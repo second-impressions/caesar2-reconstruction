@@ -32,10 +32,10 @@ _STOCK_IMAGE = "localhost/watcom-10.0a-wibo"
 # The canonical PS.EXE compile flags (Watcom 10.0a; default OptSize=50,
 # unsigned char).  Proven settled — per-flag byte-level proofs in the
 # watcom10.0a sibling repo (docs/watcom-10.0a-flags.md).
-# -dC2_TARGET_DOS=1 selects the DOS target in include/c2_target.h; it is
-# a preprocessor define only (codegen-neutral — the header would derive
-# the same target for Watcom without it).
-PS_CFLAGS = "-bt=dos -mf -4r -s -d1 -dC2_TARGET_DOS=1"
+# -dPLATFORM_DOS=1 selects the DOS platform in include/c2_target.h; it is
+# a preprocessor define only (codegen-neutral — the header defaults to the
+# same platform without it).
+PS_CFLAGS = "-bt=dos -mf -4r -s -d1 -dPLATFORM_DOS=1"
 
 def _run_in_container(
     work: Path,

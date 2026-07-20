@@ -944,7 +944,7 @@ void adjust_slave_usage(void) {
 }
 
 // Draw and apply a skill-dependent random province event for the current turn.
-#if C2_TARGET_WIN
+#if PLATFORM_WINDOWS
 /* The Windows build rewrote this handler: OR-combined quiet-outcome
    gates, reordered temple sums, split argument locals, and a dead
    20000-denarii tier storing 50 where the DOS build stores 20 (both

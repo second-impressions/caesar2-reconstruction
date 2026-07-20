@@ -55,7 +55,7 @@
  * entry point is a DLL import, so CAESAR2.EXE call sites are indirect
  * (`call [__imp_...]`).  MSVC reproduces that with dllimport. */
 #include "c2_target.h"
-#if C2_TARGET_WIN
+#if PLATFORM_WINDOWS
 #define AILIMPORT __declspec(dllimport)
 #else
 #define AILIMPORT

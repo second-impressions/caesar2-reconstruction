@@ -7,7 +7,7 @@ int  *SmackAILDigDriver;
 int   setbyprog;
 int   count;
 int   sndinit[5];     /* Scratch buffer shared with the DOS diamond renderers. */
-#if C2_TARGET_DOS
+#if PLATFORM_DOS
 /* DOS-only timer state for the sound bridge. */
 int   timer;
 #endif

@@ -97,7 +97,7 @@ void reduce_villa_to_domus(unsigned char *cell_ptr);
 void remove_house(void);
 /* Callers before this point treat the return as implicit int;
    only the Windows build sees the prototype. */
-#if C2_TARGET_WIN
+#if PLATFORM_WINDOWS
 void evolve_a_plaza(signed char land_value, signed char old_kind, int cell_x);
 #endif
 void clear_fire_zones(void);

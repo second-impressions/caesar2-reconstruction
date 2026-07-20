@@ -150,7 +150,7 @@ codegen and the byte-exact rebuild will catch it.
 
 Cross-build differences (DOS release vs the Windows build-A witness)
 are guarded by the target/feature macros in `include/c2_target.h`
-(`C2_TARGET_DOS` / `C2_TARGET_WIN`, `C2_FEAT_*`, with `C2_PATCHLEVEL`
+(`PLATFORM_DOS` / `PLATFORM_WINDOWS`, `C2_FEAT_*`, with `C2_PATCHLEVEL`
 reserved for future per-platform patchlevels) — never by raw compiler
 macros.  `grep C2_FEAT_ include src` lists the verified difference
 classes.

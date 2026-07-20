@@ -1,7 +1,7 @@
 #include "lib32.h"
 #include "c2_data.h"
 #include <conio.h>             /* inp(), outpw() */
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 #include <i86.h>              /* int386, union REGS, sound/nosound/delay */
 #endif
 #include <io.h>                /* open, close, read, write */
@@ -337,7 +337,7 @@ void yclip(int clip_top, int clip_bottom);
 void setup_scratch_buffer(void);
 void stop_system(void);
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Populate directory[] with up to 100 DOS 8.3 filenames matching a wildcard pattern.
 // FUNCTION: C2 0x24212
@@ -408,7 +408,7 @@ void main_path(void)
         chdir(path_name);
     }
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Walk past the filename to the '.' separator and copy the 3-char extension into the global
 // `extension[]` buffer (NUL-terminated).
@@ -651,7 +651,7 @@ int convert_lbm_file(unsigned char *src, unsigned char *dst, char *pal, int leng
     return 0;
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Query VESA information and enter 640×480 or 640×400 banked SVGA mode.
 // FUNCTION: C2 0x247b1
@@ -751,7 +751,7 @@ int set_svga_640_480(int mode)
     set_bank(0);
     return 0;
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Detects the installed VGA chipset and records its capabilities.
 // FUNCTION: C2 0x24b0e
@@ -775,7 +775,7 @@ void recognise_card(void)
     }
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Detect a Trident VGA chipset and record its model.
 // FUNCTION: C2 0x24b69
@@ -806,7 +806,7 @@ int check_for_Trident(void)
     cards_recognised += 1;
     return 1;
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Report that no supported Tseng VGA chipset was detected.
 // FUNCTION: C2 0x24c2c
@@ -869,7 +869,7 @@ void print_vesa_info(void)
     printf("--------------------------------------------------------\n");
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Switch the VGA into mode-X (320×200, 4 planes × 80 bytes), saving the touched register values
 // into the old3*_* slots so unset_vga_256x can restore them. Read-modify-write each control
@@ -993,7 +993,7 @@ void set_vga_palette_range(char *p, int start, int end)
         outp(0x3c9, *p++);
     }
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Rotate the colour entries in current_palette[start_idx..end_idx] (inclusive) by one slot toward
 // higher indices: the colour that was at end_idx moves to start_idx, and every entry in between
@@ -1246,7 +1246,7 @@ void fade_to_black_out(void)
 }
 
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Wait for a complete vertical-blank cycle on port 0x3DA bit 3.
 // FUNCTION: C2 0x255cb
@@ -1276,7 +1276,7 @@ void swap_screens(void)
         cscreen = 0x4000;
     }
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // De-interleave a 4-plane mode-X buffer (4 × 0x3E80 bytes) back into a contiguous 256×N raster.
 // FUNCTION: C2 0x25645
@@ -1411,7 +1411,7 @@ void cbc_end(void)
 {
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // BIOS int 10h fn 6: scroll up, full text screen with attribute 7 (effective text-mode CLS).
 // FUNCTION: C2 0x25881
@@ -1424,7 +1424,7 @@ void dos_cls(void)
     r.w.ax  = 0x600;
     int386(0x10, &r, &r);
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 #pragma aux click_handler __loadds parm [eax] [ebx] [ecx] [edx] [esi] [edi];
 
@@ -1449,7 +1449,7 @@ void __far click_handler(unsigned int ax, unsigned int bx,
 
 #pragma on(check_stack);
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Initializes the mouse driver and installs the click callback.
 // FUNCTION: C2 0x258f3
@@ -1485,7 +1485,7 @@ void install_mouse(void)
     sr.es = FP_SEG(click_handler);
     int386x(0x33, &in, &out, &sr);
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Drain the deferred mouse-call buffer (cbd) into mse_x/mse_y/mse_button.
 // FUNCTION: C2 0x25a0c
@@ -1500,7 +1500,7 @@ void read_installed_mouse(void)
     cbd.pending = 0;
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Hide the mouse cursor (int 33h fn 2) then reset the mouse driver (int 33h fn 0) when one is
 // installed.
@@ -1531,7 +1531,7 @@ int init_mouse(void)
         mouse_installed = 0;
     return mouse_installed;
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Constrain the mouse cursor to the active screen mode's resolution. No-op if no mouse is
 // installed or screen_mode isn't 1/2/3.
@@ -1548,7 +1548,7 @@ void set_mouse_limits(void)
         mouserange(0, 0, 640, 480);
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Configure the int 33h driver's horizontal (fn 7) and vertical (fn 8) cursor limits. Zeroes the
 // full REGS union before each int386 call so any reserved register slots are left clear.
@@ -1581,7 +1581,7 @@ void read_mouse(void)
     mse_y = r.w.dx;
     mse_button = r.w.bx;
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Poll the mouse until the user clicks any button.
 // FUNCTION: C2 0x25c0c
@@ -1618,7 +1618,7 @@ void position_mouse(short x, short y)
     set_mouse();
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Push the cached (mse_x, mse_y) to the mouse driver via int 33h fn 4.
 // FUNCTION: C2 0x25c85
@@ -1631,7 +1631,7 @@ void set_mouse(void)
     r.w.dx = mse_y;
     int386(0x33, &r, &r);
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Pump the mouse driver and update the engine's mouse state. Tries sim_mouse() first
 // (replay-from-recording / inter-net sync feeder); on no replay frame falls through to
@@ -3030,7 +3030,7 @@ int timer(int mode)
     return 0;
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Play a short 880 Hz beep.
 // FUNCTION: C2 0x2759c
@@ -3049,7 +3049,7 @@ void low_beep(void)
     delay(50);
     nosound();
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Emit `n` high beeps with a 1-tick delay between each.
 // FUNCTION: C2 0x275d0
@@ -3087,7 +3087,7 @@ void test_beeps(void)
     vhigh_beep();
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Short beep at 1720 Hz (0x6b8) for 150 ms.
 // FUNCTION: C2 0x2763c
@@ -3097,7 +3097,7 @@ void vhigh_beep(void)
     delay(150);
     nosound();
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Sets up Bresenham state for the line from (x1, y1) to (x2, y2). dx / dy hold the absolute
 // extents along each axis; the longer of the two becomes the major axis (so the line loop in
@@ -3699,7 +3699,7 @@ int get_shortest_distance(int x1, int y1, int x2, int y2)
     return distance;
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Issue DPMI service 0x600 (lock linear region) for the byte range [addr, addr+size). Returns
 // nonzero on success (carry clear).
@@ -3719,7 +3719,7 @@ int lock_region(unsigned int address, unsigned int size)
     int386(0x31, &r, &r);
     return r.w.cflag == 0;
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Start the game runtime from the program entry path.
 // FUNCTION: C2 0x283f0
@@ -3781,7 +3781,7 @@ int start_system(void)
     return exit_flag == 0;
 }
 
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 
 // Query the DPMI host and runtime heap for current memory availability.
 // FUNCTION: C2 0x28579
@@ -3800,7 +3800,7 @@ void get_dos_memory(void)
     avl_memory = _memavl();
     max_memory = _memmax();
 }
-#endif /* __WATCOMC__ */
+#endif /* PLATFORM_DOS */
 
 // Allocate scratch_buffer with the size in scratch_buffer_size and charge the (KB-rounded) cost to
 // used_memory.

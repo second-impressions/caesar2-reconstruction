@@ -4,10 +4,10 @@
 #include "c2_data.h"
 #include "smacker.h"
 #include <fcntl.h>             /* O_BINARY */
-#ifdef __WATCOMC__
+#if PLATFORM_DOS
 char __far *MK_FP(int off, int seg);
 #pragma aux MK_FP = parm [eax] [edx] value [dx eax];
-#else
+#elif PLATFORM_WINDOWS
 static char __far *MK_FP(unsigned off, unsigned seg) { return 0; }
 #endif
 extern int  open(const char *path, int flags, ...);
