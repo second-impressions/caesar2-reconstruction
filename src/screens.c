@@ -2845,7 +2845,7 @@ void place_legend_block(int sprite_idx, int x, int y)
                  + (landfill[sprite_idx * 16 + 0xD] << 8);
     for (yo = 0; yo < 16; yo += 2) {
         for (xo = 0; xo < 16; xo += 2) {
-            place_2x2_block((int)landfill + sprite_start,
+            place_2x2_block(landfill + sprite_start,
                             (x + xo) + (y + yo) * screen_width);
         }
     }
