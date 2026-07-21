@@ -1686,7 +1686,7 @@ int perform_city_strip_action(void)
     selected_icon_text = cleared_selection;
     icon_strip_toggle  = 0x1f;
 
-    ((void (**)(void))((char *)rome2_buttons + 0x3a))[last_icon_over]();
+    city_actions[last_icon_over - 4]();
 
     if (last_icon_over >= 0xe && last_icon_over != 0x12) {
         last_icon_used = last_icon_over;
@@ -1714,7 +1714,7 @@ int perform_region_strip_action(void)
     selected_icon_text = cleared_selection;
     icon_strip_toggle  = 0x1f;
 
-    ((void (**)(void))((char *)city_actions + 0x50))[last_icon_over]();
+    region_actions[last_icon_over - 4]();
 
     if (last_icon_over >= 0xe && last_icon_over != 0x12) {
         last_icon_used = last_icon_over;
@@ -1757,7 +1757,7 @@ int perform_battle_strip_action(void)
             if (mouse_left_preclick == 0) {
                 return 0;
             }
-            region_actions[0xf + icon_idx]();
+            battle_actions[icon_idx - 4]();
             update_icon = icon_idx;
             if (icon_idx >= 9) {
                 last_icon_used = icon_idx;
