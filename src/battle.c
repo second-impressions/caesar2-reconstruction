@@ -265,7 +265,7 @@ void select_drag_figures(void)
     int x;
     int y;
     int cell_offset;
-    int width;
+    int temp;
     unsigned char figure_idx;
 
     x0 = battle_drag_start_x;
@@ -273,16 +273,11 @@ void select_drag_figures(void)
     y0 = battle_drag_start_y;
     y1 = act_start_y;
 
-    if (x1 < x0) {
-        int old_x = x0; x0 = x1; x1 = old_x;
-    }
-    if (y0 > y1) {
-        int old_y = y0; y0 = y1; y1 = old_y;
-    }
+    if (x1 < x0) { temp = x0; x0 = x1; x1 = temp; }
+    if (y0 > y1) { temp = y0; y0 = y1; y1 = temp; }
 
     cell_offset = (y0 * 0x34 + x0) * 4;
-    width = x1 - x0 + 1;
-    row_stride = (0x34 - width) * 4;
+    row_stride = (0x34 - ((x1 - x0) + 1)) * 4;
 
     for (y = y0; y <= y1; y++, cell_offset += row_stride) {
         for (x = x0; x <= x1; x++, cell_offset += 4) {
@@ -2188,21 +2183,19 @@ void elephant_fire(void)
 // FUNCTION: C2WIN 0x0047a4ba
 void get_arrow_base_image(void)
 {
-    int sprite_type = figure_list[figure_no].sprite_type;
-
-    if (sprite_type == 3) {
+    if (figure_list[figure_no].sprite_type == 3) {
         arrow_list[created_arrow_no].sprite_base = 0xaa;
-    } else if (sprite_type == 9) {
+    } else if (figure_list[figure_no].sprite_type == 9) {
         arrow_list[created_arrow_no].sprite_base = 0xaa;
-    } else if (sprite_type == 10) {
+    } else if (figure_list[figure_no].sprite_type == 10) {
         arrow_list[created_arrow_no].sprite_base = 0xaa;
-    } else if (sprite_type == 13) {
+    } else if (figure_list[figure_no].sprite_type == 13) {
         arrow_list[created_arrow_no].sprite_base = 0x28;
-    } else if (sprite_type == 15) {
+    } else if (figure_list[figure_no].sprite_type == 15) {
         arrow_list[created_arrow_no].sprite_base = 0x50;
-    } else if (sprite_type == 16) {
+    } else if (figure_list[figure_no].sprite_type == 16) {
         arrow_list[created_arrow_no].sprite_base = 0xaa;
-    } else if (sprite_type == 17) {
+    } else if (figure_list[figure_no].sprite_type == 17) {
         arrow_list[created_arrow_no].sprite_base = 0xaa;
     } else {
         arrow_list[created_arrow_no].sprite_base = 0;
@@ -2269,28 +2262,28 @@ void general_reform(int formation)
 // Assign a formation and destination slots to every figure in a unit.
 // FUNCTION: C2 0x4f33d
 // FUNCTION: C2WIN 0x0047a94b
-void reform(int unit_ref, int formation, int force_reform)
+void reform(int unit_ref, int mode, int force)
 {
-  int base_x;
-  int position;
-  int base_y;
-  unit_list[unit_ref].formation_mode = formation;
-  position = 0;
-  base_x = unit_list[unit_ref].x;
-  base_y = unit_list[unit_ref].y;
+  int unit_x;
+  int pos;
+  int unit_y;
+  unit_list[unit_ref].formation_mode = mode;
+  pos = 0;
+  unit_x = unit_list[unit_ref].x;
+  unit_y = unit_list[unit_ref].y;
   for (temp_figure = unit_list[unit_ref].first_figure; temp_figure <= unit_list[unit_ref].last_figure; temp_figure++)
   {
     if (figure_list[temp_figure].exists != 0)
     {
-      if (formation != 3)
+      if (mode != 3)
       {
-        get_fig_in_unit_position(formation, position, temp_figure);
-        figure_list[temp_figure].prev_grid_x = base_x + ((char) x_bit);
-        figure_list[temp_figure].prev_grid_y = base_y + ((char) y_bit);
+        get_fig_in_unit_position(mode, pos, temp_figure);
+        figure_list[temp_figure].prev_grid_x = unit_x + x_bit;
+        figure_list[temp_figure].prev_grid_y = unit_y + y_bit;
         figure_list[temp_figure].offset_x = x_bit;
         figure_list[temp_figure].offset_y = y_bit;
-        figure_list[temp_figure].shield_class = formation;
-        if (force_reform != 0)
+        figure_list[temp_figure].shield_class = mode;
+        if (force != 0)
           figure_list[temp_figure].state_idx = 7;
         if (figure_list[temp_figure].state_idx == 0xc)
           figure_list[temp_figure].state_idx = 7;
@@ -2300,7 +2293,7 @@ void reform(int unit_ref, int formation, int force_reform)
         figure_list[temp_figure].state_idx = 0xa;
       }
       figure_list[temp_figure].is_defending = 0;
-      position++;
+      pos++;
     }
   }
 
@@ -2310,18 +2303,18 @@ void reform(int unit_ref, int formation, int force_reform)
 // Immediately place a unit's figures into the requested formation.
 // FUNCTION: C2 0x4f44d
 // FUNCTION: C2WIN 0x0047ab55
-void instant_reform(int unit_idx, int formation)
+void instant_reform(int unit_no, int formation)
 {
     int base_y;
   int base_x;
   int position;
-  unit_list[unit_idx].formation_mode = formation;
+  unit_list[unit_no].formation_mode = formation;
   if (formation == 3)
     return;
   position = 0;
-  base_x = unit_list[unit_idx].x;
-  base_y = unit_list[unit_idx].y;
-  for (temp_figure = unit_list[unit_idx].first_figure; temp_figure <= unit_list[unit_idx].last_figure; temp_figure++)
+  base_x = unit_list[unit_no].x;
+  base_y = unit_list[unit_no].y;
+  for (temp_figure = unit_list[unit_no].first_figure; temp_figure <= unit_list[unit_no].last_figure; temp_figure++)
   {
     if (figure_list[temp_figure].exists != 0)
     {
@@ -2329,14 +2322,14 @@ void instant_reform(int unit_idx, int formation)
     }
   }
 
-  for (temp_figure = unit_list[unit_idx].first_figure; temp_figure <= unit_list[unit_idx].last_figure; temp_figure++)
+  for (temp_figure = unit_list[unit_no].first_figure; temp_figure <= unit_list[unit_no].last_figure; temp_figure++)
   {
     if (figure_list[temp_figure].exists != 0)
     {
       get_fig_in_unit_position(formation, position, temp_figure);
       update_map = 1;
-      figure_list[temp_figure].grid_x = base_x + ((char) x_bit);
-      figure_list[temp_figure].grid_y = base_y + ((char) y_bit);
+      figure_list[temp_figure].grid_x = base_x + x_bit;
+      figure_list[temp_figure].grid_y = base_y + y_bit;
       figure_list[temp_figure].map_ref = (figure_list[temp_figure].grid_x + (figure_list[temp_figure].grid_y * 0x34)) * 4;
       ((unsigned char *) battle_map)[figure_list[temp_figure].map_ref + 1] = temp_figure;
       figure_list[temp_figure].offset_x = x_bit;
@@ -2347,7 +2340,11 @@ void instant_reform(int unit_idx, int formation)
       figure_list[temp_figure].wf_step_y = 0;
       figure_list[temp_figure].wf_step_x = 0;
       figure_list[temp_figure].is_routing = 0;
+#if PLATFORM_WINDOWS
+      figure_list[temp_figure].is_visible &= 0xfd;
+#else
       figure_list[temp_figure].is_visible &= 0xfc;
+#endif
       figure_list[temp_figure].is_visible |= 1;
       position++;
     }
@@ -2359,40 +2356,39 @@ void instant_reform(int unit_idx, int formation)
 // Test whether a unit can use the requested `formation` at its current position.
 // FUNCTION: C2 0x4f5e0
 // FUNCTION: C2WIN 0x0047aeb4
-int test_reform_pattern(int unit_ref, int formation)
+int test_reform_pattern(int unit_ref, int dir)
 {
-  int position;
-  int base_x;
-    int base_y;
-  int cell_offset;
-  int occupant_idx;
-  if (formation == 3)
-    return 1;
-  position = 0;
-  base_x = unit_list[unit_ref].x;
-  base_y = unit_list[unit_ref].y;
-  for (temp_figure = unit_list[unit_ref].first_figure; temp_figure <= unit_list[unit_ref].last_figure; temp_figure++)
-  {
-    if (figure_list[temp_figure].exists != 0)
-    {
-      get_fig_in_unit_position(formation, position, temp_figure);
-      cell_offset = (base_x + x_bit) * BATTLE_CELL_BYTES;
-      cell_offset += (base_y + y_bit) * BATTLE_ROW;
-      occupant_idx = ((unsigned char *) battle_map)[cell_offset + 1];
-      position++;
-      if (cell_offset >= nomansland_ptr)
-        return 0;
-      if (occupant_idx != 0)
-      {
-        if ((figure_list[occupant_idx].unit_ref) != (figure_list[temp_figure].unit_ref))
-        {
-          return 0;
-        }
-      }
-    }
-  }
+    int position;
+    int unit_x;
+    int unit_y;
+    int occupant_idx;
 
-  return 1;
+    if (dir == 3)
+        return 1;
+    position = 0;
+    unit_x = unit_list[unit_ref].x;
+    unit_y = unit_list[unit_ref].y;
+    for (temp_figure = unit_list[unit_ref].first_figure;
+         temp_figure <= unit_list[unit_ref].last_figure;
+         temp_figure++) {
+        if (figure_list[temp_figure].exists != 0) {
+            int cell_off;
+
+            get_fig_in_unit_position(dir, position, temp_figure);
+            cell_off = (unit_x + x_bit) * BATTLE_CELL_BYTES;
+            cell_off += (unit_y + y_bit) * BATTLE_ROW;
+            occupant_idx = ((unsigned char *)battle_map)[cell_off + 1];
+            position++;
+            if (cell_off >= nomansland_ptr)
+                return 0;
+            if (occupant_idx == 0)
+                continue;
+            if (figure_list[occupant_idx].unit_ref != figure_list[temp_figure].unit_ref) {
+                return 0;
+            }
+        }
+    }
+    return 1;
 }
 
 
@@ -2403,24 +2399,23 @@ void get_fig_in_unit_position(int formation, int position, int figure_idx)
 {
     int side;
     int row_spacing;
-    int formation_cols;
+    int column;
 
     row_spacing = figure_list[figure_idx].unit_grid_x;
-    formation_cols = figure_list[figure_idx].unit_grid_y;
+    column = figure_list[figure_idx].unit_grid_y;
     side = figure_list[figure_idx].unit_position;
 
     if (formation == 0) {
-        x_bit = get_x_spacing(row_spacing, formation_cols, position);
-        y_bit = get_y_spacing(row_spacing, formation_cols, position, side);
+        x_bit = get_x_spacing(row_spacing, column, position);
+        y_bit = get_y_spacing(row_spacing, column, position, side);
     } else if (formation == 1) {
-        y_bit = get_x_spacing(row_spacing, formation_cols, position);
-        x_bit = get_y_spacing(row_spacing, formation_cols, position, side);
+        y_bit = get_x_spacing(row_spacing, column, position);
+        x_bit = get_y_spacing(row_spacing, column, position, side);
     } else if (formation == 2) {
-        x_bit = get_x_spacing(row_spacing, formation_cols + 1, position);
-        y_bit = get_y_spacing(row_spacing, formation_cols + 1, position, side);
+        x_bit = get_x_spacing(row_spacing, column + 1, position);
+        y_bit = get_y_spacing(row_spacing, column + 1, position, side);
     } else {
-        y_bit = 0;
-        x_bit = 0;
+        x_bit = y_bit = 0;
     }
 }
 
@@ -2430,77 +2425,79 @@ void get_fig_in_unit_position(int formation, int position, int figure_idx)
 // FUNCTION: C2WIN 0x0047b16d
 void get_fig_fight_image(void)
 {
-    int direction;
-    int direction_stride;
-    int defender_frame_offset;
-    int attacker_frame_offset;
-    int sprite_frame;
-    int animation_frame;
+    int dir;
+    int cnt8;
+    int defend_frame;
+    int attacker;
+    int sprite_idx;
+    int frame_index;
 
-    direction = figure_list[figure_no].fight_direction;
+    dir = figure_list[figure_no].fight_direction;
     if (figure_list[figure_no].fight_state == 2) {
         get_fig_still_image();
         return;
     }
     if (figure_list[figure_no].fight_state != 0) {
-        direction_stride = 9;
-        defender_frame_offset = 0;
-        attacker_frame_offset = 0;
+        cnt8 = 9;
+        defend_frame = 0;
+        attacker = 0;
         figure_list[figure_no].sprite_dir = 1;
     } else {
-        direction_stride = 20;
-        defender_frame_offset = 16;
-        attacker_frame_offset = 10;
+        cnt8 = 20;
+        defend_frame = 16;
+        attacker = 10;
     }
     if (figure_list[figure_no].fight_state != 0) {
-        direction = (direction + 2) % 8;
+        dir = (dir + 2) % 8;
     }
     if (map_direction == 0) {
-        sprite_frame = (direction % 8) * direction_stride;
+        sprite_idx = (dir % 8) * cnt8;
     } else if (map_direction == 2) {
-        sprite_frame = ((direction + 6) % 8) * direction_stride;
+        sprite_idx = ((dir + 6) % 8) * cnt8;
     } else if (map_direction == 4) {
-        sprite_frame = ((direction + 4) % 8) * direction_stride;
+        sprite_idx = ((dir + 4) % 8) * cnt8;
     } else if (map_direction == 6) {
-        sprite_frame = ((direction + 2) % 8) * direction_stride;
+        sprite_idx = ((dir + 2) % 8) * cnt8;
     }
     if (figure_list[figure_no].fight_role == 1) {
         if (figure_list[figure_no].fight_state != 0) {
             figure_list[figure_no].anim_counter++;
             if (figure_list[figure_no].anim_counter >= 12)
                 figure_list[figure_no].anim_counter = 0;
-            sprite_frame += ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
+            frame_index = ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
+            sprite_idx += frame_index;
         } else if (figure_list[figure_no].fight_swing_active != 0) {
-            sprite_frame += attacker_frame_offset + 3;
+            sprite_idx += attacker + 3;
             figure_list[figure_no].anim_counter++;
             if (figure_list[figure_no].anim_counter >= 8)
                 figure_list[figure_no].anim_counter = 0;
-            animation_frame = ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
-            if (animation_frame == 3)
-                animation_frame = 1;
-            sprite_frame += animation_frame;
+            frame_index = ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
+            if (frame_index == 3)
+                frame_index = 1;
+            sprite_idx += frame_index;
         } else {
-            sprite_frame += attacker_frame_offset;
+            sprite_idx += attacker;
             figure_list[figure_no].anim_counter++;
             if (figure_list[figure_no].anim_counter >= 12)
                 figure_list[figure_no].anim_counter = 0;
-            sprite_frame += ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
+            sprite_idx += ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
         }
     } else {
         if (figure_list[figure_no].fight_state != 0) {
             figure_list[figure_no].anim_counter++;
             if (figure_list[figure_no].anim_counter >= 12)
                 figure_list[figure_no].anim_counter = 0;
-            sprite_frame += ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
+            frame_index = ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
+            sprite_idx += frame_index;
         } else {
-            sprite_frame += defender_frame_offset;
+            sprite_idx += defend_frame;
             figure_list[figure_no].anim_counter++;
             if (figure_list[figure_no].anim_counter >= 8)
                 figure_list[figure_no].anim_counter = 0;
-            sprite_frame += ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
+            sprite_idx += ((unsigned char)figure_list[figure_no].anim_counter) >> 1;
         }
     }
-    figure_list[figure_no].sprite_anim = sprite_frame;
+    figure_list[figure_no].sprite_anim = sprite_idx;
 }
 
 
@@ -2509,22 +2506,22 @@ void get_fig_fight_image(void)
 // FUNCTION: C2WIN 0x0047b600
 void get_fig_walk_image(void)
 {
-    int direction_stride;
-    int sprite_frame;
+    int stride;
+    int dir_base;
 
     figure_list[figure_no].sprite_dir = 0;
     if (figure_list[figure_no].fight_state == 2) {
-        direction_stride = 6;
+        stride = 6;
     } else if (figure_list[figure_no].fight_state != 0) {
-        direction_stride = 5;
+        stride = 5;
     } else {
-        direction_stride = 0x14;
+        stride = 0x14;
     }
-    if (map_direction == 0)      sprite_frame = (figure_list[figure_no].direction % 8) * direction_stride;
-    else if (map_direction == 2) sprite_frame = ((figure_list[figure_no].direction + 6) % 8) * direction_stride;
-    else if (map_direction == 4) sprite_frame = ((figure_list[figure_no].direction + 4) % 8) * direction_stride;
-    else if (map_direction == 6) sprite_frame = ((figure_list[figure_no].direction + 2) % 8) * direction_stride;
-    sprite_frame += (unsigned char)figure_list[figure_no].anim_counter >> 1;
+    if (map_direction == 0)      dir_base = (figure_list[figure_no].direction % 8) * stride;
+    else if (map_direction == 2) dir_base = ((figure_list[figure_no].direction + 6) % 8) * stride;
+    else if (map_direction == 4) dir_base = ((figure_list[figure_no].direction + 4) % 8) * stride;
+    else if (map_direction == 6) dir_base = ((figure_list[figure_no].direction + 2) % 8) * stride;
+    dir_base += (unsigned char)figure_list[figure_no].anim_counter >> 1;
     if (figure_list[figure_no].fight_state == 2) {
         figure_list[figure_no].anim_counter++;
         if (figure_list[figure_no].anim_counter >= 0xc)
@@ -2538,7 +2535,7 @@ void get_fig_walk_image(void)
         if (figure_list[figure_no].anim_counter >= 0x14)
             figure_list[figure_no].anim_counter = 0;
     }
-    figure_list[figure_no].sprite_anim = sprite_frame;
+    figure_list[figure_no].sprite_anim = dir_base;
 }
 
 // Select the current figure's still frame, including tortoise-formation poses.
@@ -2546,27 +2543,26 @@ void get_fig_walk_image(void)
 // FUNCTION: C2WIN 0x0047b8e5
 void get_fig_still_image(void)
 {
-    int direction_stride;
-    int sprite_frame;
+    int stride;
+    int dir_base;
 
     figure_list[figure_no].sprite_dir = 0;
     if (figure_list[figure_no].fight_state == 2) {
-        direction_stride = 6;
+        stride = 6;
     } else if (figure_list[figure_no].fight_state != 0) {
-        direction_stride = 5;
+        stride = 5;
+    } else if (figure_list[figure_no].is_defending != 0
+               && figure_list[figure_no].shield_class == 2) {
+        get_fig_tortoise_image();
+        return;
     } else {
-        if (figure_list[figure_no].is_defending != 0
-            && figure_list[figure_no].shield_class == 2) {
-            get_fig_tortoise_image();
-            return;
-        }
-        direction_stride = 0x14;
+        stride = 0x14;
     }
-    if (map_direction == 0)      sprite_frame = (figure_list[figure_no].direction % 8) * direction_stride;
-    else if (map_direction == 2) sprite_frame = ((figure_list[figure_no].direction + 6) % 8) * direction_stride;
-    else if (map_direction == 4) sprite_frame = ((figure_list[figure_no].direction + 4) % 8) * direction_stride;
-    else if (map_direction == 6) sprite_frame = ((figure_list[figure_no].direction + 2) % 8) * direction_stride;
-    figure_list[figure_no].sprite_anim = sprite_frame;
+    if (map_direction == 0)      dir_base = (figure_list[figure_no].direction % 8) * stride;
+    else if (map_direction == 2) dir_base = ((figure_list[figure_no].direction + 6) % 8) * stride;
+    else if (map_direction == 4) dir_base = ((figure_list[figure_no].direction + 4) % 8) * stride;
+    else if (map_direction == 6) dir_base = ((figure_list[figure_no].direction + 2) % 8) * stride;
+    figure_list[figure_no].sprite_anim = dir_base;
 }
 
 // Pick the facing for a tortoise figure (the locked-shield Roman formation): prefer to face the
@@ -2657,40 +2653,40 @@ void get_fig_death_image(void)
 // FUNCTION: C2WIN 0x0047bf53
 void get_fig_missile_image(void)
 {
-    int sprite_frame;
-    int direction_stride;
-    int timer_idx;
+    int dir_base;
+    int stride;
+    int cnt8;
 
     figure_list[figure_no].sprite_dir = 0;
     if (figure_list[figure_no].fight_state != 0) {
-        direction_stride = 9;
+        stride = 9;
         figure_list[figure_no].sprite_dir = 1;
     } else {
-        direction_stride = 0x14;
+        stride = 0x14;
     }
 
     if (map_direction == 0)
-        sprite_frame = (figure_list[figure_no].direction % 8) * direction_stride;
+        dir_base = (figure_list[figure_no].direction % 8) * stride;
     else if (map_direction == 2)
-        sprite_frame = ((figure_list[figure_no].direction + 6) % 8) * direction_stride;
+        dir_base = ((figure_list[figure_no].direction + 6) % 8) * stride;
     else if (map_direction == 4)
-        sprite_frame = ((figure_list[figure_no].direction + 4) % 8) * direction_stride;
+        dir_base = ((figure_list[figure_no].direction + 4) % 8) * stride;
     else if (map_direction == 6)
-        sprite_frame = ((figure_list[figure_no].direction + 2) % 8) * direction_stride;
+        dir_base = ((figure_list[figure_no].direction + 2) % 8) * stride;
 
-    timer_idx = figure_list[figure_no].missile_timer;
-    if (0x20 < timer_idx)
-        timer_idx = 0x20;
+    cnt8 = figure_list[figure_no].missile_timer;
+    if (0x20 < cnt8)
+        cnt8 = 0x20;
 
     if (figure_list[figure_no].sprite_type == 10)
-        sprite_frame += sling_images[timer_idx];
+        dir_base += sling_images[cnt8];
     else if (figure_list[figure_no].sprite_type == 3)
-        sprite_frame += sling_images[timer_idx];
+        dir_base += sling_images[cnt8];
     else if (figure_list[figure_no].fight_state != 0)
-        sprite_frame += horsebow_images[timer_idx];
+        dir_base += horsebow_images[cnt8];
     else
-        sprite_frame += bow_images[timer_idx];
-    figure_list[figure_no].sprite_anim = sprite_frame;
+        dir_base += bow_images[cnt8];
+    figure_list[figure_no].sprite_anim = dir_base;
 }
 
 // Mark a clipped rectangle of battle-map cells dirty for redraw.
@@ -2699,30 +2695,30 @@ void get_fig_missile_image(void)
 void set_figure_map_refresh(int grid_x, int grid_y, int offset_x, int offset_y,
                             int radius, int extra_size)
 {
-    int x0;
-    int x1;
-    int y0;
-    int y1;
-    int row;
-    int column;
-    int cell_offset;
+    int x_from;
+    int last_bound;
+    int x;
+    int y_begin;
+    int bottom_row;
+    int y;
+    int map_pos;
     int row_stride;
 
-    x0 = grid_x + offset_x - radius;
-    y0 = grid_y + offset_y - radius;
-    x1 = (grid_x + offset_x + extra_size) + radius;
-    y1 = (grid_y + offset_y + extra_size) + radius;
+    x_from = grid_x + offset_x - radius;
+    y_begin = grid_y + offset_y - radius;
+    last_bound = (grid_x + offset_x + extra_size) + radius;
+    bottom_row = (grid_y + offset_y + extra_size) + radius;
 
-    if (x0 < 0) x0 = 0;
-    if (x1 >= 0x34) x1 = 0x33;
-    if (y0 < 0) y0 = 0;
-    if (y1 >= 0x34) y1 = 0x33;
+    if (x_from < 0) x_from = 0;
+    if (last_bound >= 0x34) last_bound = 0x33;
+    if (y_begin < 0) y_begin = 0;
+    if (bottom_row >= 0x34) bottom_row = 0x33;
 
-    cell_offset = (y0 * 0x34 + x0) * 4;
-    row_stride = (0x34 - ((x1 - x0) + 1)) * 4;
-    for (row = y0; row <= y1; ++row, cell_offset += row_stride) {
-        for (column = x0; column <= x1; ++column, cell_offset += 4) {
-            ((unsigned char *)battle_map)[(cell_offset) + 2] |= 2;
+    map_pos = (y_begin * 0x34 + x_from) * 4;
+    row_stride = (0x34 - ((last_bound - x_from) + 1)) * 4;
+    for (y = y_begin; y <= bottom_row; ++y, map_pos += row_stride) {
+        for (x = x_from; x <= last_bound; ++x, map_pos += 4) {
+            ((unsigned char *)battle_map)[map_pos + 2] |= 2;
         }
     }
 }
@@ -4484,11 +4480,11 @@ struct byte_delta_rec elephant_stampede[8] = {
     { 26, 53 }
 };
 
-char sling_images[33] = { 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 10, 11, 11, 12, 12, 11, 12, 11, 12 };
+unsigned char sling_images[33] = { 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 10, 11, 11, 12, 12, 11, 12, 11, 12 };
 
-char bow_images[33] = { 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 11, 11, 11, 12, 12, 12, 12, 12 };
+unsigned char bow_images[33] = { 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 11, 11, 11, 12, 12, 12, 12, 12 };
 
-char horsebow_images[33] = { 6, 6, 6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 8, 8, 8, 8, 8 };
+unsigned char horsebow_images[33] = { 6, 6, 6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 8, 8, 8, 8, 8 };
 
 char elephant_archer_images[21] = "111111111122223333000";
 

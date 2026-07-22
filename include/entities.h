@@ -436,7 +436,7 @@ struct figure_rec {
     signed char    sprite_dir;       /* +0x03  per-direction sub-frame
                                                 set by the get_fig_*_image
                                                 shared tail (1 = facing). */
-    char           fight_state;      /* +0x04  enum-like fight/animation state.
+    unsigned char  fight_state;      /* +0x04  enum-like fight/animation state.
                                                 build_units_figures sets
                                                 1 (walk) or 2 (still);
                                                 get_fig_*_image switches
@@ -586,7 +586,7 @@ struct figure_rec {
                                                 decremented per-tick by
                                                 do_the_fight which gates the
                                                 next combat resolution */
-    char           fight_role;       /* +0x37  1 = attacker, 2 = defender
+    unsigned char  fight_role;       /* +0x37  1 = attacker, 2 = defender
                                                 (set by sf09_look_for_fight). */
     char           missile_max;     /* +0x38  per-figure missile cooldown
                                                 threshold; set to 0x20 by
@@ -608,12 +608,12 @@ struct figure_rec {
                                                 cycle).  Signed-read by
                                                 walk-image to drive
                                                 `sar dl, 1`. */
-    char           unit_grid_x;      /* +0x3B  per-figure column index within
+    unsigned char  unit_grid_x;      /* +0x3B  per-figure column index within
                                                 the parent unit's grid (read
                                                 by get_fig_in_unit_position). */
-    char           unit_grid_y;      /* +0x3C  per-figure row index within
+    unsigned char  unit_grid_y;      /* +0x3C  per-figure row index within
                                                 the parent unit's grid. */
-    char           shield_class;     /* +0x3D  troop class — when == 2,
+    unsigned char  shield_class;     /* +0x3D  troop class — when == 2,
                                                 set_defense_shield adds an
                                                 extra +2 to .defense (heavy
                                                 shield bonus). */
@@ -621,7 +621,7 @@ struct figure_rec {
     char           backtrack_flag;   /* +0x3F  set by figure_go_to_target
                                                 after a backtrack; checked
                                                 by set_unit_to_fight. */
-    char           missile_timer;    /* +0x40  per-tick missile-firing timer
+    unsigned char  missile_timer;    /* +0x40  per-tick missile-firing timer
                                                 indexed into bow/sling/horsebow
                                                 _images[] by
                                                 get_fig_missile_image. */
@@ -891,12 +891,12 @@ struct arrow_rec {
     char           sprite_kind;      /* +0x1B  sprite-data-table selector
                                                 copied from figure_rec.sprite_kind
                                                 by get_arrow_base_image. */
-    char           sprite_base;      /* +0x1C  base sprite frame for the
+    unsigned char  sprite_base;      /* +0x1C  base sprite frame for the
                                                 arrow's weapon class; one of
                                                 0xAA/0x28/0x50/0 written by
                                                 get_arrow_base_image. */
-    char           anim_count;       /* +0x1D */
-    char           anim_delta;       /* +0x1E  subtracted from anim_count per tick */
+    unsigned char  anim_count;       /* +0x1D */
+    unsigned char  anim_delta;       /* +0x1E  subtracted from anim_count per tick */
     char           _unk1F[1];        /* +0x1F  reserved slack: NO access anywhere
                                                 in PS.EXE (whole-binary disasm +
                                                 byte scan; every other arrow_rec
@@ -916,7 +916,7 @@ struct arrow_rec {
                                                 (dy>dx), 1 = horizontal-or-
                                                 equal.  Read by bd() to choose
                                                 which axis to step on. */
-    char           exists;           /* +0x23 */
+    unsigned char  exists;           /* +0x23 */
     unsigned char  flight_age;       /* +0x24  per-tick age counter bumped
                                                 each call to fly_to_target;
                                                 when it exceeds fire_speed the
