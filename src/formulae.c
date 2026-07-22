@@ -89,16 +89,15 @@ promote:
 // FUNCTION: C2 0x554f3
 // FUNCTION: C2WIN 0x00454f27
 void adjust_peace_criteria(void) {
-    int uncapped_rating;
+    int value;
     pax_romanum += 2;
     if (pax_romanum > 1000) pax_romanum = 1000;
     if (pax_romanum < 0)    pax_romanum = 0;
     peace_rating = pax_romanum / 10;
-    uncapped_rating = peace_rating;
+    value = peace_rating;
     peace_rating = city_pop_limit_10_to_1(peace_rating, 1);
-    peace_rating_pop_limit = (uncapped_rating > peace_rating);
-    if (population < 10)
-        peace_rating_pop_limit = 0;
+    peace_rating_pop_limit = (value > peace_rating);
+    if (population < 10) peace_rating_pop_limit = 0;
 }
 
 // Recomputes culture from entertainment, religion, and public-service coverage.
