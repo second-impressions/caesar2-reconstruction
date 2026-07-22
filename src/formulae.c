@@ -17,7 +17,7 @@ void adjust_culture_criteria(void);
 void adjust_proserity_criteria(void);
 void adjust_empire_criteria(void);
 void assign_to_new_province(void);
-void do_promotion(int promotion_level);
+void do_promotion(int level);
 void make_emperor(void);
 void get_morale_and_readiness(void);
 void get_current_cohort_totals(void);
@@ -349,13 +349,13 @@ void assign_to_new_province(void) {
 // Applies a rank promotion and returns to province selection.
 // FUNCTION: C2 0x55b1e
 // FUNCTION: C2WIN 0x00455768
-void do_promotion(int promotion_level) {
+void do_promotion(int level) {
     game_state = 3;
     if (player_rank >= 10)
         return;
-    if (promotion_level + player_rank > 10)
+    if (level + player_rank > 10)
         return;
-    player_rank = promotion_level + player_rank;
+    player_rank = level + player_rank;
 }
 
 // Promotes the player to emperor and triggers the victory sequence.
