@@ -4153,7 +4153,7 @@ void loose_arrow_move(void)
 // FUNCTION: C2WIN 0x0048185b
 void do_the_fight(void)
 {
-    temp_figure = (short)figure_list[enemy_figure].opponent;
+    temp_figure = (short)(unsigned char)figure_list[enemy_figure].opponent;
 
     if (temp_figure == figure_no
         && figure_list[enemy_figure].fight_role == 1)

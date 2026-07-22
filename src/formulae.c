@@ -753,39 +753,27 @@ void get_army_totals(void) {
     total_no_of_regulars = army_wage_level * (main_paras[1] + 1 - province_difficulty);
     total_no_of_specials = mercs_in_army;
 
-    if (total_no_of_auxillaries < current_no_of_auxillaries) {
-        lacking_auxillaries = current_no_of_auxillaries - total_no_of_auxillaries;
-    } else {
-        if (current_no_of_auxillaries + main_paras[2] <= total_no_of_auxillaries) extra_auxillaries = main_paras[2];
-        else extra_auxillaries = total_no_of_auxillaries - current_no_of_auxillaries;
-    }
+    if (total_no_of_auxillaries < current_no_of_auxillaries) lacking_auxillaries = current_no_of_auxillaries - total_no_of_auxillaries;
+    else if (current_no_of_auxillaries + main_paras[2] <= total_no_of_auxillaries) extra_auxillaries = main_paras[2];
+    else extra_auxillaries = total_no_of_auxillaries - current_no_of_auxillaries;
     current_no_of_auxillaries = current_no_of_auxillaries - lacking_auxillaries;
     current_no_of_auxillaries = current_no_of_auxillaries + extra_auxillaries;
 
-    if (total_no_of_irregulars < current_no_of_irregulars) {
-        lacking_irregulars = current_no_of_irregulars - total_no_of_irregulars;
-    } else {
-        if (current_no_of_irregulars + main_paras[3] <= total_no_of_irregulars) extra_irregulars = main_paras[3];
-        else extra_irregulars = total_no_of_irregulars - current_no_of_irregulars;
-    }
+    if (total_no_of_irregulars < current_no_of_irregulars) lacking_irregulars = current_no_of_irregulars - total_no_of_irregulars;
+    else if (current_no_of_irregulars + main_paras[3] <= total_no_of_irregulars) extra_irregulars = main_paras[3];
+    else extra_irregulars = total_no_of_irregulars - current_no_of_irregulars;
     current_no_of_irregulars = current_no_of_irregulars - lacking_irregulars;
     current_no_of_irregulars = current_no_of_irregulars + extra_irregulars;
 
-    if (total_no_of_regulars < current_no_of_regulars) {
-        lacking_regulars = current_no_of_regulars - total_no_of_regulars;
-    } else {
-        if (current_no_of_regulars + main_paras[4] <= total_no_of_regulars) extra_regulars = main_paras[4];
-        else extra_regulars = total_no_of_regulars - current_no_of_regulars;
-    }
+    if (total_no_of_regulars < current_no_of_regulars) lacking_regulars = current_no_of_regulars - total_no_of_regulars;
+    else if (current_no_of_regulars + main_paras[4] <= total_no_of_regulars) extra_regulars = main_paras[4];
+    else extra_regulars = total_no_of_regulars - current_no_of_regulars;
     current_no_of_regulars = current_no_of_regulars - lacking_regulars;
     current_no_of_regulars = current_no_of_regulars + extra_regulars;
 
-    if (total_no_of_specials < current_no_of_specials) {
-        lacking_specials = current_no_of_specials - total_no_of_specials;
-    } else {
-        if (current_no_of_specials + 1000 <= total_no_of_specials) extra_specials = 1000;
-        else extra_specials = total_no_of_specials - current_no_of_specials;
-    }
+    if (total_no_of_specials < current_no_of_specials) lacking_specials = current_no_of_specials - total_no_of_specials;
+    else if (current_no_of_specials + 1000 <= total_no_of_specials) extra_specials = 1000;
+    else extra_specials = total_no_of_specials - current_no_of_specials;
     current_no_of_specials = current_no_of_specials - lacking_specials;
     current_no_of_specials = current_no_of_specials + extra_specials;
 
