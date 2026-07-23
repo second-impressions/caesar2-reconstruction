@@ -2319,7 +2319,6 @@ void get_text_pointer(int entry_idx, int word_count)
 // FUNCTION: C2WIN 0x0044cfeb
 int edit_format_buffer(void)
 {
-    int len;
     int i;
 
     if (this_letter > fb_current_char_length)
