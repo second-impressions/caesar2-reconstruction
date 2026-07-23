@@ -1887,10 +1887,11 @@ char to_upper(char c)
 // Uppercase every ASCII letter in `s` in place.
 // FUNCTION: C2 0x2615b
 // FUNCTION: C2WIN 0x0044c91f
-void string_to_upper(char *s)
+void string_to_upper(unsigned char *s)
 {
-    char c;
-    while ((c = *s) != 0) {
+    unsigned char c;
+    while (*s != 0) {
+        c = *s;
         if (c >= 'a' && c <= 'z')
             c -= 0x20;
         *s = c;
