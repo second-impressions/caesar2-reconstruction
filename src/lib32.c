@@ -2653,7 +2653,7 @@ void load_format_buffer_from_disk(char *filename, int entry_idx)
 void save_format_buffer_to_disk(char *filename, int entry_idx)
 {
     int word_value;
-    int i;
+    int buffer_idx;
     int found_zero;
 
     readfile(filename, (char *)&word_value, 2, entry_idx * 4 + 0x1e);
@@ -2663,14 +2663,11 @@ void save_format_buffer_to_disk(char *filename, int entry_idx)
                + ((word_value & 0xff00) >> 8);
 
     /* Replace anything past the first NUL with spaces. */
-    found_zero = 0;
-    i = 0;
-    while (i < fb_max_char_length) {
-        if (format_buffer[i] == 0)
-            found_zero = 1;
-        if (found_zero)
-            format_buffer[i] = ' ';
-        i++;
+    buffer_idx = found_zero = 0;
+    while (buffer_idx < fb_max_char_length) {
+        if (format_buffer[buffer_idx] == 0) found_zero = 1;
+        if (found_zero) format_buffer[buffer_idx] = ' ';
+        buffer_idx++;
     }
 
     write_to_file(filename, format_buffer,
