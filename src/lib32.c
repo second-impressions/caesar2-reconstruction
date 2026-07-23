@@ -2025,7 +2025,7 @@ void my_strcpy(char *src, char *dst, int n)
 // Uppercase a single ASCII letter; non-letters pass through unchanged.
 // FUNCTION: C2 0x2613e
 // FUNCTION: C2WIN 0x0044c8e5
-char to_upper(char c)
+unsigned char to_upper(unsigned char c)
 {
     if (c >= 'a' && c <= 'z')
         c -= 0x20;
