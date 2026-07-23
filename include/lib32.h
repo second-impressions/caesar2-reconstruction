@@ -77,7 +77,7 @@ extern char old_mouse_rb;
 extern char old_mouse_lb;
 extern unsigned char mouse_left_button;
 extern unsigned char mouse_left_click;
-extern char debar_fade_click;
+extern unsigned char debar_fade_click;
 extern unsigned char mouse_right_preclick;
 extern unsigned char mouse_left_preclick;
 extern char mouse_right_button;

@@ -255,7 +255,7 @@ char old_mouse_rb;
 char old_mouse_lb;
 unsigned char mouse_left_button;
 unsigned char mouse_left_click;
-char debar_fade_click;
+unsigned char debar_fade_click;
 unsigned char mouse_right_preclick;
 unsigned char mouse_left_preclick;
 char mouse_right_button;
@@ -1178,69 +1178,102 @@ void go_16m_palette(unsigned char *p)
 void fade_to_palette(char *p)
 {
     short i;
-    short j;
-    int waited;
+    short loop_counter;
+    int delay;
     int wait_limit;
-    char changed;
-    char target;
-    char cur;
-    short fade_step;
+    unsigned char changed_flag;
+    unsigned char wanted;
+    unsigned char current_color;
+    short fade_no;
+#if !PLATFORM_DOS
+    int pal_ptr;
+#endif
 
     wait_limit = 5;
-    for (fade_step = 0; fade_step < 300; fade_step++) {
-        changed = 0;
-        j = 0;
+    for (fade_no = 0; fade_no < 300; fade_no++) {
+        changed_flag = 0;
+        loop_counter = 0;
         get_mouse();
         if ((mouse_left_preclick || mouse_right_preclick) && !debar_fade_click) wait_limit = 0;
-        waited = 0;
-        while (j < 20000) {
-            waited += running_delay1();
-            if (waited >= wait_limit) break;
-            j++;
+        delay = 0;
+#if PLATFORM_DOS
+        while (loop_counter < 20000) {
+            delay += running_delay1();
+            if (delay >= wait_limit) break;
+            loop_counter++;
         }
+#endif
 
         for (i = 0; i < 256; i++) {
-            target = p[i * 3];
-            cur = current_palette[i * 3];
-            if (cur > target) {
-                changed = 1;
-                cur--;
-            } else if (cur < target) {
-                if (fade_step >= (unsigned char)cur) {
-                    changed = 1;
-                    cur++;
+#if PLATFORM_DOS
+            wanted = p[i * 3];
+            current_color = current_palette[i * 3];
+#else
+            pal_ptr = i * 3;
+            wanted = p[pal_ptr];
+            current_color = current_palette[pal_ptr];
+#endif
+            if (current_color > wanted) {
+                current_color--;
+                changed_flag = 1;
+            } else if (current_color < wanted) {
+                if (fade_no >= (unsigned char)current_color) {
+                    current_color++;
+                    changed_flag = 1;
                 }
             }
-            current_palette[i * 3] = cur;
+#if PLATFORM_DOS
+            current_palette[i * 3] = current_color;
+#else
+            current_palette[pal_ptr] = current_color;
+#endif
 
-            target = p[i * 3 + 1];
-            cur = current_palette[i * 3 + 1];
-            if (cur > target) {
-                changed = 1;
-                cur--;
-            } else if (cur < target) {
-                if (fade_step >= (unsigned char)cur) {
-                    changed = 1;
-                    cur++;
+#if PLATFORM_DOS
+            wanted = p[i * 3 + 1];
+            current_color = current_palette[i * 3 + 1];
+#else
+            wanted = p[pal_ptr + 1];
+            current_color = current_palette[pal_ptr + 1];
+#endif
+            if (current_color > wanted) {
+                current_color--;
+                changed_flag = 1;
+            } else if (current_color < wanted) {
+                if (fade_no >= (unsigned char)current_color) {
+                    current_color++;
+                    changed_flag = 1;
                 }
             }
-            current_palette[i * 3 + 1] = cur;
+#if PLATFORM_DOS
+            current_palette[i * 3 + 1] = current_color;
+#else
+            current_palette[pal_ptr + 1] = current_color;
+#endif
 
-            target = p[i * 3 + 2];
-            cur = current_palette[i * 3 + 2];
-            if (cur > target) {
-                changed = 1;
-                cur--;
-            } else if (cur < target) {
-                if (fade_step >= (unsigned char)cur) {
-                    changed = 1;
-                    cur++;
+#if PLATFORM_DOS
+            wanted = p[i * 3 + 2];
+            current_color = current_palette[i * 3 + 2];
+#else
+            wanted = p[pal_ptr + 2];
+            current_color = current_palette[pal_ptr + 2];
+#endif
+            if (current_color > wanted) {
+                current_color--;
+                changed_flag = 1;
+            } else if (current_color < wanted) {
+                if (fade_no >= (unsigned char)current_color) {
+                    current_color++;
+                    changed_flag = 1;
                 }
             }
-            current_palette[i * 3 + 2] = cur;
+#if PLATFORM_DOS
+            current_palette[i * 3 + 2] = current_color;
+#else
+            current_palette[pal_ptr + 2] = current_color;
+#endif
         }
 
-        if (!changed) break;
+        if (!changed_flag) break;
         set_vga_palette(current_palette);
     }
 

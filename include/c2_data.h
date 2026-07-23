@@ -258,7 +258,7 @@ extern int db_buffer_size;
 extern int db_handle;
 extern int db_playing;
 extern int db_recommended_buffer_size;
-extern char debar_fade_click;
+extern unsigned char debar_fade_click;
 extern char debug_interupt;
 extern unsigned char decision;
 extern int demo_mode;
