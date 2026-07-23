@@ -364,7 +364,31 @@ void get_directory(char *pattern)
 
     first_entry = 0;
 }
+#else
+void get_directory(char *pattern)
+{
+    struct _finddata_t find_buf;
+    long hFile;
+    int j;
+    int find_return;
 
+    no_of_entries = 0;
+    hFile = _findfirst(pattern, &find_buf);
+    if (hFile == -1) return;
+    find_return = 0;
+    while (find_return == 0) {
+        for (j = 0; j < 13; j++) {
+            directory[no_of_entries][j] = find_buf.name[j];
+        }
+        no_of_entries++;
+        find_return = _findnext(hFile, &find_buf);
+        if (no_of_entries >= 100) break;
+    }
+    first_entry = 0;
+}
+#endif /* PLATFORM_DOS */
+
+#if PLATFORM_DOS
 // Switch to the CD drive and media subdirectory selected by the file extension.
 // FUNCTION: C2 0x2426e
 // FUNCTION: C2WIN 0x0044a8ae
