@@ -1415,25 +1415,25 @@ void clear_a_screen(void)
 void grey_a_screen(void)
 {
     int i;
-    int palette_offset;
-    int total;
-    int idx;
+    int offset;
+    int value;
+    int colour;
 
     if (screen_mode != 2)         return;
     if (internal_screen == 0)     return;
 
     for (i = 0; i < 0x100; i++)
     {
-        palette_offset = i * 3; total = (unsigned char)current_palette[palette_offset];
-        total += (unsigned char)current_palette[palette_offset];
-        total += (unsigned char)current_palette[palette_offset]; total /= 3;
-        greying_data[i] = (unsigned char)(0x3f - (total >> 1));
+        offset = i * 3; value = (unsigned char)current_palette[offset];
+        value += (unsigned char)current_palette[offset];
+        value += (unsigned char)current_palette[offset]; value /= 3;
+        greying_data[i] = (unsigned char)(0x3f - (value >> 1));
     }
 
     for (i = 0; i < 0x4b000; i++)
     {
-        idx = internal_screen[i];
-        internal_screen[i] = greying_data[idx];
+        colour = internal_screen[i];
+        internal_screen[i] = greying_data[colour];
     }
 }
 
