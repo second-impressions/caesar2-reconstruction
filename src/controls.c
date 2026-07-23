@@ -84,37 +84,35 @@ void show_menus(struct menu_rec *menu_list, int menu_count, int active_menu_idx)
 // FUNCTION: C2WIN 0x004201d2
 void show_menu_items(struct menu_item_rec *item_list, int x, int y, int text_group, int item_count, int active_item_idx)
 {
-    struct menu_item_rec *item_ptr;
     int i;
-    int row_y;
-    int text_idx;
-    int refresh_x;
-    int refresh_y;
+    int item_y;
+    int menu_text;
+    int col_no;
+    int ry;
     int refresh_width;
-    int refresh_height;
+    int tile_rows;
 
     sprite_width = 9;
     sprite_height = item_count * 20 + 4;
     show_fast_rect(x, y + 0x12, 0x1a);
-    item_ptr = item_list;
     for (i = 1; i <= item_count; i++) {
-        text_idx = item_ptr->text;
-        row_y = y + 0x18 + item_ptr->y;
+        menu_text = item_list->text;
+        item_y = y + 0x18 + item_list->y;
         if (i == active_item_idx) {
             sprite_width = 9;
             sprite_height = 0xf;
-            show_fast_rect(x, row_y - 1, 0x10);
-            font_list(text_group, text_idx, x + 0x10, row_y, font1, 0x1a);
+            show_fast_rect(x, item_y - 1, 0x10);
+            font_list(text_group, menu_text, x + 0x10, item_y, font1, 0x1a);
         }
-        else font_list(text_group, text_idx, x + 0x10, row_y, font1, 0x10);
-        item_ptr++;
+        else font_list(text_group, menu_text, x + 0x10, item_y, font1, 0x10);
+        item_list++;
     }
     ref_x = x / 16;
     ref_y = (y + 0x12) / 16;
     refresh_width = 10;
-    refresh_height = (item_count * 20 + 4) / 16 + 2;
-    for (refresh_y = ref_y; refresh_y < ref_y + refresh_height; refresh_y++)
-        for (refresh_x = ref_x; refresh_x < ref_x + refresh_width; refresh_x++) svga_refresh_table[refresh_x + refresh_y * 40] = 2;
+    tile_rows = (item_count * 20 + 4) / 16 + 2;
+    for (ry = ref_y; ry < ref_y + tile_rows; ry++)
+        for (col_no = ref_x; col_no < ref_x + refresh_width; col_no++) svga_refresh_table[col_no + ry * 40] = 2;
 }
 
 // Draw a system window sized for the current selection list.
