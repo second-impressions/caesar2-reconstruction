@@ -2505,16 +2505,16 @@ void get_fb_length(void)
 // FUNCTION: C2WIN 0x0044d72a
 int get_fb_width(unsigned char *font)
 {
-    int i;
-    int total;
+    int char_idx;
+    int width;
     unsigned char c;
 
-    i = 0;
-    total = 0;
-    while ((c = format_buffer[i++]) != 0) {
-        total = total + get_letter_width(c, font);
+    char_idx = 0;
+    width = 0;
+    while ((c = format_buffer[char_idx++]) != 0) {
+        width = width + get_letter_width(c, font);
     }
-    return total;
+    return width;
 }
 
 // Word-wrap measurement: walk the format_buffer and return the number of display lines the text
