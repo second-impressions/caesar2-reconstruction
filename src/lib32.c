@@ -260,12 +260,12 @@ unsigned char mouse_right_preclick;
 unsigned char mouse_left_preclick;
 char mouse_right_button;
 unsigned char mouse_right_click;
-char key_code;
+unsigned char key_code;
 char debug_interupt;
-char key_ascii_was;
+unsigned char key_ascii_was;
 char mse_button;
 unsigned char key_ready;
-char key_ascii;
+unsigned char key_ascii;
 
 extern void write_i_sprite(unsigned char *sprite_addr);
 extern void write_i_left_sprite(unsigned char *sprite_addr);
