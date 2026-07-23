@@ -3092,6 +3092,7 @@ void high_beep(void)
 
 // Short beep at 220 Hz (0xDC).
 // FUNCTION: C2 0x275bf
+// FUNCTION: C2WIN 0x0044ea10
 void low_beep(void)
 {
     sound(0xdc);
@@ -3102,6 +3103,11 @@ void low_beep(void)
 void high_beep(void)
 {
     Beep(0x370, 50);
+}
+
+void low_beep(void)
+{
+    Beep(0xdc, 50);
 }
 #endif /* PLATFORM_DOS */
 
