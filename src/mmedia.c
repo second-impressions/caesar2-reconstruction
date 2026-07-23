@@ -767,7 +767,8 @@ void act_forward_tutorial_page(void)
 // FUNCTION: C2WIN 0x00453b88
 int city_icon_allowed(int icon_idx)
 {
-    return (unsigned char)city_tutorial_icons[icon_idx] <= tutorial_level;
+    if (city_tutorial_icons[icon_idx] > tutorial_level) return 0;
+    return 1;
 }
 
 // Return whether the current tutorial stage permits a region-map icon.
