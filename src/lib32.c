@@ -2247,28 +2247,28 @@ void load_to_text_buffer(char *src, int entry_idx, int word_count, int copy_len)
 // FUNCTION: C2WIN 0x0044ce30
 void load_from_text_buffer(char *dst, int entry_idx, int word_count, int copy_len)
 {
-    int buffer_offset;
-    char *src;
-    unsigned char i;
+    int text_offset;
+    char *buffer_ptr;
+    unsigned char char_idx;
     unsigned char offset_byte;
 
-    src = text_buffer;
+    buffer_ptr = text_buffer;
     offset_byte = text_buffer[entry_idx * 4 + 0x1e];
-    buffer_offset  = offset_byte;
-    buffer_offset  = buffer_offset << 8;
+    text_offset  = offset_byte;
+    text_offset  = text_offset << 8;
     offset_byte = text_buffer[entry_idx * 4 + 0x1f];
-    buffer_offset  = buffer_offset + offset_byte;
-    buffer_offset = buffer_offset + 0x1c;
-    src = src + buffer_offset;
+    text_offset  = text_offset + offset_byte;
+    text_offset = text_offset + 0x1c;
+    buffer_ptr = buffer_ptr + text_offset;
     while (word_count > 0) {
-        if (*src == 0 && (signed char)*(src - 1) >= ' ')
+        if (*buffer_ptr == 0 && (signed char)*(buffer_ptr - 1) >= ' ')
             word_count--;
-        src++;
+        buffer_ptr++;
     }
-    while ((signed char)*src < ' ')
-        src++;
-    for (i = 0; i < copy_len; i++)
-        dst[i] = src[i];
+    while ((signed char)*buffer_ptr < ' ')
+        buffer_ptr++;
+    for (char_idx = 0; char_idx < copy_len; char_idx++)
+        dst[char_idx] = buffer_ptr[char_idx];
 }
 
 // Returns the 24-bit little-endian value at text_buffer[idx*4 + 8..10]: (high<<16) + (mid<<8) +
