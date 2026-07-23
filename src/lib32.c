@@ -2519,7 +2519,6 @@ int get_fb_lines(void)
 void in_format_buffer(char *src, int max_chars, int line_width, int edit_limit)
 {
     int i;
-    char unused_char;
 
     for (i = 0x7cf; i >= 0; i--) format_buffer[i] = 0;
     while (*src) format_buffer[++i] = *src++;
