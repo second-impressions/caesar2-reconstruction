@@ -1424,6 +1424,8 @@ void dos_cls(void)
     r.w.ax  = 0x600;
     int386(0x10, &r, &r);
 }
+#else
+extern void dos_cls(void);
 #endif /* PLATFORM_DOS */
 
 #pragma aux click_handler __loadds parm [eax] [ebx] [ecx] [edx] [esi] [edi];
@@ -1485,6 +1487,8 @@ void install_mouse(void)
     sr.es = FP_SEG(click_handler);
     int386x(0x33, &in, &out, &sr);
 }
+#else
+extern void install_mouse(void);
 #endif /* PLATFORM_DOS */
 
 // Drain the deferred mouse-call buffer (cbd) into mse_x/mse_y/mse_button.
@@ -1531,6 +1535,9 @@ int init_mouse(void)
         mouse_installed = 0;
     return mouse_installed;
 }
+#else
+extern void de_install_mouse(void);
+extern int init_mouse(void);
 #endif /* PLATFORM_DOS */
 
 // Constrain the mouse cursor to the active screen mode's resolution. No-op if no mouse is
@@ -1581,6 +1588,9 @@ void read_mouse(void)
     mse_y = r.w.dx;
     mse_button = r.w.bx;
 }
+#else
+extern int mouserange();
+extern void read_mouse(void);
 #endif /* PLATFORM_DOS */
 
 // Poll the mouse until the user clicks any button.
@@ -1631,6 +1641,8 @@ void set_mouse(void)
     r.w.dx = mse_y;
     int386(0x33, &r, &r);
 }
+#else
+extern int set_mouse();
 #endif /* PLATFORM_DOS */
 
 // Pump the mouse driver and update the engine's mouse state. Tries sim_mouse() first
