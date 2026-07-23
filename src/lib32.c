@@ -2462,14 +2462,12 @@ void test_for_delimiter(void)
     at_limit = 0;
     if (format_buffer[this_letter] == 0)
         at_limit = 1;
-    if (fb_limit == 1) {
-        if (format_buffer[this_letter] == '.') {
-            if (this_letter < 8)
-                at_limit = 1;
-            else
-                at_limit = 2;
-        }
-    }
+    if (fb_limit != 1) return;
+    if (format_buffer[this_letter] != '.') return;
+    if (this_letter < 8)
+        at_limit = 1;
+    else
+        at_limit = 2;
 }
 
 // Walk the format buffer and pull-string-left every space character up to fb_current_char_length,
