@@ -1926,11 +1926,44 @@ int mouse_in_area(int x, int y, int w, int h)
     return 0;
 }
 
+#if PLATFORM_WINDOWS
+// Poll for a Windows character message and return its byte value through key.
+// FUNCTION: C2WIN 0x0044c731
+int get_windows_key(char *key)
+{
+    extern HWND main_window;
+    extern HACCEL accelerator;
+    MSG message;
+
+    if (PeekMessage(&message, 0, WM_CHAR, WM_CHAR, PM_REMOVE)) {
+        if (TranslateAccelerator(main_window, accelerator, &message) == 0) {
+            TranslateMessage(&message);
+            DispatchMessage(&message);
+            *key = (char)message.wParam;
+            return 1;
+        }
+    }
+    return 0;
+}
+#endif
+
 // Non-blocking keyboard poll.
 // FUNCTION: C2 0x26056
 // FUNCTION: C2WIN 0x0044c7aa
 void get_key(void)
 {
+#if PLATFORM_WINDOWS
+    char key;
+
+    key_ready = 0;
+    key_ascii = 0;
+    if (get_windows_key(&key)) {
+        key_ascii_was = key_ascii;
+        key_ready = 1;
+        key_code = 0;
+        key_ascii = key;
+    }
+#else
     key_ready = 0;
     key_ascii = 0;
     if (kbhit()) {
@@ -1942,6 +1975,7 @@ void get_key(void)
             key_code = getch();
         }
     }
+#endif
 }
 
 // Drain the keyboard buffer then block until the next key event.
