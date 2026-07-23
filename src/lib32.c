@@ -397,6 +397,7 @@ void cd_path(const char *filename)
     else if (strcmp("XMI", extension) == 0) chdir("xmi");
     else if (strcmp("SMK", extension) == 0) chdir("smk");
 }
+#endif /* PLATFORM_DOS */
 
 // If c2inf.drive_init==1 we're booted from a non-system drive: switch back to the original drive
 // and chdir into the install path.
@@ -405,12 +406,14 @@ void cd_path(const char *filename)
 void main_path(void)
 {
     unsigned drive_count;
-    if (c2inf.drive_init == 1) {
-        _dos_setdrive(drive_name - 0x40, &drive_count);
-        chdir(path_name);
-    }
-}
+    if (c2inf.drive_init != 1) return;
+#if PLATFORM_DOS
+    _dos_setdrive(drive_name - 0x40, &drive_count);
+#else
+    _chdrive(drive_name - 0x40);
 #endif /* PLATFORM_DOS */
+    chdir(path_name);
+}
 
 // Walk past the filename to the '.' separator and copy the 3-char extension into the global
 // `extension[]` buffer (NUL-terminated).
