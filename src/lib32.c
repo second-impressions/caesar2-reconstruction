@@ -2277,19 +2277,18 @@ void load_from_text_buffer(char *dst, int entry_idx, int word_count, int copy_le
 // FUNCTION: C2WIN 0x0044cefc
 int get_buffer_ofset(int entry_idx)
 {
-    int table_offset = entry_idx * 4;
-    int buffer_offset;
+    int offset;
     int offset_byte;
 
-    offset_byte  = (unsigned char)text_buffer[table_offset + 0xa];
+    offset_byte  = (unsigned char)text_buffer[entry_idx * 4 + 0xa];
     offset_byte <<= 16;
-    buffer_offset  = offset_byte;
-    offset_byte  = (unsigned char)text_buffer[table_offset + 9];
+    offset  = offset_byte;
+    offset_byte  = (unsigned char)text_buffer[entry_idx * 4 + 9];
     offset_byte <<= 8;
-    buffer_offset += offset_byte;
-    offset_byte  = (unsigned char)text_buffer[table_offset + 8];
-    buffer_offset += offset_byte;
-    return buffer_offset;
+    offset += offset_byte;
+    offset_byte  = (unsigned char)text_buffer[entry_idx * 4 + 8];
+    offset += offset_byte;
+    return offset;
 }
 
 // Walk the text buffer from the entry's offset, skipping `word_count` tokens (anything preceded by
