@@ -1562,11 +1562,12 @@ extern void install_mouse(void);
 void read_installed_mouse(void)
 {
     if (mouse_installed == 0) return;
-    if (cbd.pending == 0)     return;
-    mse_x      = cbd.cx;
-    mse_y      = cbd.dx;
-    mse_button = (char)cbd.bx;
-    cbd.pending = 0;
+    if (cbd.pending != 0) {
+        mse_x      = cbd.cx;
+        mse_y      = cbd.dx;
+        mse_button = (char)cbd.bx;
+        cbd.pending = 0;
+    }
 }
 
 #if PLATFORM_DOS
