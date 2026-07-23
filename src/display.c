@@ -119,25 +119,26 @@ void display_picfile(char *filename)
 // FUNCTION: C2WIN 0x0045fbd3
 void show_a_system_window(int window_x, int window_y, int column_count, int row_count)
 {
-    int row_idx;
-    int column_idx;
+    int row;
+    int column;
 
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (column_idx = 0; column_idx < column_count; column_idx++) {
-            if (row_idx == 0)
+    for (row = 0; row < row_count; row++) {
+        for (column = 0; column < column_count; column++) {
+            if (row == 0)
                 sprite_image_no = 0;
-            else if (row_idx == row_count - 1)
+            else if (row == row_count - 1)
                 sprite_image_no = 6;
             else
                 sprite_image_no = 3;
-            if (column_idx != 0) {
-                if (column_idx == column_count - 1)
-                    sprite_image_no += 2;
-                else
-                    sprite_image_no++;
-            }
-            sprite_x = window_x + column_idx * 16;
-            sprite_y = window_y + row_idx * 16;
+            if (column == 0)
+                goto draw_system_tile;
+            if (column == column_count - 1)
+                sprite_image_no += 2;
+            else
+                sprite_image_no++;
+draw_system_tile:
+            sprite_x = window_x + column * 16;
+            sprite_y = window_y + row * 16;
             place_16x16_block(system_panel);
         }
     }
