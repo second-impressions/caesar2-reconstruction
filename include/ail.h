@@ -57,8 +57,10 @@
 #include "c2_target.h"
 #if PLATFORM_WINDOWS
 #define AILIMPORT __declspec(dllimport)
+#define AILCALL __stdcall
 #else
 #define AILIMPORT
+#define AILCALL
 #endif
 
 AILIMPORT void AIL_shutdown(void);
@@ -67,7 +69,7 @@ AILIMPORT void AIL_end_sample     (int handle);
 AILIMPORT int  AIL_sequence_status(int handle);
 AILIMPORT void AIL_end_sequence   (int handle);
 AILIMPORT void AIL_stop_sequence  (int handle);
-AILIMPORT void AIL_set_sequence_volume(int handle, int volume, int ms);
+AILIMPORT void AILCALL AIL_set_sequence_volume(int handle, int volume, int ms);
 AILIMPORT void AIL_set_digital_master_volume(int dig, int volume);
 AILIMPORT int  AIL_startup(void);
 AILIMPORT void AIL_stop_sample  (int handle);
