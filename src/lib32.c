@@ -2249,15 +2249,17 @@ void load_from_text_buffer(char *dst, int entry_idx, int word_count, int copy_le
 {
     int buffer_offset;
     char *src;
-    char i;
+    unsigned char i;
     unsigned char offset_byte;
 
+    src = text_buffer;
     offset_byte = text_buffer[entry_idx * 4 + 0x1e];
     buffer_offset  = offset_byte;
     buffer_offset  = buffer_offset << 8;
     offset_byte = text_buffer[entry_idx * 4 + 0x1f];
     buffer_offset  = buffer_offset + offset_byte;
-    src  = &text_buffer[0x1c + buffer_offset];
+    buffer_offset = buffer_offset + 0x1c;
+    src = src + buffer_offset;
     while (word_count > 0) {
         if (*src == 0 && (signed char)*(src - 1) >= ' ')
             word_count--;
