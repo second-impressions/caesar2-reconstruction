@@ -3364,22 +3364,22 @@ void draw_a_line(int x1, int y1, int x2, int y2, int colour)
 // FUNCTION: C2WIN 0x0044ef01
 void draw_a_dotted_line(int x1, int y1, int x2, int y2, int colour)
 {
-    int loc_x;
-    int loc_y;
+    int x;
+    int y;
 
     get_longest_side(x1, y1, x2, y2);
-    loc_y = iy;
-    loc_x = ix;
+    y = iy;
+    x = ix;
 
     if (x1 == x2) {
-        while (loc_y <= ey) {
-            draw_a_point(x1, loc_y, colour);
-            loc_y += 2;
+        while (y <= ey) {
+            draw_a_point(x1, y, colour);
+            y += 2;
         }
     } else if (y1 == y2) {
-        while (loc_x <= ex) {
-            draw_a_point(loc_x, y1, colour);
-            loc_x += 2;
+        while (x <= ex) {
+            draw_a_point(x, y1, colour);
+            x += 2;
         }
     }
 }
