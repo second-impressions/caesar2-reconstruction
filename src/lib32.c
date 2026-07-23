@@ -3416,25 +3416,21 @@ void draw_a_dias(int x, int y, int w, int h)
 // FUNCTION: C2WIN 0x0044f0d9
 void draw_a_diamond(int x, int y, int width, int height, int colour)
 {
-    int col;
-    int row_down;
-    int row_up;
+    int i;
+    int j;
+    int k;
 
     width += 2;
-    col = 0;
-    row_down = height / 2 - 1;
-    row_up   = height / 2;
-    for ( ; col < width / 2; col += 2, row_down--, row_up++) {
-        draw_a_2point(x + col, y + row_down, colour);
-        draw_a_2point(x + col, y + row_up, colour);
+    i = 0; j = height / 2 - 1; k = height / 2;
+    for ( ; i < width / 2; i += 2, j--, k++) {
+        draw_a_2point(x + i, y + j, colour);
+        draw_a_2point(x + i, y + k, colour);
     }
 
-    col      = width / 2;
-    row_down = height - 2;
-    row_up   = 1;
-    for ( ; col < width - 2; col += 2, row_down--, row_up++) {
-        draw_a_2point(x + col, y + row_down, colour);
-        draw_a_2point(x + col, y + row_up, colour);
+    i = width / 2; j = height - 2; k = 1;
+    for ( ; i < width - 2; i += 2, j--, k++) {
+        draw_a_2point(x + i, y + j, colour);
+        draw_a_2point(x + i, y + k, colour);
     }
 }
 
