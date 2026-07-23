@@ -1719,10 +1719,8 @@ void clear_mouse(void)
     do {
         get_mouse();
     } while (mouse_left_button != 0 || mouse_right_button != 0);
-    mouse_right_click    = 0;
-    mouse_left_click     = 0;
-    mouse_right_preclick = 0;
-    mouse_left_preclick  = 0;
+    mouse_left_click = mouse_right_click = 0;
+    mouse_left_preclick = mouse_right_preclick = 0;
 }
 
 // Update the cached (mouse_x, mouse_y) and push them to the driver via set_mouse (int 33h fn 4).
