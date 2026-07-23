@@ -219,6 +219,11 @@ void show_a_mosaic_frame(int window_x, int window_y, int column_count, int row_c
     }
 }
 
+void get_general_sprite_sizes(int);
+void general_sprite(int, int, int);
+void write_general_sprite(int, int, int);
+void write_general_sprite_with_front_ofset(int, int, int, int);
+
 // Draw a horizontal stone divider with capped ends.
 // FUNCTION: C2 0x5a6d5
 // FUNCTION: C2WIN 0x0045ff6a
