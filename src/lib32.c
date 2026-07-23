@@ -1728,10 +1728,8 @@ void clear_mouse(void)
 // FUNCTION: C2WIN 0x0044c1da
 void position_mouse(short x, short y)
 {
-    mse_x   = x;
-    mouse_x = x;
-    mse_y   = y;
-    mouse_y = y;
+    mouse_x = mse_x = x;
+    mouse_y = mse_y = y;
     set_mouse();
 }
 
