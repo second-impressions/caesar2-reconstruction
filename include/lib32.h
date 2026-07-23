@@ -268,7 +268,7 @@ extern int scat128;
 extern unsigned char font1[];
 extern int rand32000;
 extern int rand8;
-extern char format_buffer[];
+extern unsigned char format_buffer[];
 extern char hot_exit_flag;
 extern unsigned char decision;
 extern char confirming;

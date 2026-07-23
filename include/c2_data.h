@@ -386,7 +386,7 @@ extern unsigned char font1[];
 extern unsigned char font2[];
 extern int font_screen_limit;
 extern int font_style;
-extern char format_buffer[];
+extern unsigned char format_buffer[];
 extern int forts_count;
 extern int forts_pass_count;
 extern unsigned char forum_dept;

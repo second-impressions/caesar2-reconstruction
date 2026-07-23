@@ -37,7 +37,7 @@ char temp_palette[768];
 unsigned char logos[5344];
 unsigned char font2[28248];
 unsigned char system_panel[41672];
-char format_buffer[2000];
+unsigned char format_buffer[2000];
 char text_buffer[40000];
 char path_name[80];
 struct dpmi_mem_info memory;
