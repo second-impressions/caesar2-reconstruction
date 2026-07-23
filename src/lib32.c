@@ -2038,12 +2038,11 @@ void strip_trailing_space(signed char *s)
     i = 0;
     while (s[i] != 0)
         i++;
-    do {
-        i--;
-        if (s[i] != ' ')
-            return;
+    i--;
+    while (s[i] == ' ') {
         s[i] = 0;
-    } while (1);
+        i--;
+    }
 }
 
 // Collapse repeated spaces in a NUL-terminated string.
