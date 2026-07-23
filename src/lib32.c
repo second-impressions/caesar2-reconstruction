@@ -2506,14 +2506,11 @@ int get_fb_width(unsigned char *font)
 {
     int i;
     int total;
+    unsigned char c;
 
     i = 0;
     total = 0;
-    while (1) {
-        unsigned char c;
-        c = format_buffer[i];
-        i = i + 1;
-        if (c == 0) break;
+    while ((c = format_buffer[i++]) != 0) {
         total = total + get_letter_width(c, font);
     }
     return total;
