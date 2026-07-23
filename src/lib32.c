@@ -2655,7 +2655,7 @@ int one_letter(unsigned char *font, unsigned char letter)
 // FUNCTION: C2WIN 0x0044dedb
 char get_insert_letter(void)
 {
-    char c = insert_text[insert_count];
+    unsigned char c = insert_text[insert_count];
     if (c == 0) {
         insert_count = 0;
         return ' ';
