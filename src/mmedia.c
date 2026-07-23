@@ -776,7 +776,8 @@ int city_icon_allowed(int icon_idx)
 // FUNCTION: C2WIN 0x00453bbb
 int region_icon_allowed(int icon_idx)
 {
-    return (unsigned char)region_tutorial_icons[icon_idx] <= tutorial_level;
+    if (region_tutorial_icons[icon_idx] > tutorial_level) return 0;
+    return 1;
 }
 
 // Grey out city-map controls that the current tutorial stage has not unlocked.
