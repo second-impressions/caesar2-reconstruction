@@ -19,6 +19,7 @@ void mid_slider_var(struct slider_rec *slider_ptr, int track_position);
 void down_slider_var(struct slider_rec *slider_ptr);
 void up_slider_var(struct slider_rec *slider_ptr);
 void de_toggle_all_icons(struct icon_rec *icon_list, int icon_count);
+void show_menu_items(struct menu_item_rec *, int, int, int, int, int);
 
 
 // Draw the top-bar menus, record their horizontal hit boxes, and mark the strip for refresh.
@@ -26,55 +27,56 @@ void de_toggle_all_icons(struct icon_rec *icon_list, int icon_count);
 // FUNCTION: C2WIN 0x0041ff90
 void show_menus(struct menu_rec *menu_list, int menu_count, int active_menu_idx)
 {
-    struct menu_rec *menu_ptr;
-    int i;
-    int menu_start_x;
+    int text_pixel_width;
+    int start_x;
     int menu_y;
-    int text_idx;
-    int width_blocks;
-    int text_x;
-    int refresh_x;
-    int refresh_y;
+    int menu_text;
+    int menu_no;
+    int menu_x;
+    int col_no;
+    int ry;
     int refresh_width;
-    int refresh_height;
+    int tile_rows;
 
+#if !C2_FEAT_SOFTWARE_MENUS
+    return;
+#endif
     cover_mouse_droppings();
     hold_mouse_replace = 1;
     x_is = 0;
     x_is = menu_list->u.start_x;
-    menu_start_x = x_is;
-    menu_ptr = menu_list;
-    for (i = 1; i <= menu_count; i++) {
-        text_idx = menu_ptr->text;
-        menu_ptr->u.pos.x1 = x_is;
-        text_x = (short)x_is;
-        menu_y = menu_ptr->y;
-        if (i == active_menu_idx) {
-            get_text_pointer(text_idx, 0);
-            width_blocks = (get_string_width(text_pointer, font1) + 4) / 16 + 2;
-            sprite_width = width_blocks;
+    start_x = x_is;
+    for (menu_no = 1; menu_no <= menu_count; menu_no++) {
+        menu_text = menu_list->text;
+        menu_list->u.pos.x1 = x_is;
+        menu_x = menu_list->u.pos.x1;
+        menu_y = menu_list->y;
+        if (menu_no == active_menu_idx) {
+            get_text_pointer(menu_text, 0);
+            text_pixel_width = get_string_width(text_pointer, font1);
+            sprite_width = (text_pixel_width + 4) / 16 + 2;
             sprite_height = 0xf;
-            show_fast_rect(text_x - 2, menu_y - 1, 0x10);
-            font_list(text_idx, 0, text_x, menu_y, font1, 0x1a);
+            show_fast_rect(menu_x - 2, menu_y - 1, 0x10);
+            font_list(menu_text, 0, menu_x, menu_y, font1, 0x1a);
         } else {
-            get_text_pointer(text_idx, 0);
-            width_blocks = (get_string_width(text_pointer, font1) + 4) / 16 + 2;
-            sprite_width = width_blocks;
+            get_text_pointer(menu_text, 0);
+            text_pixel_width = get_string_width(text_pointer, font1);
+            sprite_width = (text_pixel_width + 4) / 16 + 2;
             sprite_height = 0xf;
-            show_fast_rect(text_x - 2, menu_y - 1, 0x1a);
-            font_list(text_idx, 0, text_x, menu_y, font1, 0x10);
+            show_fast_rect(menu_x - 2, menu_y - 1, 0x1a);
+            font_list(menu_text, 0, menu_x, menu_y, font1, 0x10);
         }
-        menu_ptr->u.pos.x2 = x_is;
+        menu_list->u.pos.x2 = x_is;
         x_is += 0x20;
-        menu_ptr++;
+        menu_list++;
     }
-    ref_x = (menu_start_x - 2) / 16;
+    ref_x = (start_x - 2) / 16;
     ref_y = (menu_y - 1) / 16;
-    refresh_width = (x_is - menu_start_x - 2) / 16 + 2;
-    refresh_height = 2;
-    for (refresh_y = ref_y; refresh_y < ref_y + refresh_height; refresh_y++)
-        for (refresh_x = ref_x; refresh_x < ref_x + refresh_width; refresh_x++)
-            svga_refresh_table[refresh_x + refresh_y * 40] = 2;
+    refresh_width = (x_is - start_x - 2) / 16 + 2;
+    tile_rows = 2;
+    for (ry = ref_y; ry < ref_y + tile_rows; ry++)
+        for (col_no = ref_x; col_no < ref_x + refresh_width; col_no++)
+            svga_refresh_table[col_no + ry * 40] = 2;
 }
 
 // Draw a menu's drop-down items and highlight the active row.
