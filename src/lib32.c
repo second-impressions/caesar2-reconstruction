@@ -2140,18 +2140,18 @@ int get_string_width(char *src, unsigned char *font)
 {
     int total;
     int remaining_chars;
-    char character;
+    unsigned char c;
 
     remaining_chars = 0x2710;
     total = 0;
     while (remaining_chars > 0) {
-        character = *src;
+        c = *src;
         src++;
-        if (character == 0) return total;
-        if (character == ' ') {
+        if (c == 0) return total;
+        if (c == ' ') {
             total += 4;
         } else {
-            sprite_image_no = letter_table[character - ' '];
+            sprite_image_no = letter_table[c - ' '];
             if (sprite_image_no != 0) {
                 sprite_image_no--;
                 data_ptr = sprite_image_no * 16 + 8;
