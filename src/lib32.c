@@ -2218,28 +2218,28 @@ int get_number_from_text(char *text)
 // FUNCTION: C2WIN 0x0044cd64
 void load_to_text_buffer(char *src, int entry_idx, int word_count, int copy_len)
 {
-    int buffer_offset;
-    char *dst;
-    unsigned char i;
+    int text_offset;
+    char *buffer_ptr;
+    unsigned char char_idx;
     unsigned char offset_byte;
 
-    dst = text_buffer;
+    buffer_ptr = text_buffer;
     offset_byte = text_buffer[entry_idx * 4 + 0x1e];
-    buffer_offset  = offset_byte;
-    buffer_offset  = buffer_offset << 8;
+    text_offset  = offset_byte;
+    text_offset  = text_offset << 8;
     offset_byte = text_buffer[entry_idx * 4 + 0x1f];
-    buffer_offset  = buffer_offset + offset_byte;
-    buffer_offset = buffer_offset + 0x1c;
-    dst = dst + buffer_offset;
+    text_offset  = text_offset + offset_byte;
+    text_offset = text_offset + 0x1c;
+    buffer_ptr = buffer_ptr + text_offset;
     while (word_count > 0) {
-        if (*dst == 0 && (signed char)*(dst - 1) >= ' ')
+        if (*buffer_ptr == 0 && (signed char)*(buffer_ptr - 1) >= ' ')
             word_count--;
-        dst++;
+        buffer_ptr++;
     }
-    while ((signed char)*dst < ' ')
-        dst++;
-    for (i = 0; i < copy_len; i++)
-        dst[i] = src[i];
+    while ((signed char)*buffer_ptr < ' ')
+        buffer_ptr++;
+    for (char_idx = 0; char_idx < copy_len; char_idx++)
+        buffer_ptr[char_idx] = src[char_idx];
 }
 
 // Copy bytes from a selected word position in a text-buffer entry into `dst`.
