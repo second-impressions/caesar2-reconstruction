@@ -172,9 +172,21 @@ void stop_sequences(void)
 // FUNCTION: C2WIN 0x0040149b
 void set_samples_volume(void)
 {
+    int volume;
+#if C2_FEAT_PER_SAMPLE_VOLUME
+    int ds;
+#endif
+
     if (c2inf.samples_on == 0)   return;
     if (samples_running == 0)    return;
-    AIL_set_digital_master_volume(dig, totalXpercent(0x7f, c2inf.samples_level));
+    volume = totalXpercent(0x7f, c2inf.samples_level);
+#if C2_FEAT_PER_SAMPLE_VOLUME
+    for (ds = 0; ds < 6; ds++) {
+        AIL_set_sample_volume(S_dig[ds], volume);
+    }
+#else
+    AIL_set_digital_master_volume(dig, volume);
+#endif
 }
 
 // Apply the configured music volume to both MIDI sequence handles.

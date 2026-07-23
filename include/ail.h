@@ -26,6 +26,7 @@
 #pragma aux AIL_sequence_status           "_*" parm caller [] modify [eax ebx ecx edx]
 #pragma aux AIL_end_sequence              "_*" parm caller [] modify [eax ebx ecx edx]
 #pragma aux AIL_stop_sequence             "_*" parm caller [] modify [eax ebx ecx edx]
+#pragma aux AIL_set_sample_volume         "_*" parm caller [] modify [eax ebx ecx edx]
 #pragma aux AIL_set_sequence_volume       "_*" parm caller [] modify [eax ebx ecx edx]
 #pragma aux AIL_set_digital_master_volume "_*" parm caller [] modify [eax ebx ecx edx]
 #pragma aux AIL_startup                   "_*" parm caller [] modify [eax ebx ecx edx]
@@ -69,6 +70,7 @@ AILIMPORT void AILCALL AIL_end_sample     (int handle);
 AILIMPORT int  AILCALL AIL_sequence_status(int handle);
 AILIMPORT void AILCALL AIL_end_sequence   (int handle);
 AILIMPORT void AILCALL AIL_stop_sequence  (int handle);
+AILIMPORT void AILCALL AIL_set_sample_volume(int handle, int volume);
 AILIMPORT void AILCALL AIL_set_sequence_volume(int handle, int volume, int ms);
 AILIMPORT void AILCALL AIL_set_digital_master_volume(int dig, int volume);
 AILIMPORT int  AILCALL AIL_startup(void);
