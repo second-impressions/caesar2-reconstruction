@@ -3019,10 +3019,11 @@ int clicked_delay(int delay)
 {
     int i;
     int j;
-    for (j = 0; j < 1000; j++)
+    int k;
+    for (i = 0; i < 1000; i++)
         get_mouse();
-    for (i = 0; i < delay; i++) {
-        for (j = 0; j < 8000; j++) {
+    for (j = 0; j < delay; j++) {
+        for (k = 0; k < 8000; k++) {
             get_mouse();
             if (mouse_left_click != 0 || mouse_right_click != 0) {
                 clear_mouse();
