@@ -1619,7 +1619,6 @@ void mouserange(int xmin, int ymin, int xmax, int ymax)
 
 // Read the mouse position via int 33h fn 3 and update mse_x, mse_y and mse_button.
 // FUNCTION: C2 0x25bb9
-// FUNCTION: C2WIN 0x0044c055
 void read_mouse(void)
 {
     union REGS r;
@@ -1632,16 +1631,56 @@ void read_mouse(void)
 }
 #else
 extern int mouserange();
-extern void read_mouse(void);
+
+// WIN: 0x0044c055
+void set_mouse(void)
+{
+    extern HWND hWnd;
+    POINT point;
+    point.x = mse_x;
+    point.y = mse_y;
+    ClientToScreen(hWnd, &point);
+    SetCursorPos(point.x, point.y);
+}
+
+// WIN: 0x0044c0fb
+void read_mouse(void)
+{
+    extern HWND main_window;
+    extern HACCEL accelerator;
+    extern void process_windows_message(MSG *message);
+    MSG message;
+    RECT rect;
+    POINT point;
+    int w;
+    int h;
+
+    if (PeekMessage(&message, 0, 0, 0, PM_REMOVE)) {
+        if (TranslateAccelerator(main_window, accelerator, &message) == 0) {
+            TranslateMessage(&message);
+            DispatchMessage(&message);
+            process_windows_message(&message);
+        }
+    }
+}
 #endif /* PLATFORM_DOS */
 
 // Poll the mouse until the user clicks any button.
 // FUNCTION: C2 0x25c0c
+// WIN: 0x0044c161
 void wait_click(void)
 {
+#if PLATFORM_WINDOWS
+    for (;;) {
+        read_mouse();
+        if (mse_button != 0)
+            break;
+    }
+#else
     do {
         read_mouse();
     } while (mse_button == 0);
+#endif
 }
 
 // Drain any held mouse buttons and reset the click/preclick latches.
@@ -1671,7 +1710,6 @@ void position_mouse(short x, short y)
 }
 
 #if PLATFORM_DOS
-
 // Push the cached (mse_x, mse_y) to the mouse driver via int 33h fn 4.
 // FUNCTION: C2 0x25c85
 void set_mouse(void)
@@ -1683,9 +1721,7 @@ void set_mouse(void)
     r.w.dx = mse_y;
     int386(0x33, &r, &r);
 }
-#else
-extern int set_mouse();
-#endif /* PLATFORM_DOS */
+#endif
 
 // Pump the mouse driver and update the engine's mouse state. Tries sim_mouse() first
 // (replay-from-recording / inter-net sync feeder); on no replay frame falls through to
