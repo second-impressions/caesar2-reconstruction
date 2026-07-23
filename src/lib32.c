@@ -2557,45 +2557,34 @@ int get_fb_width(unsigned char *font)
 // FUNCTION: C2WIN 0x0044d782
 int get_fb_lines(void)
 {
-    int line;
-    int px_on_line;
-    int chars_on_line;
-    int idx;
+    int line_no;
+    int pixels_across;
+    int num_chars;
     int last_space;
-    int active;
     unsigned char c;
-    char *fb;
+    int keep_going;
+    int line_offset;
+    char *fb = format_buffer;
+    int linehead;
+    int letter_width;
 
-    fb = format_buffer;
-    active = 1;
-    line = 0;
-    last_space = 0;
-    while (line < 0x64 && active != 0) {
-        idx = last_space;
-        last_space = 0;
-        px_on_line = 0;
-        chars_on_line = 0;
-        while (chars_on_line < 0x32 && active != 0
-               && px_on_line < fb_line_length) {
-            c = (unsigned char)fb[idx];
-            if (c == 0) {
-                active = 0;
-                last_space = idx;
-            } else if (c == ' ') {
-                last_space = idx;
-                px_on_line += 4;
-            } else if (c == '#') {
-                px_on_line += 0x64;
+    keep_going = 1; line_no = 0; linehead = 0;
+    while (line_no < 0x64 && keep_going) {
+        line_offset = linehead; num_chars = pixels_across = last_space = 0;
+        while (num_chars < 0x32 && keep_going
+               && pixels_across < fb_line_length) {
+            c = (unsigned char)fb[line_offset];
+            if (c == 0) { keep_going = 0; last_space = line_offset;
+            } else if (c == ' ') { last_space = line_offset; pixels_across += 4;
+            } else if (c == '#') { pixels_across += 0x64;
             }
-            chars_on_line++;
-            idx++;
+            num_chars++; line_offset++;
         }
-        if (last_space == 0)
-            last_space = idx - 1;
-        line++;
-        last_space++;
+        if (!last_space) { line_offset--; last_space = line_offset;
+        }
+        line_no++; linehead = last_space + 1;
     }
-    return line;
+    return line_no;
 }
 
 // Initialise format_buffer for editing. Wipes all 0x7D0 bytes (= 2000) of the buffer to 0, then
