@@ -3699,18 +3699,16 @@ int get_distance(int x1, int y1, int x2, int y2)
 // FUNCTION: C2WIN 0x0044fdc9
 int get_longest_distance(int x1, int y1, int x2, int y2)
 {
-    int dx;
-    int dy;
-    int distance;
-    if (x1 > x2)      dx = x1 - x2;
-    else if (x1 < x2) dx = x2 - x1;
-    else              dx = 0;
-    if (y1 > y2)      dy = y1 - y2;
-    else if (y1 < y2) dy = y2 - y1;
-    else              dy = 0;
-    if (dx < dy) distance = dy;
-    else         distance = dx;
-    return distance;
+    int x_diff;
+    int y_diff;
+    if (x1 > x2)      x_diff = x1 - x2;
+    else if (x1 < x2) x_diff = x2 - x1;
+    else              x_diff = 0;
+    if (y1 > y2)      y_diff = y1 - y2;
+    else if (y1 < y2) y_diff = y2 - y1;
+    else              y_diff = 0;
+    if (x_diff < y_diff) return y_diff;
+    return x_diff;
 }
 
 // min(|dx|, |dy|) — the shortest leg of the bounding rectangle.
