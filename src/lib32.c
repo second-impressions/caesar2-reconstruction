@@ -3250,8 +3250,7 @@ void vhigh_beep(void)
 // FUNCTION: C2WIN 0x0044eaa4
 void get_longest_side(int x1, int y1, int x2, int y2)
 {
-    gy = 1;
-    gx = 1;
+    gx = gy = 1;
 
     if (x1 > x2) dx = x1 - x2;
     else         dx = x2 - x1;
