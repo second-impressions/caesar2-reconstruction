@@ -3683,15 +3683,15 @@ int valueDIVtotal(int value, int total)
 // FUNCTION: C2WIN 0x0044fd3a
 int get_distance(int x1, int y1, int x2, int y2)
 {
-    int dx;
-    int dy;
-    if (x1 > x2)      dx = x1 - x2;
-    else if (x1 < x2) dx = x2 - x1;
-    else              dx = 0;
-    if (y1 > y2)      dy = y1 - y2;
-    else if (y1 < y2) dy = y2 - y1;
-    else              dy = 0;
-    return dx + dy;
+    int x_diff;
+    int y_diff;
+    if (x1 > x2)      x_diff = x1 - x2;
+    else if (x1 < x2) x_diff = x2 - x1;
+    else              x_diff = 0;
+    if (y1 > y2)      y_diff = y1 - y2;
+    else if (y1 < y2) y_diff = y2 - y1;
+    else              y_diff = 0;
+    return x_diff + y_diff;
 }
 
 // Chebyshev (king-move) distance: max(|dx|, |dy|).
