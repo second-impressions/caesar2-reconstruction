@@ -3722,35 +3722,35 @@ void scatter(void)
 // reseed rand32000) if the masked sample exceeds max.
 // FUNCTION: C2 0x2817b
 // FUNCTION: C2WIN 0x0044fad0
-int get_rand_max(int max_value)
+int get_rand_max(int max)
 {
     int i;
     int mask;
-    int value;
+    int v;
 
-    if (max_value <= 0) return 0;
+    if (max <= 0) return 0;
 
-    if      (max_value <=     1) mask =     1;
-    else if (max_value <=     3) mask =     3;
-    else if (max_value <=     7) mask =     7;
-    else if (max_value <=   0xf) mask =   0xf;
-    else if (max_value <=  0x1f) mask =  0x1f;
-    else if (max_value <=  0x3f) mask =  0x3f;
-    else if (max_value <=  0x7f) mask =  0x7f;
-    else if (max_value <=  0xff) mask =  0xff;
-    else if (max_value <= 0x1ff) mask = 0x1ff;
-    else if (max_value <= 0x3ff) mask = 0x3ff;
-    else if (max_value <= 0x7ff) mask = 0x7ff;
-    else if (max_value <= 0xfff) mask = 0xfff;
-    else if (max_value <= 0x1fff) mask = 0x1fff;
-    else if (max_value <= 0x3fff) mask = 0x3fff;
-    else if (max_value <= 0x7fff) mask = 0x7fff;
+    if      (max <=     1) mask =     1;
+    else if (max <=     3) mask =     3;
+    else if (max <=     7) mask =     7;
+    else if (max <=   0xf) mask =   0xf;
+    else if (max <=  0x1f) mask =  0x1f;
+    else if (max <=  0x3f) mask =  0x3f;
+    else if (max <=  0x7f) mask =  0x7f;
+    else if (max <=  0xff) mask =  0xff;
+    else if (max <= 0x1ff) mask = 0x1ff;
+    else if (max <= 0x3ff) mask = 0x3ff;
+    else if (max <= 0x7ff) mask = 0x7ff;
+    else if (max <= 0xfff) mask = 0xfff;
+    else if (max <= 0x1fff) mask = 0x1fff;
+    else if (max <= 0x3fff) mask = 0x3fff;
+    else if (max <= 0x7fff) mask = 0x7fff;
     else                   mask = 0xffff;
 
     i = 0;
     while (i++ < 10) {
-        value = rand32000 & mask;
-        if (value <= max_value) return value;
+        v = rand32000 & mask;
+        if (v <= max) return v;
         random();
     }
     return 0;
