@@ -2365,26 +2365,27 @@ int edit_format_buffer(void)
     /* Printable / control: backspace and the per-codepage whitelist. */
     if (key_ascii == 8) {                          /* BS     */
         if (this_letter > 0) {
-            at_limit = 0;
             this_letter--;
+            at_limit = 0;
             del_fb();
             return 0;
         }
     }
     if (at_limit == 2) return 0;
 
-    if (key_ascii == ' ' || key_ascii == '\\'
-        || key_ascii == ',' || key_ascii == '?'
-        || key_ascii == '\'' || key_ascii == '!'
-        || key_ascii == '"'
-        || (key_ascii >= '0' && key_ascii <= '9')
-        || (key_ascii >= 'a' && key_ascii <= 'z')
-        || (key_ascii >= 'A' && key_ascii <= 'Z')
-        || (key_ascii >= 0x80 && key_ascii <= 0x9a)
-        || (key_ascii >= 0xa0 && key_ascii <= 0xa7)
-        || key_ascii == 0xe1) {
-        to_fb();
-    }
+    if (key_ascii == ' ') to_fb();
+    else if (key_ascii == '\\') to_fb();
+    else if (key_ascii == ',') to_fb();
+    else if (key_ascii == '?') to_fb();
+    else if (key_ascii == '\'') to_fb();
+    else if (key_ascii == '!') to_fb();
+    else if (key_ascii == '"') to_fb();
+    else if (key_ascii >= '0' && key_ascii <= '9') to_fb();
+    else if (key_ascii >= 'a' && key_ascii <= 'z') to_fb();
+    else if (key_ascii >= 'A' && key_ascii <= 'Z') to_fb();
+    else if (key_ascii >= 0x80 && key_ascii <= 0x9a) to_fb();
+    else if (key_ascii >= 0xa0 && key_ascii <= 0xa7) to_fb();
+    else if (key_ascii == 0xe1) to_fb();
 
     if (this_letter >= fb_max_char_length)
         this_letter = fb_max_char_length;
