@@ -129,39 +129,54 @@ void show_selection_box(int selection_count, int x, int y, int text_group)
                          select_height / 16);
 }
 
+int check_selection_goods_list(short goods_kind);
+int check_highlight_list(short goods_kind);
+void clear_highlight_goods_list(void);
+void get_selection_goods_list(int);
+void show_selections(struct selection_rec *, int, int, int, int, int);
+void show_confirming_panel(int, int, int);
+void show_Xconfirming_panel(int, int, int);
+void show_adjusting_panel(int, int, int, int);
+void show_warning_panel(int, int, int);
+void show_icons(struct icon_rec *, int);
+int slider_control(struct slider_rec *, int);
+
 // Determine which choices are available and calculate the selection panel's dimensions.
 // FUNCTION: C2 0x2d80c
 // FUNCTION: C2WIN 0x004203b8
-void get_allowed_selections(struct selection_rec *selection_list, int selection_count, int text_group)
+void get_allowed_selections(struct selection_rec *list, int count, int what)
 {
+    int current_cost;
+    int text_word_no;
     int i;
     int max_cost;
-    int width_or_cost;
+    int text_width;
 
     select_count = 0;
     select_width = 0;
     select_height = 0;
     select_cost_flag = 0;
     max_cost = 0;
-    for (i = 1; i <= selection_count; i++) {
-        if (selection_list->max_population > max_population) {
-            selection_list->visible = 0;
-        } else if (check_selection_goods_list(selection_list->goods_kind) == 0) {
-            selection_list->visible = 0;
+    for (i = 1; i <= count; i++) {
+        if (list->max_population > max_population) {
+            list->visible = 0;
+        } else if (check_selection_goods_list(list->goods_kind) == 0) {
+            list->visible = 0;
         } else {
-            selection_list->visible = 1;
+            list->visible = 1;
             select_count++;
-            get_text_pointer(text_group, selection_list->text_word);
-            width_or_cost = get_string_width(text_pointer, font1);
-            if (width_or_cost > select_width) select_width = width_or_cost;
-            if (selection_list->cost_kind != 0) {
-                if (map_mode == 0) width_or_cost = city_costs[selection_list->cost_kind];
-                else width_or_cost = region_costs[selection_list->cost_kind];
-                if (width_or_cost > max_cost) max_cost = width_or_cost;
+            text_word_no = list->text_word;
+            get_text_pointer(what, text_word_no);
+            text_width = get_string_width(text_pointer, font1);
+            if (text_width > select_width) select_width = text_width;
+            if (list->cost_kind != 0) {
+                if (map_mode == 0) current_cost = city_costs[list->cost_kind];
+                else current_cost = region_costs[list->cost_kind];
+                if (current_cost > max_cost) max_cost = current_cost;
             }
         }
-        selection_list->highlighted = check_highlight_list(selection_list->goods_kind) != 0;
-        selection_list++;
+        list->highlighted = check_highlight_list(list->goods_kind) != 0;
+        list++;
     }
     if (max_cost <= 0) select_cost_flag = 0;
     else if (max_cost < 100) select_cost_flag = 0x30;
@@ -170,6 +185,10 @@ void get_allowed_selections(struct selection_rec *selection_list, int selection_
     select_height = select_count * 20 + 0x20;
     select_width += 0x30;
 }
+
+int control_buttons(int, int, struct button_rec *, int);
+int control_selection(struct selection_rec *, int, int, int, int);
+int over_selection(int, int, int);
 
 // Clear all goods highlights.
 // FUNCTION: C2 0x2d942
