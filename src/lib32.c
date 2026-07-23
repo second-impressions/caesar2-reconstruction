@@ -2167,22 +2167,19 @@ int get_string_width(char *src, unsigned char *font)
 // Pixel width of a single ASCII character in the given font.
 // FUNCTION: C2 0x26305
 // FUNCTION: C2WIN 0x0044cc2a
-int get_letter_width(int letter, unsigned char *font)
+int get_letter_width(unsigned char letter, unsigned char *font)
 {
-    char character;
     int width;
-    character = (char)letter;
-    if (character == 0) width = 0;
-    else if (character == ' ') width = 4;
-    else {
-        sprite_image_no = letter_table[character - 0x20];
-        if (sprite_image_no == 0) width = 0;
-        else {
-            sprite_image_no = sprite_image_no - 1;
-            data_ptr = sprite_image_no * 16 + 8;
-            width = (font[data_ptr] + font[data_ptr + 1] * 0x100) + 1;
-        }
-    }
+
+    width = 0;
+    if (letter == 0) return 0;
+    if (letter == ' ') return 4;
+    sprite_image_no = letter_table[letter - 0x20];
+    if (sprite_image_no == 0) return width;
+    sprite_image_no = sprite_image_no - 1;
+    data_ptr = sprite_image_no * 16 + 8;
+    width = font[data_ptr] + font[data_ptr + 1] * 0x100;
+    width++;
     return width;
 }
 
