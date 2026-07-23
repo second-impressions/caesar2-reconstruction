@@ -1281,14 +1281,18 @@ void black_out(void)
 void set_palette(char *p)
 {
     int i;
-    for (i = 0; i < 256; i++) {
-        current_palette[i*3]     = p[i*3];
-        current_palette[i*3 + 1] = p[i*3 + 1];
-        current_palette[i*3 + 2] = p[i*3 + 2];
+
+    {
+        int ptr;
+
+        for (i = 0; i < 256; i++) {
+            ptr = i * 3;
+            current_palette[i * 3]     = p[ptr];
+            current_palette[i * 3 + 1] = p[ptr + 1];
+            current_palette[i * 3 + 2] = p[ptr + 2];
+        }
     }
-    current_palette[2] = 0;
-    current_palette[1] = 0;
-    current_palette[0] = 0;
+    current_palette[0] = current_palette[1] = current_palette[2] = 0;
     set_vga_palette(current_palette);
 }
 
