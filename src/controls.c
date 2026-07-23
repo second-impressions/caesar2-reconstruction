@@ -782,14 +782,13 @@ int control_menus(struct menu_rec *menu_list, int menu_count, void (*draw_map_fn
 // FUNCTION: C2WIN 0x00421d3c
 int over_menu(struct menu_rec *menu_list, int menu_count)
 {
-    struct menu_rec *menu_ptr = menu_list;
     int i;
     for (i = 1; i <= menu_count; i++) {
-        if (menu_ptr->u.pos.x1 <= mouse_x && menu_ptr->u.pos.x2 > mouse_x
-         && menu_ptr->y <= mouse_y && menu_ptr->y + 0xc > mouse_y) {
+        if (menu_list->u.pos.x1 <= mouse_x && menu_list->u.pos.x2 > mouse_x
+         && menu_list->y <= mouse_y && menu_list->y + 0xc > mouse_y) {
             return i;
         }
-        menu_ptr++;
+        menu_list++;
     }
     return 0;
 }
