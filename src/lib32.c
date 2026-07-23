@@ -2190,18 +2190,17 @@ int get_letter_width(unsigned char letter, unsigned char *font)
 // FUNCTION: C2WIN 0x0044ccd7
 int get_number_from_text(char *text)
 {
-    char *digit_ptr;
+    unsigned char *digit_ptr;
     int total;
     int digits;
 
-    digit_ptr = text;
-    total = 0;
-    digits = 0;
+    digit_ptr = (unsigned char *)text;
+    digits = total = 0;
     while (*digit_ptr >= '0' && *digit_ptr <= '9') {
         digits = digits + 1;
         digit_ptr = digit_ptr + 1;
     }
-    digit_ptr = text;
+    digit_ptr = (unsigned char *)text;
     while (digits != 0) {
         int digit_value;
         digits = digits - 1;
