@@ -1124,6 +1124,7 @@ void copy_palette(char *src, char *dst)
 // Right-shift every channel of a 256-entry palette by 2 (6-bit VGA → 4-bit hi-color downsample).
 // FUNCTION: C2 0x25384
 // FUNCTION: C2WIN 0x0044b87c
+#if PLATFORM_DOS
 void go_64k_palette(char *p)
 {
     int i;
@@ -1133,6 +1134,20 @@ void go_64k_palette(char *p)
         p[i*3+2] >>= 2;
     }
 }
+#else
+void go_64k_palette(char *src, char *dst)
+{
+    int i;
+
+    for (i = 0; i < 256; i++) {
+        int ptr;
+        ptr = i * 3;
+        dst[i * 3] = src[ptr];
+        dst[i * 3 + 1] = src[ptr + 1];
+        dst[i * 3 + 2] = src[ptr + 2];
+    }
+}
+#endif
 
 // Expand a 256-entry palette in place from 6-bit to 8-bit channel values.
 // FUNCTION: C2 0x253ab
