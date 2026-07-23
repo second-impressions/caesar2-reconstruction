@@ -90,4 +90,9 @@
  * (verified at C2WIN 0x40149b vs C2 0x11a53). */
 #define C2_FEAT_PER_SAMPLE_VOLUME PLATFORM_WINDOWS
 
+/* The DOS mouse poll consumes mse_button after updating the engine state.
+ * The Windows port preserves the sampled byte for its Windows input path
+ * (verified at C2WIN 0x44c216 vs C2 0x25ccc). */
+#define C2_FEAT_PRESERVE_MOUSE_SAMPLE PLATFORM_WINDOWS
+
 #endif /* C2_TARGET_H */

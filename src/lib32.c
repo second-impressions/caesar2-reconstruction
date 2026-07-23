@@ -1640,7 +1640,9 @@ void set_mouse(void)
 // FUNCTION: C2WIN 0x0044c216
 void get_mouse(void)
 {
+#if !C2_FEAT_PRESERVE_MOUSE_SAMPLE
     int button_state;
+#endif
 
     if (sim_mouse() == 0) {
         read_mouse();
@@ -1653,12 +1655,17 @@ void get_mouse(void)
     mouse_x = mse_x;
     mouse_y = mse_y;
 
+#if C2_FEAT_PRESERVE_MOUSE_SAMPLE
+    mouse_left_button = mouse_left_preclick = mouse_left_click = 0;
+    mouse_right_button = mouse_right_preclick = mouse_right_click = 0;
+#else
     mouse_left_button   = 0;
     mouse_left_preclick = 0;
     mouse_left_click    = 0;
     mouse_right_button   = 0;
     mouse_right_preclick = 0;
     mouse_right_click    = 0;
+#endif
 
     if ((mse_button & 2) != 0) mouse_right_button = 1;
     if ((mse_button & 1) != 0) mouse_left_button  = 1;
@@ -1666,9 +1673,20 @@ void get_mouse(void)
     if (old_mouse_x != mouse_x) mouse_movement = 1;
     if (old_mouse_y != mouse_y) mouse_movement = 1;
 
+#if C2_FEAT_PRESERVE_MOUSE_SAMPLE
+    if (mouse_left_button != old_mouse_lb) {
+        mouse_movement    = 1;
+        mouse_was_pressed = 1;
+        if (mouse_left_button == 1) {
+            mouse_left_preclick = 1;
+        } else if (mouse_left_button == 0) {
+            mouse_left_click = 1;
+        }
+    }
+#else
     if (mouse_left_button != old_mouse_lb) {
         button_state = 1;
-        mouse_movement   = button_state;
+        mouse_movement    = button_state;
         mouse_was_pressed = button_state;
         if (mouse_left_button == button_state) {
             mouse_left_preclick = 1;
@@ -1676,10 +1694,22 @@ void get_mouse(void)
             mouse_left_click = 1;
         }
     }
+#endif
 
+#if C2_FEAT_PRESERVE_MOUSE_SAMPLE
+    if (mouse_right_button != old_mouse_rb) {
+        mouse_movement    = 1;
+        mouse_was_pressed = 1;
+        if (mouse_right_button == 1) {
+            mouse_right_preclick = 1;
+        } else if (mouse_right_button == 0) {
+            mouse_right_click = 1;
+        }
+    }
+#else
     if (mouse_right_button != old_mouse_rb) {
         button_state = 1;
-        mouse_movement   = button_state;
+        mouse_movement    = button_state;
         mouse_was_pressed = button_state;
         if (mouse_right_button == button_state) {
             mouse_right_preclick = 1;
@@ -1687,8 +1717,11 @@ void get_mouse(void)
             mouse_right_click = 1;
         }
     }
+#endif
 
+#if !C2_FEAT_PRESERVE_MOUSE_SAMPLE
     mse_button = 0;
+#endif
 }
 
 // Mouse-cursor variant of write_image().
