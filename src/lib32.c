@@ -2626,7 +2626,7 @@ void out_format_buffer(char *out)
 void load_format_buffer_from_disk(char *filename, int entry_idx)
 {
     int word_value;
-    char *p;
+    unsigned char *p;
 
     readfile(filename, (char *)&word_value, 2, entry_idx * 4 + 0x1e);
 
@@ -2638,10 +2638,7 @@ void load_format_buffer_from_disk(char *filename, int entry_idx)
 
     fb_max_char_length = 0;
     p = format_buffer;
-    while (*p != 0) {
-        p++;
-        fb_max_char_length++;
-    }
+    while (*p != 0) { p++; fb_max_char_length++; }
 
     fb_line_length  = 0xe0;
     fb_no_of_lines  = 4;
