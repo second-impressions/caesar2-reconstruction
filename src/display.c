@@ -144,18 +144,22 @@ draw_system_tile:
     }
 }
 
+void show_a_mosaic_window(int, int, int, int);
+void mosaic_frame_divider(int, int, int, int);
+void show_a_32_block(int, int, int);
+
 // Fill a rectangular area with the system window's interior tile.
 // FUNCTION: C2 0x5a4cf
 // FUNCTION: C2WIN 0x0045fcb7
 void show_a_system_blank(int window_x, int window_y, int column_count, int row_count)
 {
-    int row_idx;
-    int column_idx;
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (column_idx = 0; column_idx < column_count; column_idx++) {
+    int row;
+    int column;
+    for (row = 0; row < row_count; row++) {
+        for (column = 0; column < column_count; column++) {
             sprite_image_no = 4;
-            sprite_x = window_x + column_idx * 16;
-            sprite_y = window_y + row_idx * 16;
+            sprite_x = window_x + column * 16;
+            sprite_y = window_y + row * 16;
             place_16x16_block(system_panel);
         }
     }
