@@ -4016,6 +4016,9 @@ void free_scratch_buffer(void)
 {
     if (scratch_buffer != 0) {
         free((void *)scratch_buffer);
+#if PLATFORM_WINDOWS
+        scratch_buffer = 0;
+#endif
         used_memory -= scratch_buffer_size / 1024;
     }
 }
