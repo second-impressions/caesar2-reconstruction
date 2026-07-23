@@ -2297,18 +2297,17 @@ int get_buffer_ofset(int entry_idx)
 // FUNCTION: C2WIN 0x0044cf59
 void get_text_pointer(int entry_idx, int word_count)
 {
-    char *scan_ptr;
-
     text_pointer = text_buffer;
     text_pointer += get_buffer_ofset(entry_idx);
 
     while (word_count > 0) {
-        scan_ptr = text_pointer;
-        if (*scan_ptr == 0 && (*(scan_ptr - 1) >= ' ' || *(scan_ptr - 1) == 0)) word_count--;
+        if ((unsigned char)*text_pointer == 0 &&
+            ((unsigned char)*(text_pointer - 1) >= ' ' ||
+             (unsigned char)*(text_pointer - 1) == 0)) word_count--;
         text_pointer++;
     }
 
-    while (*text_pointer < ' ')
+    while ((unsigned char)*text_pointer < ' ')
         text_pointer++;
 
 }
