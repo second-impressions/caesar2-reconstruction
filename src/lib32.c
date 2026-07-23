@@ -2220,15 +2220,17 @@ void load_to_text_buffer(char *src, int entry_idx, int word_count, int copy_len)
 {
     int buffer_offset;
     char *dst;
-    char i;
+    unsigned char i;
     unsigned char offset_byte;
 
+    dst = text_buffer;
     offset_byte = text_buffer[entry_idx * 4 + 0x1e];
     buffer_offset  = offset_byte;
     buffer_offset  = buffer_offset << 8;
     offset_byte = text_buffer[entry_idx * 4 + 0x1f];
     buffer_offset  = buffer_offset + offset_byte;
-    dst  = &text_buffer[0x1c + buffer_offset];
+    buffer_offset = buffer_offset + 0x1c;
+    dst = dst + buffer_offset;
     while (word_count > 0) {
         if (*dst == 0 && (signed char)*(dst - 1) >= ' ')
             word_count--;
