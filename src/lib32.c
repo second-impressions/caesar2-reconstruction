@@ -2437,10 +2437,9 @@ void to_fb(void)
 // FUNCTION: C2WIN 0x0044d568
 void del_fb(void)
 {
-    if (at_limit == 0) {
-        pull_string_left(&format_buffer[this_letter],
-                         &format_buffer[fb_current_char_length]);
-    }
+    if (at_limit != 0) return;
+    pull_string_left(&format_buffer[this_letter],
+                     &format_buffer[fb_current_char_length]);
 }
 
 // Copy 2000 bytes (the full format buffer) from src to dst.
