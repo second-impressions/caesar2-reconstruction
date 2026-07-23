@@ -257,71 +257,73 @@ int check_highlight_list(short goods_kind)
     return 0;
 }
 
+void click_warning(int, int, int);
+void confirm(int, int, int);
+void extended_confirm(int, int, int);
+
 // Draw the visible selection choices, including costs and selection or highlight colours.
 // FUNCTION: C2 0x2da7a
 // FUNCTION: C2WIN 0x004207ff
 void show_selections(struct selection_rec *selection_list, int selection_count, int x, int y, int text_group, int selected_row_idx)
 {
-    struct selection_rec *selection_ptr;
+    int col_no;
     int i;
-    int visible_row_idx;
-    int row_y;
-    int cost;
-    int refresh_x;
-    int refresh_y;
-    int refresh_width;
-    int refresh_height;
-    int text_word_idx;
+    int item_y;
+    int refresh_count;
+    int cols_count;
+    int visible_index;
+    int selection_word_no;
+    int cost_no;
+    int ry;
 
     sprite_width = select_width / 16 - 1;
     sprite_width += select_cost_flag / 16;
     sprite_height = select_height - 0x18;
     show_fast_rect(x + 8, y + 8, 0x1a);
-    selection_ptr = selection_list;
-    visible_row_idx = 0;
+    visible_index = 0;
     for (i = 1; i <= selection_count; i++) {
-        if (selection_ptr->visible != 0) {
-            text_word_idx = selection_ptr->text_word;
-            row_y = y + 0xc + visible_row_idx * 20;
-            if (selection_ptr->cost_kind != 0) {
-                if (map_mode == 0) cost = city_costs[selection_ptr->cost_kind];
-                else cost = region_costs[selection_ptr->cost_kind];
+        if (selection_list->visible != 0) {
+            selection_word_no = selection_list->text_word;
+            item_y = y + 0xc + visible_index * 20;
+            if (selection_list->cost_kind != 0) {
+                if (map_mode == 0) cost_no = city_costs[selection_list->cost_kind];
+                else cost_no = region_costs[selection_list->cost_kind];
             } else {
-                cost = 0;
+                cost_no = 0;
             }
-            if (selected_row_idx - 1 == visible_row_idx) {
+            if (selected_row_idx - 1 == visible_index) {
                 sprite_width = select_width / 16 - 1;
                 sprite_width += select_cost_flag / 16;
                 sprite_height = 0xf;
-                show_fast_rect(x + 8, row_y - 1, 0x10);
-                font_list(text_group, text_word_idx, x + 8, row_y, font1, 0x1a);
-                if (cost != 0)
-                    font_no(cost, 0x40, "Dn", x + select_width - 0x10, row_y, font1, 0x1a);
+                show_fast_rect(x + 8, item_y - 1, 0x10);
+                font_list(text_group, selection_word_no, x + 8, item_y, font1, 0x1a);
+                if (cost_no != 0)
+                    font_no(cost_no, 0x40, "Dn", x + select_width - 0x10, item_y, font1, 0x1a);
             } else {
-                if (selection_ptr->highlighted != 0)
-                    font_list(text_group, text_word_idx, x + 8, row_y, font1, 0xb);
+                if (selection_list->highlighted != 0)
+                    font_list(text_group, selection_word_no, x + 8, item_y, font1, 0xb);
                 else
-                    font_list(text_group, text_word_idx, x + 8, row_y, font1, 0x10);
-                if (cost != 0) {
-                    if (selection_ptr->highlighted != 0)
-                        font_no(cost, 0x40, "Dn", x + select_width - 0x10, row_y,
+                    font_list(text_group, selection_word_no, x + 8, item_y, font1, 0x10);
+                if (cost_no != 0) {
+                    if (selection_list->highlighted != 0)
+                        font_no(cost_no, 0x40, "Dn", x + select_width - 0x10, item_y,
                                 font1, 0xb);
                     else
-                        font_no(cost, 0x40, "Dn", x + select_width - 0x10, row_y,
+                        font_no(cost_no, 0x40, "Dn", x + select_width - 0x10, item_y,
                                 font1, 0x10);
                 }
             }
-            visible_row_idx++;
+            visible_index++;
         }
-        selection_ptr++;
+        selection_list++;
     }
     ref_x = (x + 8) / 16;
     ref_y = (y + 8) / 16;
-    refresh_width = (select_width + select_cost_flag) / 16;
-    refresh_height = select_height / 16;
-    for (refresh_y = ref_y; refresh_y < ref_y + refresh_height; refresh_y++)
-        for (refresh_x = ref_x; refresh_x < ref_x + refresh_width; refresh_x++)
-            svga_refresh_table[refresh_x + refresh_y * 40] = 2;
+    cols_count = (select_width + select_cost_flag) / 16;
+    refresh_count = select_height / 16;
+    for (ry = ref_y; ry < ref_y + refresh_count; ry++)
+        for (col_no = ref_x; col_no < ref_x + cols_count; col_no++)
+            svga_refresh_table[col_no + ry * 40] = 2;
 }
 
 // Draw a confirmation dialog with its message and yes/no buttons.
