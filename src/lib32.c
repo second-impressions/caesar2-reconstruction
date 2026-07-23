@@ -1284,6 +1284,10 @@ void swap_screens(void)
         cscreen = 0x4000;
     }
 }
+#else
+void swap_screens(void)
+{
+}
 #endif /* PLATFORM_DOS */
 
 // De-interleave a 4-plane mode-X buffer (4 × 0x3E80 bytes) back into a contiguous 256×N raster.
