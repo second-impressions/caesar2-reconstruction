@@ -2497,7 +2497,9 @@ void show_slave_allocation(void)
 void show_year_end_screen(void)
 {
     cover_mouse_droppings();
+#if C2_FEAT_TILE_REFRESH
     setup_whole_screen_refresh();
+#endif
     stone_random_count = 0xf;
     show_a_mosaic_frame(0x10, 0x30, 0x1c, 0xf);
     show_a_mosaic_blank(0x20, 0x40, 0x1a, 0xd);
@@ -2509,7 +2511,7 @@ void show_year_end_screen(void)
     font_list(0x49, 1, x_is + 0x30, 0x54, font1, 0x10);
 
     x_is = 0;
-    font_list(0x49, 3, 0x40, 0x80, font1, 0x10);
+    font_list(0x49, 3, x_is + 0x40, 0x80, font1, 0x10);
     font_no(this_years_population, 0x20, " ",
             x_is + 0x40, 0x80, font1, 0x10);
     x_is = 0;
@@ -2524,7 +2526,7 @@ void show_year_end_screen(void)
     }
 
     x_is = 0;
-    font_list(0x49, 4, 0x40, 0x92, font1, 0x10);
+    font_list(0x49, 4, x_is + 0x40, 0x92, font1, 0x10);
     if (this_years_denarii >= 0)
         font_no(this_years_denarii, 0x20, "Dn",
                 x_is + 0x40, 0x92, font1, 0x10);
@@ -2533,41 +2535,41 @@ void show_year_end_screen(void)
                 x_is + 0x40, 0x92, font1, 0xb);
     x_is = 0;
     if (this_years_denarii >= last_years_denarii) {
-        font_list(0x49, 7, 0x120, 0x92, font1, 0x10);
+        font_list(0x49, 7, x_is + 0x120, 0x92, font1, 0x10);
         font_no(this_years_denarii - last_years_denarii,
                 0x20, "Dn)", x_is + 0x120, 0x92, font1, 0x10);
     } else {
-        font_list(0x49, 8, 0x120, 0x92, font1, 0xb);
+        font_list(0x49, 8, x_is + 0x120, 0x92, font1, 0xb);
         font_no(last_years_denarii - this_years_denarii,
                 0x20, "Dn)", x_is + 0x120, 0x92, font1, 0xb);
     }
 
     x_is = 0;
-    font_list(0x49, 5, 0x40, 0xa4, font1, 0x10);
+    font_list(0x49, 5, x_is + 0x40, 0xa4, font1, 0x10);
     font_no(this_years_pop_tax, 0x20, "Dn",
             x_is + 0x40, 0xa4, font1, 0x10);
     x_is = 0;
     if (this_years_pop_tax >= last_years_pop_tax) {
-        font_list(0x49, 7, 0x120, 0xa4, font1, 0x10);
+        font_list(0x49, 7, x_is + 0x120, 0xa4, font1, 0x10);
         font_no(this_years_pop_tax - last_years_pop_tax,
                 0x20, "Dn)", x_is + 0x120, 0xa4, font1, 0x10);
     } else {
-        font_list(0x49, 8, 0x120, 0xa4, font1, 0xb);
+        font_list(0x49, 8, x_is + 0x120, 0xa4, font1, 0xb);
         font_no(last_years_pop_tax - this_years_pop_tax,
                 0x20, "Dn)", x_is + 0x120, 0xa4, font1, 0xb);
     }
 
     x_is = 0;
-    font_list(0x49, 6, 0x40, 0xb6, font1, 0x10);
+    font_list(0x49, 6, x_is + 0x40, 0xb6, font1, 0x10);
     font_no(this_years_ind_tax, 0x20, "Dn",
             x_is + 0x40, 0xb6, font1, 0x10);
     x_is = 0;
     if (this_years_ind_tax >= last_years_ind_tax) {
-        font_list(0x49, 7, 0x120, 0xb6, font1, 0x10);
+        font_list(0x49, 7, x_is + 0x120, 0xb6, font1, 0x10);
         font_no(this_years_ind_tax - last_years_ind_tax,
                 0x20, "Dn)", x_is + 0x120, 0xb6, font1, 0x10);
     } else {
-        font_list(0x49, 8, 0x120, 0xb6, font1, 0xb);
+        font_list(0x49, 8, x_is + 0x120, 0xb6, font1, 0xb);
         font_no(last_years_ind_tax - this_years_ind_tax,
                 0x20, "Dn)", x_is + 0x120, 0xb6, font1, 0xb);
     }
