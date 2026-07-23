@@ -1258,7 +1258,13 @@ void wvbl2(void)
     while (inp(0x3DA) & 8) ;
     while (!(inp(0x3DA) & 8)) ;
 }
+#else
+void wvbl2(void)
+{
+}
+#endif /* PLATFORM_DOS */
 
+#if PLATFORM_DOS
 // Toggle the active framebuffer page (cscreen / oscreen) by reprogramming the CRTC start-address
 // registers and flipping a private page flag.
 // FUNCTION: C2 0x255e8
