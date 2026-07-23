@@ -63,35 +63,35 @@
 #define AILCALL
 #endif
 
-AILIMPORT void AIL_shutdown(void);
-AILIMPORT int  AIL_sample_status  (int handle);
-AILIMPORT void AIL_end_sample     (int handle);
-AILIMPORT int  AIL_sequence_status(int handle);
-AILIMPORT void AIL_end_sequence   (int handle);
-AILIMPORT void AIL_stop_sequence  (int handle);
+AILIMPORT void AILCALL AIL_shutdown(void);
+AILIMPORT int  AILCALL AIL_sample_status  (int handle);
+AILIMPORT void AILCALL AIL_end_sample     (int handle);
+AILIMPORT int  AILCALL AIL_sequence_status(int handle);
+AILIMPORT void AILCALL AIL_end_sequence   (int handle);
+AILIMPORT void AILCALL AIL_stop_sequence  (int handle);
 AILIMPORT void AILCALL AIL_set_sequence_volume(int handle, int volume, int ms);
-AILIMPORT void AIL_set_digital_master_volume(int dig, int volume);
-AILIMPORT int  AIL_startup(void);
-AILIMPORT void AIL_stop_sample  (int handle);
-AILIMPORT void AIL_resume_sample(int handle);
-AILIMPORT int  AIL_sample_buffer_ready(int handle);
-AILIMPORT void AIL_load_sample_buffer(int handle, int slot, void *buf, int size);
-AILIMPORT void AIL_set_GTL_filename_prefix(char *prefix);
-AILIMPORT int  AIL_install_MDI_INI(int *mdi_handle_out);
-AILIMPORT int  AIL_allocate_sequence_handle(int mdi);
-AILIMPORT void AIL_branch_index(int seq, int marker);
-AILIMPORT void AIL_init_sample(int sample);
-AILIMPORT int  AIL_set_sample_file(int sample, void *buf, int block);
-AILIMPORT void AIL_set_sample_loop_count(int sample, int loops);
-AILIMPORT char __far *AIL_start_sample(int sample);
-AILIMPORT void AIL_set_sample_type(int sample, int format, int flags);
-AILIMPORT void AIL_set_sample_playback_rate(int sample, int rate_hz);
-AILIMPORT int  AIL_minimum_sample_buffer_size(int dig, int rate_hz, int bits);
-AILIMPORT int  AIL_install_DIG_INI(int *dig_handle_out);
-AILIMPORT int  AIL_init_sequence(int seq, void *bytes, int sequence_num);
-AILIMPORT char __far *AIL_start_sequence(int seq);
-AILIMPORT char __far *AIL_resume_sequence(int seq);
-AILIMPORT void AIL_register_trigger_callback(int seq, void (*cb)());
-AILIMPORT int  AIL_allocate_sample_handle(int dig);
+AILIMPORT void AILCALL AIL_set_digital_master_volume(int dig, int volume);
+AILIMPORT int  AILCALL AIL_startup(void);
+AILIMPORT void AILCALL AIL_stop_sample  (int handle);
+AILIMPORT void AILCALL AIL_resume_sample(int handle);
+AILIMPORT int  AILCALL AIL_sample_buffer_ready(int handle);
+AILIMPORT void AILCALL AIL_load_sample_buffer(int handle, int slot, void *buf, int size);
+AILIMPORT void AILCALL AIL_set_GTL_filename_prefix(char *prefix);
+AILIMPORT int  AILCALL AIL_install_MDI_INI(int *mdi_handle_out);
+AILIMPORT int  AILCALL AIL_allocate_sequence_handle(int mdi);
+AILIMPORT void AILCALL AIL_branch_index(int seq, int marker);
+AILIMPORT void AILCALL AIL_init_sample(int sample);
+AILIMPORT int  AILCALL AIL_set_sample_file(int sample, void *buf, int block);
+AILIMPORT void AILCALL AIL_set_sample_loop_count(int sample, int loops);
+AILIMPORT char __far *AILCALL AIL_start_sample(int sample);
+AILIMPORT void AILCALL AIL_set_sample_type(int sample, int format, int flags);
+AILIMPORT void AILCALL AIL_set_sample_playback_rate(int sample, int rate_hz);
+AILIMPORT int  AILCALL AIL_minimum_sample_buffer_size(int dig, int rate_hz, int bits);
+AILIMPORT int  AILCALL AIL_install_DIG_INI(int *dig_handle_out);
+AILIMPORT int  AILCALL AIL_init_sequence(int seq, void *bytes, int sequence_num);
+AILIMPORT char __far *AILCALL AIL_start_sequence(int seq);
+AILIMPORT char __far *AILCALL AIL_resume_sequence(int seq);
+AILIMPORT void AILCALL AIL_register_trigger_callback(int seq, void (*cb)());
+AILIMPORT int  AILCALL AIL_allocate_sample_handle(int dig);
 
 #endif /* AIL_H */

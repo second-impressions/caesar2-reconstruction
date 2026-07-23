@@ -151,9 +151,7 @@ void stop_samples(void)
     db_playing = 0;
     for (ds = 0; ds < 6; ds++) {
         dig_status = AIL_sample_status(S_dig[ds]);
-        if (dig_status == 4) {
-            AIL_end_sample(S_dig[ds]);
-        }
+        if (dig_status == 4) AIL_end_sample(S_dig[ds]);
     }
 }
 
@@ -165,9 +163,7 @@ void stop_sequences(void)
     if (sequences_running == 0) return;
     for (ms = 0; ms < 2; ms++) {
         mdi_status = AIL_sequence_status(S_mdi[ms]);
-        if (mdi_status == 4) {
-            AIL_end_sequence(S_mdi[ms]);
-        }
+        if (mdi_status == 4) AIL_end_sequence(S_mdi[ms]);
     }
 }
 
