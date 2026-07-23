@@ -334,6 +334,7 @@ void clear_keys(void);
 void to_fb(void);
 void del_fb(void);
 void test_for_delimiter(void);
+void string_to_upper(unsigned char *s);
 void xclip(int clip_left, int clip_right);
 void yclip(int clip_top, int clip_bottom);
 void setup_scratch_buffer(void);
@@ -388,40 +389,42 @@ void get_directory(char *pattern)
 }
 #endif /* PLATFORM_DOS */
 
-#if PLATFORM_DOS
 // Switch to the CD drive and media subdirectory selected by the file extension.
 // FUNCTION: C2 0x2426e
 // FUNCTION: C2WIN 0x0044a8ae
 void cd_path(const char *filename)
 {
-    char *path_buffer = "c:\\";
-    int extension_unmatched;
-    char *path_ptr;
+    char drive_letter;
     unsigned saved_drive;
+    int matched;
+    char *buf = "c:\\";
 
-    path_ptr = path_buffer;
     if (c2inf.drive_init != 1) return;
 
     get_filename_extension(filename);
     string_to_upper(extension);
 
-    extension_unmatched = 1;
-    if (strcmp("PL8", extension) == 0) extension_unmatched = 0;
-    else if (strcmp("RAW", extension) == 0) extension_unmatched = 0;
-    else if (strcmp("XMI", extension) == 0) extension_unmatched = 0;
-    else if (strcmp("SMK", extension) == 0) extension_unmatched = 0;
-    if (extension_unmatched) return;
+    matched = 1;
+    if (strcmp("PL8", extension) == 0) matched = 0;
+    else if (strcmp("RAW", extension) == 0) matched = 0;
+    else if (strcmp("XMI", extension) == 0) matched = 0;
+    else if (strcmp("SMK", extension) == 0) matched = 0;
+    if (matched) return;
 
+#if PLATFORM_DOS
     _dos_setdrive(c2inf.cd_letter - 0x40, &saved_drive);
-    path_ptr[0] = c2inf.cd_letter;
-    chdir(path_ptr);
+#else
+    _chdrive(c2inf.cd_letter - 0x40);
+#endif /* PLATFORM_DOS */
+    drive_letter = c2inf.cd_letter;
+    buf[0] = drive_letter;
+    matched = chdir(buf);
 
     if      (strcmp("PL8", extension) == 0) chdir("pl8");
     else if (strcmp("RAW", extension) == 0) chdir("raw");
     else if (strcmp("XMI", extension) == 0) chdir("xmi");
     else if (strcmp("SMK", extension) == 0) chdir("smk");
 }
-#endif /* PLATFORM_DOS */
 
 // If c2inf.drive_init==1 we're booted from a non-system drive: switch back to the original drive
 // and chdir into the install path.
