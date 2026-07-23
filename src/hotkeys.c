@@ -28,7 +28,7 @@ void capture_shot(char *filename);
 
 // Translate keyboard shortcuts into the same actions as mouse/UI input.
 // FUNCTION: C2 0x2881b
-char sim_mouse(void)
+unsigned char sim_mouse(void)
 {
     int i;
     int one;

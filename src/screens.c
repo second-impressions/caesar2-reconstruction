@@ -3160,13 +3160,12 @@ void show_general_query_panel(void)
 // FUNCTION: C2WIN 0x0042b5ad
 void show_query_house_advice(void)
 {
-    int q = q_type;
     int next_lv;
     int demote_lv;
     int word;
 
-    next_lv = (((signed char *)promotion_av_levels)[(q) * 2 + 0x186]);
-    demote_lv = (((signed char *)promotion_av_levels)[(q) * 2 + 0x187]);
+    next_lv = (((signed char *)promotion_av_levels)[q_type * 2 + 0x186]);
+    demote_lv = (((signed char *)promotion_av_levels)[q_type * 2 + 0x187]);
 
     if (q_lv > demote_lv)              { word = 0x57; goto render; }
     if (!q_aqua && !q_sub_aqua) {

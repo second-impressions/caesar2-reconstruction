@@ -12,9 +12,10 @@
  *                      source-location/oracle target, not a full rebuild.
  *                      Which Windows build is meant is C2_PATCHLEVEL's job.
  *
- * Exactly one platform is 1 and every other platform is 0.  Builds should
- * select their platform explicitly.  An unspecified build defaults to the
- * original DOS platform without inferring a platform from compiler identity.
+ * Exactly one platform is 1 and every other platform is 0.  Windows builds
+ * select `PLATFORM_WINDOWS=1` explicitly.  An unspecified build defaults to
+ * the original DOS platform, preserving the authentic Watcom command line
+ * without inferring a platform from compiler identity.
  */
 #if !defined(PLATFORM_DOS) && !defined(PLATFORM_WINDOWS)
 #  define PLATFORM_DOS 1

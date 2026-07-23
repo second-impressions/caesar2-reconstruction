@@ -251,19 +251,19 @@ char screen_refresh_flag;
 unsigned char hold_mouse_replace;
 unsigned char screen_mode;
 unsigned char pointer_mode;
-char old_mouse_rb;
-char old_mouse_lb;
+unsigned char old_mouse_rb;
+unsigned char old_mouse_lb;
 unsigned char mouse_left_button;
 unsigned char mouse_left_click;
 unsigned char debar_fade_click;
 unsigned char mouse_right_preclick;
 unsigned char mouse_left_preclick;
-char mouse_right_button;
+unsigned char mouse_right_button;
 unsigned char mouse_right_click;
 unsigned char key_code;
 char debug_interupt;
 unsigned char key_ascii_was;
-char mse_button;
+unsigned char mse_button;
 unsigned char key_ready;
 unsigned char key_ascii;
 
@@ -318,7 +318,7 @@ extern void __cdecl code_018D13(void);
 extern void __cdecl code_018D36(void);
 extern void __cdecl code_018D50(void);
 char get_insert_letter(void);
-char sim_mouse(void);
+unsigned char sim_mouse(void);
 
 extern void __far click_handler(unsigned int ax,
                                 unsigned int bx,
@@ -3815,7 +3815,7 @@ int get_rand_max(int max)
 // FUNCTION: C2WIN 0x0044fca2
 int totalXpercent(int total, int percent)
 {
-    total *= percent;
+    total = percent * total;
     total = total / 100;
     return total;
 }
@@ -3825,7 +3825,7 @@ int totalXpercent(int total, int percent)
 // FUNCTION: C2WIN 0x0044fccd
 int totalXpercentX100(int total, int percent_x100)
 {
-    total *= percent_x100;
+    total = percent_x100 * total;
     total = total / 10000;
     return total;
 }
