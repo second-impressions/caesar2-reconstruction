@@ -3100,6 +3100,8 @@ void low_beep(void)
     nosound();
 }
 #else
+void vhigh_beep(void);
+
 void high_beep(void)
 {
     Beep(0x370, 50);
@@ -3151,11 +3153,17 @@ void test_beeps(void)
 
 // Short beep at 1720 Hz (0x6b8) for 150 ms.
 // FUNCTION: C2 0x2763c
+// FUNCTION: C2WIN 0x0044e9dd
 void vhigh_beep(void)
 {
     sound(0x6b8);
     delay(150);
     nosound();
+}
+#else
+void vhigh_beep(void)
+{
+    Beep(0x6b8, 150);
 }
 #endif /* PLATFORM_DOS */
 
