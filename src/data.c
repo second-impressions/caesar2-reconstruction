@@ -839,11 +839,9 @@ struct lv_effect_rec temple_lv_effect[12] = {
 
 int buildings_lv_effect[56] = { 2, 2, 3, 2, 3, 2, 3, 2, 3, 4, 4, 3, 4, 5, 4, 4, 5, 6, 3, 2, 4, 4, 4, 4, 2, 1, 4, 2, 2, 1, 3, 1, 4, 1, 5, 1, 3, 3, 4, 3, 5, 3, 6, 3, 4, 3, -4, 4, -3, 4, -3, 2, 4, 1, 2, 2 };
 
-struct salary_rec init_salary[1] = {
-    { 3, 5 }
-};
+int init_salary[2] = { 3, 5 };
 
-struct salary_rec init_slave_data[10] = {
+struct slave_init_rec init_slave_data[10] = {
     { 7, 40 },
     { 7, 40 },
     { 7, 40 },

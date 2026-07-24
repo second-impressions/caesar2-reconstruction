@@ -1450,17 +1450,13 @@ struct rotated_sprite_rec {
 extern struct rotated_sprite_rec rotated_map[];
 extern struct rotated_sprite_rec rotated2_map[];
 
-/* Welfare-bill / slave-count pair.  init_salary is the governor's salary
- * record; init_slave_data has one starting-slave record per province
- * difficulty and is indexed by province_difficulty - 1.  Both are typed as
- * salary_rec int pairs (NOT raw char[] blobs) so their initializers render
- * as the { welfare_bill, slaves } pairs the original source wrote. */
-struct salary_rec {
+/* Starting pleb values for one province-difficulty level. */
+struct slave_init_rec {
     int welfare_bill;
     int slaves;
 };
-extern struct salary_rec init_salary[];
-extern struct salary_rec init_slave_data[];   /* 10 records */
+extern int init_salary[2];
+extern struct slave_init_rec init_slave_data[10];
 
 /* request_message — 0x68-byte mixed-purpose scratch buffer at 0x117E64.
  * Originally just an `int` flag (the first slot), the area is reused as

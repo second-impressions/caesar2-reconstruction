@@ -439,7 +439,7 @@ void start_a_new_game(void)
     province_is = 0;
     player_rank = 0;
     players_denarii = 0;
-    players_salary = init_salary[0].welfare_bill;
+    players_salary = init_salary[0];
     init_tribute();
     clear_empire();
     new_province();

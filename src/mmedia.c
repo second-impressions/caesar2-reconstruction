@@ -517,7 +517,7 @@ void do_tutorial(void)
     month               = 0;
     week                = 0;
     players_denarii     = 0;
-    players_salary      = init_salary[0].welfare_bill;
+    players_salary      = init_salary[0];
     init_tribute();
     years_elapsed       = 0;
     completed_provinces = 0;
