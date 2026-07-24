@@ -81,6 +81,11 @@
  * choice (verified at C2WIN 0x454e88 vs C2 0x554b1). */
 #define C2_FEAT_MODAL_PROMOTION   PLATFORM_WINDOWS
 
+/* The Windows port routes warnings and confirmations through native dialogs;
+ * DOS draws and pumps the equivalent software panels (verified at C2WIN
+ * 0x42216b / 0x4221cc / 0x42222f vs C2 0x2eaac / 0x2eb01 / 0x2eb95). */
+#define C2_FEAT_NATIVE_DIALOGS    PLATFORM_WINDOWS
+
 /* The Windows wait-state transition preserves visibility bit 0 while
  * clearing bit 1, then sets bit 0.  The DOS build clears both low bits
  * before the same final set (verified at C2WIN 0x477fae vs C2 0x4dd39). */

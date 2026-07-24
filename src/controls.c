@@ -918,11 +918,26 @@ int over_selection(int row_count, int x, int base_y)
     return 0;
 }
 
+#if C2_FEAT_NATIVE_DIALOGS
+extern char warning_text_1[];
+extern char warning_text_2[];
+extern char warning_message[];
+extern void *main_window;
+void get_text_string(int text_group, int text_word, char *destination);
+void show_native_message(void *window, char *message);
+#endif
+
 // Show a modal warning until either mouse button is clicked.
 // FUNCTION: C2 0x2eaac
 // FUNCTION: C2WIN 0x0042216b
 void click_warning(int message_idx, int x, int y)
 {
+#if C2_FEAT_NATIVE_DIALOGS
+    get_text_string(0xb, message_idx, warning_text_1);
+    get_text_string(0xb, message_idx + 1, warning_text_2);
+    sprintf(warning_message, "%s %s", warning_text_1, warning_text_2);
+    show_native_message(main_window, warning_message);
+#else
     clear_mouse();
     show_warning_panel(message_idx, x, y);
     setup_whole_screen_refresh();
@@ -935,6 +950,7 @@ void click_warning(int message_idx, int x, int y)
         }
     }
     setup_whole_screen_refresh();
+#endif
 }
 
 // Run a yes/no confirmation dialog and leave the result in the global decision state.
