@@ -918,7 +918,7 @@ int over_selection(int row_count, int x, int base_y)
     return 0;
 }
 
-#if C2_FEAT_NATIVE_DIALOGS
+#if PLATFORM_WINDOWS
 extern char warning_text_1[];
 extern char warning_text_2[];
 extern char warning_message[];
@@ -938,7 +938,7 @@ void act_no(void);
 // FUNCTION: C2WIN 0x0042216b
 void click_warning(int message_idx, int x, int y)
 {
-#if C2_FEAT_NATIVE_DIALOGS
+#if PLATFORM_WINDOWS
     get_text_string(0xb, message_idx, warning_text_1);
     get_text_string(0xb, message_idx + 1, warning_text_2);
     sprintf(warning_message, "%s %s", warning_text_1, warning_text_2);
@@ -964,7 +964,7 @@ void click_warning(int message_idx, int x, int y)
 // FUNCTION: C2WIN 0x004221cc
 void confirm(int message_idx, int x, int y)
 {
-#if C2_FEAT_NATIVE_DIALOGS
+#if PLATFORM_WINDOWS
     int result;
 
     get_text_string(10, message_idx, warning_message);
@@ -1000,6 +1000,20 @@ void confirm(int message_idx, int x, int y)
 // FUNCTION: C2WIN 0x0042222f
 void extended_confirm(int message_idx, int x, int y)
 {
+#if PLATFORM_WINDOWS
+    int result;
+
+    decision = 0;
+    pointer_mode = 0;
+    get_text_string(10, message_idx, warning_message);
+    native_dialog_extended = 1;
+    result = show_native_confirm(main_window, warning_message,
+                                 confirm_yes_text, confirm_no_text);
+    if (result == 1) act_yes();
+    else act_no();
+    setup_whole_screen_refresh();
+    update_map = 1;
+#else
     decision = 0;
     pointer_mode = 0;
     show_Xconfirming_panel(message_idx, x, y);
@@ -1018,6 +1032,7 @@ void extended_confirm(int message_idx, int x, int y)
     }
     setup_whole_screen_refresh();
     update_map = 1;
+#endif
 }
 
 // Run a modal numeric adjustment dialog.
