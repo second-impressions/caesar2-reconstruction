@@ -792,7 +792,9 @@ void this_region_box(int confirmation_mode)
     } else {
         font_list(9, 1, 0x100, 0x13c, font1, 0x10);
     }
+#if C2_FEAT_TILE_REFRESH
     setup_whole_screen_refresh();
+#endif
 }
 
 // Show the introductory skill-selection information.
