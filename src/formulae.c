@@ -829,8 +829,8 @@ void predict_army_totals(void) {
 // FUNCTION: C2 0x56943
 // FUNCTION: C2WIN 0x004571e5
 void init_slaves(void) {
-    slave_welfare_bill = init_salary[province_difficulty].welfare_bill;
-    slaves             = init_salary[province_difficulty].slaves;
+    slave_welfare_bill = init_slave_data[province_difficulty - 1].welfare_bill;
+    slaves             = init_slave_data[province_difficulty - 1].slaves;
 
     slave_requirements[0].max     = 0x14;
     slave_requirements[1].current = 0x0C;
