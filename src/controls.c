@@ -833,6 +833,10 @@ int over_item(struct menu_item_rec *item_list, int item_count, int x, int y)
     return 0;
 }
 
+void adjust(int message_idx, int *value_ptr, int step_value, int max_value, int min_value, int x, int y, int display_kind);
+int exit_screen(void);
+int exit_screen_at(int, int);
+
 // Run a selection dialog and invoke the callback for the chosen visible entry.
 // FUNCTION: C2 0x2e8bb
 // FUNCTION: C2WIN 0x00421e5e
@@ -892,14 +896,14 @@ int control_selection(struct selection_rec *selection_list, int selection_count,
 int over_selection(int row_count, int x, int base_y)
 {
     int i;
-    int row_y;
+    int item_y;
 
     for (i = 0; i < row_count; ++i) {
-        row_y = base_y + 7 + i * 20;
+        item_y = base_y + 7 + i * 20;
         if (x <= mouse_x &&
             x + select_width + select_cost_flag > mouse_x &&
-            row_y <= mouse_y &&
-            row_y + 20 > mouse_y) {
+            item_y <= mouse_y &&
+            item_y + 20 > mouse_y) {
             return i + 1;
         }
     }
