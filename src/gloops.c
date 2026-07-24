@@ -819,7 +819,9 @@ void initreg_game_loop(void)
             font_list(0x22, 2, 0xd8, 0x1e, font1, 0x3f);
             show_date(year, x_is + 0xd8, 0x1e, 2);
         }
+#if C2_FEAT_TILE_REFRESH
         setup_refresh_area(0xd2, 0x1a, 0x12, 2, 1);
+#endif
     }
     gloop_end();
 
