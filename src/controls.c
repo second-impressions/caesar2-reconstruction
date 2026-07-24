@@ -925,6 +925,12 @@ extern char warning_message[];
 extern void *main_window;
 void get_text_string(int text_group, int text_word, char *destination);
 void show_native_message(void *window, char *message);
+extern unsigned char native_dialog_extended;
+extern char *confirm_yes_text;
+extern char *confirm_no_text;
+int show_native_confirm(void *window, char *message, char *yes_text, char *no_text);
+void act_yes(void);
+void act_no(void);
 #endif
 
 // Show a modal warning until either mouse button is clicked.
@@ -958,6 +964,16 @@ void click_warning(int message_idx, int x, int y)
 // FUNCTION: C2WIN 0x004221cc
 void confirm(int message_idx, int x, int y)
 {
+#if C2_FEAT_NATIVE_DIALOGS
+    int result;
+
+    get_text_string(10, message_idx, warning_message);
+    native_dialog_extended = 0;
+    result = show_native_confirm(main_window, warning_message,
+                                 confirm_yes_text, confirm_no_text);
+    if (result == 1) act_yes();
+    else act_no();
+#else
     decision = 0;
     pointer_mode = 0;
     show_confirming_panel(message_idx, x, y);
@@ -976,6 +992,7 @@ void confirm(int message_idx, int x, int y)
     }
     setup_whole_screen_refresh();
     update_map = 1;
+#endif
 }
 
 // Run a taller yes/no confirmation dialog for wrapped messages.
