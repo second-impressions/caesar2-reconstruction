@@ -843,14 +843,22 @@ int exit_screen_at(int, int);
 int control_selection(struct selection_rec *selection_list, int selection_count, int x, int y, int text_group)
 {
     int i;
-    int visible_idx;
+    int visible;
 
     selection_is = 0;
     get_allowed_selections(selection_list, selection_count, text_group);
+#if C2_FEAT_SELECTION_WIDTH_OFFSET
+    x -= select_width;
+#else
     x -= select_cost_flag;
+#endif
     if (x < 0) x = 0;
     if (y < 0x18) y = 0x18;
+#if C2_FEAT_SELECTION_WIDTH_OFFSET
+    if (x + select_cost_flag >= 0x26c) x = 0x26c - select_cost_flag;
+#else
     if (select_width + x >= 0x26c) x = 0x26c - select_width;
+#endif
     if (select_height + y >= 0x1cc) y = 0x1cc - select_height;
     show_selection_box(selection_count, x, y, text_group);
     setup_whole_screen_refresh();
@@ -870,10 +878,10 @@ int control_selection(struct selection_rec *selection_list, int selection_count,
     }
     if (selection_is != 0 && selection_is <= select_count) {
         i = 1;
-        visible_idx = 1;
+        visible = 1;
         for (; i <= selection_count; i++) {
             if (selection_list->visible != 0) {
-                if (visible_idx++ == selection_is) break;
+                if (visible++ == selection_is) break;
             }
             selection_list++;
         }
