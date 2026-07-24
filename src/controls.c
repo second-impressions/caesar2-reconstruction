@@ -408,48 +408,46 @@ void show_icons(struct icon_rec *icon_list, int icon_count)
 // FUNCTION: C2WIN 0x00420e66
 void show_buttons(int x, int y, struct button_rec *button_list, int button_count)
 {
-    struct button_rec *button_ptr = button_list;
-    int button_count_copy = button_count;
     int i;
     int button_size;
-    int refresh_width;
-    int refresh_height;
-    int refresh_x;
-    int refresh_y;
+    int cols_count;
+    int refresh_count;
+    int col_no;
+    int ry;
 
-    for (i = 0; i < button_count_copy; i++) {
-        sprite_x = x + button_ptr->x;
-        sprite_y = y + button_ptr->y;
-        if (button_ptr->type == 4) {
-            sprite_image_no = button_ptr->sprite;
-            if (button_ptr->down != 0)
-                sprite_image_no = button_ptr->sprite + 1;
+    for (i = 0; i < button_count; i++) {
+        sprite_x = x + button_list->x;
+        sprite_y = y + button_list->y;
+        if (button_list->type == 4) {
+            sprite_image_no = button_list->sprite;
+            if (button_list->down != 0)
+                sprite_image_no = button_list->sprite + 1;
         } else {
-            if (button_ptr->state == 0)
-                sprite_image_no = button_ptr->sprite;
+            if (button_list->state == 0)
+                sprite_image_no = button_list->sprite;
             else
-                sprite_image_no = button_ptr->sprite + 1;
+                sprite_image_no = button_list->sprite + 1;
         }
 
-        button_size = button_ptr->size;
+        button_size = button_list->size;
         if (button_size == 0x10)      place_16x16_block(system_panel);
         else if (button_size == 0x18) place_24x24_block(system_panel);
         else if (button_size == 0x20) place_32x32_block(system_panel);
 
-        button_ptr++;
+        button_list++;
         ref_x = sprite_x / 16;
         ref_y = sprite_y / 16;
 
         if (button_size == 0x10) {
-            refresh_width = 2;
-            refresh_height = 2;
+            cols_count = 2;
+            refresh_count = 2;
         } else {
-            refresh_width = 3;
-            refresh_height = 3;
+            cols_count = 3;
+            refresh_count = 3;
         }
-        for (refresh_y = ref_y; refresh_y < ref_y + refresh_height; refresh_y++) {
-            for (refresh_x = ref_x; refresh_x < ref_x + refresh_width; refresh_x++) {
-                svga_refresh_table[refresh_x + refresh_y * 40] = 2;
+        for (ry = ref_y; ry < ref_y + refresh_count; ry++) {
+            for (col_no = ref_x; col_no < ref_x + cols_count; col_no++) {
+                svga_refresh_table[col_no + ry * 40] = 2;
             }
         }
     }
@@ -737,6 +735,8 @@ int control_buttons(int x, int y, struct button_rec *button_list, int button_cou
     }
     return 0;
 }
+
+int over_menu(struct menu_rec *menu_list, int menu_count);
 
 // Run top-bar menu interaction and invoke the selected item's action.
 // FUNCTION: C2 0x2e67d
