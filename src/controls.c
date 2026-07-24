@@ -817,17 +817,18 @@ int over_menu(struct menu_rec *menu_list, int menu_count)
 // Return the one-based drop-down item index under the mouse, or zero.
 // FUNCTION: C2 0x2e868
 // FUNCTION: C2WIN 0x00421dcb
-int over_item(struct menu_item_rec *item_list, int item_count, int x_start, int y_base)
+int over_item(struct menu_item_rec *item_list, int item_count, int x, int y)
 {
-    struct menu_item_rec *item_ptr = item_list;
     int i;
+    int item_y;
+
     for (i = 1; i <= item_count; i++) {
-        int item_y = y_base + 0x17 + item_ptr->y;
-        if (x_start <= mouse_x && x_start + 0x60 > mouse_x
+        item_y = (long)(y + 0x17) + item_list->y;
+        if (x <= mouse_x && x + 0x60 > mouse_x
          && item_y <= mouse_y && item_y + 0xf > mouse_y) {
             return i;
         }
-        item_ptr++;
+        item_list++;
     }
     return 0;
 }
