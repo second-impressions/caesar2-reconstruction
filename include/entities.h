@@ -1450,18 +1450,17 @@ struct rotated_sprite_rec {
 extern struct rotated_sprite_rec rotated_map[];
 extern struct rotated_sprite_rec rotated2_map[];
 
-/* Per-difficulty starting wage / slave-count pair.  Symbol-level data is
- * split between init_salary (1 record) and the adjacent init_slave_data
- * (10 records) in symbols.json; together they are the combined 11-record
- * table the PS source treated as one.  Both are typed as salary_rec int
- * pairs (NOT a raw char[] blob) so the initializer renders as the
- * { welfare_bill, slaves } pairs the original source wrote. */
+/* Welfare-bill / slave-count pair.  init_salary is the governor's salary
+ * record; init_slave_data has one starting-slave record per province
+ * difficulty and is indexed by province_difficulty - 1.  Both are typed as
+ * salary_rec int pairs (NOT raw char[] blobs) so their initializers render
+ * as the { welfare_bill, slaves } pairs the original source wrote. */
 struct salary_rec {
     int welfare_bill;
     int slaves;
 };
 extern struct salary_rec init_salary[];
-extern struct salary_rec init_slave_data[];   /* 10 records, adjacent to init_salary */
+extern struct salary_rec init_slave_data[];   /* 10 records */
 
 /* request_message — 0x68-byte mixed-purpose scratch buffer at 0x117E64.
  * Originally just an `int` flag (the first slot), the area is reused as
