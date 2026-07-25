@@ -1007,7 +1007,7 @@ void random_event(void) {
             }
         } else if (robbery_count != 0) {
             value = large_temples_count * 4
-                          + med_temples_count * 2
+                          + (med_temples_count << 1)
                           + small_temples_count;
             average = (large_robbery_count * 4
                            + med_robbery_count * 2
