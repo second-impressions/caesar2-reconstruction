@@ -28,19 +28,19 @@ void get_new_province_options(void)
     auto_conquered        = pompous_conquests[c2inf.skill_level];
     auto_conquered_months = 0;
 
-    for (i = 0; i < 44; i++) {
-        if (empire[i] != 6) empire[i] = 0;
-    }
+    for (i = 0; i < 44; i++) if (empire[i] != 6) empire[i] = 0;
 
     for (i = 0; i < 44; i++) {
         if (empire[i] == 6) continue;
         if (i >= 36 && player_rank < 10) continue;
         for (j = 0; j < 4; j++) {
             border_province_idx = region_borders[i].u.dir[j];
-            if (border_province_idx >= 44) continue;
-            if (empire[border_province_idx] != 6) continue;
-            empire[i] = 2;
-            provinces_on_offer++;
+            if (border_province_idx < 44) {
+                if (empire[border_province_idx] == 6) {
+                    empire[i] = 2;
+                    provinces_on_offer++;
+                }
+            }
         }
     }
 }
