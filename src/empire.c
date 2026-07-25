@@ -112,17 +112,13 @@ void set_new_province(void)
 {
     int i;
     int direction_idx;
-    int source_choice_idx;
-    int industry_kind;
 
     empire[province_is] = 6;
 
     /* Clear the prior "on offer" provinces. */
-    for (i = 0; i < 44; i++) {
-        if (empire[i] == 2) {
+    for (i = 0; i < 44; i++)
+        if (empire[i] == 2)
             empire[i] = 0;
-        }
-    }
 
     if (c2inf.peace_mode != 0) {
         mercs_in_army     = 0;
@@ -130,31 +126,42 @@ void set_new_province(void)
         return;
     }
 
-    /* Select four valid local industries from the province's source table. */
-    source_choice_idx = 0; i = 0;
-    while (i < 4) {
-        if      (source_choice_idx < 3) industry_kind = region_sources[province_is].choices[source_choice_idx % 3];
-        else if (source_choice_idx < 6) industry_kind = region_sources[province_is].choices[3 + (source_choice_idx % 3)];
-        else               industry_kind = region_sources[province_is].choices[6 + (source_choice_idx % 3)];
-        source_choice_idx++;
-        if (industry_kind >= 16) continue;
-        province_industries[i].kind      = industry_kind;
-        province_industries[i].is_trader = 0;
-        industry[industry_kind].status               = 1;
-        i++;
-    }
+    {
+        int industry_kind;
+        int border_idx;
 
-    /* Add each neighbour's primary industry and flag any missing trader route. */
-    for (direction_idx = 0; direction_idx < 4; direction_idx++, i++) {
-        industry_kind = region_sources[region_borders[province_is].u.dir[direction_idx]].primary;
-        province_industries[i].kind      = industry_kind;
-        province_industries[i].is_trader = 2;
-        industry[industry_kind].status               = 1;
+        {
+            int source_choice_idx;
 
-        if (direction_idx == 0 && north_trader_is == 0) province_industries[i].is_trader = 1;
-        if (direction_idx == 1 && east_trader_is  == 0) province_industries[i].is_trader = 1;
-        if (direction_idx == 2 && south_trader_is == 0) province_industries[i].is_trader = 1;
-        if (direction_idx == 3 && west_trader_is  == 0) province_industries[i].is_trader = 1;
+            /* Select four valid local industries from the province's source table. */
+            source_choice_idx = 0; i = 0;
+            while (i < 4) {
+                if      (source_choice_idx < 3) industry_kind = region_sources[province_is].choices[source_choice_idx % 3];
+                else if (source_choice_idx < 6) industry_kind = region_sources[province_is].choices[3 + (source_choice_idx % 3)];
+                else               industry_kind = region_sources[province_is].choices[6 + (source_choice_idx % 3)];
+                source_choice_idx++;
+                if (industry_kind < 16) {
+                    province_industries[i].kind      = industry_kind;
+                    province_industries[i].is_trader = 0;
+                    industry[industry_kind].status   = 1;
+                    i++;
+                }
+            }
+        }
+
+        /* Add each neighbour's primary industry and flag any missing trader route. */
+        for (direction_idx = 0; direction_idx < 4; direction_idx++, i++) {
+            border_idx = region_borders[province_is].u.dir[direction_idx];
+            industry_kind = region_sources[border_idx].primary;
+            province_industries[i].kind      = industry_kind;
+            province_industries[i].is_trader = 2;
+            industry[industry_kind].status   = 1;
+
+            if (direction_idx == 0 && north_trader_is == 0) province_industries[i].is_trader = 1;
+            if (direction_idx == 1 && east_trader_is  == 0) province_industries[i].is_trader = 1;
+            if (direction_idx == 2 && south_trader_is == 0) province_industries[i].is_trader = 1;
+            if (direction_idx == 3 && west_trader_is  == 0) province_industries[i].is_trader = 1;
+        }
     }
 
     mercs_in_army = 0;
