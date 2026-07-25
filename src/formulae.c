@@ -1216,6 +1216,12 @@ void collect_ind_tax(void) {
     ind_tax_counts        = 0;
 }
 
+void get_average_pop_tax(void);
+void get_average_ind_tax(void);
+void get_new_tribute(void);
+void init_tribute(void);
+void get_temple_tip(int);
+
 // Projects the current year's income, expenses, tribute, and final balance.
 // FUNCTION: C2 0x5729a
 // FUNCTION: C2WIN 0x00457e0b
