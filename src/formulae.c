@@ -1306,22 +1306,30 @@ void get_average_ind_tax(void) {
 // Updates imperial favour, requests, tribute reviews, and personal tax demands.
 // FUNCTION: C2 0x574e8
 // FUNCTION: C2WIN 0x004580c6
+#if PLATFORM_WINDOWS
+#define TRIBUTE_TAX_PROVINCE completed_provinces
+#else
+#define TRIBUTE_TAX_PROVINCE cp
+#endif
+
 void get_new_tribute(void) {
-    int favour_delta;
-    int province_count;
-    int request_amount;
+    int delta;
+#if !PLATFORM_WINDOWS
+    int cp;
+#endif
+    int amount;
     last_tribute = tribute;
 
-    favour_delta = rand128 & 7;
-    favour_delta -= 3;
-    favour_delta -= c2inf.skill_level;
-    if      (imperial_favour <  25) favour_delta += 2;
-    else if (imperial_favour <  70) favour_delta += 1;
-    else if (imperial_favour > 175) favour_delta -= 2;
-    else if (imperial_favour > 120) favour_delta -= 1;
+    delta = rand128 & 7;
+    delta -= 3;
+    delta -= c2inf.skill_level;
+    if      (imperial_favour <  25) delta += 2;
+    else if (imperial_favour <  70) delta += 1;
+    else if (imperial_favour > 175) delta -= 2;
+    else if (imperial_favour > 120) delta -= 1;
 
-    if (population < 50) favour_delta = 0;
-    imperial_favour += favour_delta;
+    if (population < 50) delta = 0;
+    imperial_favour += delta;
     if (imperial_favour <   0) imperial_favour =   0;
     if (imperial_favour > 200) imperial_favour = 200;
 
@@ -1338,7 +1346,12 @@ void get_new_tribute(void) {
         if (max_population < 2000) { imperial_request = 2;
         } else if (imperial_request == 0) {
                 imperial_req_goods  = province_industries[rand128 & 3].kind;
-                request_amount = c2inf.skill_level + 1 + completed_provinces / 2; request_amount += years_elapsed_in_region / 10; request_amount += rand128 & 1; imperial_req_amount = request_amount;
+#if PLATFORM_WINDOWS
+                imperial_req_amount = c2inf.skill_level + completed_provinces / 2
+                                    + years_elapsed_in_region / 10 + (rand128 & 1) + 1;
+#else
+                amount = c2inf.skill_level + 1 + completed_provinces / 2; amount += years_elapsed_in_region / 10; amount += rand128 & 1; imperial_req_amount = amount;
+#endif
                 put_message(135, 0, 10);
             } else if (imperial_request == -1) { put_message(136, 0, 11);
             } else if (imperial_request == -2) { put_message(137, 0, 14);
@@ -1376,25 +1389,31 @@ void get_new_tribute(void) {
     }
 
     imperial_tax -= 1; if (imperial_tax <= 0) {
-        imperial_tax = main_paras[5] + (rand8 & 3); province_count = completed_provinces;
+#if PLATFORM_WINDOWS
+        imperial_tax = (rand8 & 3) + main_paras[5];
+#else
+        imperial_tax = main_paras[5] + (rand8 & 3); cp = completed_provinces;
+#endif
         if (players_denarii >= tax_triggers[0]) {
-            last_imperial_tax_percent = tax_rates[province_count];
+            last_imperial_tax_percent = tax_rates[TRIBUTE_TAX_PROVINCE];
             last_imperial_tax_amount = totalXpercent(players_denarii, last_imperial_tax_percent);
             total_imperial_taxes += last_imperial_tax_amount;
             put_message(146, 0, 14);
         } else if (players_denarii >= tax_triggers[1]) {
-            last_imperial_tax_percent = tax_rates[20 + province_count];
+            last_imperial_tax_percent = tax_rates[20 + TRIBUTE_TAX_PROVINCE];
             last_imperial_tax_amount = totalXpercent(players_denarii, last_imperial_tax_percent);
             total_imperial_taxes += last_imperial_tax_amount;
             put_message(145, 0, 14);
         } else if (players_denarii >= tax_triggers[2]) {
-            last_imperial_tax_percent = tax_rates[40 + province_count];
+            last_imperial_tax_percent = tax_rates[40 + TRIBUTE_TAX_PROVINCE];
             last_imperial_tax_amount = totalXpercent(players_denarii, last_imperial_tax_percent);
             total_imperial_taxes += last_imperial_tax_amount;
             put_message(144, 0, 14);
         }
     }
 }
+
+#undef TRIBUTE_TAX_PROVINCE
 
 // Resets imperial favour, tribute, bribe, gift, and personal-tax state.
 // FUNCTION: C2 0x57958
