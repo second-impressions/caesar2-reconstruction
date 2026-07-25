@@ -70,33 +70,37 @@ void auto_conquer(void)
 {
     int i;
     int j;
-    int conquest_pick;
-    int option_count;
     int border_province_idx;
 
     if (c2inf.peace_mode != 0) return;
     if (player_rank >= 10) return;
-    auto_conquered_months++;
-    if (auto_conquered_months < 30) return;
+    if (++auto_conquered_months < 30) return;
     if (auto_conquered <= 0) return;
 
-    conquest_pick  = rand128 & 7;
-    option_count = 0;
-    for (i = 0; i < 44; i++) {
-        if (empire[i] == 6) continue;
-        for (j = 0; j < 4; j++) {
-            border_province_idx = region_borders[i].u.dir[j];
-            if (border_province_idx >= 44) continue;
-            if (empire[border_province_idx] != 6) continue;
-            if (option_count == conquest_pick) {
-                put_message(100, 0, 11);
-                empire[i]     = 6;
-                empire_won[i] = 99999;
-                auto_conquered--;
-                auto_conquered_months = rand8;
-                return;
+    {
+        int pick;
+        int count;
+
+        pick = rand128 & 7;
+        count = 0;
+        for (i = 0; i < 44; i++) {
+            if (empire[i] == 6) continue;
+            for (j = 0; j < 4; j++) {
+                border_province_idx = ((unsigned char *)region_borders)[i * 4 + j];
+                if (border_province_idx < 44) {
+                    if (empire[border_province_idx] == 6) {
+                        if (count == pick) {
+                            put_message(100, 0, 11);
+                            empire[i]     = 6;
+                            empire_won[i] = 99999;
+                            auto_conquered--;
+                            auto_conquered_months = rand8;
+                            return;
+                        }
+                        count++;
+                    }
+                }
             }
-            option_count++;
         }
     }
 }
