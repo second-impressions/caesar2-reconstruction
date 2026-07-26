@@ -3706,7 +3706,7 @@ void test_type_regionmap_neighbours_posedge(unsigned char type)
     gmn_ns_count = gmn_ew_count = gmn_nesw_count = gmn_nwse_count = 0;
     gmn_run = gmn_max_run = 0;
 
-    if (gmn_y == 0) { gmn[0] = 0; gmn_density = -1; }
+    if (gmn_y == 0) { gmn[0] = 0; gmn_density--; }
     else gmn[0] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).base_kind ^ (unsigned char)type;
     if (gmn[0] == 0) { gmn[0] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[0] = 0;
@@ -3746,15 +3746,11 @@ void test_type_regionmap_neighbours_posedge(unsigned char type)
     if (gmn[7] == 0) { gmn[7] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[7] = 0;
 
-    gmn[8] = gmn[0];
-    gmn[9] = gmn[1];
-    gmn[10] = gmn[2];
-    gmn[11] = gmn[3];
-    gmn[12] = gmn[4];
-    gmn[13] = gmn[5];
-    gmn[14] = gmn[6];
-    gmn[15] = gmn[7];
-    for (i = 0; i < 16; i++) { if (gmn[i]) gmn_run++; else gmn_run = 0; if (gmn_run > gmn_max_run) gmn_max_run = gmn_run; }
+    gmn[8] = gmn[0]; gmn[9] = gmn[1]; gmn[10] = gmn[2]; gmn[11] = gmn[3]; gmn[12] = gmn[4]; gmn[13] = gmn[5]; gmn[14] = gmn[6]; gmn[15] = gmn[7];
+    for (i = 0; i < 16; i++) {
+        if (gmn[i]) gmn_run++; else gmn_run = 0;
+        if (gmn_run > gmn_max_run) gmn_max_run = gmn_run;
+    }
 }
 
 // Measure neighbours of a specific type around a region cell, treating map edges as empty.
