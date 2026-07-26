@@ -2602,7 +2602,8 @@ void clear_reg_basic(int rm_offset)
         (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).occupant = 0;
     }
     (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).terrain   &= 0xd8;
-    (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).edge_bits &= 2;
+    (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).edge_bits &= 3;
+    (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).edge_bits &= 0xdf;
     (*(struct region_cell *)((unsigned char *)region_map + (rm_offset)))._unused05  = 0;
     (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).outside    = 0;
     (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).edge_bits |= 1;
