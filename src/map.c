@@ -4758,28 +4758,28 @@ void test_range_for(int x, int y, int radius, int mode)
 int test_range_for_road(int x, int y, int radius)
 {
     int side;
-    int width;
+    int w;
     int sptr;
     int row_skip;
-    unsigned char road_flag;
+    unsigned char terrain;
     x -= radius;
     y -= radius;
     side = radius * 2 + 1;
-    width = side;
+    w = side;
 
-    if (x < 0) { width = side + x; x = 0; }
-    else if (x + side > 80) { width -= (x + side) - 80; }
-    if (y < 0) { side = side + y; y = 0; }
-    else if (y + side > 80) { side -= (y + side) - 80; }
+    if (x < 0) { w += x; x = 0; }
+    else if (x + w > 80) { w -= (x + w) - 80; }
+    if (y < 0) { side += y; y = 0; }
+    else if (side + y > 80) { side -= (side + y) - 80; }
 
     sptr = ((x) + (y) * 80) * 20;
-    row_skip = (80 - width) * 20;
+    row_skip = (80 - w) * 20;
 
     for (gmn_y = y; gmn_y < y + side; gmn_y++, sptr += row_skip) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, sptr += 20) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, sptr += 20) {
 
-            road_flag = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).terrain & 0x20;
-            if (road_flag != 0) return 1;
+            terrain = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).terrain & 0x20;
+            if (terrain != 0) return 1;
         }
     }
     return 0;
