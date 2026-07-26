@@ -2388,8 +2388,8 @@ void spread_fire_atom(int sptr, int dir)
 // FUNCTION: C2WIN 0x004a5a2b
 void spread_plague_atom(int sptr, int dir)
 {
-    int kind;
-    int tile_size;
+    unsigned char kind;
+    unsigned char tile_size;
 
     if (dir == 0)
         sptr -= 0x640;
@@ -2400,18 +2400,17 @@ void spread_plague_atom(int sptr, int dir)
     else if (dir == 2)
         sptr += 0x14;
 
-    kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind & 0xff;
-    if (kind < 0x82) return;
-    if (kind > 0xa1) return;
-    if (((*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits & 0x80) != 0) return;
-
-    tile_size = forum_gfxdat[kind + 0x26] & 0xff;
-    if (tile_size == 4)
-        plague_sized(sptr, 2);
-    else if (tile_size == 9)
-        plague_sized(sptr, 3);
-    else
-        plague_it(sptr);
+    kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
+    if (kind >= 0x82 && kind <= 0xa1) {
+        if (((*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits & 0x80) != 0) return;
+        tile_size = forum_gfxdat[kind + 0x26];
+        if (tile_size == 4)
+            plague_sized(sptr, 2);
+        else if (tile_size == 9)
+            plague_sized(sptr, 3);
+        else
+            plague_it(sptr);
+    }
 }
 
 // Mark the building footprint containing a city cell as plague-stricken.
