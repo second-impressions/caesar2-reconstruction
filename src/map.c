@@ -543,43 +543,44 @@ void test_rm_elastic_range(int strict, int r, unsigned char reject_mask)
 // FUNCTION: C2WIN 0x004a0a83
 void get_best_rm_elastic_value(int x, int y, int cell_offset, int start_dir)
 {
-    int i;
-    int dir = start_dir;
-    unsigned char neighbour_value;
+    int count;
+    int dir;
+    unsigned char v;
 
     best_elastic_value = 100;
     best_elastic_dirc = 0;
-    i = 0;
-    while (i++ < 4) {
+    dir = start_dir;
+    count = 0;
+    while (count++ < 4) {
         if (dir == 0) {
             if (y > 0) {
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset - 480))).place_state;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset - 480))).place_state;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 0;
                 }
             }
         } else if (dir == 1) {
             if (x < 59) {
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset + 8))).place_state;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset + 8))).place_state;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 1;
                 }
             }
         } else if (dir == 2) {
             if (y < 59) {
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset + 480))).place_state;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset + 480))).place_state;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 2;
                 }
             }
         } else if (dir == 3) {
             if (x > 0) {
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset - 8))).place_state;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset - 8))).place_state;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 3;
                 }
             }
