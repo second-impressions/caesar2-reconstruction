@@ -2640,40 +2640,36 @@ void plague_it(int sptr)
 // FUNCTION: C2 0x6a1cb
 // FUNCTION: C2WIN 0x004a6605
 void build_an_area(int x1, int y1, int x2, int y2,
-                   int base_kind, int edge_bits, int color)
+                   char base_kind, int edge_bits, int color)
 {
-    int row_skip;
+    int exchange;
+    int row_offset;
     int x;
     int y;
-    int swap_value;
-    unsigned char old_kind;
-    unsigned char building_kind_byte;
 
-    building_kind_byte = (unsigned char)base_kind;
-    if (x1 > x2) { swap_value = x2; x2 = x1; x1 = swap_value; }
-    if (y1 > y2) { swap_value = y2; y2 = y1; y1 = swap_value; }
+    if (x2 < x1) { exchange = x2; x2 = x1; x1 = exchange; }
+    if (y2 < y1) { exchange = y2; y2 = y1; y1 = exchange; }
 
     cm_sptr = (x1 + y1 * CITY_W) * CITY_CELL_BYTES;
-    row_skip = (CITY_W - (x2 - x1) - 1) * CITY_CELL_BYTES;
-    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+    row_offset = (CITY_W - (x2 - x1) - 1) * CITY_CELL_BYTES;
+    for (y = y1; y <= y2; y++, cm_sptr += row_offset) {
         for (x = x1; x <= x2; x++, cm_sptr += CITY_CELL_BYTES) {
             CM_CELL(cm_sptr).edge_bits |= 1;
-            if ((CM_CELL(cm_sptr).terrain & 0x10) == 0 &&
-                (CM_CELL(cm_sptr).terrain & 0xe7) == 0 &&
-                (CM_CELL(cm_sptr).base_kind >= 8 ||
-                 (CM_CELL(cm_sptr).edge_bits & 0x80) == 0) &&
-                CM_CELL(cm_sptr).citizen_a == 0 &&
-                CM_CELL(cm_sptr).citizen_b == 0) {
-                old_kind = CM_CELL(cm_sptr).base_kind;
-                particles_built++;
-                if (old_kind < 0x1a) particles_cleared++;
-                CM_CELL(cm_sptr).base_kind = building_kind_byte;
-                CM_CELL(cm_sptr).terrain |= placing_flags;
-                CM_CELL(cm_sptr).extra_edge = color;
-                CM_CELL(cm_sptr).edge_bits &= 0xe3;
-                CM_CELL(cm_sptr).edge_bits |= edge_bits;
-                CM_CELL(cm_sptr).activity_a = 0;
-            }
+            if ((CM_CELL(cm_sptr).terrain & 0x10) != 0) continue;
+            if ((CM_CELL(cm_sptr).terrain & 0xe7) != 0) continue;
+            if (CM_CELL(cm_sptr).base_kind < 8)
+                if ((CM_CELL(cm_sptr).edge_bits & 0x80) != 0)
+                    continue;
+            if (CM_CELL(cm_sptr).citizen_a != 0) continue;
+            if (CM_CELL(cm_sptr).citizen_b != 0) continue;
+            particles_built++;
+            if ((unsigned char)CM_CELL(cm_sptr).base_kind < 0x1a) particles_cleared++;
+            CM_CELL(cm_sptr).base_kind = base_kind;
+            CM_CELL(cm_sptr).terrain |= placing_flags;
+            CM_CELL(cm_sptr).extra_edge = color;
+            CM_CELL(cm_sptr).edge_bits &= 0xe3;
+            CM_CELL(cm_sptr).edge_bits |= edge_bits;
+            CM_CELL(cm_sptr).activity_a = 0;
         }
     }
     if (particles_built == 0) illegal_build = 1;
