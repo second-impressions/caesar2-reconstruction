@@ -2691,14 +2691,26 @@ int put_x1_area(int x, int y, char base_kind, int edge_bits, int color)
     cm_sptr = start_sptr;
 
     if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0x10) != 0) {
-    illegal:
         illegal_build = 1;
         return 0;
     }
-    if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0xe7) != 0) goto illegal;
-    if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 8 && ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) != 0) goto illegal;
-    if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).citizen_a != 0) goto illegal;
-    if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).citizen_b != 0) goto illegal;
+    if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0xe7) != 0) {
+        illegal_build = 1;
+        return 0;
+    }
+    if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 8 &&
+        ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) != 0) {
+        illegal_build = 1;
+        return 0;
+    }
+    if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).citizen_a != 0) {
+        illegal_build = 1;
+        return 0;
+    }
+    if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).citizen_b != 0) {
+        illegal_build = 1;
+        return 0;
+    }
 
     particles_built++;
     if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 0x1a) particles_cleared++;
