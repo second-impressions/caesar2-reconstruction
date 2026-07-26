@@ -3171,7 +3171,7 @@ int put_rm_area(int x, int y, int footprint_size, unsigned char base_kind,
     return 1;
 }
 
-char affected_by_cover1(unsigned char *, int, char);
+char affected_by_cover1(unsigned char *, int, unsigned char);
 
 // Set terrain flags across a directionally anchored regional footprint.
 // FUNCTION: C2 0x6b08c
@@ -4676,16 +4676,16 @@ unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size)
 // Test whether a city building footprint has any requested education coverage.
 // FUNCTION: C2 0x6e3b5
 // FUNCTION: C2WIN 0x004accc6
-char affected_by_cover1(unsigned char *p, int range, char mask)
+char affected_by_cover1(unsigned char *p, int range, unsigned char mask)
 {
-    int xi;
-    int yi;
+    int i;
+    int j;
 
     if (range == 1)
         return (p)[13] & mask;
-    for (yi = 0; yi < range; yi++) {
-        for (xi = 0; xi < range; xi++) {
-            if ((p + xi * CITY_CELL_BYTES + yi * CITY_ROW)[13] & mask)
+    for (i = 0; i < range; i++) {
+        for (j = 0; j < range; j++) {
+            if ((p + j * CITY_CELL_BYTES + i * CITY_ROW)[13] & mask)
                 return 1;
         }
     }
