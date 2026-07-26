@@ -1097,7 +1097,7 @@ void build_wall_from_elastic(void)
 void test_type_regionmap_neighbours_posedge(unsigned char);
 void clear_all_rm(char);
 void clear_all_bm(char);
-void unflag_all_cm(char, int);
+void unflag_all_cm(unsigned char, unsigned char);
 void unflag_all_rm(char, int);
 void unflag_all_rm_xwarehouse(void);
 void flag_range(int, int, int, int, unsigned char, unsigned char);
@@ -3882,13 +3882,11 @@ void clear_all_bm(char layer)
 // Mask one data field across the city map.
 // FUNCTION: C2 0x6d12c
 // FUNCTION: C2WIN 0x004aac70
-void unflag_all_cm(char field_off, int mask)
+void unflag_all_cm(unsigned char field_off, unsigned char mask)
 {
     cm_sptr = 0;
-    gmn_y = 0;
-    do {
-        gmn_x = 0;
-        do {
+    for (gmn_y = 0; gmn_y < 80; gmn_y++) {
+        for (gmn_x = 0; gmn_x < 10; gmn_x++, cm_sptr += 0xa0) {
             ((unsigned char *)city_map)[cm_sptr + field_off + 0x00] &= mask;
             ((unsigned char *)city_map)[cm_sptr + field_off + 0x14] &= mask;
             ((unsigned char *)city_map)[cm_sptr + field_off + 0x28] &= mask;
@@ -3897,11 +3895,8 @@ void unflag_all_cm(char field_off, int mask)
             ((unsigned char *)city_map)[cm_sptr + field_off + 0x64] &= mask;
             ((unsigned char *)city_map)[cm_sptr + field_off + 0x78] &= mask;
             ((unsigned char *)city_map)[cm_sptr + field_off + 0x8c] &= mask;
-            gmn_x++;
-            cm_sptr += 0xa0;
-        } while (gmn_x < 10);
-        gmn_y++;
-    } while (gmn_y < 80);
+        }
+    }
 }
 
 // Mask one data field across the region map.
