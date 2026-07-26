@@ -3049,15 +3049,14 @@ int put_reg_x1_area(int x, int y, unsigned char base_kind, int edge_bits,
 int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
                     int color, int strict_flags)
 {
-    int xi;
-    int yi;
-    int footprint_idx;
-    int cell_offset;
+    int y_pos;
+    int x_pos;
     int bad;
-    int row_skip;
+    int i;
+    int offset;
 
     bad = 0;
-    row_skip = (60 - 2) * 8;
+    offset = (60 - 2) * 8;
 
     if (map_direction == 2) x--;
     if (map_direction == 6) y--;
@@ -3069,16 +3068,15 @@ int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
 
     start_x_pos = x;
     start_y_pos = y;
-    cell_offset = ((x) + (y) * 60) * 8;
-    start_sptr = cell_offset;
-    cm_sptr = cell_offset;
+    start_sptr = (x + y * 60) * 8;
+    cm_sptr = start_sptr;
 
-    for (yi = y; yi < y + 2; yi++, cm_sptr += row_skip) {
-        for (xi = x; xi < x + 2; xi++, cm_sptr += 8) {
+    for (y_pos = y; y_pos < y + 2; y_pos++, cm_sptr += offset) {
+        for (x_pos = x; x_pos < x + 2; x_pos++, cm_sptr += 8) {
             if (strict_flags == 1) {
                 if (((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & 0x3f) != 0) bad = 1;
             } else {
-                if ((int)(*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain != 0) bad = 1;
+                if (((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & 0xff) != 0) bad = 1;
             }
             if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant != 0) bad = 1;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits |= 1;
@@ -3087,17 +3085,16 @@ int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
     if (bad) return 0;
 
     cm_sptr = start_sptr;
-    footprint_idx = 0;
-    for (yi = y; yi < y + 2; yi++, cm_sptr += row_skip) {
-        for (xi = x; xi < x + 2; xi++, cm_sptr += 8, footprint_idx++) {
+    for (y_pos = y, i = 0; y_pos < y + 2; y_pos++, cm_sptr += offset) {
+        for (x_pos = x; x_pos < x + 2; x_pos++, cm_sptr += 8, i++) {
             if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind < 0x10) particles_cleared++;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind = (unsigned char)base_kind;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain |= reg_placing_flags;
-            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx = color + diamond_ofsets_2x[footprint_idx];
+            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx = color + diamond_ofsets_2x[i];
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits &= 0xe3;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits |= (unsigned char)edge_bits;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits &= 0xbf;
-            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant = (unsigned char)footprint_idx;
+            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant = (unsigned char)i;
         }
     }
     particles_built++;
