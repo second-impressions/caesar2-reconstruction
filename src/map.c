@@ -870,8 +870,9 @@ int road_ramifications(int x, int y)
                         return 0;
                     }
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x80;
+                } else if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind >= 0x7c) {
+                    continue;
                 } else {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind >= 0x7c) continue;
                     test_citymap_neighbours_posedge(0x20);
                     if (choose_from(road_data, 0x10) != 0) {
                         (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
