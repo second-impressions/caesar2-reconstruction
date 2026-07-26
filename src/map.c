@@ -4810,51 +4810,49 @@ int test_range_for_road(int x, int y, int radius)
 // FUNCTION: C2WIN 0x004ad339
 int test_area_for_population(int extra, int x, int y, int radius)
 {
-    int width;
-    int height;
-    int xend;
-    int yend;
+    int count;
+    int w;
+    int map_height;
     int row_skip;
-    int sptr;
-    int total;
-    int kind;
-    char kind_byte;
-    char flag;
+    int cm_sptr;
+    int people;
+    unsigned char kind;
+    unsigned char sub;
 
     x -= radius;
     y -= radius;
-    width = height = radius * 2 + 1;
-    if (extra != 0)
-        height = width = height + extra;
+    w = map_height = radius * 2 + 1;
+    if (extra != 0) {
+        w += extra;
+        map_height += extra;
+    }
 
-    xend = width + x;
     if (x < 0) {
-        width = xend;
+        w += x;
         x = 0;
-    } else if (xend > 80) {
-        width -= xend - 80;
+    } else if (x + w > 80) {
+        w -= x + w - 80;
     }
-    yend = height + y;
     if (y < 0) {
-        height = yend;
+        map_height += y;
         y = 0;
-    } else if (yend > 80) {
-        height -= yend - 80;
+    } else if (y + map_height > 80) {
+        map_height -= y + map_height - 80;
     }
 
-    sptr = ((x) + (y) * 80) * 20;
-    row_skip = (80 - width) * 20;
-    total = 0;
-    for (gmn_y = y; gmn_y < y + height; gmn_y++, sptr += row_skip) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, sptr += 20) {
-            flag = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).activity_a & 0xf;
-            kind_byte = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
-            kind = kind_byte & 0xff;
-            if (kind >= 0x82 && kind <= 0xa1 && flag == 0)
-                total += houses_to_people[kind - 0x82];
+    cm_sptr = ((x) + (y) * 80) * 20;
+    row_skip = (80 - w) * 20;
+    people = 0;
+    for (gmn_y = y; gmn_y < y + map_height; gmn_y++, cm_sptr += row_skip) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, cm_sptr += 20) {
+            sub = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
+            kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+            if (kind < 0x82 || kind > 0xa1) continue;
+            if (sub != 0) continue;
+            people += houses_to_people[kind - 0x82];
         }
     }
-    return total;
+    return people;
 }
 
 // Save the active city or region map for a possible undo.
