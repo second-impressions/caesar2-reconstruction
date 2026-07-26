@@ -3268,7 +3268,10 @@ void check_region_map_for_port_square(int x, int y)
     if (map_direction == 2) x--;
     if (map_direction == 6) y--;
     if (map_direction == 4) { x--; y--; }
-    if (x < 0 || y < 0 || x + 1 >= 60 || y + 1 >= 60) return;
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x + 1 >= 60) return;
+    if (y + 1 >= 60) return;
 
     gmn_sptr = ((x) + (y) * 60) * 8;
     for (gmn_y = y; gmn_y < y + 2; gmn_y++, gmn_sptr += row_skip) {
