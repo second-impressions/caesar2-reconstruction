@@ -24,7 +24,7 @@ void test_citymap_neighbours_posedge(unsigned char mask);
 #if PLATFORM_WINDOWS
 void test_citymap_neighbours_negedge();
 #else
-void test_citymap_neighbours_negedge(char mask);
+void test_citymap_neighbours_negedge(unsigned char mask);
 #endif
 void trace_back_route_elastic(void);
 void test_type_citymap_neighbours_negedge(unsigned char type);
@@ -3400,7 +3400,7 @@ void test_citymap_neighbours_posedge(unsigned char mask)
 // Measure matching neighbours around the current city-map cell, treating map edges as empty.
 // FUNCTION: C2 0x6b814
 // FUNCTION: C2WIN 0x004a89f2
-void test_citymap_neighbours_negedge(char mask)
+void test_citymap_neighbours_negedge(unsigned char mask)
 {
     int i;
 
@@ -3440,17 +3440,9 @@ void test_citymap_neighbours_negedge(char mask)
     else gmn[7] = mask & (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW - CITY_CELL_BYTES))).terrain;
     if (gmn[7]) { gmn_count++; gmn_nwse_count++; }
 
-    gmn[8] = gmn[0];
-    gmn[9] = gmn[1];
-    gmn[10] = gmn[2];
-    gmn[11] = gmn[3];
-    gmn[12] = gmn[4];
-    gmn[13] = gmn[5];
-    gmn[14] = gmn[6];
-    gmn[15] = gmn[7];
+    gmn[8] = gmn[0]; gmn[9] = gmn[1]; gmn[10] = gmn[2]; gmn[11] = gmn[3]; gmn[12] = gmn[4]; gmn[13] = gmn[5]; gmn[14] = gmn[6]; gmn[15] = gmn[7];
     for (i = 0; i < 16; i++) {
-        if (gmn[i]) gmn_run++;
-        else gmn_run = 0;
+        if (gmn[i]) gmn_run++; else gmn_run = 0;
         if (gmn_run > gmn_max_run) gmn_max_run = gmn_run;
     }
 }
