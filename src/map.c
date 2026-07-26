@@ -684,127 +684,137 @@ void transform_road_elastic(int radius)
     }
 }
 
+void get_wall_elastic(void);
+void build_wall_from_elastic(void);
+void get_aquaduct_elastic(void);
+void build_aquaduct_from_elastic(void);
+
 // Build the city road represented by the current elastic path.
 // FUNCTION: C2 0x66d22
 // FUNCTION: C2WIN 0x004a0f4e
 void build_road_from_elastic(void)
 {
-    int over_y_l;
-    int over_x_l;
-    int cell_ptr;
-    int count;
-    unsigned char saved_slot;
-    unsigned char status;
-    int attempt;
-    int dir;
-    unsigned char neighbour;
-    int bridge_count;
+    int y_pos;
+    int x_pos;
+    int pm_ptr;
+    int total;
+    unsigned char saved_byte2;
+    unsigned char build_outcome;
+    int remaining;
+    int next_direction;
+    unsigned char neighbour_byte;
+    int bridge;
+    int size;
 
-    count = (*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
-    if (count == 0) { illegal_build = 1; return; }
-    if (count == 0xff) { illegal_build = 1; return; }
+    total = (*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
+    if (total == 0) { illegal_build = 1; return; }
+    if (total == 0xff) { illegal_build = 1; return; }
 
-    over_x_l = over_x;
-    over_y_l = over_y;
-    cell_ptr = pm_over_cm_ptr;
-    dir      = 0;
-    bridge_count = 0;
-    status   = 0;
+    x_pos = over_x;
+    y_pos = over_y;
+    pm_ptr = pm_over_cm_ptr;
+    next_direction = 0;
+    bridge = 0;
+    build_outcome = 0;
 
-    while (count > 0) {
-        count--;
-        if ((*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).terrain & 0x02) {
-            (*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).terrain &= 0xf9;
-            (*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).terrain |= 0x04;
+    while (total > 0) {
+        total--;
+        if ((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 0x02) {
+#if PLATFORM_WINDOWS
+            (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain &= 0xfd;
+#else
+            (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain &= 0xf9;
+#endif
+            (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain |= 0x04;
         }
-        if (!((*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).terrain & 0x20)) particles_built++;
-        if ((*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).base_kind < 0x1a) particles_cleared++;
-        (*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).terrain |= 0x20;
-        (*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).edge_bits |= 1;
+        if (!((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 0x20)) particles_built++;
+        if ((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).base_kind < 0x1a) particles_cleared++;
+        (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain |= 0x20;
+        (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).edge_bits |= 1;
 
-        saved_slot = (*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).road_aqueduct;
-        attempt = 4; dir = 0;
-        while (attempt-- > 0) {
-            neighbour    = 0;
-            if ((*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).terrain & 0x10) bridge_count = 1; else bridge_count = 0;
-            if (++dir > 3) dir = 0;
-            if (dir == 0) {
-                if (over_y_l > 0) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x640))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x640))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 0x640; over_y_l--; break; }
-            } else if (dir == 1) {
-                if (over_x_l < 0x4f) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x14))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x14))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 0x14; over_x_l++; break; }
-            } else if (dir == 2) {
-                if (over_y_l < 0x4f) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x640))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x640))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 0x640; over_y_l++; break; }
-            } else if (dir == 3) {
-                if (over_x_l > 0) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x14))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x14))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 0x14; over_x_l--; break; }
+        saved_byte2 = (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).road_aqueduct;
+        remaining = 4; next_direction = 0;
+        while (remaining-- > 0) {
+            neighbour_byte = 0;
+            if ((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 0x10) bridge = 1; else bridge = 0;
+            if (++next_direction > 3) next_direction = 0;
+            if (next_direction == 0) {
+                if (y_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x640; y_pos--; break; }
+            } else if (next_direction == 1) {
+                if (x_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x14; x_pos++; break; }
+            } else if (next_direction == 2) {
+                if (y_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x640; y_pos++; break; }
+            } else if (next_direction == 3) {
+                if (x_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x14; x_pos--; break; }
             }
         }
-        if (neighbour != 0 && neighbour < saved_slot)
+        if (neighbour_byte != 0 && neighbour_byte < saved_byte2)
             continue;
-        if (saved_slot > 1) { status = 1; goto finish; }
+        if (saved_byte2 > 1) { build_outcome = 1; goto finish; }
         goto phase2;
     }
 
 phase2:
-    count    = (*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
-    over_x_l = over_x;
-    over_y_l = over_y;
-    cell_ptr = pm_over_cm_ptr;
-    dir      = 0;
-    bridge_count = 0;
+    total = (*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
+    x_pos = over_x;
+    y_pos = over_y;
+    pm_ptr = pm_over_cm_ptr;
+    next_direction = 0;
+    bridge = 0;
 
-    while (count > 0) {
-        count--;
-        if (road_ramifications(over_x_l, over_y_l) == 0) {
-            status = 2; goto finish;
+    while (total > 0) {
+        total--;
+        if (road_ramifications(x_pos, y_pos) == 0) {
+            build_outcome = 2; goto finish;
         }
-        saved_slot = (*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).road_aqueduct;
-        attempt = 4; dir = 0;
-        while (attempt-- > 0) {
-            neighbour    = 0;
-            if ((*(struct city_cell *)((unsigned char *)city_map + (cell_ptr))).terrain & 0x10) bridge_count = 1; else bridge_count = 0;
-            if (++dir > 3) dir = 0;
-            if (dir == 0) {
-                if (over_y_l > 0) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x640))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x640))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 0x640; over_y_l--; break; }
-            } else if (dir == 1) {
-                if (over_x_l < 0x4f) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x14))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x14))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 0x14; over_x_l++; break; }
-            } else if (dir == 2) {
-                if (over_y_l < 0x4f) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x640))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) + 0x640))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 0x640; over_y_l++; break; }
-            } else if (dir == 3) {
-                if (over_x_l > 0) neighbour = (*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x14))).road_aqueduct;
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_ptr) - 0x14))).terrain & 0x10) bridge_count++;
-                if (bridge_count > 1) neighbour = 0;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 0x14; over_x_l--; break; }
+        saved_byte2 = (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).road_aqueduct;
+        remaining = 4; next_direction = 0;
+        while (remaining-- > 0) {
+            neighbour_byte = 0;
+            if ((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 0x10) bridge = 1; else bridge = 0;
+            if (++next_direction > 3) next_direction = 0;
+            if (next_direction == 0) {
+                if (y_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x640; y_pos--; break; }
+            } else if (next_direction == 1) {
+                if (x_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x14; x_pos++; break; }
+            } else if (next_direction == 2) {
+                if (y_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x640; y_pos++; break; }
+            } else if (next_direction == 3) {
+                if (x_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).road_aqueduct;
+                if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).terrain & 0x10) bridge++;
+                if (bridge > 1) neighbour_byte = 0;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x14; x_pos--; break; }
             }
         }
-        if (neighbour != 0 && neighbour < saved_slot)
+        if (neighbour_byte != 0 && neighbour_byte < saved_byte2)
             continue;
-        if (saved_slot > 1) { status = 3; goto finish; }
+        if (saved_byte2 > 1) { build_outcome = 3; goto finish; }
         break;
     }
 
 finish:
-    if (status != 0) {
+    if (build_outcome != 0) {
         illegal_build = 1;
         restore_city_from_undo_buffer();
     }
