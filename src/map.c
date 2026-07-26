@@ -843,40 +843,39 @@ int road_ramifications(int x, int y)
                 if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 8) != 0) continue;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 1;
                 if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x10) != 0) {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building != 0) continue;
-                    kind = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = kind;
-                    if (kind >= 0x1e && kind < 0x22)
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x4e;
-                    else if (kind >= 0x22 && kind < 0x26)
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x4f;
-                    else if (kind >= 0x26 && kind < 0x2a)
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x50;
-                    else if (kind >= 0x2a && kind < 0x2e)
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x51;
-                    continue;
-                }
-                if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 4) != 0) {
-                    if (one_wall_ramification() != 0) continue;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain &= 0xf9;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain |= 2;
-                    return 0;
-                }
-                if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x40) != 0) {
+                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building == 0) {
+                        kind = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind;
+                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = kind;
+                        if (kind >= 0x1e && kind < 0x22)
+                            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x4e;
+                        else if (kind >= 0x22 && kind < 0x26)
+                            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x4f;
+                        else if (kind >= 0x26 && kind < 0x2a)
+                            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x50;
+                        else if (kind >= 0x2a && kind < 0x2e)
+                            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0x51;
+                    }
+                } else if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 4) != 0) {
+                    if (one_wall_ramification() == 0) {
+                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain &= 0xf9;
+                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain |= 2;
+                        return 0;
+                    }
+                } else if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x40) != 0) {
                     if (one_aquaduct_ramification() == 0) {
                         (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain &= 0xdf;
                         return 0;
                     }
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x80;
-                    continue;
+                } else if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind < 0x7c) {
+                    test_citymap_neighbours_posedge(0x20);
+                    if (choose_from(road_data, 0x10) != 0) {
+                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
+                    } else {
+                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain &= 0xdf;
+                        return 0;
+                    }
                 }
-                if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind & 0xff) >= 0x7c) continue;
-                test_citymap_neighbours_posedge(0x20);
-                if (choose_from(road_data, 0x10) == 0) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain &= 0xdf;
-                    return 0;
-                }
-                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
             }
         }
     }
