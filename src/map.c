@@ -2109,45 +2109,34 @@ void garden_an_area(int x1, int y1, int x2, int y2)
 // FUNCTION: C2WIN 0x004a4dd7
 void plaza_an_area(int x1, int y1, int x2, int y2)
 {
-    int row_skip;
-    int swap_value;
-    int y;
+    int exchange;
+    int row_offset;
     int x;
+    int y;
 
-    if (x1 > x2) {
-        swap_value = x2;
-        x2 = x1;
-        x1 = swap_value;
-    }
-    if (y1 > y2) {
-        swap_value = y2;
-        y2 = y1;
-        y1 = swap_value;
-    }
+    if (x1 > x2) { exchange = x2; x2 = x1; x1 = exchange; }
+    if (y1 > y2) { exchange = y2; y2 = y1; y1 = exchange; }
 
     cm_sptr = (x1 + y1 * 80) * 20;
-    row_skip = (80 - (x2 - x1) - 1) * 20;
+    row_offset = (80 - (x2 - x1) - 1) * 20;
 
-    for (y = y1; y <= y2;) {
-        for (x = x1; x <= x2;) {
-            if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 0x1e
-                && ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind >= 8
-                    || ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) == 0)) {
-                if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 0x1a) particles_cleared++;
-                particles_built++;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind = 0x7c;
-                clear_basic(cm_sptr);
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).extra_edge = 0x74;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0xe3;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits |= 4;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a = 0;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain |= 0x20;
-            }
-            x++;
-            cm_sptr += 20;
+    for (y = y1; y <= y2; y++, cm_sptr += row_offset) {
+        for (x = x1; x <= x2; x++, cm_sptr += 20) {
+            if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind >= 0x1e)
+                continue;
+            if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 8)
+                if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) != 0)
+                    continue;
+            if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 0x1a) particles_cleared++;
+            particles_built++;
+            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind = 0x7c;
+            clear_basic(cm_sptr);
+            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).extra_edge = 0x74;
+            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0xe3;
+            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits |= 4;
+            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a = 0;
+            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain |= 0x20;
         }
-        y++;
-        cm_sptr += row_skip;
     }
     if (particles_built == 0) illegal_build = 1;
 }
