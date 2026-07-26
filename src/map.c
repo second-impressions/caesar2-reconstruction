@@ -3849,17 +3849,16 @@ void clear_all_rm(char layer)
     cm_sptr = 0;
     for (gmn_y = 0; gmn_y < 60; gmn_y++) {
         for (gmn_x = 0; gmn_x < 6; gmn_x++, cm_sptr += 0x50) {
-            int idx = cm_sptr + (unsigned char)layer;
-            ((unsigned char *)region_map)[(idx + 0x00)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x08)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x10)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x18)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x20)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x28)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x30)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x38)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x40)] = 0;
-            ((unsigned char *)region_map)[(idx + 0x48)] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x00] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x08] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x10] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x18] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x20] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x28] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x30] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x38] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x40] = 0;
+            ((unsigned char *)region_map)[cm_sptr + (unsigned char)layer + 0x48] = 0;
         }
     }
 }
