@@ -21,7 +21,11 @@ void plague_it(int sptr);
 void unflag_rm_area(int x, int y, int size, unsigned char mask_byte);
 void adjust_regions_coastline(int x, int y, int width, int height);
 void test_citymap_neighbours_posedge(char mask);
+#if PLATFORM_WINDOWS
 void test_citymap_neighbours_negedge();
+#else
+void test_citymap_neighbours_negedge(char mask);
+#endif
 void trace_back_route_elastic(void);
 void test_type_citymap_neighbours_negedge(unsigned char type);
 void test_regionmap_neighbours_posedge(char mask);
