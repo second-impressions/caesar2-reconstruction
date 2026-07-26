@@ -2172,7 +2172,7 @@ void plaza_an_area(int x1, int y1, int x2, int y2)
 // FUNCTION: C2WIN 0x004a4fa8
 void clear_an_area(int x1, int y1, int x2, int y2)
 {
-    char size;
+    unsigned char size;
     int swap_temp;
     int row_skip;
     int x;
