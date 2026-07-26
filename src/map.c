@@ -3015,7 +3015,7 @@ int put_reg_x1_area(int x, int y, unsigned char base_kind, int edge_bits,
                     int color, int strict_flags)
 {
     start_x_pos = x; start_y_pos = y;
-    x = x + y * 60; start_sptr = x * 8;
+    start_sptr = (x + y * 60) * 8;
     cm_sptr = start_sptr;
 
     if (strict_flags == 1) { if (((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & 0x3f) != 0) return 0; }
