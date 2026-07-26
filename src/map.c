@@ -2318,36 +2318,36 @@ restore_random:
 // FUNCTION: C2WIN 0x004a57bd
 void destroy_an_atom(int sptr, int rubble_kind)
 {
-    int saved_random;
-    int kind;
-    int size;
-    int cell_index;
+    int saved_random_count;
+    unsigned char kind;
+    unsigned char forum_size;
+    int cell_position;
     int x;
     int y;
 
-    saved_random = stone_random_count;
-    kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind & 0xff;
+    saved_random_count = stone_random_count;
+    kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
     if (kind >= 0x82) {
-        size = forum_gfxdat[kind + 0x26] & 0xff;
-        if (size == 4)
+        forum_size = forum_gfxdat[kind + 0x26];
+        if (forum_size == 4)
             clear_sized_to_rubble(sptr, 2, rubble_kind);
-        else if (size == 9)
+        else if (forum_size == 9)
             clear_sized_to_rubble(sptr, 3, rubble_kind);
-        else if (size == 0x10)
+        else if (forum_size == 0x10)
             clear_sized_to_rubble(sptr, 4, rubble_kind);
-        else if (kind >= 0x82)
-            clear_to_rubble(sptr, rubble_kind);
-        else
+        else if (kind < 0x82)
             clear_to_empty(sptr);
+        else
+            clear_to_rubble(sptr, rubble_kind);
     } else if (kind >= 8) {
         clear_to_empty(sptr);
     }
 
-    cell_index = sptr / 20;
-    x = cell_index % 80;
-    y = cell_index / 80;
+    cell_position = sptr / 20;
+    x = cell_position % 80;
+    y = cell_position / 80;
     aquaduct_ramifications(x, y);
-    stone_random_count = (signed char)saved_random;
+    stone_random_count = (signed char)saved_random_count;
     particles_cleared = 0;
 }
 
