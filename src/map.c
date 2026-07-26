@@ -2515,8 +2515,8 @@ void clear_to_rubble(int sptr, int rubble_kind)
 
     stone_random_count++;
     if (stone_random_count >= 0x40) stone_random_count = 0;
-    random_value = stone_random_data[stone_random_count];
-    (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind = (random_value / 2);
+    (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind =
+        stone_random_data[stone_random_count] / 2;
     clear_basic(sptr);
     (*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits |= 0x40;
 
@@ -2524,9 +2524,10 @@ void clear_to_rubble(int sptr, int rubble_kind)
         (*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits |= 0x80;
         stone_random_count += rand8;
         if (stone_random_count >= 0x40) stone_random_count = 0;
-        random_value = stone_random_data[stone_random_count];
-        (*(struct city_cell *)((unsigned char *)city_map + (sptr))).building = random_value;
-        (*(struct city_cell *)((unsigned char *)city_map + (sptr))).fire = (random_value / 4 + 8);
+        (*(struct city_cell *)((unsigned char *)city_map + (sptr))).building =
+            stone_random_data[stone_random_count];
+        (*(struct city_cell *)((unsigned char *)city_map + (sptr))).fire =
+            stone_random_data[stone_random_count] / 4 + 8;
         set_sound("fire.wav", 1);
     } else if (had_clear_sound == 0 || mouse_left_button == 0) {
         set_sound("smrub.wav", 1);
