@@ -362,43 +362,44 @@ void test_elastic_range(int radius, unsigned char reject_mask)
 // FUNCTION: C2WIN 0x004a03c4
 void get_best_elastic_value(int x, int y, int cell_offset, int start_dir)
 {
-    int i;
-    int dir = start_dir;
-    unsigned char neighbour_value;
+    int count;
+    int dir;
+    unsigned char v;
 
     best_elastic_value = 100;
     best_elastic_dirc = 0;
-    i = 0;
-    while (i++ < 4) {
+    dir = start_dir;
+    count = 0;
+    while (count++ < 4) {
         if (dir == 0) {
             if (y > 0) {
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) - CITY_ROW))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) - CITY_ROW))).road_aqueduct;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 0;
                 }
             }
         } else if (dir == 1) {
             if (x < 79) {
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) + CITY_CELL_BYTES))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) + CITY_CELL_BYTES))).road_aqueduct;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 1;
                 }
             }
         } else if (dir == 2) {
             if (y < 79) {
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) + CITY_ROW))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) + CITY_ROW))).road_aqueduct;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 2;
                 }
             }
         } else if (dir == 3) {
             if (x > 0) {
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) - CITY_CELL_BYTES))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < best_elastic_value) {
-                    best_elastic_value = neighbour_value;
+                v = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset) - CITY_CELL_BYTES))).road_aqueduct;
+                if (v != 0 && v < best_elastic_value) {
+                    best_elastic_value = v;
                     best_elastic_dirc = 3;
                 }
             }
