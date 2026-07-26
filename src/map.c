@@ -1092,28 +1092,41 @@ void build_wall_from_elastic(void)
     }
 }
 
+void test_type_regionmap_neighbours_posedge(unsigned char);
+void clear_all_rm(char);
+void clear_all_bm(char);
+void unflag_all_cm(char, int);
+void unflag_all_rm(char, int);
+void unflag_all_rm_xwarehouse(void);
+void flag_range(int, int, int, int, unsigned char, unsigned char);
+int test_for_ns_polar_walls(int, int, int);
+int test_for_ew_polar_walls(int, int, int);
+int test_for_next_to_region_wall(int, int);
+int get_reg_industries_in_radius(int, int);
+int get_closest_trading_post(int, int, int);
+
 // Validate wall connections at (x, y) and across the 3×3 (or smaller, if at edges) neighbourhood.
 // FUNCTION: C2 0x678bb
 // FUNCTION: C2WIN 0x004a2251
 int wall_ramifications(int x, int y)
 {
-    int x_min;
-    int y_min;
-    int x_max;
-    int y_max;
+    int x_min_bound;
+    int y_min_bound;
+    int x_max_bound;
+    int y_max_bound;
 
-    if (x == 0) x_min = 0; else x_min = x - 1;
-    if (y == 0) y_min = 0; else y_min = y - 1;
-    if (x == 79) x_max = x; else x_max = x + 1;
-    if (y == 79) y_max = y; else y_max = y + 1;
+    if (x == 0) x_min_bound = 0; else x_min_bound = x - 1;
+    if (y == 0) y_min_bound = 0; else y_min_bound = y - 1;
+    if (x == 79) x_max_bound = 79; else x_max_bound = x + 1;
+    if (y == 79) y_max_bound = 79; else y_max_bound = y + 1;
 
     gmn_x = x;
     gmn_y = y;
     if (one_wall_ramification() == 0)
         return 0;
 
-    for (gmn_y = y_min; y_max >= gmn_y; gmn_y++) {
-        for (gmn_x = x_min; x_max >= gmn_x; gmn_x++) {
+    for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
+        for (gmn_x = x_min_bound; x_max_bound >= gmn_x; gmn_x++) {
             if (one_wall_ramification() == 0)
                 return 0;
         }
@@ -3141,6 +3154,9 @@ void flag_rm_area(int x, int y, int size, char mask_byte)
         }
     }
 }
+
+int get_range1(unsigned char *, int, char);
+int get_range3(unsigned char *, int, char);
 
 // Mask terrain flags across a regional footprint.
 // FUNCTION: C2 0x6b126
