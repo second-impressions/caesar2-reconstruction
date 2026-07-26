@@ -2976,13 +2976,11 @@ void change_sized(int base_kind, int gfx_base_idx, int footprint_size, int cell_
 // FUNCTION: C2WIN 0x004a7573
 void set_map_ref(int x, int y, int size)
 {
-    int row_skip;
-    int sptr;
-    int xi;
-    int yi;
-    int size_minus_one;
+    int x_pos;
+    int y_pos;
+    int rowadd;
 
-    row_skip = (80 - size) * 20;
+    rowadd = (80 - size) * 20;
     if (map_direction == 2)
         x -= size - 1;
     if (map_direction == 6)
@@ -2993,17 +2991,15 @@ void set_map_ref(int x, int y, int size)
     }
     if (x < 0) return;
     if (y < 0) return;
-    size_minus_one = size - 1;
-    if (x + size_minus_one >= 80) return;
-    if (y + size_minus_one >= 80) return;
+    if (x + (size - 1) >= 80) return;
+    if (y + (size - 1) >= 80) return;
 
     start_x_pos = x;
     start_y_pos = y;
-    sptr = (x + y * 80) * 20;
-    start_sptr = sptr;
-    cm_sptr = sptr;
-    for (yi = y; yi < y + size; yi++, cm_sptr += row_skip) {
-        for (xi = x; xi < x + size; xi++, cm_sptr += 20) {
+    start_sptr = (x + y * 80) * 20;
+    cm_sptr = start_sptr;
+    for (y_pos = y; y_pos < y + size; y_pos++, cm_sptr += rowadd) {
+        for (x_pos = x; x_pos < x + size; x_pos++, cm_sptr += 20) {
             (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits |= 1;
         }
     }
