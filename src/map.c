@@ -3576,15 +3576,11 @@ void test_type_citymap_neighbours_negedge(unsigned char type)
     if (gmn[7] == 0) { gmn[7] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[7] = 0;
 
-    gmn[8] = gmn[0];
-    gmn[9] = gmn[1];
-    gmn[10] = gmn[2];
-    gmn[11] = gmn[3];
-    gmn[12] = gmn[4];
-    gmn[13] = gmn[5];
-    gmn[14] = gmn[6];
-    gmn[15] = gmn[7];
-    for (i = 0; i < 16; i++) { if (gmn[i]) gmn_run++; else gmn_run = 0; if (gmn_run > gmn_max_run) gmn_max_run = gmn_run; }
+    gmn[8] = gmn[0]; gmn[9] = gmn[1]; gmn[10] = gmn[2]; gmn[11] = gmn[3]; gmn[12] = gmn[4]; gmn[13] = gmn[5]; gmn[14] = gmn[6]; gmn[15] = gmn[7];
+    for (i = 0; i < 16; i++) {
+        if (gmn[i]) gmn_run++; else gmn_run = 0;
+        if (gmn_run > gmn_max_run) gmn_max_run = gmn_run;
+    }
 }
 
 // Measure matching neighbours around the current region cell, treating map edges as occupied.
@@ -3816,15 +3812,11 @@ void test_type_regionmap_neighbours_negedge(unsigned char type)
     if (gmn[7] == 0) { gmn[7] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[7] = 0;
 
-    gmn[8] = gmn[0];
-    gmn[9] = gmn[1];
-    gmn[10] = gmn[2];
-    gmn[11] = gmn[3];
-    gmn[12] = gmn[4];
-    gmn[13] = gmn[5];
-    gmn[14] = gmn[6];
-    gmn[15] = gmn[7];
-    for (i = 0; i < 16; i++) { if (gmn[i]) gmn_run++; else gmn_run = 0; if (gmn_run > gmn_max_run) gmn_max_run = gmn_run; }
+    gmn[8] = gmn[0]; gmn[9] = gmn[1]; gmn[10] = gmn[2]; gmn[11] = gmn[3]; gmn[12] = gmn[4]; gmn[13] = gmn[5]; gmn[14] = gmn[6]; gmn[15] = gmn[7];
+    for (i = 0; i < 16; i++) {
+        if (gmn[i]) gmn_run++; else gmn_run = 0;
+        if (gmn_run > gmn_max_run) gmn_max_run = gmn_run;
+    }
 }
 
 // Choose the first pattern record matching the current neighbour configuration.
