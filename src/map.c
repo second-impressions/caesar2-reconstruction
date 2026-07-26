@@ -2548,15 +2548,20 @@ void clear_to_empty(int sptr)
 // FUNCTION: C2WIN 0x004a6203
 void clear_basic(int sptr)
 {
-    if (((*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).terrain & 0x10) && ((*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).terrain & 0x20)) {
-        (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).base_kind = (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).building;
+    if ((*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).terrain & 0x10) {
+        if ((*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).terrain & 0x20) {
+            (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).base_kind = (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).building;
+        }
     }
     (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).building = 0;
     (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).fire = 0;
     (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).terrain &= 0x18;
-    (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).edge_bits &= 2;
+    (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).edge_bits &= 3;
+    (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).edge_bits &= 0x7f;
+    (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).edge_bits &= 0xdf;
     (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).range_flag &= 0xfc;
-    (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).fpu_flag &= 0xc0;
+    (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).fpu_flag &= 0xcf;
+    (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).fpu_flag &= 0xf0;
     (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).activity_a = 0;
     (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).activity_b = 0;
     (*(struct city_cell *)((unsigned char *)city_map + ((sptr)))).edge_bits |= 1;
