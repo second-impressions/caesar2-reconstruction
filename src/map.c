@@ -3204,7 +3204,7 @@ void flag_rm_area(int x, int y, int size, char mask_byte)
 
 int get_range1(unsigned char *, int, char);
 int get_range3(unsigned char *, int, char);
-char affected_by_cover2(unsigned char *, int, char);
+char affected_by_cover2(unsigned char *, int, unsigned char);
 
 // Mask terrain flags across a regional footprint.
 // FUNCTION: C2 0x6b126
@@ -4695,16 +4695,16 @@ char affected_by_cover1(unsigned char *p, int range, unsigned char mask)
 // Test whether a city building footprint has any requested health coverage.
 // FUNCTION: C2 0x6e41c
 // FUNCTION: C2WIN 0x004acd6f
-char affected_by_cover2(unsigned char *p, int range, char mask)
+char affected_by_cover2(unsigned char *p, int range, unsigned char mask)
 {
-    int xi;
-    int yi;
+    int i;
+    int j;
 
     if (range == 1)
         return (p)[14] & mask;
-    for (yi = 0; yi < range; yi++) {
-        for (xi = 0; xi < range; xi++) {
-            if ((p + xi * CITY_CELL_BYTES + yi * CITY_ROW)[14] & mask)
+    for (i = 0; i < range; i++) {
+        for (j = 0; j < range; j++) {
+            if ((p + j * CITY_CELL_BYTES + i * CITY_ROW)[14] & mask)
                 return 1;
         }
     }
