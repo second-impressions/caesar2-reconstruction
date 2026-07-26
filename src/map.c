@@ -28,7 +28,12 @@ void test_citymap_neighbours_negedge(char mask);
 #endif
 void trace_back_route_elastic(void);
 void test_type_citymap_neighbours_negedge(unsigned char type);
+#if PLATFORM_WINDOWS
+void test_regionmap_neighbours_posedge();
+#else
 void test_regionmap_neighbours_posedge(char mask);
+#endif
+void flag_range3(int, int, int, int, int, unsigned char, unsigned char, unsigned char);
 void test_regionmap_neighbours_negedge(char mask);
 void test_type_regionmap_neighbours_negedge(unsigned char type);
 void init_choices(struct choice_rec *arr, int count);
@@ -1771,29 +1776,37 @@ finish:
     }
 }
 
+int get_reg_industries_in_radius(int x, int y);
+void count_city_flags(void);
+
 // Recompute regional road and wall-crossing sprites around a cell.
 // FUNCTION: C2 0x688bb
 // FUNCTION: C2WIN 0x004a3eb6
 int reg_road_ramifications(int x, int y)
 {
-    int x_min;
-    int y_max;
-    int x_max;
-    int y_min;
+    int x_min_bound;
+    unsigned char kind;
+    int x_max_bound;
+    int y_max_bound;
+    int y_min_bound;
 
-    if (x == 0) x_min = 0; else x_min = x - 1;
-    if (y == 0) y_min = 0; else y_min = y - 1;
-    if (x == 59) x_max = 59; else x_max = x + 1;
-    if (y == 59) y_max = 59; else y_max = y + 1;
+    if (x == 0) x_min_bound = 0; else x_min_bound = x - 1;
+    if (y == 0) y_min_bound = 0; else y_min_bound = y - 1;
+    if (x == 59) x_max_bound = 59; else x_max_bound = x + 1;
+    if (y == 59) y_max_bound = 59; else y_max_bound = y + 1;
 
-    for (gmn_y = y_min; y_max >= gmn_y; gmn_y++) {
-        for (gmn_x = x_min; x_max >= gmn_x; gmn_x++) {
+    for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
+        for (gmn_x = x_min_bound; gmn_x <= x_max_bound; gmn_x++) {
             gmn_sptr = (gmn_x + gmn_y * 60) * 8;
             if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x20) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits |= 1;
                 if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 2) != 0) {
                     if (one_reg_wall_ramification() == 0) {
+#if PLATFORM_WINDOWS
+                        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain &= 0xfb;
+#else
                         (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain &= 0xf9;
+#endif
                         (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain |= 2;
                         return 0;
                     }
