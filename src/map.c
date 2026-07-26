@@ -7,7 +7,6 @@ extern void copy(unsigned char *src, unsigned char *dst, int n);
 /* Forward declarations (functions defined later in this file). */
 void generate_cm_scrub(void);
 void flesh_river_atoms(void);
-void transform_road_elastic(int radius);
 void transform_wall_elastic(int radius);
 void transform_aquaduct_elastic(int radius);
 void transform_reg_wall_elastic(int radius);
@@ -200,21 +199,20 @@ void generate_cm_scrub(void)
 void flesh_river_atoms(void)
 {
     unsigned char terrain;
-    unsigned char variant;
+    unsigned char match;
 
     gmn_y    = 0;
     gmn_sptr = 0;
 
     for ( ; gmn_y < 0x50; gmn_y++) {
-        gmn_x = 0;
-        do {
+        for (gmn_x = 0; gmn_x < 0x50; gmn_x++, gmn_sptr += 0x14) {
             if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x10) {
                 test_citymap_neighbours_posedge(0x10);
                 terrain = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind;
-                variant = (unsigned char)choose_from(river_data, 6);
+                match = (unsigned char)choose_from(river_data, 6);
 
-                if (variant != 0) {
-                    if (terrain != choice_info) {
+                if (match != 0) {
+                    if (choice_info != terrain) {
                         if (first_choice == 0x26) first_choice = 0x2a;
                         else if (first_choice == 0x1e) first_choice = 0x22;
                         else if (first_choice == 0x36) first_choice = 0x2e;
@@ -223,15 +221,14 @@ void flesh_river_atoms(void)
                         else if (first_choice == 0x4a) first_choice = 0x3e;
                     }
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice + choice_count;
-                    if (variant > 2) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain |= 8;
+                    if (match > 2) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain |= 8;
                 }
             }
-
-            gmn_x++;
-            gmn_sptr += 0x14;
-        } while (gmn_x < 0x50);
+        }
     }
 }
+
+void transform_road_elastic(int radius);
 
 // Expand a city construction path by one breadth-first search layer.
 // FUNCTION: C2 0x663ab
