@@ -2002,7 +2002,7 @@ int reg_wall_ramifications(int x, int y)
         return 0;
 
     for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
-        for (gmn_x = x_min_bound; x_max_bound >= gmn_x; gmn_x++) {
+        for (gmn_x = x_min_bound; gmn_x <= x_max_bound; gmn_x++) {
             if (one_reg_wall_ramification() == 0)
                 return 0;
         }
