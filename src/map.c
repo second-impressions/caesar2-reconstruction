@@ -4301,31 +4301,31 @@ int test_for_next_to_region_wall(int x, int y)
 int get_reg_buildings_in_radius(int x, int y, int span, int radius,
                                 unsigned char building_kind)
 {
-    int width;
+    int w;
     int height;
     int row_skip;
     int count;
-    unsigned char kind;
+    unsigned char tmp;
 
     x = x - radius;
     y = y - radius;
     height = radius * 2 + 1;
-    span--;
-    width = height + span;
-    height = width;
-    if (x < 0) { width += x; x = 0; }
-    else if (x + width > 60) width -= x + width - 60;
+    w = height;
+    w += span - 1;
+    height += span - 1;
+    if (x < 0) { w += x; x = 0; }
+    else if (x + w > 60) w -= x + w - 60;
     if (y < 0) { height += y; y = 0; }
     else if (y + height > 60) height -= y + height - 60;
 
     gmn_sptr = (x + y * 60) * 8;
-    row_skip = (60 - width) * 8;
+    row_skip = (60 - w) * 8;
 
     count = 0;
     for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += row_skip) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, gmn_sptr += 8) {
-            kind = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
-            if (kind == building_kind) count++;
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 8) {
+            tmp = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+            if (tmp == building_kind) count++;
         }
     }
     return count;
