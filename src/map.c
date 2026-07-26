@@ -2070,53 +2070,38 @@ int one_reg_wall_ramification(void)
 // FUNCTION: C2WIN 0x004a4bca
 void garden_an_area(int x1, int y1, int x2, int y2)
 {
-    int saved_count = stone_random_count;
+    int prev_random = stone_random_count;
     int row_stride;
     int swap_value;
     int y;
     int x;
 
-    if (x1 > x2) {
-        swap_value = x2;
-        x2 = x1;
-        x1 = swap_value;
-    }
-    if (y1 > y2) {
-        swap_value = y2;
-        y2 = y1;
-        y1 = swap_value;
-    }
+    if (x1 > x2) { swap_value = x2; x2 = x1; x1 = swap_value; }
+    if (y1 > y2) { swap_value = y2; y2 = y1; y1 = swap_value; }
 
     cm_sptr = (x1 + y1 * 80) * 20;
     row_stride = (80 - (x2 - x1) - 1) * 20;
 
-    for (y = y1; y <= y2;) {
-        for (x = x1; x <= x2;) {
-            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1e) {
-                if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind >= 8 || !((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits & 0x80)) {
-                    stone_random_count++;
-                    if (stone_random_count >= 0x40)
-                        stone_random_count = 0;
-                    if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
-                        particles_cleared++;
-                    particles_built++;
-                    (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind = (unsigned char)((stone_random_data[stone_random_count] >> 2) + 0x78);
-                    clear_basic(cm_sptr);
-                    (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge = (unsigned char)((stone_random_data[stone_random_count] >> 2) + 0x77);
-                    (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits &= 0xe3;
-                    (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits |= 4;
-                    (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a = 0;
-                }
-            }
-            x++;
-            cm_sptr += 20;
+    for (y = y1; y <= y2; y++, cm_sptr += row_stride) {
+        for (x = x1; x <= x2; x++, cm_sptr += 20) {
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind >= 0x1e)
+                continue;
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8)
+                if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits & 0x80) != 0)
+                    continue;
+            stone_random_count++; if (stone_random_count >= 0x40) stone_random_count = 0;
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a) particles_cleared++;
+            particles_built++;
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind = (unsigned char)((stone_random_data[stone_random_count] >> 2) + 0x78);
+            clear_basic(cm_sptr);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge = (unsigned char)((stone_random_data[stone_random_count] >> 2) + 0x77);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits &= 0xe3;
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits |= 4;
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a = 0;
         }
-        y++;
-        cm_sptr += row_stride;
     }
-    stone_random_count = (signed char)saved_count;
-    if (particles_built == 0)
-        illegal_build = 1;
+    stone_random_count = (signed char)prev_random;
+    if (particles_built == 0) illegal_build = 1;
 }
 
 // Pave every clearable cell in a city-map rectangle as plaza.
