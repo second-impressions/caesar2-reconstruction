@@ -113,9 +113,7 @@ int generate_cm_river(void)
     previous_dir   = 0;
     current_dir    = 4;
 
-    for (;;) {
-        if (--budget == -1) break;
-
+    while (budget--) {
         if (current_dir == 0) {
             y--;  cm_sptr -= 0x640;
             (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain |= 0x10;
@@ -145,33 +143,29 @@ int generate_cm_river(void)
 
         if (candidate_dir == 0 && south_count < 4) {
             current_dir = 8;
-            continue;
-        }
-        if (candidate_dir == previous_dir) {
+        } else if (candidate_dir == previous_dir) {
             current_dir = 8;
-            continue;
-        }
+        } else {
+            if (candidate_dir == 0) {
+                gmn_y--; gmn_sptr -= 0x640;
+            } else if (candidate_dir == 2) {
+                gmn_x++; gmn_sptr += 0x14;
+            } else if (candidate_dir == 4) {
+                gmn_y++; gmn_sptr += 0x640;
+            } else if (candidate_dir == 6) {
+                gmn_x--; gmn_sptr -= 0x14;
+            }
 
-        if (candidate_dir == 0) {
-            gmn_y--; gmn_sptr -= 0x640;
-        } else if (candidate_dir == 2) {
-            gmn_x++; gmn_sptr += 0x14;
-        } else if (candidate_dir == 4) {
-            gmn_y++; gmn_sptr += 0x640;
-        } else if (candidate_dir == 6) {
-            gmn_x--; gmn_sptr -= 0x14;
+            test_citymap_neighbours_negedge(0x10);
+            if (gmn_count > 2) {
+                current_dir = 8;
+            } else {
+                current_dir = candidate_dir;
+                previous_dir = (candidate_dir + 4) % 8;
+                if (candidate_dir == 4) south_count++;
+                if (candidate_dir == 0) south_count = 0;
+            }
         }
-
-        test_citymap_neighbours_negedge(0x10);
-        if (gmn_count > 2) {
-            current_dir = 8;
-            continue;
-        }
-
-        current_dir  = candidate_dir;
-        previous_dir = (candidate_dir + 4) % 8;
-        if (candidate_dir == 4) south_count++;
-        if (candidate_dir == 0) south_count = 0;
     }
 
     if (budget != 0) {
