@@ -5163,12 +5163,8 @@ void init_flag_markers(void)
     flag_mode = 0;
     flag_mode_decay_count = 0;
     danger_flag_map_mode = 0;
-    no_of_danger_flags = 0;
-    no_of_prov_flags = 0;
-    no_of_city_flags = 0;
-    last_danger_flag = 0;
-    last_prov_flag = 0;
-    last_city_flag = 0;
+    no_of_city_flags = no_of_prov_flags = no_of_danger_flags = 0;
+    last_city_flag = last_prov_flag = last_danger_flag = 0;
     for (i = 0; i < 0x14; i++)
         city_flag_list[i] = -1;
     for (i = 0; i < 0x14; i++)
