@@ -4424,29 +4424,29 @@ int get_reg_industries_in_radius(int x, int y)
 // FUNCTION: C2WIN 0x004ac2ff
 int get_closest_trading_post(int x, int y, int radius)
 {
-    unsigned char kind;
-    unsigned char occ;
-    int y2;
-    int x2;
-    int width;
     int height;
-    int row_skip;
-    int best;
-    int best_sptr;
-    int dist;
+    int start_x;
+    int start_y;
+    unsigned char type;
+    unsigned char tile;
+    int w;
+    int step;
+    int ptr;
+    int distance;
+    int best_dist;
 
-    best_sptr = 0;
-    best = radius + 1;
-    x2 = x;
-    y2 = y;
+    ptr = 0;
+    best_dist = radius + 1;
+    start_x = x;
+    start_y = y;
     x -= radius;
     y -= radius;
-    width = height = radius * 2 + 1;
+    w = height = radius * 2 + 1;
     if (x < 0) {
-        width += x;
+        w += x;
         x = 0;
-    } else if (x + width > 60) {
-        width -= x + width - 60;
+    } else if (x + w > 60) {
+        w -= x + w - 60;
     }
     if (y < 0) {
         height += y;
@@ -4455,24 +4455,24 @@ int get_closest_trading_post(int x, int y, int radius)
         height -= y + height - 60;
     }
     gmn_sptr = (y * 60 + x) * 8;
-    row_skip = (60 - width) * 8;
+    step = (60 - w) * 8;
 
-    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += row_skip) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, gmn_sptr += 8) {
-            kind = ((unsigned char *)region_map)[gmn_sptr];
-            occ  = ((unsigned char *)region_map)[gmn_sptr + 7] & 3;
-            if (occ != 0) continue;
-            if (kind >= 0xe8 && kind <= 0xeb) {
-                dist = get_longest_distance(gmn_x, gmn_y, x2, y2);
-                if (dist < best) {
-                    best = dist;
-                    best_sptr = gmn_sptr;
+    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += step) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 8) {
+            type = ((unsigned char *)region_map)[gmn_sptr];
+            tile = ((unsigned char *)region_map)[gmn_sptr + 7] & 3;
+            if (tile != 0) continue;
+            if (type >= 0xe8 && type <= 0xeb) {
+                distance = get_longest_distance(gmn_x, gmn_y, start_x, start_y);
+                if (distance < best_dist) {
+                    best_dist = distance;
+                    ptr = gmn_sptr;
                 }
             }
         }
     }
-    gmn_sptr = best_sptr;
-    return best;
+    gmn_sptr = ptr;
+    return best_dist;
 }
 
 // Distribute goods among compatible warehouses near a regional location.
