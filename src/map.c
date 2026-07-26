@@ -21,7 +21,8 @@ void plague_it(int sptr);
 void unflag_rm_area(int x, int y, int size, unsigned char mask_byte);
 void adjust_regions_coastline(int x, int y, int width, int height);
 void test_citymap_neighbours_posedge(char mask);
-void test_citymap_neighbours_negedge(char mask);
+void test_citymap_neighbours_negedge();
+void trace_back_route_elastic(void);
 void test_type_citymap_neighbours_negedge(unsigned char type);
 void test_regionmap_neighbours_posedge(char mask);
 void test_regionmap_neighbours_negedge(char mask);
@@ -1442,6 +1443,7 @@ void save_undo_info(void);
 void clear_region_map(void);
 void clear_edge_info(void);
 void set_route_elastic(void);
+void count_prov_flags(void);
 
 // Recompute aqueduct connections at a cell and its surrounding neighbourhood.
 // FUNCTION: C2 0x6811e
@@ -1479,7 +1481,7 @@ int aquaduct_ramifications(int x, int y)
 int one_aquaduct_ramification(void)
 {
     unsigned char polar;
-    int sel;
+    int choice;
     unsigned char sprite;
 
     gmn_sptr = ((gmn_x) + (gmn_y) * 80) * 20;
@@ -1492,9 +1494,14 @@ int one_aquaduct_ramification(void)
         test_citymap_neighbours_negedge(0xc0);
         if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 2) != 0) {
             if (gmn_polar_count == 0) {
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind == 0xc1) first_choice = 0xbd;
-                else if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind != 0xc2) return 0;
-                else first_choice = 0xbc;
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind == 0xc1) {
+                    first_choice = 0xbd;
+                } else {
+                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind == 0xc2)
+                        first_choice = 0xbc;
+                    else
+                        return 0;
+                }
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
@@ -1503,54 +1510,58 @@ int one_aquaduct_ramification(void)
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = sprite;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = sprite;
                 return 1;
-            } else {
-                if (choose_from(aquawall_data, 2) != 0) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
-                    if (first_choice == 0xbc) sprite = 3;
-                    else sprite = 7;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = sprite;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = sprite;
-                    return 1;
-                }
-                err:
-                gmn_err_sptr = gmn_sptr;
-                gmn_err_x = gmn_x;
-                gmn_err_y = gmn_y;
-                return 0;
             }
+            if (choose_from(aquawall_data, 2) != 0) {
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
+                if (first_choice == 0xbc) sprite = 3;
+                else sprite = 7;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = sprite;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = sprite;
+                return 1;
+            }
+            gmn_err_sptr = gmn_sptr;
+            gmn_err_x = gmn_x;
+            gmn_err_y = gmn_y;
+            return 0;
         }
         if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) != 0) {
-            sel = choose_from(aquaroad_data, 2);
+            choice = choose_from(aquaroad_data, 2);
             (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x80;
         } else {
-            sel = choose_from(aquaduct_data, 0xe);
+            choice = choose_from(aquaduct_data, 0xe);
         }
-        if (sel == 0) {
-            goto err;
+        if (choice != 0) {
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].edge_bits;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
+            if (polar == 3) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 2;
+            else if (polar >= 1) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 1;
+            return 1;
         }
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].edge_bits;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
-        if (polar == 3) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 2;
-        else if (polar >= 1) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 1;
-        return 1;
+        gmn_err_sptr = gmn_sptr;
+        gmn_err_x = gmn_x;
+        gmn_err_y = gmn_y;
+        return 0;
     }
-
-    if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x80) == 0)
-        return 1;
-    test_citymap_neighbours_negedge(0xc0);
-    if (choose_from(resevoir_data, 0x10) == 0) {
-        goto err;
+    if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x80) != 0) {
+        test_citymap_neighbours_negedge(0xc0);
+        if (choose_from(resevoir_data, 0x10) != 0) {
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = first_choice;
+            if (polar == 3) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 3;
+            if (polar == 2) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 2;
+            if (polar == 1) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 1;
+            return 1;
+        }
+        gmn_err_sptr = gmn_sptr;
+        gmn_err_x = gmn_x;
+        gmn_err_y = gmn_y;
+        return 0;
     }
-    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
-    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = first_choice;
-    if (polar == 3) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 3;
-    if (polar == 2) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 2;
-    if (polar == 1) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge++;
     return 1;
 }
 
@@ -1622,6 +1633,10 @@ int transform_reg_road_elastic(int radius)
 
     return y_min + side;
 }
+
+void set_ns_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value);
+void set_ew_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value);
+unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size);
 
 // Build the regional road represented by the current elastic path.
 // FUNCTION: C2 0x68654
