@@ -1431,28 +1431,40 @@ void build_aquaduct_from_elastic(void)
     }
 }
 
+void fill_warehouses_with(int, int, int, int, int);
+void take_from_warehouses(int, int);
+void change_lv(int, int, int, int, int);
+int get_best_lv(unsigned char *, int);
+void test_range_for(int, int, int, int);
+int test_range_for_road(int, int, int);
+int test_area_for_population(int, int, int, int);
+void save_undo_info(void);
+void clear_region_map(void);
+void clear_edge_info(void);
+void set_route_elastic(void);
+
 // Recompute aqueduct connections at a cell and its surrounding neighbourhood.
 // FUNCTION: C2 0x6811e
 // FUNCTION: C2WIN 0x004a30d6
 int aquaduct_ramifications(int x, int y)
 {
-    int x_min;
-    int y_min;
-    int x_max;
-    int y_max;
+    int x_min_bound;
+    int y_min_bound;
+    int x_max_bound;
+    int y_max_bound;
 
-    if (x <= 0) x_min = 0; else x_min = x - 1;
-    if (y <= 0) y_min = 0; else y_min = y - 1;
-    if (x >= 79) x_max = 79; else x_max = x + 1;
-    if (y >= 79) y_max = 79; else y_max = y + 1;
+    if (x <= 0) x_min_bound = 0; else x_min_bound = x - 1;
+    if (y <= 0) y_min_bound = 0; else y_min_bound = y - 1;
+    if (x >= 79) x_max_bound = 79; else x_max_bound = x + 1;
+    if (y >= 79) y_max_bound = 79; else y_max_bound = y + 1;
 
     gmn_x = x;
     gmn_y = y;
     if (one_aquaduct_ramification() == 0)
         return 0;
 
-    for (gmn_y = y_min; y_max >= gmn_y; gmn_y++) {
-        for (gmn_x = x_min; x_max >= gmn_x; gmn_x++) {
+    for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
+        for (gmn_x = x_min_bound; gmn_x <= x_max_bound; gmn_x++) {
             if (one_aquaduct_ramification() == 0)
                 return 0;
         }
@@ -3166,6 +3178,7 @@ void flag_rm_area(int x, int y, int size, char mask_byte)
 
 int get_range1(unsigned char *, int, char);
 int get_range3(unsigned char *, int, char);
+char affected_by_cover2(unsigned char *, int, char);
 
 // Mask terrain flags across a regional footprint.
 // FUNCTION: C2 0x6b126
