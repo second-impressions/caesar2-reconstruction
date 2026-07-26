@@ -3130,14 +3130,16 @@ void change_reg_sized(int base_kind, int gfx_base_idx, int footprint_size, int c
 // FUNCTION: C2 0x6af11
 // FUNCTION: C2WIN 0x004a7c06
 int put_rm_area(int x, int y, int footprint_size, unsigned char base_kind,
-                int edge_bits, int color, int terrain_flags)
+                signed char edge_bits, unsigned char color, int terrain_flags)
 {
-    int row_skip;
-    int cell_offset, xi, yi, footprint_idx;
-    unsigned char gfx_base_idx = color;
+    int x_pos;
+    unsigned char terrain;
+    int y_pos;
+    int i;
+    int offset;
+    int rowadd;
 
-
-    row_skip = (60 - footprint_size) * 8;
+    rowadd = (60 - footprint_size) * 8;
 
     if (map_direction == 2) x -= footprint_size - 1;
     if (map_direction == 6) y -= footprint_size - 1;
@@ -3145,28 +3147,28 @@ int put_rm_area(int x, int y, int footprint_size, unsigned char base_kind,
     if (x < 0) return 0;
     if (y < 0) return 0;
 
-    cell_offset = (x + y * 60) * 8;
-    for (yi = y; yi < y + footprint_size; yi++, cell_offset += row_skip) {
-        for (xi = x; xi < x + footprint_size; xi++, cell_offset += 8) {
+    offset = (x + y * 60) * 8;
+    for (y_pos = y; y_pos < y + footprint_size; y_pos++, offset += rowadd) {
+        for (x_pos = x; x_pos < x + footprint_size; x_pos++, offset += 8) {
 
-            if ((*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant != 0) return 0;
-            if (((*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).terrain & 0x10) != 0) return 0;
-            if (((*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).terrain & 1) != 0) return 0;
-            (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).edge_bits |= 1;
+            if ((*(struct region_cell *)((unsigned char *)region_map + (offset))).occupant != 0) return 0;
+            if (((*(struct region_cell *)((unsigned char *)region_map + (offset))).terrain & 0x10) != 0) return 0;
+            if (((*(struct region_cell *)((unsigned char *)region_map + (offset))).terrain & 1) != 0) return 0;
+            (*(struct region_cell *)((unsigned char *)region_map + (offset))).edge_bits |= 1;
         }
     }
-    cell_offset = (x + y * 60) * 8;
-    for (yi = y, footprint_idx = 0; yi < y + footprint_size; yi++, cell_offset += row_skip) {
-        for (xi = x; xi < x + footprint_size; xi++, cell_offset += 8, footprint_idx++) {
+    offset = (x + y * 60) * 8;
+    for (y_pos = y, i = 0; y_pos < y + footprint_size; y_pos++, offset += rowadd) {
+        for (x_pos = x; x_pos < x + footprint_size; x_pos++, offset += 8, i++) {
 
-            (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).base_kind = base_kind;
-            (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).terrain |= terrain_flags;
-            (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).edge_bits &= 0xe3;
-            (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).edge_bits |= edge_bits;
-            if (footprint_size == 1) (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).gfx = gfx_base_idx;
-            else if (footprint_size == 2) (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).gfx = gfx_base_idx + diamond_ofsets_2x[footprint_idx];
-            else if (footprint_size == 3) (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).gfx = gfx_base_idx + diamond_ofsets_3x[footprint_idx];
-            else if (footprint_size == 4) (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).gfx = gfx_base_idx + diamond_ofsets_4x[footprint_idx];
+            (*(struct region_cell *)((unsigned char *)region_map + (offset))).base_kind = base_kind;
+            (*(struct region_cell *)((unsigned char *)region_map + (offset))).terrain |= terrain_flags;
+            (*(struct region_cell *)((unsigned char *)region_map + (offset))).edge_bits &= 0xe3;
+            (*(struct region_cell *)((unsigned char *)region_map + (offset))).edge_bits |= edge_bits;
+            if (footprint_size == 1) (*(struct region_cell *)((unsigned char *)region_map + (offset))).gfx = color;
+            else if (footprint_size == 2) (*(struct region_cell *)((unsigned char *)region_map + (offset))).gfx = color + diamond_ofsets_2x[i];
+            else if (footprint_size == 3) (*(struct region_cell *)((unsigned char *)region_map + (offset))).gfx = color + diamond_ofsets_3x[i];
+            else if (footprint_size == 4) (*(struct region_cell *)((unsigned char *)region_map + (offset))).gfx = color + diamond_ofsets_4x[i];
         }
     }
     return 1;
