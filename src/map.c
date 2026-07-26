@@ -1160,36 +1160,34 @@ int one_wall_ramification(void)
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = sprite;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = sprite;
                 return 1;
-            } else {
-                if (choose_from(wallaqua_data, 2) != 0) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
-                    if (first_choice == 0xbc) sprite = 3;
-                    else sprite = 7;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = sprite;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = sprite;
-                    return 1;
-                }
-                gmn_err_sptr = gmn_sptr;
-                gmn_err_x = gmn_x;
-                gmn_err_y = gmn_y;
-                return 0;
             }
-        }
-        if (choose_from(wall_data, 0xe) == 0) {
+            if (choose_from(wallaqua_data, 2) != 0) {
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
+                if (first_choice == 0xbc) sprite = 3;
+                else sprite = 7;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = sprite;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = sprite;
+                return 1;
+            }
             gmn_err_sptr = gmn_sptr;
             gmn_err_x = gmn_x;
             gmn_err_y = gmn_y;
             return 0;
         }
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].edge_bits;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
-        return 1;
+        if (choose_from(wall_data, 0xe) != 0) {
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].edge_bits;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
+            return 1;
+        }
+        gmn_err_sptr = gmn_sptr;
+        gmn_err_x = gmn_x;
+        gmn_err_y = gmn_y;
+        return 0;
     }
-
     if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 4) != 0) {
         if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) != 0) {
             test_type_citymap_neighbours_negedge(0xc0);
@@ -1203,36 +1201,44 @@ int one_wall_ramification(void)
             if (choose_from(gateway_data, 6) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0xc0;
+#if PLATFORM_WINDOWS
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x80;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
+#else
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0x63;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x88;
+#endif
                 return 1;
             }
             test_citymap_neighbours_negedge(0x20);
-            if (choose_from(gateway2_data, 2) == 0) {
-                gmn_err_sptr = gmn_sptr;
-                gmn_err_x = gmn_x;
-                gmn_err_y = gmn_y;
-                return 0;
+            if (choose_from(gateway2_data, 2) != 0) {
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0xc0;
+#if PLATFORM_WINDOWS
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x80;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
+#else
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0x63;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x88;
+#endif
+                return 1;
             }
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0xc0;
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0x63;
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x88;
-            return 1;
+        } else {
+            test_citymap_neighbours_negedge(6);
+            if (choose_from(tower_data, 0x10) != 0) {
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0xbf;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
+                return 1;
+            }
         }
-
-        test_citymap_neighbours_negedge(6);
-        if (choose_from(tower_data, 0x10) == 0) {
-            gmn_err_sptr = gmn_sptr;
-            gmn_err_x = gmn_x;
-            gmn_err_y = gmn_y;
-            return 0;
-        }
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0xbf;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
-        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
-        return 1;
+        gmn_err_sptr = gmn_sptr;
+        gmn_err_x = gmn_x;
+        gmn_err_y = gmn_y;
+        return 0;
     }
     return 1;
 }
