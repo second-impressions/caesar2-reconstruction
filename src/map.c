@@ -2584,20 +2584,20 @@ void clear_basic(int sptr)
 // FUNCTION: C2WIN 0x004a633c
 void clear_sized_to_reg_basic(int rm_offset, int size)
 {
-    int x;
     int y;
+    int x;
 
     if (((*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).base_kind) == 0xd4)
-        y = x = 0;
+        x = y = 0;
     else
-        y = x = (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).occupant & 3;
-    y = y % size;
-    x = x / size;
-    ofset_x = y; ofset_y = x;
-    rm_offset -= y * 8;
-    rm_offset -= x * 60 * 8;
-    for (y = 0; y < size; y++, rm_offset += (60 - size) * 8)
-        for (x = 0; x < size; x++, rm_offset += 8)
+        x = y = (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).occupant & 3;
+    x = x % size;
+    y = y / size;
+    ofset_x = x; ofset_y = y;
+    rm_offset -= x * 8;
+    rm_offset -= y * 60 * 8;
+    for (x = 0; x < size; x++, rm_offset += (60 - size) * 8)
+        for (y = 0; y < size; y++, rm_offset += 8)
             clear_reg_basic(rm_offset);
 }
 
