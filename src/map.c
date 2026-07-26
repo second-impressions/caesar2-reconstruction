@@ -4072,43 +4072,40 @@ void flag_range3(int extra, int x, int y, int range, int unused_field_off,
                  unsigned char threshold, unsigned char query_mask,
                  unsigned char clear_mask)
 {
+    int w;
     int height;
-    int width;
-    int row_stride;
-    int xend;
-    int yend;
-
-    (void)unused_field_off;
+    unsigned char temp;
+    int skip;
 
     x -= range;
     y -= range;
-    width = height = 2 * range + 1;
+    w = height = 2 * range + 1;
     if (extra != 0) {
-        width = height = (2 * range + 1) + extra;
+        w += extra;
+        height += extra;
     }
 
-    xend = width + x;
     if (x < 0) {
-        width = xend;
+        w += x;
         x = 0;
-    } else if (xend > 80) {
-        width -= xend - 80;
+    } else if (x + w > 80) {
+        w -= x + w - 80;
     }
 
-    yend = height + y;
     if (y < 0) {
-        height = yend;
+        height += y;
         y = 0;
-    } else if (yend > 80) {
-        height -= yend - 80;
+    } else if (y + height > 80) {
+        height -= y + height - 80;
     }
 
     gmn_sptr   = (x + y * 80) * 20;
-    row_stride = (80 - width) * 20;
+    skip = (80 - w) * 20;
 
-    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += row_stride) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, gmn_sptr += 20) {
-            if (threshold > (unsigned char)((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).entertainment & query_mask)) {
+    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += skip) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 20) {
+            temp = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).entertainment & query_mask;
+            if (threshold > temp) {
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).entertainment &= clear_mask;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).entertainment |= threshold;
             }
