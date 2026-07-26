@@ -826,7 +826,7 @@ finish:
 int road_ramifications(int x, int y)
 {
     int x_min;
-    char kind;
+    unsigned char kind;
     int x_max;
     int y_max;
     int y_min;
