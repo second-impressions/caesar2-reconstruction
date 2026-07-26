@@ -2220,6 +2220,8 @@ void clear_an_area(int x1, int y1, int x2, int y2)
     stone_random_count = (signed char)random_backup;
 }
 
+char affected_by_cover1(unsigned char *, int, unsigned char);
+
 // Demolish a region-map rectangle while preserving protected forts and occupied army ranges.
 // FUNCTION: C2 0x695b9
 // FUNCTION: C2WIN 0x004a536b
@@ -3154,8 +3156,6 @@ int put_rm_area(int x, int y, int footprint_size, unsigned char base_kind,
     }
     return 1;
 }
-
-char affected_by_cover1(unsigned char *, int, unsigned char);
 
 // Set terrain flags across a directionally anchored regional footprint.
 // FUNCTION: C2 0x6b08c
