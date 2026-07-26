@@ -3792,16 +3792,17 @@ void test_type_regionmap_neighbours_negedge(unsigned char type)
 // FUNCTION: C2WIN 0x004aa7d6
 int choose_from(struct choice_rec *records, int count)
 {
-    int rec_idx;
-    int byte_idx;
-    for (rec_idx = 0; rec_idx < count; records++, rec_idx++) {
-        for (byte_idx = 0; byte_idx < 8; byte_idx++) {
-            if (records->match[byte_idx] == 2) continue;
-            if (records->match[byte_idx] != 0 && gmn[byte_idx] != 0) continue;
-            if (records->match[byte_idx] != 0) break;
-            if (gmn[byte_idx] != 0) break;
+    int i;
+    int j;
+
+    for (i = 0; i < count; i++) {
+        for (j = 0; j < 8; j++) {
+            if (records->match[j] == 2) continue;
+            if (records->match[j] != 0 && gmn[j] != 0) continue;
+            else if (records->match[j] == 0 && gmn[j] == 0) continue;
+            break;
         }
-        if (byte_idx >= 8) {
+        if (j >= 8) {
             first_choice = records->value;
             choice_info  = records->info;
             records->counter++;
@@ -3809,8 +3810,9 @@ int choose_from(struct choice_rec *records, int count)
                 records->counter = 0;
             }
             choice_count = records->counter;
-            return rec_idx + 1;
+            return i + 1;
         }
+        records++;
     }
     return 0;
 }
