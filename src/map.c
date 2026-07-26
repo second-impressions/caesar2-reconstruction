@@ -92,7 +92,8 @@ int generate_cm_river(void)
     int previous_dir;
     int south_count;
     int budget;
-    int candidate_dir;
+    int rand_dir;
+    int next_dir;
 
     budget = 0x3c0;
     random();
@@ -139,20 +140,20 @@ int generate_cm_river(void)
         if (x == 0 || y == 0 || x >= 0x4f || y >= 0x4f) break;
 
         random();
-        candidate_dir = (rand128 & 3) * 2;
+        rand_dir = (rand128 & 3) * 2;
 
-        if (candidate_dir == 0 && south_count < 4) {
+        if (rand_dir == 0 && south_count < 4) {
             current_dir = 8;
-        } else if (candidate_dir == previous_dir) {
+        } else if (rand_dir == previous_dir) {
             current_dir = 8;
         } else {
-            if (candidate_dir == 0) {
+            if (rand_dir == 0) {
                 gmn_y--; gmn_sptr -= 0x640;
-            } else if (candidate_dir == 2) {
+            } else if (rand_dir == 2) {
                 gmn_x++; gmn_sptr += 0x14;
-            } else if (candidate_dir == 4) {
+            } else if (rand_dir == 4) {
                 gmn_y++; gmn_sptr += 0x640;
-            } else if (candidate_dir == 6) {
+            } else if (rand_dir == 6) {
                 gmn_x--; gmn_sptr -= 0x14;
             }
 
@@ -160,10 +161,10 @@ int generate_cm_river(void)
             if (gmn_count > 2) {
                 current_dir = 8;
             } else {
-                current_dir = candidate_dir;
-                previous_dir = (candidate_dir + 4) % 8;
-                if (candidate_dir == 4) south_count++;
-                if (candidate_dir == 0) south_count = 0;
+                current_dir = rand_dir;
+                previous_dir = (rand_dir + 4) % 8;
+                if (rand_dir == 4) south_count++;
+                if (rand_dir == 0) south_count = 0;
             }
         }
     }
