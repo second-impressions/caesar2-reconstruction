@@ -1098,7 +1098,7 @@ void test_type_regionmap_neighbours_posedge(unsigned char);
 void clear_all_rm(char);
 void clear_all_bm(char);
 void unflag_all_cm(unsigned char, unsigned char);
-void unflag_all_rm(char, int);
+void unflag_all_rm(unsigned char, unsigned char);
 void unflag_all_rm_xwarehouse(void);
 void flag_range(int, int, int, int, unsigned char, unsigned char);
 int test_for_ns_polar_walls(int, int, int);
@@ -3902,28 +3902,23 @@ void unflag_all_cm(unsigned char field_off, unsigned char mask)
 // Mask one data field across the region map.
 // FUNCTION: C2 0x6d1b7
 // FUNCTION: C2WIN 0x004aae45
-void unflag_all_rm(char field_off, int mask)
+void unflag_all_rm(unsigned char field_off, unsigned char mask)
 {
     cm_sptr = 0;
-    gmn_y = 0;
-    do {
-        gmn_x = 0;
-        do {
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x00)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x08)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x10)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x18)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x20)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x28)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x30)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x38)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x40)] &= (char)mask;
-            ((unsigned char *)region_map)[(cm_sptr + field_off + 0x48)] &= (char)mask;
-            gmn_x++;
-            cm_sptr += 0x50;
-        } while (gmn_x < 6);
-        gmn_y++;
-    } while (gmn_y < 60);
+    for (gmn_y = 0; gmn_y < 60; gmn_y++) {
+        for (gmn_x = 0; gmn_x < 6; gmn_x++, cm_sptr += 0x50) {
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x00] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x08] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x10] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x18] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x20] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x28] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x30] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x38] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x40] &= mask;
+            ((unsigned char *)region_map)[cm_sptr + field_off + 0x48] &= mask;
+        }
+    }
 }
 
 // Clear temporary edge flags from all regional cells except warehouses.
