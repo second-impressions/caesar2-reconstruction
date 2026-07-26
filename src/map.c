@@ -4424,41 +4424,41 @@ int get_closest_trading_post(int x, int y, int radius)
 // FUNCTION: C2WIN 0x004ac4e9
 void fill_warehouses_with(int x, int y, int amount, int goods, int refresh)
 {
-    unsigned char stored_goods;
+    unsigned char stored_type;
     unsigned char qty;
-    unsigned char cell_kind;
+    unsigned char type;
     unsigned char refresh_qty;
-    int row_skip;
-    int i;
+    int step;
+    int count;
     int height;
-    int width;
+    int w;
 
     if (amount == 0) return;
     x -= 1; y--;
-    width = height = 4;
-    if (x < 0)             { width = x + 4; x = 0; }
-    else if (x + 4 > 0x3c) width = 4 - (x - 0x38);
+    w = height = 4;
+    if (x < 0)             { w += x; x = 0; }
+    else if (x + w > 0x3c) w -= x + w - 0x3c;
     if (y < 0)             { height += y; y = 0; }
     else if (y + height > 0x3c) height -= y + height - 0x3c;
 
-    row_skip = (60 - width) * 8;
-    i = 0;
-    for ( ; i < amount; i++) {
+    step = (60 - w) * 8;
+    count = 0;
+    for ( ; count < amount; count++) {
         gmn_sptr = ((x) + (y) * 60) * 8;
         gmn_y = y;
-        for ( ; gmn_y < y + height; gmn_y++, gmn_sptr += row_skip) {
+        for ( ; gmn_y < y + height; gmn_y++, gmn_sptr += step) {
             gmn_x = x;
-            for ( ; gmn_x < x + width; gmn_x++, gmn_sptr += 8) {
-                cell_kind = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
-                if (cell_kind == 0xd4) {
-                    stored_goods = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf0;
-                    stored_goods >>= 4;
+            for ( ; gmn_x < x + w; gmn_x++, gmn_sptr += 8) {
+                type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+                if (type == 0xd4) {
+                    stored_type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf0;
+                    stored_type >>= 4;
                     qty = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf;
                     if (qty == 0) {
                         (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits |= 0x40;
                         (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant &= 0xf;
                         (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= (goods << 4);
-                    } else if (stored_goods != goods) continue;
+                    } else if (stored_type != goods) continue;
                     else if (qty >= 0xf) continue;
                     qty++;
                     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant &= 0xf0;
@@ -4471,20 +4471,18 @@ next_unit:
         ;
     }
 
-    if (refresh == 1) {
-        gmn_sptr = ((x) + (y) * 60) * 8;
-        gmn_y = y;
-        for ( ; gmn_y < y + height; ) {
-            gmn_x = x;
-            for ( ; gmn_x < x + width; ) {
-                cell_kind = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
-                if (cell_kind == 0xd4) {
-                    qty = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf;
-                    if (qty < 0xf) refresh_qty = qty + 0xb;
-                    else refresh_qty = 0x24;
-                    change_reg_sized(cell_kind, refresh_qty, 1, gmn_sptr);
-                }
-                gmn_x++; gmn_sptr += 8; } gmn_y++; gmn_sptr += row_skip; }
+    if (refresh != 1) return;
+    gmn_sptr = ((x) + (y) * 60) * 8;
+    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += step) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 8) {
+            type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+            if (type == 0xd4) {
+                qty = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf;
+                if (qty < 0xf) refresh_qty = qty + 0xb;
+                else refresh_qty = 0x24;
+                change_reg_sized(type, refresh_qty, 1, gmn_sptr);
+            }
+        }
     }
 }
 
