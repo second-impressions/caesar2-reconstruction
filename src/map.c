@@ -3735,11 +3735,15 @@ void init_choices(struct choice_rec *arr, int count)
 
 // Invert the current neighbour flags.
 // FUNCTION: C2 0x6d002
+// FUNCTION: C2WIN 0x004aa936
 void invert_gmn(void)
 {
     int i;
     for (i = 0; i < 16; i++) {
-        gmn[i] = (gmn[i] == 0);
+        if (gmn[i] != 0)
+            gmn[i] = 0;
+        else
+            gmn[i] = 1;
     }
 }
 
@@ -4842,6 +4846,7 @@ void clear_region_map(void)
 
 // Clear one data layer across the city map.
 // FUNCTION: C2 0x6e99d
+// FUNCTION: C2WIN 0x004aa98d REORDERED
 void clear_all_cm(char layer)
 {
     cm_sptr = 0;
