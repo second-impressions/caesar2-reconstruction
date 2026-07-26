@@ -39,7 +39,7 @@ void test_type_regionmap_neighbours_negedge(unsigned char type);
 void init_choices(struct choice_rec *arr, int count);
 void invert_gmn(void);
 void set_range(int x, int y, int range, unsigned char field_off, unsigned char value);
-void set_rm_range(int x, int y, int half_width, char field_offset, char kind_byte);
+void set_rm_range(int x, int y, int half_width, unsigned char field_offset, char kind_byte);
 void set_4_neighbours_if_not_wallortower(int x, int y, int sptr, unsigned char field_off, unsigned char value);
 void set_2_neighbours_if_not_wallortower(int x, int y, int sptr, unsigned char field_off, unsigned char value, int north_south);
 void set_4_neighbours_if_not_aquaductorresevoir(int x, int y, int sptr, unsigned char field_off, unsigned char value);
@@ -3990,37 +3990,37 @@ void set_range(int x, int y, int range, unsigned char field_off, unsigned char v
 // Set a data field throughout a clipped square of the region map.
 // FUNCTION: C2 0x6d3ed
 // FUNCTION: C2WIN 0x004ab344
-void set_rm_range(int x, int y, int half_width, char field_offset,
+void set_rm_range(int x, int y, int half_width, unsigned char field_offset,
                   char kind_byte)
 {
-    int width;
+    int w;
     int height;
-    int row_skip;
+    int skip;
 
     x -= half_width;
     y -= half_width;
     height = 2 * half_width + 1;
-    width = height;
+    w = height;
 
     if (x < 0) {
-        width = x + height;
+        w += x;
         x = 0;
-    } else if (x + height > 60) {
-        width -= (x + height - 60);
+    } else if (x + w > 60) {
+        w -= (x + w - 60);
     }
 
     if (y < 0) {
-        height = y + height;
+        height += y;
         y = 0;
     } else if (y + height > 60) {
         height -= (y + height - 60);
     }
 
     gmn_sptr = ((x) + (y) * 60) * 8;
-    row_skip = (60 - width) * 8;
+    skip = (60 - w) * 8;
 
-    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += row_skip) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, gmn_sptr += 8) {
+    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += skip) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 8) {
             ((unsigned char *)region_map)[(gmn_sptr + field_offset)] = kind_byte;
         }
     }
