@@ -2232,34 +2232,35 @@ void clear_an_area(int x1, int y1, int x2, int y2)
 // FUNCTION: C2WIN 0x004a536b
 void clear_a_reg_area(int x1, int y1, int x2, int y2, int keep_fortress)
 {
-    int saved_random;
-    int row_skip;
-    unsigned char kind;
+    unsigned char forum_size;
+    int exchange;
+    int row_offset;
     int x;
     int y;
-    int swap_value;
+    int random_backup;
+    unsigned char tile_kind;
 
-    saved_random = stone_random_count;
+    random_backup = stone_random_count;
 
-    if (x1 > x2) { swap_value = x2; x2 = x1; x1 = swap_value; }
-    if (y1 > y2) { swap_value = y2; y2 = y1; y1 = swap_value; }
+    if (x1 > x2) { exchange = x2; x2 = x1; x1 = exchange; }
+    if (y1 > y2) { exchange = y2; y2 = y1; y1 = exchange; }
 
     cm_sptr = (x1 + y1 * 60) * 8;
-    row_skip = (60 - (x2 - x1) - 1) * 8;
+    row_offset = (60 - (x2 - x1) - 1) * 8;
 
-    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_offset) {
         for (x = x1; x <= x2; x++, cm_sptr += 8) {
             if ((RM_CELL(cm_sptr).terrain & 0x10) != 0) continue;
             stone_random_count++;
             if (stone_random_count >= 0x40) stone_random_count = 0;
-            kind = RM_CELL(cm_sptr).base_kind;
-            if (kind >= 0x92 && kind <= 0x9b) continue;
-            if (keep_fortress != 0 && kind == 0xd2) continue;
-            if (kind < 0x10) particles_cleared++;
-            if (kind >= 0x20 && kind < 0x7c) {
-            } else if (kind >= 0xd5 && kind <= 0xeb) {
+            tile_kind = RM_CELL(cm_sptr).base_kind;
+            if (tile_kind >= 0x92 && tile_kind <= 0x9b) continue;
+            if (keep_fortress != 0 && tile_kind == 0xd2) continue;
+            if (tile_kind < 0x10) particles_cleared++;
+            if (tile_kind >= 0x20 && tile_kind < 0x7c) {
+            } else if (tile_kind >= 0xd5 && tile_kind <= 0xeb) {
                 clear_sized_to_reg_basic(cm_sptr, 2);
-            } else if (kind >= 0xec && kind <= 0xef) {
+            } else if (tile_kind >= 0xec && tile_kind <= 0xef) {
                 clear_sized_to_reg_basic(cm_sptr, 2);
                 unflag_rm_area(x - ofset_x, y - ofset_y, 2, 0xf7);
                 adjust_regions_coastline(x - ofset_x - 1,
@@ -2267,17 +2268,17 @@ void clear_a_reg_area(int x1, int y1, int x2, int y2, int keep_fortress)
             } else {
                 clear_reg_basic(cm_sptr);
             }
-            if (kind == 0xd2) clear_army_from_fort_ref(cm_sptr);
+            if (tile_kind == 0xd2) clear_army_from_fort_ref(cm_sptr);
         }
     }
 
-    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_offset) {
         for (x = x1; x <= x2; x++, cm_sptr += 8) {
             reg_road_ramifications(x, y);
             reg_wall_ramifications(x, y);
         }
     }
-    stone_random_count = saved_random;
+    stone_random_count = random_backup;
 }
 
 // Destroy a regional structure and refresh the affected terrain and connections.
