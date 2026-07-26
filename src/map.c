@@ -825,19 +825,19 @@ finish:
 // FUNCTION: C2WIN 0x004a1612
 int road_ramifications(int x, int y)
 {
-    int x_min;
+    int x_min_bound;
     unsigned char kind;
-    int x_max;
-    int y_max;
-    int y_min;
+    int x_max_bound;
+    int y_max_bound;
+    int y_min_bound;
 
-    x_min = (x == 0) ? 0 : x - 1;
-    y_min = (y == 0) ? 0 : y - 1;
-    x_max = (x == 79) ? 79 : x + 1;
-    y_max = (y == 79) ? 79 : y + 1;
+    x_min_bound = (x == 0) ? 0 : x - 1;
+    y_min_bound = (y == 0) ? 0 : y - 1;
+    x_max_bound = (x == 79) ? 79 : x + 1;
+    y_max_bound = (y == 79) ? 79 : y + 1;
 
-    for (gmn_y = y_min; y_max >= gmn_y; gmn_y++) {
-        for (gmn_x = x_min; x_max >= gmn_x; gmn_x++) {
+    for (gmn_y = y_min_bound; y_max_bound >= gmn_y; gmn_y++) {
+        for (gmn_x = x_min_bound; x_max_bound >= gmn_x; gmn_x++) {
             gmn_sptr = ((gmn_x) + (gmn_y) * 80) * 20;
             if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) == 0) continue;
             if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 8) != 0) continue;
