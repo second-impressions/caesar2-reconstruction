@@ -604,58 +604,81 @@ void get_road_elastic(void)
     transform_road_elastic(20);
 }
 
+int road_ramifications(int, int);
+int one_wall_ramification(void);
+int one_aquaduct_ramification(void);
+int wall_ramifications(int, int);
+int aquaduct_ramifications(int, int);
+int transform_reg_road_elastic(int);
+int reg_road_ramifications(int, int);
+int one_reg_wall_ramification(void);
+int reg_wall_ramifications(int, int);
+
 // Mark legal road candidates near the current city construction start.
 // FUNCTION: C2 0x66b56
 // FUNCTION: C2WIN 0x004a0c9f
 void transform_road_elastic(int radius)
 {
-    int x_min;
-    int y_min;
-    int x_max;
-    int y_max;
-    int side;
-    int x_span;
-    int stride;
+    int min_x;
+    int min_y;
+    int needs_bounds;
+    int w;
+    int skip;
+    int height;
+    unsigned char val;
 
-    x_min = act_start_x - radius;
-    y_min = act_start_y - radius;
-    side  = 2 * radius + 1;
-    x_span = side;
-    x_max = side + x_min;
-    if (x_min <= 0)       { x_span = x_max; x_min = 0; }
-    else if (x_max > 80)  { x_span -= x_max - 80; }
-    y_max = side + y_min;
-    if (y_min <= 0)       { side = y_max; y_min = 0; }
-    else if (y_max >= 80) { side -= y_max - 80; }
+    needs_bounds = 0;
+    min_x = act_start_x - radius;
+    min_y = act_start_y - radius;
+    height = 2 * radius + 1;
+    w = height;
+    if (min_x <= 0) {
+        w += min_x;
+        min_x = 0;
+        needs_bounds = 1;
+    } else if (min_x + w > 80) {
+        w -= min_x + w - 80;
+        needs_bounds = 1;
+    }
+    if (min_y <= 0) {
+        height += min_y;
+        min_y = 0;
+        needs_bounds = 1;
+    } else if (min_y + height >= 80) {
+        height -= min_y + height - 80;
+        needs_bounds = 1;
+    }
 
-    gmn_sptr = (x_min + y_min * 80) * 20;
-    stride   = (80 - x_span) * 20;
+    gmn_sptr = (min_x + min_y * 80) * 20;
+    skip = (80 - w) * 20;
 
-    gmn_y = y_min;
-    for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-        gmn_x = x_min;
-        for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 20) {
-            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct != 0xff) {
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x02) {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind <= 0xc2
-                        || (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind >= 0xc7) continue;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                }
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x04) {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) continue;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                }
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x80) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                }
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x40) {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind < 0xd1) continue;
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                }
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind < 8
-                    && ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits & 0x80)) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                }
+    gmn_y = min_y;
+    for ( ; gmn_y < min_y + height; gmn_y++, gmn_sptr += skip) {
+        gmn_x = min_x;
+        for ( ; gmn_x < min_x + w; gmn_x++, gmn_sptr += 20) {
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct == 0xff)
+                continue;
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x02) {
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind <= 0xc2)
+                    continue;
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind >= 0xc7)
+                    continue;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+            }
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x04) {
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) continue;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+            }
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x80) {
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+            }
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x40) {
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind < 0xd1) continue;
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+            }
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind < 8
+                && ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits & 0x80)) {
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
             }
         }
     }
