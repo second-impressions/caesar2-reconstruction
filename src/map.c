@@ -3189,6 +3189,7 @@ void flag_rm_area(int x, int y, int size, char mask_byte)
 int get_range1(unsigned char *, int, char);
 int get_range3(unsigned char *, int, char);
 char affected_by_cover2(unsigned char *, int, unsigned char);
+int put_city_flag(int);
 
 // Mask terrain flags across a regional footprint.
 // FUNCTION: C2 0x6b126
