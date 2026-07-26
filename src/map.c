@@ -3204,7 +3204,7 @@ void flag_rm_area(int x, int y, int size, char mask_byte)
 }
 
 int get_range1(unsigned char *, int, unsigned char);
-int get_range3(unsigned char *, int, char);
+int get_range3(unsigned char *, int, unsigned char);
 char affected_by_cover2(unsigned char *, int, unsigned char);
 int put_city_flag(int);
 
@@ -4669,25 +4669,20 @@ int get_range1(unsigned char *start, int range, unsigned char mask)
 // Return the highest masked entertainment coverage in a city building footprint.
 // FUNCTION: C2 0x6e4f3
 // FUNCTION: C2WIN 0x004aced1
-int get_range3(unsigned char *start, int range, char mask)
+int get_range3(unsigned char *start, int range, unsigned char mask)
 {
     int best;
     int row;
     int col;
     int range_value;
-    unsigned char *cell_ptr;
 
-    if (range == 1) {
-        range_value = (start)[12];
-        range_value &= mask;
-        return range_value;
-    }
+    if (range == 1)
+        return start[12] & mask;
     best = 0;
     for (row = 0; row < range; row++) {
         for (col = 0; col < range; col++) {
-            cell_ptr = start + col * CITY_CELL_BYTES + row * CITY_ROW;
-            range_value = (cell_ptr)[12];
-            range_value &= mask;
+            range_value =
+                mask & (start + col * CITY_CELL_BYTES + row * CITY_ROW)[12];
             if (range_value > best)
                 best = range_value;
         }
