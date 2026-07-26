@@ -4491,35 +4491,35 @@ next_unit:
 // FUNCTION: C2WIN 0x004ac84e
 void take_from_warehouses(int amount, int goods)
 {
+    unsigned char temp;
+    unsigned char type;
     unsigned char qty;
-    unsigned char stored_goods;
+    unsigned char stored_type;
 
     if (amount <= 0) return;
     gmn_y = 0;
     gmn_sptr = 0;
     for ( ; gmn_y < 60; gmn_y++) {
-    gmn_x = 0;
-    do {
-        if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind & 0xff) == 0xd4) {
-                stored_goods = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf0;
-                stored_goods >>= 4;
+        for (gmn_x = 0; gmn_x < 60; gmn_x++, gmn_sptr += 8) {
+            type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+            if (type == 0xd4) {
+                stored_type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf0;
+                stored_type >>= 4;
                 qty = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0xf;
-                if (stored_goods == goods && qty != 0) {
-                    if (amount >= qty) {
-                        amount -= qty;
-                        qty = 0;
-                    } else {
-                        qty -= amount;
-                        amount = 0;
-                    }
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant &= 0xf0;
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= qty;
-                    if (amount <= 0) return;
+                if (stored_type != goods) continue;
+                if (qty == 0) continue;
+                if (amount >= qty) {
+                    amount -= qty;
+                    qty = 0;
+                } else {
+                    qty -= amount;
+                    amount = 0;
                 }
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant &= 0xf0;
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= qty;
+                if (amount <= 0) return;
             }
-        gmn_x++;
-        gmn_sptr += 8;
-    } while (gmn_x < 60);
+        }
     }
 }
 
