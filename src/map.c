@@ -2240,7 +2240,7 @@ void clear_an_area(int x1, int y1, int x2, int y2)
 // Demolish a region-map rectangle while preserving protected forts and occupied army ranges.
 // FUNCTION: C2 0x695b9
 // FUNCTION: C2WIN 0x004a536b
-void clear_a_reg_area(int x0, int y0, int x1, int y1, int keep_fortress)
+void clear_a_reg_area(int x1, int y1, int x2, int y2, int keep_fortress)
 {
     int saved_random;
     int row_skip;
@@ -2251,14 +2251,14 @@ void clear_a_reg_area(int x0, int y0, int x1, int y1, int keep_fortress)
 
     saved_random = stone_random_count;
 
-    if (x1 < x0) { swap_value = x1; x1 = x0; x0 = swap_value; }
-    if (y0 > y1) { swap_value = y1; y1 = y0; y0 = swap_value; }
+    if (x1 > x2) { swap_value = x2; x2 = x1; x1 = swap_value; }
+    if (y1 > y2) { swap_value = y2; y2 = y1; y1 = swap_value; }
 
-    cm_sptr = (x0 + y0 * 60) * 8;
-    row_skip = (60 - (x1 - x0)) * 8 - 8;
+    cm_sptr = (x1 + y1 * 60) * 8;
+    row_skip = (60 - (x2 - x1) - 1) * 8;
 
-    for (y = y0; y <= y1; y++, cm_sptr += row_skip) {
-        for (x = x0; x <= x1; x++, cm_sptr += 8) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+        for (x = x1; x <= x2; x++, cm_sptr += 8) {
             if ((RM_CELL(cm_sptr).terrain & 0x10) != 0) continue;
             stone_random_count++;
             if (stone_random_count >= 0x40) stone_random_count = 0;
@@ -2281,8 +2281,8 @@ void clear_a_reg_area(int x0, int y0, int x1, int y1, int keep_fortress)
         }
     }
 
-    for (y = y0; y <= y1; y++, cm_sptr += row_skip) {
-        for (x = x0; x <= x1; x++, cm_sptr += 8) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+        for (x = x1; x <= x2; x++, cm_sptr += 8) {
             reg_road_ramifications(x, y);
             reg_wall_ramifications(x, y);
         }
