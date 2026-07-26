@@ -2806,12 +2806,14 @@ int put_x2_area(int x, int y, char base_kind, int edge_bits, int color)
 // FUNCTION: C2WIN 0x004a6d79
 int put_x3_area(int x, int y, char base_kind, int edge_bits, int color)
 {
-    int row_skip;
-    int xi;
-    int yi;
-    int footprint_idx;
-    int bad = 0;
-    row_skip = (80 - 3) * 20;
+    int bad;
+    int x_pos;
+    int y_pos;
+    int i;
+    int offset;
+
+    bad = 0;
+    offset = (80 - 3) * 20;
 
     if (map_direction == 2) x -= 2;
     if (map_direction == 6) y -= 2;
@@ -2820,21 +2822,29 @@ int put_x3_area(int x, int y, char base_kind, int edge_bits, int color)
         y -= 2;
     }
     if (x < 0) {
-    illegal:
         illegal_build = 1;
         return 0;
     }
-    if (y < 0) goto illegal;
-    if (x + 2 >= 80) goto illegal;
-    if (y + 2 >= 80) goto illegal;
+    if (y < 0) {
+        illegal_build = 1;
+        return 0;
+    }
+    if (x + 2 >= 80) {
+        illegal_build = 1;
+        return 0;
+    }
+    if (y + 2 >= 80) {
+        illegal_build = 1;
+        return 0;
+    }
 
     start_x_pos = x;
     start_y_pos = y;
     start_sptr = (x + y * 80) * 20;
     cm_sptr = start_sptr;
 
-    for (yi = y; yi < y + 3; ) {
-        for (xi = x; xi < x + 3; ) {
+    for (y_pos = y; y_pos < y + 3; y_pos++, cm_sptr += offset) {
+        for (x_pos = x; x_pos < x + 3; x_pos++, cm_sptr += 20) {
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0x10) != 0) bad = 1;
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0xe7) != 0) bad = 1;
             if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8 &&
@@ -2842,34 +2852,27 @@ int put_x3_area(int x, int y, char base_kind, int edge_bits, int color)
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_a != 0) bad = 1;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_b != 0) bad = 1;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits |= 1;
-            xi++;
-            cm_sptr += 20;
         }
-        yi++;
-        cm_sptr += row_skip;
     }
-    if (bad) goto illegal;
+    if (bad) {
+        illegal_build = 1;
+        return 0;
+    }
 
     cm_sptr = start_sptr;
-    footprint_idx = 0;
-    for (yi = y; yi < y + 3; ) {
-        for (xi = x; xi < x + 3; ) {
+    for (y_pos = y, i = 0; y_pos < y + 3; y_pos++, cm_sptr += offset) {
+        for (x_pos = x; x_pos < x + 3; x_pos++, cm_sptr += 20, i++) {
             if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind        = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain    |= placing_flags;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = (char)(color + diamond_ofsets_3x[footprint_idx]);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = (char)(color + diamond_ofsets_3x[i]);
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  &= 0xe3;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  |= (char)edge_bits;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a  = footprint_idx;
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a  = i;
             if (map_direction == 2 || map_direction == 4)
                 (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_b = 0x20;
-            xi++;
-            cm_sptr += 20;
-            footprint_idx++;
         }
-        yi++;
-        cm_sptr += row_skip;
     }
     particles_built++;
     return 1;
