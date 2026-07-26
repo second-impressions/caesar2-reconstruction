@@ -2422,13 +2422,14 @@ void spread_plague_atom(int sptr, int dir)
 // FUNCTION: C2WIN 0x004a5b27
 void plague_an_atom(int sptr)
 {
-    int kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind & 0xff;
-    int tile_size;
+    unsigned char kind;
+    unsigned char tile_size;
 
+    kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
     if (kind < 0x82) return;
     if (kind > 0xa1) return;
 
-    tile_size = forum_gfxdat[kind + 0x26] & 0xff;
+    tile_size = forum_gfxdat[kind + 0x26];
     if (tile_size == 4)
         plague_sized(sptr, 2);
     else if (tile_size == 9)
