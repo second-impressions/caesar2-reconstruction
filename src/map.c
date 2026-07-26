@@ -1203,28 +1203,18 @@ int one_wall_ramification(void)
             if (choose_from(gateway_data, 6) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0xc0;
-#if PLATFORM_WINDOWS
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x80;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
-#else
-                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0x63;
-                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x88;
-#endif
                 return 1;
             }
             test_citymap_neighbours_negedge(0x20);
             if (choose_from(gateway2_data, 2) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = first_choice;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = 0xc0;
-#if PLATFORM_WINDOWS
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x80;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
                 (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 8;
-#else
-                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0x63;
-                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= 0x88;
-#endif
                 return 1;
             }
         } else {
