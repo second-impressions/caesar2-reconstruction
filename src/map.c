@@ -1255,6 +1255,7 @@ void get_aquaduct_elastic(void)
 void trace_back_route_elastic(void);
 void init_flag_markers(void);
 void goto_flag_marker_mode(void);
+void count_prov_flags(void);
 
 // Mark legal aqueduct candidates near the current city construction start.
 // FUNCTION: C2 0x67c75
@@ -1434,7 +1435,6 @@ void save_undo_info(void);
 void clear_region_map(void);
 void clear_edge_info(void);
 void set_route_elastic(void);
-void count_prov_flags(void);
 
 // Recompute aqueduct connections at a cell and its surrounding neighbourhood.
 // FUNCTION: C2 0x6811e
