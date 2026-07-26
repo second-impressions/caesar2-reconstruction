@@ -2187,13 +2187,15 @@ void clear_an_area(int x1, int y1, int x2, int y2)
     cm_sptr = (x1 + y1 * 80) * 20;
     row_skip = (80 - (x2 - x1) - 1) * 20;
 
-    for (y = y1; y <= y2; ) {
-        for (x = x1; x <= x2; ) {
-            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0xbf; x++; cm_sptr += 20; } y++; cm_sptr += row_skip; }
+    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+        for (x = x1; x <= x2; x++, cm_sptr += 20) {
+            (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0xbf;
+        }
+    }
 
     cm_sptr = (x1 + y1 * 80) * 20;
-    for (y = y1; y <= y2; ) {
-        for (x = x1; x <= x2; ) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+        for (x = x1; x <= x2; x++, cm_sptr += 20) {
 
             if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0x10) != 0) {
 
@@ -2225,15 +2227,17 @@ void clear_an_area(int x1, int y1, int x2, int y2)
                     clear_to_empty(cm_sptr);
                 }
             }
-            x++; cm_sptr += 20; } y++; cm_sptr += row_skip; }
+        }
+    }
 
     cm_sptr = (x1 + y1 * 80) * 20;
-    for (y = y1; y <= y2; ) {
-        for (x = x1; x <= x2; ) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+        for (x = x1; x <= x2; x++, cm_sptr += 20) {
             road_ramifications(x, y);
             wall_ramifications(x, y);
             aquaduct_ramifications(x, y);
-            x++; cm_sptr += 20; } y++; cm_sptr += row_skip; }
+        }
+    }
     stone_random_count = (signed char)saved_random;
 }
 
