@@ -63,7 +63,7 @@ void generate_city_map_geography(void)
     clear_all_cm(3);
     clear_all_cm(9);
     clear_all_cm(0x10);
-    clear_all_cm(tries);
+    clear_all_cm(5);
     clear_all_cm(6);
     clear_all_cm(7);
     clear_all_cm(8);
@@ -78,8 +78,8 @@ void generate_city_map_geography(void)
     generate_cm_scrub();
     while (generate_cm_river() == 0) {
         generate_cm_scrub();
-        tries--;
-        if (tries == -1) break;
+        if (tries-- == 0)
+            break;
     }
 }
 
