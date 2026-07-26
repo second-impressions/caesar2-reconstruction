@@ -3092,27 +3092,23 @@ int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
 // FUNCTION: C2WIN 0x004a7b37
 void change_reg_sized(int base_kind, int gfx_base_idx, int footprint_size, int cell_offset)
 {
-    int xi;
-    int yi;
-    int footprint_idx;
-    int row_step = (60 - footprint_size) * 8;
+    int x;
+    int i;
+    int y;
+    int rowadd;
 
-    for (yi = 0, footprint_idx = 0; yi < footprint_size; ) {
-        for (xi = 0; xi < footprint_size; ) {
+    rowadd = (60 - footprint_size) * 8;
+    for (y = 0, i = 0; y < footprint_size; y++, cell_offset += rowadd) {
+        for (x = 0; x < footprint_size; x++, cell_offset += 8, i++) {
             (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).base_kind = base_kind;
             (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).edge_bits |= 1;
             if (footprint_size == 1) {
                 (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).gfx = gfx_base_idx;
             } else if (footprint_size == 2) {
                 (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).gfx =
-                    gfx_base_idx + diamond_ofsets_2x[footprint_idx];
+                    gfx_base_idx + diamond_ofsets_2x[i];
             }
-            xi++;
-            cell_offset += 8;
-            footprint_idx++;
         }
-        yi++;
-        cell_offset += row_step;
     }
 }
 
