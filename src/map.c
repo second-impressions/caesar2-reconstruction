@@ -2172,29 +2172,29 @@ void plaza_an_area(int x1, int y1, int x2, int y2)
 // FUNCTION: C2WIN 0x004a4fa8
 void clear_an_area(int x1, int y1, int x2, int y2)
 {
-    unsigned char size;
-    int swap_temp;
-    int row_skip;
+    unsigned char forum_size;
+    int exchange;
+    int row_offset;
     int x;
     int y;
-    int saved_random;
-    unsigned char kind;
+    int random_backup;
+    unsigned char tile_kind;
 
-    saved_random = stone_random_count;
-    if (x1 > x2) { swap_temp = x2; x2 = x1; x1 = swap_temp; }
-    if (y1 > y2) { swap_temp = y2; y2 = y1; y1 = swap_temp; }
+    random_backup = stone_random_count;
+    if (x1 > x2) { exchange = x2; x2 = x1; x1 = exchange; }
+    if (y1 > y2) { exchange = y2; y2 = y1; y1 = exchange; }
 
     cm_sptr = (x1 + y1 * 80) * 20;
-    row_skip = (80 - (x2 - x1) - 1) * 20;
+    row_offset = (80 - (x2 - x1) - 1) * 20;
 
-    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_offset) {
         for (x = x1; x <= x2; x++, cm_sptr += 20) {
             (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0xbf;
         }
     }
 
     cm_sptr = (x1 + y1 * 80) * 20;
-    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_offset) {
         for (x = x1; x <= x2; x++, cm_sptr += 20) {
 
             if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0x10) != 0) {
@@ -2210,13 +2210,13 @@ void clear_an_area(int x1, int y1, int x2, int y2)
 
                 if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind >= 0x82) {
 
-                    kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-                    size = forum_gfxdat[kind + 0x26];
-                    if (size == 0) clear_to_empty(cm_sptr);
-                    if (size == 4) clear_sized_to_rubble(cm_sptr, 2, 0);
-                    else if (size == 9) clear_sized_to_rubble(cm_sptr, 3, 0);
-                    else if (size == 0x10) clear_sized_to_rubble(cm_sptr, 4, 0);
-                    else if (kind < 0x82) clear_to_empty(cm_sptr);
+                    tile_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+                    forum_size = forum_gfxdat[tile_kind + 0x26];
+                    if (forum_size == 0) clear_to_empty(cm_sptr);
+                    if (forum_size == 4) clear_sized_to_rubble(cm_sptr, 2, 0);
+                    else if (forum_size == 9) clear_sized_to_rubble(cm_sptr, 3, 0);
+                    else if (forum_size == 0x10) clear_sized_to_rubble(cm_sptr, 4, 0);
+                    else if (tile_kind < 0x82) clear_to_empty(cm_sptr);
                     else clear_to_rubble(cm_sptr, 0);
 
                 } else if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 8) {
@@ -2232,14 +2232,14 @@ void clear_an_area(int x1, int y1, int x2, int y2)
     }
 
     cm_sptr = (x1 + y1 * 80) * 20;
-    for (y = y1; y <= y2; y++, cm_sptr += row_skip) {
+    for (y = y1; y <= y2; y++, cm_sptr += row_offset) {
         for (x = x1; x <= x2; x++, cm_sptr += 20) {
             road_ramifications(x, y);
             wall_ramifications(x, y);
             aquaduct_ramifications(x, y);
         }
     }
-    stone_random_count = (signed char)saved_random;
+    stone_random_count = (signed char)random_backup;
 }
 
 // Demolish a region-map rectangle while preserving protected forts and occupied army ranges.
