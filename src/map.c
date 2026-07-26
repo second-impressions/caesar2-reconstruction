@@ -2204,6 +2204,7 @@ void clear_an_area(int x1, int y1, int x2, int y2)
                     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building;
                     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain &= 0xdf;
                     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building = 0;
+                    continue;
                 }
             } else {
 
@@ -2219,10 +2220,10 @@ void clear_an_area(int x1, int y1, int x2, int y2)
                     else clear_to_rubble(cm_sptr, 0);
 
                 } else if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 8) {
-                    if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) == 0)
-                        if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x40) == 0)
-
-                            clear_to_empty(cm_sptr);
+                    if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) != 0)
+                        continue;
+                    if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x40) == 0)
+                        clear_to_empty(cm_sptr);
                 } else {
                     clear_to_empty(cm_sptr);
                 }
