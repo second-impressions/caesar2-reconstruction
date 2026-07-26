@@ -4541,36 +4541,31 @@ void set_ew_polar(int x, int y, int sptr, unsigned char field_off, unsigned char
 // FUNCTION: C2WIN 0x004aca39
 void change_lv(int x, int y, int radius, int extra, int delta)
 {
-    int width;
+    int w;
     int height;
     int row_skip;
-    int land_value;
+    signed char lv;
 
     if (extra == 0) return;
     x -= radius;
     y -= radius;
     height = extra + radius * 2;
-    width = height;
-    if (x < 0) { width += x; x = 0; }
-    else if (x + width > 80) width -= x + width - 80;
+    w = height;
+    if (x < 0) { w += x; x = 0; }
+    else if (x + w > 80) w -= x + w - 80;
     if (y < 0) { height += y; y = 0; }
     else if (y + height > 80) height -= y + height - 80;
 
     gmn_sptr = ((x) + (y) * 80) * 20;
-    row_skip = (80 - width) * 20;
-    for (gmn_y = y; gmn_y < y + height;) {
-        for (gmn_x = x; gmn_x < x + width;) {
-            signed char nv = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).land_value;
-            nv += (char)delta;
-            land_value = nv;
-            if (land_value > 0x40) nv = 0x40;
-            else if (land_value < -0x40) nv = -0x40;
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).land_value = nv;
-            gmn_x++;
-            gmn_sptr += 20;
+    row_skip = (80 - w) * 20;
+    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += row_skip) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 20) {
+            lv = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).land_value;
+            lv += delta;
+            if (lv > 0x40) lv = 0x40;
+            else if (lv < -0x40) lv = -0x40;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).land_value = lv;
         }
-        gmn_y++;
-        gmn_sptr += row_skip;
     }
 }
 
