@@ -857,7 +857,11 @@ int road_ramifications(int x, int y)
                     }
                 } else if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 4) != 0) {
                     if (one_wall_ramification() == 0) {
+#if PLATFORM_WINDOWS
+                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain &= 0xfb;
+#else
                         (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain &= 0xf9;
+#endif
                         (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain |= 2;
                         return 0;
                     }
