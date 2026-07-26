@@ -924,7 +924,7 @@ void change_sized(int, int, int, int);
 void set_map_ref(int, int, int);
 void change_reg_sized(int, int, int, int);
 void flag_rm_area(int, int, int, char);
-void check_region_map_for_farm_square(int, int, char);
+void check_region_map_for_farm_square(int, int, unsigned char);
 void check_region_map_for_port_square(int, int);
 void adjust_sailable_area(void);
 void test_type_citymap_neighbours_posedge(unsigned char);
@@ -3231,28 +3231,31 @@ void unflag_rm_area(int x, int y, int size, unsigned char mask_byte)
 // Check whether a 2x2 regional industry footprint has the required terrain.
 // FUNCTION: C2 0x6b18c
 // FUNCTION: C2WIN 0x004a808c
-void check_region_map_for_farm_square(int x, int y, char mask)
+void check_region_map_for_farm_square(int x, int y, unsigned char mask)
 {
-    int count;
-    int xi;
-    int yi;
-    int row_skip;
+    int total;
+    int x_pos;
+    int y_pos;
+    int rowadd;
 
     industry_build_ok = 1;
-    count = 0;
-    row_skip = (60 - 2) * 8;
+    total = 0;
+    rowadd = (60 - 2) * 8;
     if (map_direction == 2) x--;
     if (map_direction == 6) y--;
     if (map_direction == 4) { x--; y--; }
-    if (x < 0 || y < 0 || x + 1 >= 60 || y + 1 >= 60) return;
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x + 1 >= 60) return;
+    if (y + 1 >= 60) return;
 
     cm_sptr = ((x) + (y) * 60) * 8;
-    for (yi = y; yi < y + 2; yi++, cm_sptr += row_skip) {
-        for (xi = x; xi < x + 2; xi++, cm_sptr += 8) {
-            if (((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & mask) != 0) count++;
+    for (y_pos = y; y_pos < y + 2; y_pos++, cm_sptr += rowadd) {
+        for (x_pos = x; x_pos < x + 2; x_pos++, cm_sptr += 8) {
+            if (((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & mask) != 0) total++;
         }
     }
-    if (count == 4) industry_build_ok = 0;
+    if (total == 4) industry_build_ok = 0;
     else illegal_build = 1;
 }
 
