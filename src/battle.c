@@ -2340,11 +2340,7 @@ void instant_reform(int unit_no, int formation)
       figure_list[temp_figure].wf_step_y = 0;
       figure_list[temp_figure].wf_step_x = 0;
       figure_list[temp_figure].is_routing = 0;
-#if PLATFORM_WINDOWS
       figure_list[temp_figure].is_visible &= 0xfd;
-#else
-      figure_list[temp_figure].is_visible &= 0xfc;
-#endif
       figure_list[temp_figure].is_visible |= 1;
       position++;
     }
