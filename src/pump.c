@@ -46,6 +46,13 @@ extern void  memmove(void *dst, const void *src, unsigned int n);
 extern void *calloc(unsigned int nmemb, unsigned int size);
 extern void free(void *);
 /* Forward declarations (functions defined later in this file). */
+void InsertNode(short r);
+void DeleteNode(short p);
+void Putcode(short l, unsigned short c);
+void update(short c);
+void EncodeChar(unsigned short c);
+void EncodePosition(unsigned short c);
+int evacuate(unsigned char *src, unsigned char *dst);
 void free_pumping_memory(void);
 
 
