@@ -2356,9 +2356,8 @@ void destroy_an_atom(int sptr, int rubble_kind)
 // FUNCTION: C2WIN 0x004a590a
 void spread_fire_atom(int sptr, int dir)
 {
-    char kind_byte;
-    int kind;
-    int size;
+    unsigned char kind;
+    unsigned char forum_size;
 
     if (dir == 0)
         sptr -= 0x640;
@@ -2369,21 +2368,19 @@ void spread_fire_atom(int sptr, int dir)
     else if (dir == 2)
         sptr += 0x14;
 
-    kind_byte = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
-    kind = (unsigned char)kind_byte;
+    kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
     if (kind >= 0xbc && kind <= 0xe2) return;
-    kind = (unsigned char)kind_byte;
-    if (kind < 0x82) return;
-
-    size = forum_gfxdat[kind + 0x26] & 0xff;
-    if (size == 4)
-        clear_sized_to_rubble(sptr, 2, 1);
-    else if (size == 9)
-        clear_sized_to_rubble(sptr, 3, 1);
-    else if (size == 0x10)
-        clear_sized_to_rubble(sptr, 4, 1);
-    else
-        clear_to_rubble(sptr, 1);
+    if (kind >= 0x82) {
+        forum_size = forum_gfxdat[kind + 0x26];
+        if (forum_size == 4)
+            clear_sized_to_rubble(sptr, 2, 1);
+        else if (forum_size == 9)
+            clear_sized_to_rubble(sptr, 3, 1);
+        else if (forum_size == 0x10)
+            clear_sized_to_rubble(sptr, 4, 1);
+        else
+            clear_to_rubble(sptr, 1);
+    }
 }
 
 // Spread plague in one direction to an eligible neighbouring building.
