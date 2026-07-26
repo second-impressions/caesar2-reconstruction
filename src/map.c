@@ -2436,14 +2436,19 @@ void plague_an_atom(int sptr)
 void plague_sized(int sptr, int size)
 {
     int x;
+    unsigned char kind;
     int y;
+    int start_sptr;
 
-    x = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).activity_a & 0xf;
-    y = x % size;
-    x /= size;
-    sptr = sptr - y * 20 - x * 80 * 20;
-    for (y = 0; y < size; y++, sptr += (80 - size) * 20)
-        for (x = 0; x < size; x++, sptr += 20)
+    y = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).activity_a & 0xf;
+    x = y;
+    kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
+    x %= size; y /= size;
+    sptr -= x * 20;
+    sptr -= y * 80 * 20;
+    start_sptr = sptr;
+    for (x = 0; x < size; x++, sptr += (80 - size) * 20)
+        for (y = 0; y < size; y++, sptr += 20)
             plague_it(sptr);
 }
 
