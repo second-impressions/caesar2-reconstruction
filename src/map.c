@@ -5462,7 +5462,7 @@ int next_danger_flag(void)
 void goto_flag_marker_mode(void)
 {
     int i;
-    int cell_offset;
+    int offset;
 
     flag_mode = 1;
     clear_all_cm(2);
@@ -5470,19 +5470,19 @@ void goto_flag_marker_mode(void)
 
     for (i = 0; i < 20; i++) {
         if (city_flag_list[i] != -1) {
-            cell_offset = city_flag_list[i];
-            (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).road_aqueduct = 1;
+            offset = city_flag_list[i];
+            (*(struct city_cell *)((unsigned char *)city_map + (offset))).road_aqueduct = 1;
         }
         if (prov_flag_list[i] != -1) {
-            cell_offset = prov_flag_list[i];
-            (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).place_state = 2;
+            offset = prov_flag_list[i];
+            (*(struct region_cell *)((unsigned char *)region_map + (offset))).place_state = 2;
         }
         if (danger_flag_list[i] != -1) {
-            cell_offset = danger_flag_list[i];
+            offset = danger_flag_list[i];
             if (danger_flag_map_mode == 0)
-                (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).road_aqueduct = 3;
+                (*(struct city_cell *)((unsigned char *)city_map + (offset))).road_aqueduct = 3;
             else
-                (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).place_state = 3;
+                (*(struct region_cell *)((unsigned char *)region_map + (offset))).place_state = 3;
         }
     }
 }
