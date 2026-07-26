@@ -412,46 +412,46 @@ void get_best_elastic_value(int x, int y, int cell_offset, int start_dir)
 // Expand a regional construction path by one breadth-first search layer.
 // FUNCTION: C2 0x6675a
 // FUNCTION: C2WIN 0x004a0576
-void test_rm_elastic_range(int strict, int radius, unsigned char reject_mask)
+void test_rm_elastic_range(int strict, int r, unsigned char reject_mask)
 {
-    int x_min;
-    int y_min;
+    int w;
+    int height;
     int needs_bounds;
-    int x_span;
-    int stride;
-    int side;
-    unsigned char neighbour_value;
+    int min_x;
+    int skip;
+    int min_y;
+    unsigned char val;
 
     needs_bounds = 0;
-    x_min = act_start_x - radius;
-    y_min = act_start_y - radius;
-    side  = 2 * radius + 1;
-    x_span = side;
-    if (x_min <= 0) {
-        x_span += x_min;
-        x_min = 0;
+    min_x = act_start_x - r;
+    min_y = act_start_y - r;
+    height = 2 * r + 1;
+    w = height;
+    if (min_x <= 0) {
+        w += min_x;
+        min_x = 0;
         needs_bounds = 1;
-    } else if (x_min + side > 0x3c) {
-        x_span -= x_min + side - 0x3c;
+    } else if (min_x + w > 0x3c) {
+        w -= min_x + w - 0x3c;
         needs_bounds = 1;
     }
-    if (y_min <= 0) {
-        side += y_min;
-        y_min = 0;
+    if (min_y <= 0) {
+        height += min_y;
+        min_y = 0;
         needs_bounds = 1;
-    } else if (y_min + side >= 0x3c) {
-        side -= y_min + side - 0x3c;
+    } else if (min_y + height >= 0x3c) {
+        height -= min_y + height - 0x3c;
         needs_bounds = 1;
     }
 
-    gmn_sptr = ((x_min) + (y_min) * 60) * 8;
-    stride   = (0x3c - x_span) * 8;
+    gmn_sptr = ((min_x) + (min_y) * 60) * 8;
+    skip = (0x3c - w) * 8;
 
     if (!needs_bounds) {
-        gmn_y = y_min;
-        for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-            gmn_x = x_min;
-            for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 8) {
+        gmn_y = min_y;
+        for ( ; gmn_y < min_y + height; gmn_y++, gmn_sptr += skip) {
+            gmn_x = min_x;
+            for ( ; gmn_x < min_x + w; gmn_x++, gmn_sptr += 8) {
                 if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & reject_mask) {
                     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 0xff;
                     continue;
@@ -468,32 +468,33 @@ void test_rm_elastic_range(int strict, int radius, unsigned char reject_mask)
                 }
                 if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state != 0)
                     continue;
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).place_state;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).place_state;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
                     continue;
                 }
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).place_state;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).place_state;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
                     continue;
                 }
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).place_state;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).place_state;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
                     continue;
                 }
-                neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).place_state;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).place_state;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    continue;
                 }
             }
         }
     } else {
-        gmn_y = y_min;
-        for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-            gmn_x = x_min;
-            for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 8) {
+        gmn_y = min_y;
+        for ( ; gmn_y < min_y + height; gmn_y++, gmn_sptr += skip) {
+            gmn_x = min_x;
+            for ( ; gmn_x < min_x + w; gmn_x++, gmn_sptr += 8) {
                 if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & reject_mask) {
                     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 0xff;
                     continue;
@@ -501,35 +502,36 @@ void test_rm_elastic_range(int strict, int radius, unsigned char reject_mask)
                 if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state != 0)
                     continue;
                 if (gmn_y > 0)
-                    neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).place_state;
+                    val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).place_state;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                    val = 0;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
                     continue;
                 }
                 if (gmn_x < 0x3b)
-                    neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).place_state;
+                    val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).place_state;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                    val = 0;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
                     continue;
                 }
                 if (gmn_y < 0x3b)
-                    neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).place_state;
+                    val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).place_state;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                    val = 0;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
                     continue;
                 }
                 if (gmn_x > 0)
-                    neighbour_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).place_state;
+                    val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).place_state;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(radius + 1);
+                    val = 0;
+                if (val != 0 && val < r + 1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    continue;
                 }
             }
         }
