@@ -2029,42 +2029,42 @@ int one_reg_wall_ramification(void)
                 return 0;
             }
             test_regionmap_neighbours_negedge(6);
-            if (choose_from(regwallroad_data, 2) == 0) {
-                gmn_err_sptr = gmn_sptr;
-                gmn_err_x = gmn_x;
-                gmn_err_y = gmn_y;
-                return 0;
+            if (choose_from(regwallroad_data, 2) != 0) {
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = first_choice;
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = 0xb6;
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits &= 0xe3;
+                return 1;
             }
-            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = first_choice;
-            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = 0xb6;
-            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits &= 0xe3;
-            return 1;
-        }
-        test_regionmap_neighbours_negedge(6);
-        if (choose_from(wall_data, 0xe) == 0) {
             gmn_err_sptr = gmn_sptr;
             gmn_err_x = gmn_x;
             gmn_err_y = gmn_y;
             return 0;
         }
-        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = first_choice - 0xa;
-        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits &= 0xe3;
-        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = house_gfxdat[first_choice + 0x51];
-        return 1;
+        test_regionmap_neighbours_negedge(6);
+        if (choose_from(wall_data, 0xe) != 0) {
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = first_choice - 0xa;
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits &= 0xe3;
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = house_gfxdat[first_choice + 0x51];
+            return 1;
+        }
+        gmn_err_sptr = gmn_sptr;
+        gmn_err_x = gmn_x;
+        gmn_err_y = gmn_y;
+        return 0;
     }
 
     if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 4) != 0) {
         test_regionmap_neighbours_negedge(6);
-        if (choose_from(tower_data, 0x10) == 0) {
-            gmn_err_sptr = gmn_sptr;
-            gmn_err_x = gmn_x;
-            gmn_err_y = gmn_y;
-            return 0;
+        if (choose_from(tower_data, 0x10) != 0) {
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = first_choice;
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = 0xd2;
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits &= 0xe3;
+            return 1;
         }
-        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = first_choice;
-        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = 0xd2;
-        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits &= 0xe3;
-        return 1;
+        gmn_err_sptr = gmn_sptr;
+        gmn_err_x = gmn_x;
+        gmn_err_y = gmn_y;
+        return 0;
     }
     return 1;
 }
