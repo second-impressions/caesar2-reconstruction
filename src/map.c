@@ -4852,15 +4852,14 @@ void clear_all_cm(char layer)
     cm_sptr = 0;
     for (gmn_y = 0; gmn_y < 80; gmn_y++) {
         for (gmn_x = 0; gmn_x < 10; gmn_x++, cm_sptr += 0xa0) {
-            int idx = cm_sptr + (unsigned char)layer;
-            (*(struct city_cell *)((unsigned char *)city_map + (idx))).base_kind = 0;
-            (*(struct city_cell *)((unsigned char *)city_map + ((idx) + CITY_CELL_BYTES))).base_kind = 0;
-            (*(struct city_cell *)((unsigned char *)city_map + (idx + 0x28))).base_kind = 0;
-            (*(struct city_cell *)((unsigned char *)city_map + (idx + 0x3c))).base_kind = 0;
-            (*(struct city_cell *)((unsigned char *)city_map + (idx + 0x50))).base_kind = 0;
-            (*(struct city_cell *)((unsigned char *)city_map + (idx + 0x64))).base_kind = 0;
-            (*(struct city_cell *)((unsigned char *)city_map + (idx + 0x78))).base_kind = 0;
-            (*(struct city_cell *)((unsigned char *)city_map + (idx + 0x8c))).base_kind = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer] = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer + 0x14] = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer + 0x28] = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer + 0x3c] = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer + 0x50] = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer + 0x64] = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer + 0x78] = 0;
+            ((unsigned char *)city_map)[cm_sptr + (unsigned char)layer + 0x8c] = 0;
         }
     }
 }
