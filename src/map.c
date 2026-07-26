@@ -3948,40 +3948,40 @@ void unflag_all_rm_xwarehouse(void)
     } while (gmn_y < 60);
 }
 
+void set_4_neighbours(int x, int y, int sptr, unsigned char field_off,
+                      unsigned char value);
+
 // Set a data field throughout a clipped square of the city map.
 // FUNCTION: C2 0x6d309
 // FUNCTION: C2WIN 0x004ab1f8
 void set_range(int x, int y, int range, unsigned char field_off, unsigned char value)
 {
-    int width;
+    int w;
     int height;
-    int xend;
-    int yend;
-    int row_skip;
+    int skip;
 
     x -= range;
     y -= range;
-    width = height = range * 2 + 1;
+    height = range * 2 + 1;
+    w = height;
 
-    xend = width + x;
     if (x < 0) {
-        width = xend;
+        w += x;
         x = 0;
-    } else if (xend > 80) {
-        width -= xend - 80;
+    } else if (x + w > 80) {
+        w -= x + w - 80;
     }
-    yend = height + y;
     if (y < 0) {
-        height = yend;
+        height += y;
         y = 0;
-    } else if (yend > 80) {
-        height -= yend - 80;
+    } else if (y + height > 80) {
+        height -= y + height - 80;
     }
 
     gmn_sptr = ((x) + (y) * 80) * 20;
-    row_skip  = (80 - width) * 20;
-    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += row_skip) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, gmn_sptr += 20) {
+    skip = (80 - w) * 20;
+    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += skip) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 20) {
             ((unsigned char *)city_map)[gmn_sptr + field_off] = value;
         }
     }
