@@ -4604,9 +4604,10 @@ unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size)
     int x_off;
 
     packed = base_ptr[5] & 0xf;
-    x_off = packed % size; packed /= size;
+    x_off = packed; x_off %= size; packed /= size;
     base_ptr -= x_off * 20;
-    packed *= 1600; return base_ptr - packed;
+    base_ptr -= packed * 1600;
+    return base_ptr;
 }
 
 // Test whether a city building footprint has any requested education coverage.
