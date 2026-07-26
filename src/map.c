@@ -4705,69 +4705,59 @@ int get_range3(unsigned char *start, int range, char mask)
 // FUNCTION: C2WIN 0x004acf8a
 void test_range_for(int x, int y, int radius, int mode)
 {
-    unsigned char kind_byte;
-    int kind;
-    int height;
-    int yend;
+    unsigned char kind;
+    int map_height;
     int row_skip;
-    int sptr;
-    char val;
-    int width;
-    int xend;
-    char sub;
-    int diff;
+    int cm_sptr;
+    unsigned char range_flag;
+    int w;
+    unsigned char sub;
 
     x -= radius;
     y -= radius;
-    width = height = radius * 2 + 1;
+    w = map_height = radius * 2 + 1;
 
-    xend = width + x;
     if (x < 0) {
-        width = xend;
+        w += x;
         x = 0;
-    } else if (xend > 80) {
-        width -= xend - 80;
+    } else if (x + w > 80) {
+        w -= x + w - 80;
     }
-    yend = height + y;
     if (y < 0) {
-        height = yend;
+        map_height += y;
         y = 0;
-    } else if (yend > 80) {
-        height -= yend - 80;
+    } else if (y + map_height > 80) {
+        map_height -= y + map_height - 80;
     }
 
-    sptr = ((x) + (y) * 80) * 20;
-    diff = (80 - width) * 4;
-    diff += (80 - width);
-    row_skip = diff * 4;
+    cm_sptr = ((x) + (y) * 80) * 20;
+    row_skip = (80 - w) * 20;
     test_result1 = 0;
     test_result2 = 0;
     test_result3 = 0;
     test_result4 = 0;
-    for (gmn_y = y; gmn_y < y + height; gmn_y++, sptr += row_skip) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, sptr += 20) {
-            sub = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).activity_a & 0xf;
-            kind_byte = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
-            kind = kind_byte;
-            if (kind >= 0x82 && kind <= 0xa1)
-                if (sub == 0) {
-                    test_result1++;
-                    if (mode == 0) {
-                        val = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).range_flag & 0xc;
-                        val >>= 2;
-                        if (val == 0)
-                            test_result2++;
-                        else
-                            test_result3 += val;
-                    } else if (mode == 1) {
-                        val = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).range_flag & 0x30;
-                        if (val == 0)
-                            test_result2++;
-                    } else if (mode == 2) {
-                        val = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).fpu_flag & 0xf;
-                        test_result2 += val;
-                    }
-                }
+    for (gmn_y = y; gmn_y < y + map_height; gmn_y++, cm_sptr += row_skip) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, cm_sptr += 20) {
+            sub = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
+            kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+            if (kind < 0x82 || kind > 0xa1) continue;
+            if (sub != 0) continue;
+            test_result1++;
+            if (mode == 0) {
+                range_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0xc;
+                range_flag >>= 2;
+                if (range_flag == 0)
+                    test_result2++;
+                else
+                    test_result3 += range_flag;
+            } else if (mode == 1) {
+                range_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
+                if (range_flag == 0)
+                    test_result2++;
+            } else if (mode == 2) {
+                range_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag & 0xf;
+                test_result2 += range_flag;
+            }
         }
     }
 }
