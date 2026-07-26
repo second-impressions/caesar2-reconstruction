@@ -2535,8 +2535,7 @@ void clear_to_rubble(int sptr, int rubble_kind)
 void clear_to_empty(int sptr)
 {
     stone_random_count++;
-    if (stone_random_count >= 0x40)
-        stone_random_count = 0;
+    if (stone_random_count >= 0x40) stone_random_count = 0;
     if ((*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind < 0x1a
             || (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind > 0x1d)
         particles_cleared++;
@@ -2614,9 +2613,9 @@ void clear_reg_basic(int rm_offset)
 // FUNCTION: C2WIN 0x004a6555
 void plague_it(int sptr)
 {
-    (*(struct city_cell *)((unsigned char *)city_map + (sptr))).fpu_flag &= 0xc0;
-    (*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits |= 0x81;
-    stone_random_count = stone_random_count + (char)rand8;
+    (*(struct city_cell *)((unsigned char *)city_map + (sptr))).fpu_flag &= 0xcf; (*(struct city_cell *)((unsigned char *)city_map + (sptr))).fpu_flag &= 0xf0;
+    (*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits |= 1; (*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits |= 0x80;
+    stone_random_count = stone_random_count + rand8;
     if (stone_random_count >= 0x40)
         stone_random_count = 0;
     (*(struct city_cell *)((unsigned char *)city_map + (sptr))).building = stone_random_data[stone_random_count];
