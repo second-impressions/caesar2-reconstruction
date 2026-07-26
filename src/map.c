@@ -1260,77 +1260,78 @@ void get_aquaduct_elastic(void)
     elastic_start_dirc = 0;
 }
 
+void trace_back_route_elastic(void);
+void init_flag_markers(void);
+void goto_flag_marker_mode(void);
+
 // Mark legal aqueduct candidates near the current city construction start.
 // FUNCTION: C2 0x67c75
 // FUNCTION: C2WIN 0x004a292d
 void transform_aquaduct_elastic(int radius)
 {
-    int x_min;
-    int y_min;
-    int x_max;
-    int y_max;
-    int side;
-    int x_span;
-    int stride;
-    char kind;
+    int min_x;
+    int min_y;
+    unsigned char val;
+    unsigned char type;
+    int skip;
+    int w;
+    int height;
+    int needs_bounds;
 
-    x_min = act_start_x - radius;
-    y_min = act_start_y - radius;
-    side  = 2 * radius + 1;
-    x_span = side;
-    x_max = x_min + side;
-    if (x_min <= 0)       { x_span = x_max; x_min = 0; }
-    else if (x_max > 80)  { x_span -= x_max - 80; }
-    y_max = y_min + side;
-    if (y_min <= 0)       { side = y_max; y_min = 0; }
-    else if (y_max >= 80) { side -= y_max - 80; }
+    needs_bounds = 0;
+    min_x = act_start_x - radius;
+    min_y = act_start_y - radius;
+    height = 2 * radius + 1;
+    w = height;
+    if (min_x <= 0)                  { w += min_x; min_x = 0; needs_bounds = 1; }
+    else if (w + min_x > 80)         { w -= w + min_x - 80; needs_bounds = 1; }
+    if (min_y <= 0)                  { height += min_y; min_y = 0; needs_bounds = 1; }
+    else if (min_y + height >= 80)   { height -= min_y + height - 80; needs_bounds = 1; }
 
-    gmn_sptr = (x_min + y_min * 80) * 20;
-    stride   = (80 - x_span) * 20;
+    gmn_sptr = (min_x + min_y * 80) * 20;
+    skip = (80 - w) * 20;
 
-    gmn_y = y_min;
-    for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-        gmn_x = x_min;
-        for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 20) {
-            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct != 0xff) {
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x40) {
-                    kind = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind;
-                    if (kind == 0xcf || kind == 0xd5) {
-                        set_2_neighbours_if_not_aquaductorresevoir(gmn_x, gmn_y, gmn_sptr, 2, 0xff, 0);
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                    } else if (kind == 0xd0 || kind == 0xd6) {
-                        set_2_neighbours_if_not_aquaductorresevoir(gmn_x, gmn_y, gmn_sptr, 2, 0xff, 1);
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                    } else if (kind <= 0xce) {
-                        if (gmn_x == act_start_x && gmn_y == act_start_y) continue;
-                        inc_elastic_by2(gmn_x, gmn_y, gmn_sptr);
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct += 2;
-                    } else if (kind > 0xce) {
-                        set_4_neighbours_if_not_aquaductorresevoir(gmn_x, gmn_y, gmn_sptr, 2, 0xff);
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                    }
-                } else if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x80) {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct > 1 && (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct != 0xff) {
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct -= 1;
-                    }
-                }
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind == 0x52)
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct++;
-                    else if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind == 0x53)
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct++;
-                    else
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                }
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x02) {
-                    if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind <= 0xc2)
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct++;
-                    else
-                        (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
-                }
-                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind < 8 && ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits & 0x80)) {
+    for (gmn_y = min_y; min_y + height > gmn_y; gmn_y++, gmn_sptr += skip) {
+        for (gmn_x = min_x; min_x + w > gmn_x; gmn_x++, gmn_sptr += 20) {
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct == 0xff)
+                continue;
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x40) {
+                type = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind;
+                if (type == 0xcf || type == 0xd5) {
+                    set_2_neighbours_if_not_aquaductorresevoir(gmn_x, gmn_y, gmn_sptr, 2, 0xff, 0);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+                } else if (type == 0xd0 || type == 0xd6) {
+                    set_2_neighbours_if_not_aquaductorresevoir(gmn_x, gmn_y, gmn_sptr, 2, 0xff, 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+                } else if (type <= 0xce) {
+                    if (gmn_x == act_start_x && gmn_y == act_start_y) continue;
+                    inc_elastic_by2(gmn_x, gmn_y, gmn_sptr);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct += 2;
+                } else if (type > 0xce) {
+                    set_4_neighbours_if_not_aquaductorresevoir(gmn_x, gmn_y, gmn_sptr, 2, 0xff);
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
                 }
+            } else if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x80) {
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct > 1 && (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct != 0xff) {
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct -= 1;
+                }
+            }
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) {
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind == 0x52)
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct += 1;
+                else if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind == 0x53)
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct += 1;
+                else
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+            }
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x02) {
+                if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind <= 0xc2)
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct += 1;
+                else
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
+            }
+            if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind < 8 && ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits & 0x80)) {
+                (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
             }
         }
     }
@@ -3131,6 +3132,8 @@ int put_rm_area(int x, int y, int footprint_size, unsigned char base_kind,
     }
     return 1;
 }
+
+char affected_by_cover1(unsigned char *, int, char);
 
 // Set terrain flags across a directionally anchored regional footprint.
 // FUNCTION: C2 0x6b08c
