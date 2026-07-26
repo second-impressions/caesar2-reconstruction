@@ -1827,67 +1827,71 @@ void get_reg_wall_elastic(void)
 // FUNCTION: C2WIN 0x004a4172
 void transform_reg_wall_elastic(int radius)
 {
-    int x_min;
-    int y_min;
-    int x_max;
-    int y_max;
-    int side;
-    int x_span;
-    int stride;
-    int place_state;
-    int base_kind;
-    int occupied_base_kind;
+    int min_x;
+    int min_y;
+    unsigned char val;
+    int skip;
+    int w;
+    int height;
+    int needs_bounds;
 
-    x_min = act_start_x - radius;
-    y_min = act_start_y - radius;
-    side  = 2 * radius + 1;
-    x_span = side;
-    x_max = x_min + side;
-    if (x_min <= 0)        { x_span = x_max; x_min = 0; }
-    else if (x_max > 60)   { x_span -= x_max - 60; }
-    y_max = side + y_min;
-    if (y_min <= 0)        { side = y_max; y_min = 0; }
-    else if (y_max >= 60)  { side -= y_max - 60; }
+    needs_bounds = 0;
+    min_x = act_start_x - radius;
+    min_y = act_start_y - radius;
+    height = 2 * radius + 1;
+    w = height;
+    if (min_x <= 0) {
+        w += min_x;
+        min_x = 0;
+        needs_bounds = 1;
+    } else if (min_x + w > 60) {
+        w -= min_x + w - 60;
+        needs_bounds = 1;
+    }
+    if (min_y <= 0) {
+        height += min_y;
+        min_y = 0;
+        needs_bounds = 1;
+    } else if (min_y + height >= 60) {
+        height -= min_y + height - 60;
+        needs_bounds = 1;
+    }
 
-    gmn_sptr = (x_min + y_min * 60) * 8;
-    stride   = (60 - x_span) * 8;
+    gmn_sptr = (min_x + min_y * 60) * 8;
+    skip = (60 - w) * 8;
 
-    gmn_y = y_min;
-    for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-        gmn_x = x_min;
-        for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 8) {
-            place_state = ((unsigned char *)region_map)[(gmn_sptr + 2)];
-            if (place_state == 0xff) continue;
-
-            if (((unsigned char *)region_map)[(gmn_sptr + 1)] & 0x02) {
-                base_kind = ((unsigned char *)region_map)[(gmn_sptr)];
-                if (base_kind < 0xbd) {
-                    if (!(((unsigned char *)region_map)[(gmn_sptr + 1)] & 0x20)) {
-                        set_4_rm_neighbours_if_not_wallortower(
-                            gmn_x, gmn_y, gmn_sptr, 2, 0xff);
-                        ((unsigned char *)region_map)[(gmn_sptr + 2)] = 0xff;
+    for (gmn_y = min_y; gmn_y < min_y + height; gmn_y++, gmn_sptr += skip) {
+        for (gmn_x = min_x; gmn_x < min_x + w; gmn_x++, gmn_sptr += 8) {
+            if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state == 0xff)
+                continue;
+            if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x02) {
+                val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+                if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind < 0xbd) {
+                    if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x20) == 0) {
+                        set_4_rm_neighbours_if_not_wallortower(gmn_x, gmn_y, gmn_sptr, 2, 0xff);
+                        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 0xff;
                     }
-                } else if (base_kind <= 0xc0) {
+                } else if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind <= 0xc0) {
                     if (gmn_x == act_start_x && gmn_y == act_start_y)
                         continue;
                     inc_elastic_by2(gmn_x, gmn_y, gmn_sptr);
-                    ((unsigned char *)region_map)[(gmn_sptr + 2)] += 2;
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state += 2;
                 }
-            } else if ((((unsigned char *)region_map)[(gmn_sptr + 1)] & 0x04)
-                       && place_state > 1 && place_state != 0xff) {
-                ((unsigned char *)region_map)[(gmn_sptr + 2)]--;
+            } else if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x04)
+                       && (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state > 1
+                       && (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state != 0xff) {
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state -= 1;
             }
 
-            if (((unsigned char *)region_map)[(gmn_sptr + 1)] & 0x20) {
-                occupied_base_kind = ((unsigned char *)region_map)[(gmn_sptr)];
-                if (occupied_base_kind == 0xa0) {
-                    ((unsigned char *)region_map)[(gmn_sptr + 2)]++;
-                } else if (occupied_base_kind == 0xa1) {
-                    ((unsigned char *)region_map)[(gmn_sptr + 2)]++;
-                } else if (((unsigned char *)region_map)[(gmn_sptr + 1)] & 0x02) {
-                    ((unsigned char *)region_map)[(gmn_sptr + 2)]++;
+            if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x20) {
+                if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind == 0xa0) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state += 1;
+                } else if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind == 0xa1) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state += 1;
+                } else if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x02) {
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state += 1;
                 } else {
-                    ((unsigned char *)region_map)[(gmn_sptr + 2)] = 0xff;
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 0xff;
                 }
             }
         }
