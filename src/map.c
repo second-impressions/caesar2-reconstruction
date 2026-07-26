@@ -20,7 +20,7 @@ void clear_reg_basic(int rm_offset);
 void plague_it(int sptr);
 void unflag_rm_area(int x, int y, int size, unsigned char mask_byte);
 void adjust_regions_coastline(int x, int y, int width, int height);
-void test_citymap_neighbours_posedge(char mask);
+void test_citymap_neighbours_posedge(unsigned char mask);
 #if PLATFORM_WINDOWS
 void test_citymap_neighbours_negedge();
 #else
@@ -3350,7 +3350,7 @@ void adjust_sailable_area(void)
 // Measure matching neighbours around the current city-map cell, treating map edges as occupied.
 // FUNCTION: C2 0x6b4f3
 // FUNCTION: C2WIN 0x004a85d6
-void test_citymap_neighbours_posedge(char mask)
+void test_citymap_neighbours_posedge(unsigned char mask)
 {
     int i;
 
@@ -3358,7 +3358,7 @@ void test_citymap_neighbours_posedge(char mask)
     gmn_ns_count = gmn_ew_count = gmn_nesw_count = gmn_nwse_count = 0;
     gmn_run = gmn_max_run = 0;
 
-    if (gmn_y == 0) { gmn[0] = 1; gmn_density = -1; }
+    if (gmn_y == 0) { gmn[0] = 1; gmn_density--; }
     else gmn[0] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).terrain & mask;
     if (gmn[0]) { gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
 
@@ -3390,17 +3390,9 @@ void test_citymap_neighbours_posedge(char mask)
     else gmn[7] = mask & (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW - CITY_CELL_BYTES))).terrain;
     if (gmn[7]) { gmn_count++; gmn_nwse_count++; }
 
-    gmn[8] = gmn[0];
-    gmn[9] = gmn[1];
-    gmn[10] = gmn[2];
-    gmn[11] = gmn[3];
-    gmn[12] = gmn[4];
-    gmn[13] = gmn[5];
-    gmn[14] = gmn[6];
-    gmn[15] = gmn[7];
+    gmn[8] = gmn[0]; gmn[9] = gmn[1]; gmn[10] = gmn[2]; gmn[11] = gmn[3]; gmn[12] = gmn[4]; gmn[13] = gmn[5]; gmn[14] = gmn[6]; gmn[15] = gmn[7];
     for (i = 0; i < 16; i++) {
-        if (gmn[i]) gmn_run++;
-        else gmn_run = 0;
+        if (gmn[i]) gmn_run++; else gmn_run = 0;
         if (gmn_run > gmn_max_run) gmn_max_run = gmn_run;
     }
 }
