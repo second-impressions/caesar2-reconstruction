@@ -235,44 +235,44 @@ void transform_road_elastic(int radius);
 // FUNCTION: C2WIN 0x0049febf
 void test_elastic_range(int radius, unsigned char reject_mask)
 {
-    int x_min;
-    int y_min;
+    int min_x;
+    int min_y;
     int needs_bounds;
-    int x_span;
-    int stride;
-    int side;
-    unsigned char neighbour_value;
+    int w;
+    int skip;
+    int height;
+    unsigned char val;
 
     needs_bounds = 0;
-    x_min = act_start_x - radius;
-    y_min = act_start_y - radius;
-    side = 2 * radius + 1;
-    x_span = side;
-    if (x_min <= 0) {
-        x_span += x_min;
-        x_min = 0;
+    min_x = act_start_x - radius;
+    min_y = act_start_y - radius;
+    height = 2 * radius + 1;
+    w = height;
+    if (min_x <= 0) {
+        w += min_x;
+        min_x = 0;
         needs_bounds = 1;
-    } else if (x_span + x_min > 0x50) {
-        x_span -= x_span + x_min - 0x50;
+    } else if (w + min_x > 0x50) {
+        w -= w + min_x - 0x50;
         needs_bounds = 1;
     }
-    if (y_min <= 0) {
-        side += y_min;
-        y_min = 0;
+    if (min_y <= 0) {
+        height += min_y;
+        min_y = 0;
         needs_bounds = 1;
-    } else if (side + y_min >= 0x50) {
-        side -= side + y_min - 0x50;
+    } else if (height + min_y >= 0x50) {
+        height -= height + min_y - 0x50;
         needs_bounds = 1;
     }
 
-    gmn_sptr = ((x_min) + (y_min) * 80) * 20;
-    stride = (0x50 - x_span) * 20;
+    gmn_sptr = ((min_x) + (min_y) * 80) * 20;
+    skip = (0x50 - w) * 20;
 
     if (!needs_bounds) {
-        gmn_y = y_min;
-        for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-            gmn_x = x_min;
-            for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 20) {
+        gmn_y = min_y;
+        for ( ; gmn_y < min_y + height; gmn_y++, gmn_sptr += skip) {
+            gmn_x = min_x;
+            for ( ; gmn_x < min_x + w; gmn_x++, gmn_sptr += 20) {
                 if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & reject_mask) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = 0xff;
                     continue;
@@ -287,32 +287,33 @@ void test_elastic_range(int radius, unsigned char reject_mask)
                 }
                 if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct != 0)
                     continue;
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).road_aqueduct;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
                     continue;
                 }
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).road_aqueduct;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
                     continue;
                 }
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).road_aqueduct;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
                     continue;
                 }
-                neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).road_aqueduct;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).road_aqueduct;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    continue;
                 }
             }
         }
     } else {
-        gmn_y = y_min;
-        for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-            gmn_x = x_min;
-            for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 20) {
+        gmn_y = min_y;
+        for ( ; gmn_y < min_y + height; gmn_y++, gmn_sptr += skip) {
+            gmn_x = min_x;
+            for ( ; gmn_x < min_x + w; gmn_x++, gmn_sptr += 20) {
                 if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct != 0)
                     continue;
                 if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & reject_mask) {
@@ -320,35 +321,36 @@ void test_elastic_range(int radius, unsigned char reject_mask)
                     continue;
                 }
                 if (gmn_y > 0)
-                    neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).road_aqueduct;
+                    val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).road_aqueduct;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                    val = 0;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
                     continue;
                 }
                 if (gmn_x < 0x4f)
-                    neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).road_aqueduct;
+                    val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).road_aqueduct;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                    val = 0;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
                     continue;
                 }
                 if (gmn_y < 0x4f)
-                    neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).road_aqueduct;
+                    val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).road_aqueduct;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                    val = 0;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
                     continue;
                 }
                 if (gmn_x > 0)
-                    neighbour_value = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).road_aqueduct;
+                    val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).road_aqueduct;
                 else
-                    neighbour_value = 0;
-                if (neighbour_value != 0 && neighbour_value < radius + 1) {
+                    val = 0;
+                if (val != 0 && val < radius + 1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    continue;
                 }
             }
         }
