@@ -4031,40 +4031,36 @@ void set_rm_range(int x, int y, int half_width, unsigned char field_offset,
 // FUNCTION: C2WIN 0x004ab48d
 void flag_range(int extra, int x, int y, int range, unsigned char field_off, unsigned char mask)
 {
-    int width;
+    int w;
     int height;
-    int xend;
-    int yend;
-    int row_stride;
-    unsigned char fo;
+    int skip;
 
-    fo = field_off;
     x -= range;
     y -= range;
-    width = height = 2 * range + 1;
-    if (extra != 0)
-        height = width = height + extra;
-
-    xend = width + x;
-    if (x < 0) {
-        width = xend;
-        x = 0;
-    } else if (xend > 80) {
-        width -= xend - 80;
+    w = height = 2 * range + 1;
+    if (extra != 0) {
+        w += extra;
+        height += extra;
     }
-    yend = height + y;
+
+    if (x < 0) {
+        w += x;
+        x = 0;
+    } else if (x + w > 80) {
+        w -= x + w - 80;
+    }
     if (y < 0) {
-        height = yend;
+        height += y;
         y = 0;
-    } else if (yend > 80) {
-        height -= yend - 80;
+    } else if (y + height > 80) {
+        height -= y + height - 80;
     }
 
     gmn_sptr   = ((x) + (y) * 80) * 20;
-    row_stride = (80 - width) * 20;
-    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += row_stride) {
-        for (gmn_x = x; gmn_x < x + width; gmn_x++, gmn_sptr += 20) {
-            ((unsigned char *)city_map)[gmn_sptr + fo] |= mask;
+    skip = (80 - w) * 20;
+    for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += skip) {
+        for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 20) {
+            ((unsigned char *)city_map)[gmn_sptr + field_off] |= mask;
         }
     }
 }
