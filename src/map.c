@@ -3930,10 +3930,8 @@ void unflag_all_rm(char field_off, int mask)
 void unflag_all_rm_xwarehouse(void)
 {
     cm_sptr = 0;
-    gmn_y = 0;
-    do {
-        gmn_x = 0;
-        do {
+    for (gmn_y = 0; gmn_y < 60; gmn_y++) {
+        for (gmn_x = 0; gmn_x < 15; gmn_x++, cm_sptr += 0x20) {
             if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind != 0xd4)
                 (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits &= 0x3f;
             if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr + 8))).base_kind != 0xd4)
@@ -3942,11 +3940,8 @@ void unflag_all_rm_xwarehouse(void)
                 (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr + 16))).edge_bits &= 0x3f;
             if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr + 24))).base_kind != 0xd4)
                 (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr + 24))).edge_bits &= 0x3f;
-            gmn_x++;
-            cm_sptr += 0x20;
-        } while (gmn_x < 15);
-        gmn_y++;
-    } while (gmn_y < 60);
+        }
+    }
 }
 
 void set_4_neighbours(int x, int y, int sptr, unsigned char field_off,
