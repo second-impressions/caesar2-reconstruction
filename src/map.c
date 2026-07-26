@@ -3330,7 +3330,7 @@ void adjust_regions_coastline(int x, int y, int width, int height)
 void adjust_sailable_area(void)
 {
     unsigned char tile;
-    unsigned char coast;
+    unsigned char sea;
 
     gmn_y = 0;
     gmn_sptr = 0;
@@ -3338,11 +3338,10 @@ void adjust_sailable_area(void)
     for (gmn_x = 0; gmn_x < 0x3c; gmn_x++, gmn_sptr += 8) {
     if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 8) != 0) {
         tile = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
-        if (tile < 0x7c) {
-            coast = sailable_sea[tile - SAILABLE_SEA_FIRST_TILE];
-            if (coast != 0)
-                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain &= 0xef;
-        }
+        if (tile >= 0x7c) continue;
+        sea = sailable_sea[tile - SAILABLE_SEA_FIRST_TILE];
+        if (sea != 0)
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain &= 0xef;
     }
     }
     }
