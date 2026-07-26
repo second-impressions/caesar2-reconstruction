@@ -820,6 +820,19 @@ finish:
     }
 }
 
+void get_reg_road_elastic(void);
+void build_reg_road_from_elastic(void);
+void get_reg_wall_elastic(void);
+void build_reg_wall_from_elastic(void);
+void garden_an_area(int, int, int, int);
+void plaza_an_area(int, int, int, int);
+void clear_an_area(int, int, int, int);
+void clear_a_reg_area(int, int, int, int, int);
+void destroy_reg_atom(int);
+void destroy_an_atom(int, int);
+void spread_fire_atom(int, int);
+void spread_plague_atom(int, int);
+
 // Recompute road sprites in the clamped 3x3 neighbourhood around (x,y).
 // FUNCTION: C2 0x67109
 // FUNCTION: C2WIN 0x004a1612
@@ -836,8 +849,8 @@ int road_ramifications(int x, int y)
     x_max_bound = (x == 79) ? 79 : x + 1;
     y_max_bound = (y == 79) ? 79 : y + 1;
 
-    for (gmn_y = y_min_bound; y_max_bound >= gmn_y; gmn_y++) {
-        for (gmn_x = x_min_bound; x_max_bound >= gmn_x; gmn_x++) {
+    for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
+        for (gmn_x = x_min_bound; gmn_x <= x_max_bound; gmn_x++) {
             gmn_sptr = ((gmn_x) + (gmn_y) * 80) * 20;
             if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x20) != 0) {
                 if (((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 8) != 0) continue;
