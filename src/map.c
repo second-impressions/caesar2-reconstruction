@@ -1986,23 +1986,23 @@ void build_reg_wall_from_elastic(void)
 // FUNCTION: C2WIN 0x004a4841
 int reg_wall_ramifications(int x, int y)
 {
-    int x_min;
-    int y_min;
-    int x_max;
-    int y_max;
+    int x_min_bound;
+    int y_min_bound;
+    int x_max_bound;
+    int y_max_bound;
 
-    if (x == 0) x_min = 0; else x_min = x - 1;
-    if (y == 0) y_min = 0; else y_min = y - 1;
-    if (x == 59) x_max = x; else x_max = x + 1;
-    if (y == 59) y_max = y; else y_max = y + 1;
+    if (x == 0) x_min_bound = 0; else x_min_bound = x - 1;
+    if (y == 0) y_min_bound = 0; else y_min_bound = y - 1;
+    if (x == 59) x_max_bound = 59; else x_max_bound = x + 1;
+    if (y == 59) y_max_bound = 59; else y_max_bound = y + 1;
 
     gmn_x = x;
     gmn_y = y;
     if (one_reg_wall_ramification() == 0)
         return 0;
 
-    for (gmn_y = y_min; y_max >= gmn_y; gmn_y++) {
-        for (gmn_x = x_min; x_max >= gmn_x; gmn_x++) {
+    for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
+        for (gmn_x = x_min_bound; x_max_bound >= gmn_x; gmn_x++) {
             if (one_reg_wall_ramification() == 0)
                 return 0;
         }
