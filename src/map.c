@@ -2281,17 +2281,23 @@ void clear_a_reg_area(int x1, int y1, int x2, int y2, int keep_fortress)
 // FUNCTION: C2WIN 0x004a564b
 void destroy_reg_atom(int sptr)
 {
-    int cell = sptr / 8;
+    int random_backup;
+    int size;
+    int x;
     int y;
-    int x = cell % 60;
-    int saved_random;
-    unsigned char kind;
-    y = cell / 60;
-    saved_random = stone_random_count;
-    kind = (*(struct region_cell *)((unsigned char *)region_map + (sptr))).base_kind;
 
-    if (!((kind >= 0x20 && kind < 0x7c) ||
-          (kind >= 0x92 && kind <= 0x9b))) {
+    {
+        int cell;
+        unsigned char kind;
+
+        cell = sptr / 8;
+        x = cell % 60;
+        y = cell / 60;
+        random_backup = stone_random_count;
+        kind = (*(struct region_cell *)((unsigned char *)region_map + (sptr))).base_kind;
+
+        if (kind >= 0x20 && kind < 0x7c) goto restore_random;
+        if (kind >= 0x92 && kind <= 0x9b) goto restore_random;
         if (kind >= 0xd5 && kind <= 0xeb) {
             clear_sized_to_reg_basic(sptr, 2);
         } else if (kind >= 0xec && kind <= 0xef) {
@@ -2302,7 +2308,8 @@ void destroy_reg_atom(int sptr)
             clear_reg_basic(sptr);
         }
     }
-    stone_random_count = (signed char)saved_random;
+restore_random:
+    stone_random_count = (signed char)random_backup;
     particles_cleared = 0;
 }
 
