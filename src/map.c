@@ -730,11 +730,7 @@ void build_road_from_elastic(void)
     while (total > 0) {
         total--;
         if ((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 0x02) {
-#if PLATFORM_WINDOWS
             (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain &= 0xfd;
-#else
-            (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain &= 0xf9;
-#endif
             (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain |= 0x04;
         }
         if (!((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 0x20)) particles_built++;
