@@ -2939,33 +2939,29 @@ int put_x4_area(int x, int y, char base_kind, int edge_bits, int color)
 // FUNCTION: C2WIN 0x004a7455
 void change_sized(int base_kind, int gfx_base_idx, int footprint_size, int cell_offset)
 {
-    int xi;
-    int yi;
-    int footprint_idx;
-    int row_step = (80 - footprint_size) * 20;
+    int x;
+    int i;
+    int y;
+    int rowadd;
 
-    for (yi = 0, footprint_idx = 0; yi < footprint_size; ) {
-        for (xi = 0; xi < footprint_size; ) {
+    rowadd = (80 - footprint_size) * 20;
+    for (y = 0, i = 0; y < footprint_size; y++, cell_offset += rowadd) {
+        for (x = 0; x < footprint_size; x++, cell_offset += 20, i++) {
             (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).base_kind = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).edge_bits |= 1;
             if (footprint_size == 1) {
                 (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).extra_edge = gfx_base_idx;
             } else if (footprint_size == 2) {
                 (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).extra_edge =
-                    gfx_base_idx + diamond_ofsets_2x[footprint_idx];
+                    gfx_base_idx + diamond_ofsets_2x[i];
             } else if (footprint_size == 3) {
                 (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).extra_edge =
-                    gfx_base_idx + diamond_ofsets_3x[footprint_idx];
+                    gfx_base_idx + diamond_ofsets_3x[i];
             } else if (footprint_size == 4) {
                 (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).extra_edge =
-                    gfx_base_idx + diamond_ofsets_4x[footprint_idx];
+                    gfx_base_idx + diamond_ofsets_4x[i];
             }
-            xi++;
-            cell_offset += 20;
-            footprint_idx++;
         }
-        yi++;
-        cell_offset += row_step;
     }
 }
 
