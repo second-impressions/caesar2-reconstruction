@@ -558,20 +558,20 @@ int pump(unsigned char *source_ptr, unsigned char *dest_ptr, int source_size)
 // The input header stores compressed and uncompressed sizes.
 // FUNCTION: C2 0x702df
 // FUNCTION: C2WIN 0x0043cc5b
-int evacuate(unsigned char *source_ptr, unsigned char *dest_ptr)
+int evacuate(unsigned char *src, unsigned char *dst)
 {
-    short c;
-    short r;
-    short k;
     short i;
     short j;
-    int length;
+    short k;
+    short r;
+    short c;
     unsigned int count;
+    int length;
 
     /* Header: byte 4..7 = uncompressed length. */
-    my_strcpy((char *)(source_ptr + 4), (char *)&length, 4);
-    pmp_inbuff  = source_ptr;
-    pmp_outbuff = dest_ptr;
+    my_strcpy((char *)(src + 4), (char *)&length, 4);
+    pmp_inbuff  = src;
+    pmp_outbuff = dst;
     pmp_iptr    = 8;
     pmp_optr    = 0;
 
