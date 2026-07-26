@@ -31,7 +31,7 @@ void test_type_citymap_neighbours_negedge(unsigned char type);
 #if PLATFORM_WINDOWS
 void test_regionmap_neighbours_posedge();
 #else
-void test_regionmap_neighbours_posedge(char mask);
+void test_regionmap_neighbours_posedge(unsigned char mask);
 #endif
 void flag_range3(int, int, int, int, int, unsigned char, unsigned char, unsigned char);
 void test_regionmap_neighbours_negedge(char mask);
@@ -3566,7 +3566,7 @@ void test_type_citymap_neighbours_negedge(unsigned char type)
 // Measure matching neighbours around the current region cell, treating map edges as occupied.
 // FUNCTION: C2 0x6c22e
 // FUNCTION: C2WIN 0x004a96d6
-void test_regionmap_neighbours_posedge(char mask)
+void test_regionmap_neighbours_posedge(unsigned char mask)
 {
     int i;
 
@@ -3574,7 +3574,7 @@ void test_regionmap_neighbours_posedge(char mask)
     gmn_ns_count = gmn_ew_count = gmn_nesw_count = gmn_nwse_count = 0;
     gmn_run = gmn_max_run = 0;
 
-    if (gmn_y == 0) { gmn[0] = 1; gmn_density = -1; }
+    if (gmn_y == 0) { gmn[0] = 1; gmn_density--; }
     else gmn[0] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).terrain & mask;
     if (gmn[0]) { gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
 
@@ -3606,17 +3606,9 @@ void test_regionmap_neighbours_posedge(char mask)
     else gmn[7] = mask & (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 488))).terrain;
     if (gmn[7]) { gmn_count++; gmn_nwse_count++; }
 
-    gmn[8] = gmn[0];
-    gmn[9] = gmn[1];
-    gmn[10] = gmn[2];
-    gmn[11] = gmn[3];
-    gmn[12] = gmn[4];
-    gmn[13] = gmn[5];
-    gmn[14] = gmn[6];
-    gmn[15] = gmn[7];
+    gmn[8] = gmn[0]; gmn[9] = gmn[1]; gmn[10] = gmn[2]; gmn[11] = gmn[3]; gmn[12] = gmn[4]; gmn[13] = gmn[5]; gmn[14] = gmn[6]; gmn[15] = gmn[7];
     for (i = 0; i < 16; i++) {
-        if (gmn[i]) gmn_run++;
-        else gmn_run = 0;
+        if (gmn[i]) gmn_run++; else gmn_run = 0;
         if (gmn_run > gmn_max_run) gmn_max_run = gmn_run;
     }
 }
