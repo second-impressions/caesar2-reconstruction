@@ -3864,11 +3864,10 @@ void clear_all_bm(char layer)
     cm_sptr = 0;
     for (gmn_y = 0; gmn_y < 52; gmn_y++) {
         for (gmn_x = 0; gmn_x < 13; gmn_x++, cm_sptr += 0x10) {
-            int idx = cm_sptr + (unsigned char)layer;
-            (*(struct battle_cell *)((unsigned char *)battle_map + (idx))).terrain = 0;
-            (*(struct battle_cell *)((unsigned char *)battle_map + (idx + 0x4))).terrain = 0;
-            (*(struct battle_cell *)((unsigned char *)battle_map + (idx + 0x8))).terrain = 0;
-            (*(struct battle_cell *)((unsigned char *)battle_map + (idx + 0xc))).terrain = 0;
+            ((unsigned char *)battle_map)[cm_sptr + (unsigned char)layer + 0x00] = 0;
+            ((unsigned char *)battle_map)[cm_sptr + (unsigned char)layer + 0x04] = 0;
+            ((unsigned char *)battle_map)[cm_sptr + (unsigned char)layer + 0x08] = 0;
+            ((unsigned char *)battle_map)[cm_sptr + (unsigned char)layer + 0x0c] = 0;
         }
     }
 }
