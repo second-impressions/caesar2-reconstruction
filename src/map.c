@@ -2457,40 +2457,38 @@ void plague_sized(int sptr, int size)
 // FUNCTION: C2WIN 0x004a5c9a
 void clear_sized_to_rubble(int sptr, int size, int rubble_kind)
 {
-    int footprint_idx;
-    int yoff;
-    int xoff;
-    unsigned char old_kind;
-    int start_sptr;
     int x;
+    unsigned char kind;
     int y;
+    int start_sptr;
 
-    footprint_idx = CM_CELL(sptr).activity_a & 0xf;
-    old_kind = CM_CELL(sptr).base_kind;
-    xoff = footprint_idx % size; yoff = footprint_idx / size;
+    y = CM_CELL(sptr).activity_a & 0xf;
+    x = y;
+    kind = CM_CELL(sptr).base_kind;
+    x %= size; y /= size;
 
-    sptr -= xoff * 20;
-    sptr -= yoff * 1600;
+    sptr -= x * 20;
+    sptr -= y * 1600;
     start_sptr = sptr;
 
-    for (y = 0; y < size; y++, sptr += (80 - size) * 20)
-        for (x = 0; x < size; x++, sptr += 20)
+    for (x = 0; x < size; x++, sptr += (80 - size) * 20)
+        for (y = 0; y < size; y++, sptr += 20)
             clear_to_rubble(sptr, rubble_kind);
 
-    if (old_kind < 0xe9) return;
-    if (old_kind > 0xf0) return;
+    if (kind < 0xe9) return;
+    if (kind > 0xf0) return;
 
     sptr = start_sptr;
-    if (old_kind == 0xe9) { if (CM_CELL(sptr + 0x12c0).base_kind == 0xea) sptr += 0x12c0; else sptr -= 0x12c0; }
-    if (old_kind == 0xea) { if (CM_CELL(sptr - 0x12c0).base_kind == 0xe9) sptr -= 0x12c0; else sptr += 0x12c0; }
-    if (old_kind == 0xeb) { if (CM_CELL(sptr + 0x3c).base_kind == 0xec) sptr += 0x3c; else sptr -= 0x3c; }
-    if (old_kind == 0xec) { if (CM_CELL(sptr - 0x3c).base_kind == 0xeb) sptr -= 0x3c; else sptr += 0x3c; }
-    if (old_kind == 0xed) { if (CM_CELL(sptr + 0x1900).base_kind == 0xee) sptr += 0x1900; else sptr -= 0x1900; }
-    if (old_kind == 0xee) { if (CM_CELL(sptr - 0x1900).base_kind == 0xed) sptr -= 0x1900; else sptr += 0x1900; }
-    if (old_kind == 0xef) { if (CM_CELL(sptr + 0x50).base_kind == 0xf0) sptr += 0x50; else sptr -= 0x50; }
-    if (old_kind == 0xf0) { if (CM_CELL(sptr - 0x50).base_kind == 0xef) sptr -= 0x50; else sptr += 0x50; }
-    for (y = 0; y < size; y++, sptr += (80 - size) * 20)
-        for (x = 0; x < size; x++, sptr += 20)
+    if (kind == 0xe9) { if (CM_CELL(sptr + 0x12c0).base_kind == 0xea) sptr += 0x12c0; else sptr -= 0x12c0; }
+    if (kind == 0xea) { if (CM_CELL(sptr - 0x12c0).base_kind == 0xe9) sptr -= 0x12c0; else sptr += 0x12c0; }
+    if (kind == 0xeb) { if (CM_CELL(sptr + 0x3c).base_kind == 0xec) sptr += 0x3c; else sptr -= 0x3c; }
+    if (kind == 0xec) { if (CM_CELL(sptr - 0x3c).base_kind == 0xeb) sptr -= 0x3c; else sptr += 0x3c; }
+    if (kind == 0xed) { if (CM_CELL(sptr + 0x1900).base_kind == 0xee) sptr += 0x1900; else sptr -= 0x1900; }
+    if (kind == 0xee) { if (CM_CELL(sptr - 0x1900).base_kind == 0xed) sptr -= 0x1900; else sptr += 0x1900; }
+    if (kind == 0xef) { if (CM_CELL(sptr + 0x50).base_kind == 0xf0) sptr += 0x50; else sptr -= 0x50; }
+    if (kind == 0xf0) { if (CM_CELL(sptr - 0x50).base_kind == 0xef) sptr -= 0x50; else sptr += 0x50; }
+    for (x = 0; x < size; x++, sptr += (80 - size) * 20)
+        for (y = 0; y < size; y++, sptr += 20)
             clear_to_rubble(sptr, rubble_kind);
 
     if (had_clear_sound == 0 || mouse_left_button == 0) {
