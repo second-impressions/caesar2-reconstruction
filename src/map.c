@@ -4750,6 +4750,8 @@ char affected_by_cover2(unsigned char *p, int range, unsigned char mask)
     return 0;
 }
 
+int get_range3(unsigned char *start, int range, unsigned char mask);
+
 // Return the highest masked service-range value in a city building footprint.
 // FUNCTION: C2 0x6e47b
 // FUNCTION: C2WIN 0x004ace18
