@@ -3311,6 +3311,14 @@ void check_region_map_for_port_square(int x, int y)
     illegal_build = 1;
 }
 
+void adjust_regions_coastline(int x, int y, int width, int height);
+void test_citymap_neighbours_posedge(unsigned char mask);
+void test_type_citymap_neighbours_posedge(unsigned char type);
+void test_type_citymap_neighbours_negedge(unsigned char type);
+void test_regionmap_neighbours_negedge(unsigned char mask);
+void test_type_regionmap_neighbours_posedge(unsigned char type);
+void test_type_regionmap_neighbours_negedge(unsigned char type);
+
 // Rebuild coastline tiles and navigation flags in a regional rectangle.
 // FUNCTION: C2 0x6b347
 // FUNCTION: C2WIN 0x004a8311
