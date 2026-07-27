@@ -4964,8 +4964,27 @@ void set_route_elastic(void)
 // Expand the regional army route search by one range band.
 // FUNCTION: C2 0x6ea84
 // FUNCTION: C2WIN 0x004ad6ec
-void set_route_elastic_range(int r)
+void set_route_elastic_range(int radius)
 {
+#if PLATFORM_DOS
+    int x_count;
+    int min_y;
+    unsigned char nw;
+    unsigned char smallest;
+    unsigned char n_sw_val;
+    unsigned char prior_v;
+    unsigned char n_w_value;
+    int row;
+    unsigned char next_e;
+    unsigned char cell_value;
+    unsigned char north_neighbor;
+    unsigned char next_ne;
+    unsigned char cell_step;
+    unsigned char n_se_val;
+    int extent;
+    int min_x;
+    unsigned char next_south;
+#else
     unsigned char north_neighbor;
     int extent;
     unsigned char next_south;
@@ -4983,13 +5002,14 @@ void set_route_elastic_range(int r)
     int min_y;
     int min_x;
     unsigned char n_sw_val;
+#endif
 
     gmn_sptr = ((over_x) + (over_y) * 60) * 8;
     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 1;
 
-    min_x = over_x - r;
-    min_y = over_y - r;
-    extent = 2 * r + 1;
+    min_x = over_x - radius;
+    min_y = over_y - radius;
+    extent = 2 * radius + 1;
     x_count = extent;
     if (min_x <= 0) {
         x_count += min_x;
@@ -5070,10 +5090,25 @@ void set_route_elastic_range(int r)
                 smallest = n_sw_val;
             if (nw != 0 && nw != 0xff && nw < smallest)
                 smallest = nw;
+#if PLATFORM_DOS
+            {
+                int value;
+
+                value = smallest;
+                if (cell_step + value < prior_v) {
+                    n_sw_val = smallest + cell_step;
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = n_sw_val;
+                } else if (prior_v == 0 && smallest != 0) {
+                    n_sw_val = smallest + cell_step;
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = n_sw_val;
+                }
+            }
+#else
             if (smallest + cell_step < prior_v)
                 (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(smallest + cell_step);
             else if (prior_v == 0 && smallest != 0)
                 (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(smallest + cell_step);
+#endif
         }
     }
 }
