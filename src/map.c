@@ -4703,10 +4703,10 @@ int get_range1(unsigned char *start, int range, unsigned char mask)
 // FUNCTION: C2WIN 0x004aced1
 int get_range3(unsigned char *start, int range, unsigned char mask)
 {
-    int best;
+    int range_value;
     int row;
     int col;
-    int range_value;
+    int best;
 
     if (range == 1)
         return start[12] & mask;
