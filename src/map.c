@@ -4061,6 +4061,14 @@ void set_range(int x, int y, int range, unsigned char field_off, unsigned char v
     }
 }
 
+void flag_range(int extra, int x, int y, int range, unsigned char field_off,
+                unsigned char mask);
+void flag_range3(int extra, int x, int y, int range, int unused_field_off,
+                 unsigned char threshold, unsigned char query_mask,
+                 unsigned char clear_mask);
+int put_city_flag(int val);
+void clear_city_flag(int val);
+
 // Set a data field throughout a clipped square of the region map.
 // FUNCTION: C2 0x6d3ed
 // FUNCTION: C2WIN 0x004ab344
