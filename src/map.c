@@ -219,7 +219,7 @@ void flesh_river_atoms(void)
             if ((*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).terrain & 0x10) {
                 test_citymap_neighbours_posedge(0x10);
                 terrain = (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind;
-                match = (unsigned char)choose_from(river_data, 6);
+                match = choose_from(river_data, 6);
 
                 if (match != 0) {
                     if (choice_info != terrain) {
@@ -2106,9 +2106,9 @@ void garden_an_area(int x1, int y1, int x2, int y2)
             stone_random_count++; if (stone_random_count >= 0x40) stone_random_count = 0;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a) particles_cleared++;
             particles_built++;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind = (unsigned char)((stone_random_data[stone_random_count] >> 2) + 0x78);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind = (stone_random_data[stone_random_count] >> 2) + 0x78;
             clear_basic(cm_sptr);
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge = (unsigned char)((stone_random_data[stone_random_count] >> 2) + 0x77);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge = (stone_random_data[stone_random_count] >> 2) + 0x77;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits &= 0xe3;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits |= 4;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a = 0;
@@ -2626,11 +2626,11 @@ void build_an_area(int x1, int y1, int x2, int y2, char base_kind,
 void clear_reg_basic(int rm_offset)
 {
     if ((*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).terrain & 0x40) {
-        (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).base_kind = (char)((stone_random_data[stone_random_count]) / 4 + 0x18);
+        (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).base_kind = (stone_random_data[stone_random_count]) / 4 + 0x18;
     } else if ((*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).terrain & 0x80) {
-        (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).base_kind = (char)((stone_random_data[stone_random_count]) / 4 + 0x1c);
+        (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).base_kind = (stone_random_data[stone_random_count]) / 4 + 0x1c;
     } else {
-        (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).base_kind = (char)((stone_random_data[stone_random_count]) / 4 + 0x10);
+        (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).base_kind = (stone_random_data[stone_random_count]) / 4 + 0x10;
     }
     if ((*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).terrain & 1) {
         (*(struct region_cell *)((unsigned char *)region_map + (rm_offset))).occupant = 0;
@@ -2734,9 +2734,9 @@ int put_x1_area(int x, int y, char base_kind, int edge_bits, int color)
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits |= 1;
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind = base_kind;
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain |= placing_flags;
-    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).extra_edge = (char)color;
+    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).extra_edge = color;
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0xe3;
-    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits |= (char)edge_bits;
+    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits |= edge_bits;
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a = 0;
     return 1;
 }
@@ -2806,9 +2806,9 @@ int put_x2_area(int x, int y, char base_kind, int edge_bits, int color)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind        = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain    |= placing_flags;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = (char)(color + diamond_ofsets_2x[i]);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = color + diamond_ofsets_2x[i];
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  &= 0xe3;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  |= (char)edge_bits;
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  |= edge_bits;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a  = i;
             if (map_direction == 2 || map_direction == 4)
                 (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_b = 0x20;
@@ -2883,9 +2883,9 @@ int put_x3_area(int x, int y, char base_kind, int edge_bits, int color)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind        = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain    |= placing_flags;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = (char)(color + diamond_ofsets_3x[i]);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = color + diamond_ofsets_3x[i];
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  &= 0xe3;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  |= (char)edge_bits;
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  |= edge_bits;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a  = i;
             if (map_direction == 2 || map_direction == 4)
                 (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_b = 0x20;
@@ -2960,9 +2960,9 @@ int put_x4_area(int x, int y, char base_kind, int edge_bits, int color)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind        = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain    |= placing_flags;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = (char)(color + diamond_ofsets_4x[i]);
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).extra_edge  = color + diamond_ofsets_4x[i];
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  &= 0xe3;
-            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  |= (char)edge_bits;
+            (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits  |= edge_bits;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a  = i;
             if (map_direction == 2 || map_direction == 4)
                 (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_b = 0x20;
@@ -3056,11 +3056,11 @@ int put_reg_x1_area(int x, int y, unsigned char base_kind, int edge_bits,
     particles_built++;
     if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind < 0x10) particles_cleared++;
     (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits |= 1;
-    (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind = (unsigned char)base_kind;
+    (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind = base_kind;
     (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain |= reg_placing_flags;
-    (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx = (unsigned char)color;
+    (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx = color;
     (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits &= 0xe3;
-    (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits |= (unsigned char)edge_bits;
+    (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits |= edge_bits;
     (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits &= 0xbf;
     (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant = 0;
     return 1;
@@ -3111,13 +3111,13 @@ int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
     for (y_pos = y, i = 0; y_pos < y + 2; y_pos++, cm_sptr += offset) {
         for (x_pos = x; x_pos < x + 2; x_pos++, cm_sptr += 8, i++) {
             if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind < 0x10) particles_cleared++;
-            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind = (unsigned char)base_kind;
+            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind = base_kind;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain |= reg_placing_flags;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx = color + diamond_ofsets_2x[i];
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits &= 0xe3;
-            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits |= (unsigned char)edge_bits;
+            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits |= edge_bits;
             (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits &= 0xbf;
-            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant = (unsigned char)i;
+            (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant = i;
         }
     }
     particles_built++;
@@ -4285,13 +4285,13 @@ void set_4_rm_neighbours_if_not_wallortower(int x, int y, int sptr,
                                             unsigned char field_off, unsigned char value)
 {
     if (x > 0 && (((*(struct region_cell *)((unsigned char *)region_map + (sptr - 8))).terrain & 6) == 0))
-        ((unsigned char *)region_map)[(sptr - 8 + field_off)] = (unsigned char)value;
+        ((unsigned char *)region_map)[(sptr - 8 + field_off)] = value;
     if (x < 59 && (((*(struct region_cell *)((unsigned char *)region_map + (sptr + 8))).terrain & 6) == 0))
-        ((unsigned char *)region_map)[(sptr + 8 + field_off)] = (unsigned char)value;
+        ((unsigned char *)region_map)[(sptr + 8 + field_off)] = value;
     if (y > 0 && (((*(struct region_cell *)((unsigned char *)region_map + (sptr - 480))).terrain & 6) == 0))
-        ((unsigned char *)region_map)[(sptr - 480 + field_off)] = (unsigned char)value;
+        ((unsigned char *)region_map)[(sptr - 480 + field_off)] = value;
     if (y < 59 && (((*(struct region_cell *)((unsigned char *)region_map + (sptr + 480))).terrain & 6) == 0))
-        ((unsigned char *)region_map)[(sptr + 480 + field_off)] = (unsigned char)value;
+        ((unsigned char *)region_map)[(sptr + 480 + field_off)] = value;
 }
 
 // Set a data field on cardinal region neighbours that are not aqueducts or reservoirs.
@@ -5191,9 +5191,9 @@ void set_route_elastic_range(int radius)
             }
 #else
             if (smallest + cell_step < prior_v)
-                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(smallest + cell_step);
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = smallest + cell_step;
             else if (prior_v == 0 && smallest != 0)
-                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(smallest + cell_step);
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = smallest + cell_step;
 #endif
         }
     }
