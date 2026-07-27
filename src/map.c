@@ -4063,7 +4063,7 @@ void set_range(int x, int y, int range, unsigned char field_off, unsigned char v
 
 void flag_range(int extra, int x, int y, int range, unsigned char field_off,
                 unsigned char mask);
-void flag_range3(int extra, int x, int y, int range, int unused_field_off,
+void flag_range3(int extra, int x, int y, int range, int field_no,
                  unsigned char threshold, unsigned char query_mask,
                  unsigned char clear_mask);
 int put_city_flag(int val);
@@ -4150,7 +4150,7 @@ void flag_range(int extra, int x, int y, int range, unsigned char field_off, uns
 // Raise an entertainment coverage band throughout a clipped city-map square.
 // FUNCTION: C2 0x6d5aa
 // FUNCTION: C2WIN 0x004ab603
-void flag_range3(int extra, int x, int y, int range, int unused_field_off,
+void flag_range3(int extra, int x, int y, int range, int field_no,
                  unsigned char threshold, unsigned char query_mask,
                  unsigned char clear_mask)
 {
