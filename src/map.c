@@ -299,22 +299,22 @@ void test_elastic_range(int radius, unsigned char reject_mask)
                     continue;
                 val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).road_aqueduct;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
                 val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).road_aqueduct;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
                 val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).road_aqueduct;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
                 val = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).road_aqueduct;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
             }
@@ -335,7 +335,7 @@ void test_elastic_range(int radius, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
                 if (gmn_x < 0x4f)
@@ -343,7 +343,7 @@ void test_elastic_range(int radius, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
                 if (gmn_y < 0x4f)
@@ -351,7 +351,7 @@ void test_elastic_range(int radius, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
                 if (gmn_x > 0)
@@ -359,7 +359,7 @@ void test_elastic_range(int radius, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < radius + 1) {
-                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = (unsigned char)(radius + 1);
+                    (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).road_aqueduct = radius + 1;
                     continue;
                 }
             }
@@ -480,22 +480,22 @@ void test_rm_elastic_range(int strict, int r, unsigned char reject_mask)
                     continue;
                 val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).place_state;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
                 val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).place_state;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
                 val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).place_state;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
                 val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).place_state;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
             }
@@ -516,7 +516,7 @@ void test_rm_elastic_range(int strict, int r, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
                 if (gmn_x < 0x3b)
@@ -524,7 +524,7 @@ void test_rm_elastic_range(int strict, int r, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
                 if (gmn_y < 0x3b)
@@ -532,7 +532,7 @@ void test_rm_elastic_range(int strict, int r, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
                 if (gmn_x > 0)
@@ -540,7 +540,7 @@ void test_rm_elastic_range(int strict, int r, unsigned char reject_mask)
                 else
                     val = 0;
                 if (val != 0 && val < r + 1) {
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(r + 1);
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = r + 1;
                     continue;
                 }
             }
