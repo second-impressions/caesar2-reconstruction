@@ -1830,11 +1830,11 @@ void get_reg_wall_elastic(void)
 void transform_reg_wall_elastic(int radius)
 {
     int min_x;
+    int w;
+    int height;
     int min_y;
     unsigned char val;
     int skip;
-    int w;
-    int height;
     int needs_bounds;
 
     needs_bounds = 0;
