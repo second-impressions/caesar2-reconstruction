@@ -1571,7 +1571,7 @@ void get_reg_road_elastic(void)
 }
 
 void set_ns_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value);
-void set_ew_polar(int, int, int, unsigned char, unsigned char);
+void set_ew_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value);
 unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size);
 void clear_danger_flag(void);
 
@@ -2003,8 +2003,10 @@ int reg_wall_ramifications(int x, int y)
     if (one_reg_wall_ramification() == 0)
         return 0;
 
-    for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
-        for (gmn_x = x_min_bound; gmn_x <= x_max_bound; gmn_x++) {
+    gmn_y = y_min_bound;
+    for ( ; gmn_y <= y_max_bound; gmn_y++) {
+        gmn_x = x_min_bound;
+        for ( ; gmn_x <= x_max_bound; gmn_x++) {
             if (one_reg_wall_ramification() == 0)
                 return 0;
         }
