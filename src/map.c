@@ -2466,6 +2466,12 @@ void plague_sized(int sptr, int size)
             plague_it(sptr);
 }
 
+void clear_sized_to_rubble(int sptr, int size, int rubble_kind);
+void clear_to_rubble(int sptr, int rubble_kind);
+void clear_to_empty(int sptr);
+void clear_basic(int sptr);
+void clear_sized_to_reg_basic(int rm_offset, int size);
+
 // Reduce an entire building footprint, including linked gatehouse halves, to rubble.
 // FUNCTION: C2 0x69bc6
 // FUNCTION: C2WIN 0x004a5c9a
