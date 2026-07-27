@@ -4343,9 +4343,8 @@ void clear_all_rm(char layer);
 // Test whether the north or south city neighbour is a wall.
 // FUNCTION: C2 0x6daa6
 // FUNCTION: C2WIN 0x004abdf9
-int test_for_ns_polar_walls(int _eax_unused, int y, int sptr)
+int test_for_ns_polar_walls(int x, int y, int sptr)
 {
-    (void)_eax_unused;
     if (y > 0     && ((*(struct city_cell *)((unsigned char *)city_map + ((sptr) - CITY_ROW))).terrain & 0x06)) return 1;
     if (y < 0x4f  && ((*(struct city_cell *)((unsigned char *)city_map + ((sptr) + CITY_ROW))).terrain & 0x06)) return 1;
     return 0;
@@ -4354,9 +4353,8 @@ int test_for_ns_polar_walls(int _eax_unused, int y, int sptr)
 // Test whether the east or west city neighbour is a wall.
 // FUNCTION: C2 0x6dad6
 // FUNCTION: C2WIN 0x004abe5b
-int test_for_ew_polar_walls(int x, int _edx_unused, int sptr)
+int test_for_ew_polar_walls(int x, int y, int sptr)
 {
-    (void)_edx_unused;
     if (x > 0     && ((*(struct city_cell *)((unsigned char *)city_map + ((sptr) - CITY_CELL_BYTES))).terrain & 0x06)) return 1;
     if (x < 0x4f  && ((*(struct city_cell *)((unsigned char *)city_map + ((sptr) + CITY_CELL_BYTES))).terrain & 0x06)) return 1;
     return 0;
@@ -4622,7 +4620,6 @@ void take_from_warehouses(int amount, int goods)
 // FUNCTION: C2WIN 0x004ac9b3
 void set_ns_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value)
 {
-    (void)x;
     if (y > 0)  ((unsigned char *)city_map)[sptr - 1600 + field_off] = value;
     if (y < 79) ((unsigned char *)city_map)[sptr + 1600 + field_off] = value;
 }
@@ -4632,7 +4629,6 @@ void set_ns_polar(int x, int y, int sptr, unsigned char field_off, unsigned char
 // FUNCTION: C2WIN 0x004ac9f6
 void set_ew_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value)
 {
-    (void)y;
     if (x > 0)  ((unsigned char *)city_map)[sptr - 20 + field_off] = value;
     if (x < 79) ((unsigned char *)city_map)[sptr + 20 + field_off] = value;
 }
