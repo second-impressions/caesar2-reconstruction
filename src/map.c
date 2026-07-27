@@ -748,25 +748,24 @@ void build_road_from_elastic(void)
                 if (y_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x640; y_pos--; goto first_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x640; y_pos--; break; }
             } else if (next_direction == 1) {
                 if (x_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x14; x_pos++; goto first_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x14; x_pos++; break; }
             } else if (next_direction == 2) {
                 if (y_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x640; y_pos++; goto first_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x640; y_pos++; break; }
             } else if (next_direction == 3) {
                 if (x_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x14; x_pos--; goto first_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x14; x_pos--; break; }
             }
         }
-first_done:
         if (neighbour_byte != 0 && neighbour_byte < saved_byte2)
             continue;
         if (saved_byte2 > 1) { build_outcome = 1; goto finish; }
@@ -796,25 +795,24 @@ phase2:
                 if (y_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x640))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x640; y_pos--; goto second_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x640; y_pos--; break; }
             } else if (next_direction == 1) {
                 if (x_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x14))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x14; x_pos++; goto second_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x14; x_pos++; break; }
             } else if (next_direction == 2) {
                 if (y_pos < 0x4f) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) + 0x640))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x640; y_pos++; goto second_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x640; y_pos++; break; }
             } else if (next_direction == 3) {
                 if (x_pos > 0) neighbour_byte = (*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).road_aqueduct;
                 if ((*(struct city_cell *)((unsigned char *)city_map + ((pm_ptr) - 0x14))).terrain & 0x10) bridge++;
                 if (bridge > 1) neighbour_byte = 0;
-                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x14; x_pos--; goto second_done; }
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x14; x_pos--; break; }
             }
         }
-second_done:
         if (neighbour_byte != 0 && neighbour_byte < saved_byte2)
             continue;
         if (saved_byte2 > 1) { build_outcome = 3; goto finish; }
@@ -1053,10 +1051,9 @@ void build_wall_from_elastic(void)
                 status = 1;
                 goto check_outer_state;
             }
-            goto build_wall;
+            break;
         }
 
-    build_wall:
         size = (unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
         if ((*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).terrain & 4)
             size++;
@@ -1383,10 +1380,9 @@ void build_aquaduct_from_elastic(void)
                 outcome = 1;
                 goto check_outer_state;
             }
-            goto build_aquaduct;
+            break;
         }
 
-    build_aquaduct:
         size = CM_CELL(pm_over_cm_ptr).road_aqueduct;
         if (CM_CELL(pm_over_cm_ptr).terrain & 0x80)
             size++;
@@ -1948,10 +1944,9 @@ void build_reg_wall_from_elastic(void)
                 build_outcome = 1;
                 goto finish;
             }
-            goto build_reg_wall;
+            break;
         }
 
-    build_reg_wall:
         size = RM_CELL(pm_over_cm_ptr).place_state;
         if (RM_CELL(pm_over_cm_ptr).terrain & 0x04) size++;
 
