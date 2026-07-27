@@ -4510,6 +4510,9 @@ int get_closest_trading_post(int x, int y, int radius)
     return best_dist;
 }
 
+void take_from_warehouses(int amount, int goods);
+void clear_all_rm(char layer);
+
 // Distribute goods among compatible warehouses near a regional location.
 // FUNCTION: C2 0x6dedf
 // FUNCTION: C2WIN 0x004ac4e9
@@ -4633,6 +4636,13 @@ void set_ew_polar(int x, int y, int sptr, unsigned char field_off, unsigned char
     if (x > 0)  ((unsigned char *)city_map)[sptr - 20 + field_off] = value;
     if (x < 79) ((unsigned char *)city_map)[sptr + 20 + field_off] = value;
 }
+
+int get_best_lv(unsigned char *base, int bp);
+unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size);
+char affected_by_cover1(unsigned char *p, int range, unsigned char mask);
+char affected_by_cover2(unsigned char *p, int range, unsigned char mask);
+int get_range1(unsigned char *start, int range, unsigned char mask);
+void clear_all_rm(char layer);
 
 // Adjust land values in a clipped city-map area, clamping them to the valid range.
 // FUNCTION: C2 0x6e221
