@@ -4949,6 +4949,14 @@ int test_area_for_population(int extra, int x, int y, int radius)
     return people;
 }
 
+int toggle_city_flag(int val);
+int toggle_prov_flag(int val);
+int put_prov_flag(int val);
+int put_danger_flag(int val);
+int next_city_flag(void);
+int next_prov_flag(void);
+int next_danger_flag(void);
+
 // Save the active city or region map for a possible undo.
 // FUNCTION: C2 0x6e898
 // FUNCTION: C2WIN 0x004ad4f0
