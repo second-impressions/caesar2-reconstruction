@@ -3103,8 +3103,8 @@ int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
 // FUNCTION: C2WIN 0x004a7b37
 void change_reg_sized(int base_kind, int gfx_base_idx, int footprint_size, int cell_offset)
 {
-    int x;
     int i;
+    int x;
     int y;
     int rowadd;
 
