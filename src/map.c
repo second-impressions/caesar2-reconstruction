@@ -4800,6 +4800,10 @@ int get_range3(unsigned char *start, int range, unsigned char mask)
     return best;
 }
 
+int test_range_for_road(int x, int y, int radius);
+int test_area_for_population(int extra, int x, int y, int radius);
+void set_route_elastic_range(int radius);
+
 // Summarize housing and service coverage within a city-map radius.
 // FUNCTION: C2 0x6e563
 // FUNCTION: C2WIN 0x004acf8a
