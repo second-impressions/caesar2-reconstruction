@@ -2967,6 +2967,8 @@ int put_x4_area(int x, int y, char base_kind, int edge_bits, int color)
     return 1;
 }
 
+void change_sized(int base_kind, int gfx_base_idx, int footprint_size, int cell_offset);
+
 // Replace a city building footprint with a new kind and appearance.
 // FUNCTION: C2 0x6aaab
 // FUNCTION: C2WIN 0x004a7455
