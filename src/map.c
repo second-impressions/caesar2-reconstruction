@@ -4333,6 +4333,13 @@ void inc_elastic_by2(int x, int y, int sptr)
     }
 }
 
+int get_reg_buildings_in_radius(int x, int y, int span, int radius,
+                                unsigned char building_kind);
+int get_reg_industries_in_radius(int x, int y);
+int get_closest_trading_post(int x, int y, int radius);
+void fill_warehouses_with(int x, int y, int amount, int goods, int refresh);
+void clear_all_rm(char layer);
+
 // Test whether the north or south city neighbour is a wall.
 // FUNCTION: C2 0x6daa6
 // FUNCTION: C2WIN 0x004abdf9
@@ -4444,6 +4451,8 @@ int get_reg_industries_in_radius(int x, int y)
     }
     return count;
 }
+
+void count_city_flags(void);
 
 // Find the nearest available trading-post building within a regional search radius.
 // FUNCTION: C2 0x6dd8c
