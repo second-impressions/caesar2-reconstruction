@@ -4393,12 +4393,12 @@ int get_reg_industries_in_radius(int x, int y)
 // FUNCTION: C2WIN 0x004ac2ff
 int get_closest_trading_post(int x, int y, int radius)
 {
+    int w;
     int height;
     int start_x;
     int start_y;
     unsigned char type;
-    unsigned char tile;
-    int w;
+    unsigned char mask;
     int step;
     int ptr;
     int distance;
@@ -4429,8 +4429,8 @@ int get_closest_trading_post(int x, int y, int radius)
     for (gmn_y = y; gmn_y < y + height; gmn_y++, gmn_sptr += step) {
         for (gmn_x = x; gmn_x < x + w; gmn_x++, gmn_sptr += 8) {
             type = ((unsigned char *)region_map)[gmn_sptr];
-            tile = ((unsigned char *)region_map)[gmn_sptr + 7] & 3;
-            if (tile != 0) continue;
+            mask = ((unsigned char *)region_map)[gmn_sptr + 7] & 3;
+            if (mask != 0) continue;
             if (type >= 0xe8 && type <= 0xeb) {
                 distance = get_longest_distance(gmn_x, gmn_y, start_x, start_y);
                 if (distance < best_dist) {
