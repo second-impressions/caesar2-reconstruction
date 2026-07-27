@@ -4964,56 +4964,56 @@ void set_route_elastic(void)
 // Expand the regional army route search by one range band.
 // FUNCTION: C2 0x6ea84
 // FUNCTION: C2WIN 0x004ad6ec
-void set_route_elastic_range(int radius)
+void set_route_elastic_range(int r)
 {
-    int x_span;
-    int y_min;
-    unsigned char n_nw;
-    unsigned char best;
-    unsigned char n_sw;
-    unsigned char saved;
-    unsigned char n_w;
-    int stride;
-    unsigned char n_e;
-    unsigned char t;
-    unsigned char n_n;
-    unsigned char n_ne;
-    unsigned char cost;
-    unsigned char n_se;
-    int side;
-    int x_min;
-    unsigned char n_s;
+    unsigned char north_neighbor;
+    int extent;
+    unsigned char next_south;
+    unsigned char smallest;
+    unsigned char n_w_value;
+    unsigned char prior_v;
+    unsigned char nw;
+    int row;
+    unsigned char next_e;
+    unsigned char next_ne;
+    int x_count;
+    unsigned char cell_value;
+    unsigned char cell_step;
+    unsigned char n_se_val;
+    int min_y;
+    int min_x;
+    unsigned char n_sw_val;
 
     gmn_sptr = ((over_x) + (over_y) * 60) * 8;
     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 1;
 
-    x_min = over_x - radius;
-    y_min = over_y - radius;
-    side  = 2 * radius + 1;
-    x_span = side;
-    if (x_min <= 0) {
-        x_span += x_min;
-        x_min = 0;
-    } else if (x_min + side > 0x3c) {
-        x_span -= x_min + side - 0x3c;
+    min_x = over_x - r;
+    min_y = over_y - r;
+    extent = 2 * r + 1;
+    x_count = extent;
+    if (min_x <= 0) {
+        x_count += min_x;
+        min_x = 0;
+    } else if (min_x + x_count > 0x3c) {
+        x_count -= min_x + x_count - 0x3c;
     }
-    if (y_min <= 0) {
-        side += y_min; y_min = 0;
-    } else if (y_min + side >= 0x3c) {
-        side -= y_min + side - 0x3c;
+    if (min_y <= 0) {
+        extent += min_y; min_y = 0;
+    } else if (min_y + extent >= 0x3c) {
+        extent -= min_y + extent - 0x3c;
     }
 
-    gmn_sptr = ((x_min) + (y_min) * 60) * 8;
-    stride   = (0x3c - x_span) * 8;
-    gmn_y = y_min;
-    for ( ; gmn_y < y_min + side; gmn_y++, gmn_sptr += stride) {
-        gmn_x = x_min;
-        for ( ; gmn_x < x_min + x_span; gmn_x++, gmn_sptr += 8) {
+    gmn_sptr = ((min_x) + (min_y) * 60) * 8;
+    row = (0x3c - x_count) * 8;
+    gmn_y = min_y;
+    for ( ; gmn_y < min_y + extent; gmn_y++, gmn_sptr += row) {
+        gmn_x = min_x;
+        for ( ; gmn_x < min_x + x_count; gmn_x++, gmn_sptr += 8) {
             if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state == 0xff)
                 continue;
             if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x11) {
-                t = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
-                if (t < 0x93 || t > 0x96) {
+                cell_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+                if (cell_value < 0x93 || cell_value > 0x96) {
                     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 0xff;
                     continue;
                 }
@@ -5024,63 +5024,56 @@ void set_route_elastic_range(int radius)
                     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 0xff;
                     continue;
                 }
-                cost = 2;
+                cell_step = 2;
             } else if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x20) {
-                cost = 1;
+                cell_step = 1;
             } else {
                 if ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x02) {
                     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = 0xff;
                     continue;
                 }
-                cost = 2;
+                cell_step = 2;
             }
 
-            saved = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state;
-            n_n = n_e = n_s = n_w = n_ne = n_se = n_sw = n_nw = 0;
-            best = 0xc7;
+            prior_v = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state;
+            north_neighbor = next_e = next_south = n_w_value = next_ne = n_se_val = n_sw_val = nw = 0;
+            smallest = 0xc7;
             if (gmn_y > 0)
-                n_n = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).place_state;
+                north_neighbor = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).place_state;
             if (gmn_x < 0x3b)
-                n_e = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).place_state;
+                next_e = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).place_state;
             if (gmn_y < 0x3b)
-                n_s = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).place_state;
+                next_south = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).place_state;
             if (gmn_x > 0)
-                n_w = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).place_state;
+                n_w_value = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).place_state;
             if (gmn_y > 0 && gmn_x < 0x3b)
-                n_ne = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 472))).place_state;
+                next_ne = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 472))).place_state;
             if (gmn_x < 0x3b && gmn_y < 0x3b)
-                n_se = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 488))).place_state;
+                n_se_val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 488))).place_state;
             if (gmn_y < 0x3b && gmn_x > 0)
-                n_sw = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 472))).place_state;
+                n_sw_val = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 472))).place_state;
             if (gmn_x > 0 && gmn_y > 0)
-                n_nw = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 488))).place_state;
-            if (n_n != 0 && n_n != 0xff && n_n < best)
-                best = n_n;
-            if (n_e != 0 && n_e != 0xff && n_e < best)
-                best = n_e;
-            if (n_s != 0 && n_s != 0xff && n_s < best)
-                best = n_s;
-            if (n_w != 0 && n_w != 0xff && n_w < best)
-                best = n_w;
-            if (n_ne != 0 && n_ne != 0xff && n_ne < best)
-                best = n_ne;
-            if (n_se != 0 && n_se != 0xff && n_se < best)
-                best = n_se;
-            if (n_sw != 0 && n_sw != 0xff && n_sw < best)
-                best = n_sw;
-            if (n_nw != 0 && n_nw != 0xff && n_nw < best)
-                best = n_nw;
-            {
-                int value;
-                value = best;
-                if (cost + value < saved) {
-                    n_sw = best + cost;
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = n_sw;
-                } else if (saved == 0 && best != 0) {
-                    n_sw = best + cost;
-                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = n_sw;
-                }
-            }
+                nw = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 488))).place_state;
+            if (north_neighbor != 0 && north_neighbor != 0xff && north_neighbor < smallest)
+                smallest = north_neighbor;
+            if (next_e != 0 && next_e != 0xff && next_e < smallest)
+                smallest = next_e;
+            if (next_south != 0 && next_south != 0xff && next_south < smallest)
+                smallest = next_south;
+            if (n_w_value != 0 && n_w_value != 0xff && n_w_value < smallest)
+                smallest = n_w_value;
+            if (next_ne != 0 && next_ne != 0xff && next_ne < smallest)
+                smallest = next_ne;
+            if (n_se_val != 0 && n_se_val != 0xff && n_se_val < smallest)
+                smallest = n_se_val;
+            if (n_sw_val != 0 && n_sw_val != 0xff && n_sw_val < smallest)
+                smallest = n_sw_val;
+            if (nw != 0 && nw != 0xff && nw < smallest)
+                smallest = nw;
+            if (smallest + cell_step < prior_v)
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(smallest + cell_step);
+            else if (prior_v == 0 && smallest != 0)
+                (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).place_state = (unsigned char)(smallest + cell_step);
         }
     }
 }
