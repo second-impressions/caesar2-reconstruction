@@ -3927,6 +3927,11 @@ void unflag_all_cm(unsigned char field_off, unsigned char mask)
     }
 }
 
+void unflag_all_rm(unsigned char field_off, unsigned char mask);
+void unflag_all_rm_xwarehouse(void);
+void flag_range(int extra, int x, int y, int range, unsigned char field_off,
+                unsigned char mask);
+
 // Mask one data field across the region map.
 // FUNCTION: C2 0x6d1b7
 // FUNCTION: C2WIN 0x004aae45
