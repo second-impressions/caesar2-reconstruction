@@ -1571,7 +1571,7 @@ void get_reg_road_elastic(void)
 }
 
 void set_ns_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value);
-void set_ew_polar(int x, int y, int sptr, unsigned char field_off, unsigned char value);
+void set_ew_polar(int, int, int, unsigned char, unsigned char);
 unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size);
 void clear_danger_flag(void);
 
