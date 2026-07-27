@@ -4679,10 +4679,10 @@ char affected_by_cover2(unsigned char *p, int range, unsigned char mask)
 // FUNCTION: C2WIN 0x004ace18
 int get_range1(unsigned char *start, int range, unsigned char mask)
 {
-    int best;
+    int range_value;
     int row;
     int col;
-    int range_value;
+    int best;
 
     if (range == 1)
         return start[10] & mask;
