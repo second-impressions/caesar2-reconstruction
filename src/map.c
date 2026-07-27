@@ -5203,6 +5203,8 @@ void set_route_elastic_range(int radius)
     }
 }
 
+void clear_city_flag(int val);
+
 // Trace the lowest-cost regional path back into the selected army route.
 // FUNCTION: C2 0x6ee0b
 // FUNCTION: C2WIN 0x004adcc4
