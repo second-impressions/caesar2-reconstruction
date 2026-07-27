@@ -1650,109 +1650,112 @@ void set_ew_polar(int x, int y, int sptr, unsigned char field_off, unsigned char
 // FUNCTION: C2WIN 0x004a39b8
 void build_reg_road_from_elastic(void)
 {
-    int over_y_l;
-    int over_x_l;
-    int cell_ptr;
-    int count;
-    unsigned char saved_slot;
-    unsigned char status;
-    unsigned char neighbour;
-    int attempt;
-    int dir;
+    int y_pos;
+    int x_pos;
+    int pm_ptr;
+    int total;
+    unsigned char saved_byte2;
+    unsigned char build_outcome;
+    unsigned char neighbour_byte;
+    int remaining;
+    int next_direction;
 
-    count = (*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state;
-    if (count == 0) {
+    total = (*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state;
+    if (total == 0) {
         illegal_build = 1;
         return;
     }
-    if (count == 0xff) {
+    if (total == 0xff) {
         illegal_build = 1;
         return;
     }
 
-    over_x_l = over_x;
-    over_y_l = over_y;
-    cell_ptr = pm_over_cm_ptr;
-    dir      = 0;
-    status   = 0;
+    x_pos = over_x;
+    y_pos = over_y;
+    pm_ptr = pm_over_cm_ptr;
+    next_direction = 0;
+    build_outcome = 0;
 
-    while (count > 0) {
-        count--;
-        if (!((*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).terrain & 0x20)) particles_built++;
-        if ((*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).base_kind < 0x10) particles_cleared++;
-        (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).terrain |= 0x20;
-        (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).edge_bits |= 1;
+    while (total > 0) {
+        total--;
+        if (!((*(struct region_cell *)((unsigned char *)region_map + (pm_ptr))).terrain & 0x20)) particles_built++;
+        if ((*(struct region_cell *)((unsigned char *)region_map + (pm_ptr))).base_kind < 0x10) particles_cleared++;
+        (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr))).terrain |= 0x20;
+        (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr))).edge_bits |= 1;
 
-        saved_slot = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).place_state;
-        attempt = 4;
-        dir = 0;
-        while (attempt-- > 0) {
-            neighbour = 0;
-            if (++dir > 3) dir = 0;
-            if (dir == 0) {
-                if (over_y_l > 0) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr - 480))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 0x1e0; over_y_l--; break; }
-            } else if (dir == 1) {
-                if (over_x_l < 0x3b) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr + 8))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 8; over_x_l++; break; }
-            } else if (dir == 2) {
-                if (over_y_l < 0x3b) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr + 480))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 0x1e0; over_y_l++; break; }
-            } else if (dir == 3) {
-                if (over_x_l > 0) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr - 8))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 8; over_x_l--; break; }
+        saved_byte2 = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr))).place_state;
+        remaining = 4;
+        next_direction = 0;
+        while (remaining-- > 0) {
+            neighbour_byte = 0;
+            if (++next_direction > 3) next_direction = 0;
+            if (next_direction == 0) {
+                if (y_pos > 0) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr - 480))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x1e0; y_pos--; goto first_done; }
+            } else if (next_direction == 1) {
+                if (x_pos < 0x3b) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr + 8))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 8; x_pos++; goto first_done; }
+            } else if (next_direction == 2) {
+                if (y_pos < 0x3b) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr + 480))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x1e0; y_pos++; goto first_done; }
+            } else if (next_direction == 3) {
+                if (x_pos > 0) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr - 8))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 8; x_pos--; goto first_done; }
             }
         }
-        if (neighbour != 0 && neighbour < saved_slot)
+first_done:
+        if (neighbour_byte != 0 && neighbour_byte < saved_byte2)
             continue;
-        if (saved_slot > 1) {
-            status = 1;
+        if (saved_byte2 > 1) {
+            build_outcome = 1;
             goto finish;
         }
-        break;
+        goto build_road;
     }
 
-    count    = (*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state;
-    over_x_l = over_x;
-    over_y_l = over_y;
-    cell_ptr = pm_over_cm_ptr;
-    dir      = 0;
+build_road:
+    total = (*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state;
+    x_pos = over_x;
+    y_pos = over_y;
+    pm_ptr = pm_over_cm_ptr;
+    next_direction = 0;
 
-    while (count > 0) {
-        count--;
-        if (reg_road_ramifications(over_x_l, over_y_l) == 0) { status = 2; goto finish; }
+    while (total > 0) {
+        total--;
+        if (reg_road_ramifications(x_pos, y_pos) == 0) { build_outcome = 2; goto finish; }
 
-        saved_slot = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).place_state;
-        attempt = 4;
-        dir = 0;
-        while (attempt-- > 0) {
-            neighbour = 0;
-            if (++dir > 3) dir = 0;
-            if (dir == 0) {
-                if (over_y_l > 0) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr - 480))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 0x1e0; over_y_l--; break; }
-            } else if (dir == 1) {
-                if (over_x_l < 0x3b) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr + 8))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 8; over_x_l++; break; }
-            } else if (dir == 2) {
-                if (over_y_l < 0x3b) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr + 480))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr += 0x1e0; over_y_l++; break; }
-            } else if (dir == 3) {
-                if (over_x_l > 0) neighbour = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr - 8))).place_state;
-                if (neighbour != 0 && neighbour < saved_slot) { cell_ptr -= 8; over_x_l--; break; }
+        saved_byte2 = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr))).place_state;
+        remaining = 4;
+        next_direction = 0;
+        while (remaining-- > 0) {
+            neighbour_byte = 0;
+            if (++next_direction > 3) next_direction = 0;
+            if (next_direction == 0) {
+                if (y_pos > 0) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr - 480))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 0x1e0; y_pos--; goto second_done; }
+            } else if (next_direction == 1) {
+                if (x_pos < 0x3b) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr + 8))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 8; x_pos++; goto second_done; }
+            } else if (next_direction == 2) {
+                if (y_pos < 0x3b) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr + 480))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr += 0x1e0; y_pos++; goto second_done; }
+            } else if (next_direction == 3) {
+                if (x_pos > 0) neighbour_byte = (*(struct region_cell *)((unsigned char *)region_map + (pm_ptr - 8))).place_state;
+                if (neighbour_byte != 0 && neighbour_byte < saved_byte2) { pm_ptr -= 8; x_pos--; goto second_done; }
             }
         }
-        if (neighbour != 0 && neighbour < saved_slot)
+second_done:
+        if (neighbour_byte != 0 && neighbour_byte < saved_byte2)
             continue;
-        if (saved_slot > 1) {
-            status = 3;
+        if (saved_byte2 > 1) {
+            build_outcome = 3;
             goto finish;
         }
         break;
     }
 
 finish:
-    if (status != 0) {
+    if (build_outcome != 0) {
         restore_region_from_undo_buffer();
         illegal_build = 1;
     }
@@ -1774,8 +1777,10 @@ int reg_road_ramifications(int x, int y)
     if (x == 59) x_max_bound = 59; else x_max_bound = x + 1;
     if (y == 59) y_max_bound = 59; else y_max_bound = y + 1;
 
-    for (gmn_y = y_min_bound; gmn_y <= y_max_bound; gmn_y++) {
-        for (gmn_x = x_min_bound; gmn_x <= x_max_bound; gmn_x++) {
+    gmn_y = y_min_bound;
+    for ( ; gmn_y <= y_max_bound; gmn_y++) {
+        gmn_x = x_min_bound;
+        for ( ; gmn_x <= x_max_bound; gmn_x++) {
             gmn_sptr = (gmn_x + gmn_y * 60) * 8;
             if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 0x20) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits |= 1;
