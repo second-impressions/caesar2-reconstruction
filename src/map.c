@@ -3119,6 +3119,8 @@ int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
     return 1;
 }
 
+void change_reg_sized(int base_kind, int gfx_base_idx, int footprint_size, int cell_offset);
+
 // Replace a regional building footprint with a new kind and appearance.
 // FUNCTION: C2 0x6aeac
 // FUNCTION: C2WIN 0x004a7b37
