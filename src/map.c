@@ -2075,6 +2075,10 @@ int one_reg_wall_ramification(void)
     return 1;
 }
 
+void garden_an_area(int x1, int y1, int x2, int y2);
+void plaza_an_area(int x1, int y1, int x2, int y2);
+void clear_an_area(int x1, int y1, int x2, int y2);
+
 // Fill a city-map rectangle with random garden tiles while preserving stone and flagged cells.
 // FUNCTION: C2 0x69093
 // FUNCTION: C2WIN 0x004a4bca
