@@ -5090,72 +5090,72 @@ void set_route_elastic_range(int radius)
 // FUNCTION: C2WIN 0x004adcc4
 void trace_back_route_elastic(void)
 {
-    unsigned char orig;
-    int idx;
-    unsigned char n_n;
-    unsigned char n_nw;
+    unsigned char next_w_value;
+    int path_index;
+    unsigned char next_n_cell;
+    unsigned char nw_value;
     unsigned char n_e;
-    unsigned char n_se;
-    unsigned char dir;
-    unsigned char n_w;
-    unsigned char n_s;
-    unsigned char n_ne;
-    int iters;
+    unsigned char southeast_neighbor;
+    unsigned char route_dir_val;
+    unsigned char next_ne;
     unsigned char best;
-    int i;
-    unsigned char n_sw;
+    unsigned char start_value;
+    int count;
+    unsigned char s_value;
+    int route_pos;
+    unsigned char south_west_val;
 
-    idx   = 0;
-    iters = 0;
-    for (i = 0; i < 16; i++) temp_route[i].x = temp_route[i].y = 0;
+    path_index = 0;
+    count = 0;
+    for (route_pos = 0; route_pos < 16; route_pos++) temp_route[route_pos].x = temp_route[route_pos].y = 0;
 
     gmn_x = over_x; gmn_y = over_y;
     gmn_sptr = ((gmn_x) + (gmn_y) * 60) * 8;
-    temp_route[idx].x = gmn_x;
-    temp_route[idx].y = gmn_y;
+    temp_route[path_index].x = gmn_x;
+    temp_route[path_index].y = gmn_y;
 
-    while (++iters < 1000) {
-        orig = ((unsigned char *)region_map)[gmn_sptr + 2];
-        n_n = n_w = n_se = n_ne = n_sw = n_nw = 0; n_e = n_s = 0;
-        best = orig;
-        if (gmn_y > 0) n_n = ((unsigned char *)region_map)[gmn_sptr - 0x1de];
+    while (++count < 1000) {
+        start_value = ((unsigned char *)region_map)[gmn_sptr + 2];
+        best = start_value;
+        next_n_cell = n_e = s_value = next_w_value = next_ne = southeast_neighbor = south_west_val = nw_value = 0;
+        if (gmn_y > 0) next_n_cell = ((unsigned char *)region_map)[gmn_sptr - 0x1de];
         if (gmn_x < 0x3b) n_e = ((unsigned char *)region_map)[gmn_sptr + 0xa];
-        if (gmn_y < 0x3b) n_s = ((unsigned char *)region_map)[gmn_sptr + 0x1e2];
-        if (gmn_x > 0) n_w = ((unsigned char *)region_map)[gmn_sptr - 6];
-        if (gmn_y > 0 && gmn_x < 0x3b) n_ne = ((unsigned char *)region_map)[gmn_sptr - 0x1d6];
-        if (gmn_x < 0x3b && gmn_y < 0x3b) n_se = ((unsigned char *)region_map)[gmn_sptr + 0x1ea];
-        if (gmn_y < 0x3b && gmn_x > 0) n_sw = ((unsigned char *)region_map)[gmn_sptr + 0x1da];
-        if (gmn_x > 0 && gmn_y > 0) n_nw = ((unsigned char *)region_map)[gmn_sptr - 0x1e6];
+        if (gmn_y < 0x3b) s_value = ((unsigned char *)region_map)[gmn_sptr + 0x1e2];
+        if (gmn_x > 0) next_w_value = ((unsigned char *)region_map)[gmn_sptr - 6];
+        if (gmn_y > 0 && gmn_x < 0x3b) next_ne = ((unsigned char *)region_map)[gmn_sptr - 0x1d6];
+        if (gmn_x < 0x3b && gmn_y < 0x3b) southeast_neighbor = ((unsigned char *)region_map)[gmn_sptr + 0x1ea];
+        if (gmn_y < 0x3b && gmn_x > 0) south_west_val = ((unsigned char *)region_map)[gmn_sptr + 0x1da];
+        if (gmn_x > 0 && gmn_y > 0) nw_value = ((unsigned char *)region_map)[gmn_sptr - 0x1e6];
 
-        if (n_n  != 0 && best > n_n) { best = n_n;  dir = 0; }
-        if (n_e  != 0 && n_e  < best) { best = n_e;  dir = 2; }
-        if (n_s  != 0 && n_s  < best) { best = n_s;  dir = 4; }
-        if (n_w  != 0 && n_w  < best) { best = n_w;  dir = 6; }
-        if (n_ne != 0 && n_ne < best) { best = n_ne; dir = 1; }
-        if (n_se != 0 && n_se < best) { best = n_se; dir = 3; }
-        if (n_sw != 0 && n_sw < best) { best = n_sw; dir = 5; }
-        if (n_nw != 0 && best > n_nw) { best = n_nw; dir = 7; }
+        if (next_n_cell != 0 && best > next_n_cell) { best = next_n_cell; route_dir_val = 0; }
+        if (n_e != 0 && n_e < best) { best = n_e; route_dir_val = 2; }
+        if (s_value != 0 && s_value < best) { best = s_value; route_dir_val = 4; }
+        if (next_w_value != 0 && next_w_value < best) { best = next_w_value; route_dir_val = 6; }
+        if (next_ne != 0 && next_ne < best) { best = next_ne; route_dir_val = 1; }
+        if (southeast_neighbor != 0 && southeast_neighbor < best) { best = southeast_neighbor; route_dir_val = 3; }
+        if (south_west_val != 0 && south_west_val < best) { best = south_west_val; route_dir_val = 5; }
+        if (nw_value != 0 && best > nw_value) { best = nw_value; route_dir_val = 7; }
 
-        if (orig != best) {
-            gmn_x += gmn_ofsets[dir].dx;
-            gmn_y += gmn_ofsets[dir].dy;
-            idx++;
-            temp_route[idx].x = gmn_x;
-            temp_route[idx].y = gmn_y;
+        if (start_value != best) {
+            gmn_x += gmn_ofsets[route_dir_val].dx;
+            gmn_y += gmn_ofsets[route_dir_val].dy;
+            path_index++;
+            temp_route[path_index].x = gmn_x;
+            temp_route[path_index].y = gmn_y;
             if (best == 1) break;
             gmn_sptr = ((gmn_x) + (gmn_y) * 60) * 8;
             (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits |= 0x40;
         }
     }
 
-    for (i = 0; i <= idx; i++) {
+    for (route_pos = 0; route_pos <= path_index; route_pos++) {
         army_routes[army_list[tracking_army].cohort_id]
-            .points[this_route_number][i].x = temp_route[idx - i].x;
+            .points[this_route_number][route_pos].x = temp_route[path_index - route_pos].x;
         army_routes[army_list[tracking_army].cohort_id]
-            .points[this_route_number][i].y = temp_route[idx - i].y;
+            .points[this_route_number][route_pos].y = temp_route[path_index - route_pos].y;
     }
     army_routes[army_list[tracking_army].cohort_id]
-        .row_len[this_route_number] = (unsigned char)idx + 1;
+        .row_len[this_route_number] = path_index + 1;
 }
 
 // Reset city, province, and danger map markers.
