@@ -1983,6 +1983,8 @@ void build_reg_wall_from_elastic(void)
     }
 }
 
+void clear_a_reg_area(int x1, int y1, int x2, int y2, int keep_fortress);
+
 // Recompute regional wall connections at a cell and its surrounding neighbourhood.
 // FUNCTION: C2 0x68ea5
 // FUNCTION: C2WIN 0x004a4841
