@@ -4011,6 +4011,10 @@ void unflag_all_rm_xwarehouse(void)
 
 void set_4_neighbours(int x, int y, int sptr, unsigned char field_off,
                       unsigned char value);
+void set_rm_range(int x, int y, int half_width, unsigned char field_offset,
+                  char kind_byte);
+void flag_range(int extra, int x, int y, int range, unsigned char field_off,
+                unsigned char mask);
 
 // Set a data field throughout a clipped square of the city map.
 // FUNCTION: C2 0x6d309
