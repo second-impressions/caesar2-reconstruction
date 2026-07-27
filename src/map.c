@@ -3905,8 +3905,38 @@ void unflag_all_cm(unsigned char field_off, unsigned char mask)
 void unflag_all_rm(unsigned char field_off, unsigned char mask)
 {
     cm_sptr = 0;
+#if PLATFORM_WINDOWS
+    {
+        int c;
+        int a;
+        int b;
+        int d;
+        int e;
+        int f;
+        int g;
+        int h;
+        int i;
+        int j;
+        int k;
+
+        a = 6;
+        b = 0x50;
+        d = 0x10;
+        e = 0x18;
+        f = 0x20;
+        g = 0x28;
+        h = 0x30;
+        i = 0x38;
+        j = 0x40;
+        k = 0x48;
+#define UNFLAG_RM_COLUMNS a
+#define UNFLAG_RM_STEP b
+#else
+#define UNFLAG_RM_COLUMNS 6
+#define UNFLAG_RM_STEP 0x50
+#endif
     for (gmn_y = 0; gmn_y < 60; gmn_y++) {
-        for (gmn_x = 0; gmn_x < 6; gmn_x++, cm_sptr += 0x50) {
+        for (gmn_x = 0; gmn_x < UNFLAG_RM_COLUMNS; gmn_x++, cm_sptr += UNFLAG_RM_STEP) {
             ((unsigned char *)region_map)[cm_sptr + field_off + 0x00] &= mask;
             ((unsigned char *)region_map)[cm_sptr + field_off + 0x08] &= mask;
             ((unsigned char *)region_map)[cm_sptr + field_off + 0x10] &= mask;
@@ -3919,6 +3949,11 @@ void unflag_all_rm(unsigned char field_off, unsigned char mask)
             ((unsigned char *)region_map)[cm_sptr + field_off + 0x48] &= mask;
         }
     }
+#if PLATFORM_WINDOWS
+    }
+#endif
+#undef UNFLAG_RM_COLUMNS
+#undef UNFLAG_RM_STEP
 }
 
 // Clear temporary edge flags from all regional cells except warehouses.
