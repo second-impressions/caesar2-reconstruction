@@ -1758,9 +1758,6 @@ finish:
     }
 }
 
-int get_reg_industries_in_radius(int x, int y);
-void count_city_flags(void);
-
 // Recompute regional road and wall-crossing sprites around a cell.
 // FUNCTION: C2 0x688bb
 // FUNCTION: C2WIN 0x004a3eb6
