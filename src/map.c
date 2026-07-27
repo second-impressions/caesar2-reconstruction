@@ -1010,7 +1010,7 @@ void build_wall_from_elastic(void)
     int x;
     int pm_ptr;
 
-    size = (unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
+    size = (*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
     if ((*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).terrain & 4)
         size++;
     if (size == 0) {
@@ -1029,7 +1029,7 @@ void build_wall_from_elastic(void)
             size--;
             if (((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 6) == 0)
                 particles_built++;
-            if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).base_kind < 0x1a)
+            if ((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).base_kind < 0x1a)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).edge_bits |= 1;
             if (!((*(struct city_cell *)((unsigned char *)city_map + (pm_ptr))).terrain & 4)) {
@@ -1054,7 +1054,7 @@ void build_wall_from_elastic(void)
             break;
         }
 
-        size = (unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
+        size = (*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).road_aqueduct;
         if ((*(struct city_cell *)((unsigned char *)city_map + (pm_over_cm_ptr))).terrain & 4)
             size++;
         x = over_x;
@@ -2684,7 +2684,7 @@ void build_an_area(int x1, int y1, int x2, int y2,
             if (CM_CELL(cm_sptr).citizen_a != 0) continue;
             if (CM_CELL(cm_sptr).citizen_b != 0) continue;
             particles_built++;
-            if ((unsigned char)CM_CELL(cm_sptr).base_kind < 0x1a) particles_cleared++;
+            if (CM_CELL(cm_sptr).base_kind < 0x1a) particles_cleared++;
             CM_CELL(cm_sptr).base_kind = base_kind;
             CM_CELL(cm_sptr).terrain |= placing_flags;
             CM_CELL(cm_sptr).extra_edge = color;
@@ -2715,7 +2715,7 @@ int put_x1_area(int x, int y, char base_kind, int edge_bits, int color)
         illegal_build = 1;
         return 0;
     }
-    if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 8 &&
+    if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 8 &&
         ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) != 0) {
         illegal_build = 1;
         return 0;
@@ -2730,7 +2730,7 @@ int put_x1_area(int x, int y, char base_kind, int edge_bits, int color)
     }
 
     particles_built++;
-    if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 0x1a) particles_cleared++;
+    if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind < 0x1a) particles_cleared++;
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits |= 1;
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind = base_kind;
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain |= placing_flags;
@@ -2787,7 +2787,7 @@ int put_x2_area(int x, int y, char base_kind, int edge_bits, int color)
         for (x_pos = x; x_pos < x + 2; x_pos++, cm_sptr += 20) {
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0x10) != 0) bad = 1;
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0xe7) != 0) bad = 1;
-            if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8 &&
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8 &&
                 ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits & 0x80) != 0) bad = 1;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_a != 0) bad = 1;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_b != 0) bad = 1;
@@ -2802,7 +2802,7 @@ int put_x2_area(int x, int y, char base_kind, int edge_bits, int color)
     cm_sptr = start_sptr;
     for (y_pos = y, i = 0; y_pos < y + 2; y_pos++, cm_sptr += offset) {
         for (x_pos = x; x_pos < x + 2; x_pos++, cm_sptr += 20, i++) {
-            if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind        = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain    |= placing_flags;
@@ -2864,7 +2864,7 @@ int put_x3_area(int x, int y, char base_kind, int edge_bits, int color)
         for (x_pos = x; x_pos < x + 3; x_pos++, cm_sptr += 20) {
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0x10) != 0) bad = 1;
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0xe7) != 0) bad = 1;
-            if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8 &&
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8 &&
                 ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits & 0x80) != 0) bad = 1;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_a != 0) bad = 1;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_b != 0) bad = 1;
@@ -2879,7 +2879,7 @@ int put_x3_area(int x, int y, char base_kind, int edge_bits, int color)
     cm_sptr = start_sptr;
     for (y_pos = y, i = 0; y_pos < y + 3; y_pos++, cm_sptr += offset) {
         for (x_pos = x; x_pos < x + 3; x_pos++, cm_sptr += 20, i++) {
-            if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind        = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain    |= placing_flags;
@@ -2941,7 +2941,7 @@ int put_x4_area(int x, int y, char base_kind, int edge_bits, int color)
         for (x_pos = x; x_pos < x + 4; x_pos++, cm_sptr += 20) {
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0x10) != 0) bad = 1;
             if (((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain   & 0xe7) != 0) bad = 1;
-            if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8 &&
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 8 &&
                 ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).edge_bits & 0x80) != 0) bad = 1;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_a != 0) bad = 1;
             if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).citizen_b != 0) bad = 1;
@@ -2956,7 +2956,7 @@ int put_x4_area(int x, int y, char base_kind, int edge_bits, int color)
     cm_sptr = start_sptr;
     for (y_pos = y, i = 0; y_pos < y + 4; y_pos++, cm_sptr += offset) {
         for (x_pos = x; x_pos < x + 4; x_pos++, cm_sptr += 20, i++) {
-            if ((unsigned char)(*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
+            if ((*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind < 0x1a)
                 particles_cleared++;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).base_kind        = base_kind;
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).terrain    |= placing_flags;
@@ -3504,42 +3504,42 @@ void test_type_citymap_neighbours_posedge(unsigned char type)
     gmn_run = gmn_max_run = 0;
 
     if (gmn_y == 0) { gmn[0] = 0; gmn_density--; }
-    else gmn[0] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).base_kind ^ (unsigned char)type;
+    else gmn[0] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).base_kind ^ type;
     if (gmn[0] == 0) { gmn[0] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[0] = 0;
 
     if (gmn_y == 0 || gmn_x == 79) { gmn[1] = 0; gmn_nesw_count--; }
-    else gmn[1] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW + CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[1] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW + CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[1] == 0) { gmn[1] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[1] = 0;
 
     if (gmn_x == 79) { gmn[2] = 0; gmn_density--; }
-    else gmn[2] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[2] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[2] == 0) { gmn[2] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[2] = 0;
 
     if (gmn_x == 79 || gmn_y == 79) { gmn[3] = 0; gmn_nwse_count--; }
-    else gmn[3] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW + CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[3] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW + CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[3] == 0) { gmn[3] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[3] = 0;
 
     if (gmn_y == 79) { gmn[4] = 0; gmn_density--; }
-    else gmn[4] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).base_kind ^ (unsigned char)type;
+    else gmn[4] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).base_kind ^ type;
     if (gmn[4] == 0) { gmn[4] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[4] = 0;
 
     if (gmn_x == 0 || gmn_y == 79) { gmn[5] = 0; gmn_nesw_count--; }
-    else gmn[5] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW - CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[5] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW - CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[5] == 0) { gmn[5] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[5] = 0;
 
     if (gmn_x == 0) { gmn[6] = 0; gmn_density--; }
-    else gmn[6] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[6] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[6] == 0) { gmn[6] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[6] = 0;
 
     if (gmn_x == 0 || gmn_y == 0) { gmn[7] = 0; gmn_nwse_count--; }
-    else gmn[7] = (unsigned char)type ^ (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW - CITY_CELL_BYTES))).base_kind;
+    else gmn[7] = type ^ (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW - CITY_CELL_BYTES))).base_kind;
     if (gmn[7] == 0) { gmn[7] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[7] = 0;
 
@@ -3562,42 +3562,42 @@ void test_type_citymap_neighbours_negedge(unsigned char type)
     gmn_run = gmn_max_run = 0;
 
     if (gmn_y == 0) gmn[0] = 1;
-    else gmn[0] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).base_kind ^ (unsigned char)type;
+    else gmn[0] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW))).base_kind ^ type;
     if (gmn[0] == 0) { gmn[0] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[0] = 0;
 
     if (gmn_y == 0 || gmn_x == 79) gmn[1] = 1;
-    else gmn[1] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW + CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[1] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW + CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[1] == 0) { gmn[1] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[1] = 0;
 
     if (gmn_x == 79) gmn[2] = 1;
-    else gmn[2] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[2] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[2] == 0) { gmn[2] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[2] = 0;
 
     if (gmn_x == 79 || gmn_y == 79) gmn[3] = 1;
-    else gmn[3] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW + CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[3] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW + CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[3] == 0) { gmn[3] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[3] = 0;
 
     if (gmn_y == 79) gmn[4] = 1;
-    else gmn[4] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).base_kind ^ (unsigned char)type;
+    else gmn[4] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW))).base_kind ^ type;
     if (gmn[4] == 0) { gmn[4] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[4] = 0;
 
     if (gmn_x == 0 || gmn_y == 79) gmn[5] = 1;
-    else gmn[5] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW - CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[5] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) + CITY_ROW - CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[5] == 0) { gmn[5] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[5] = 0;
 
     if (gmn_x == 0) gmn[6] = 1;
-    else gmn[6] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).base_kind ^ (unsigned char)type;
+    else gmn[6] = (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_CELL_BYTES))).base_kind ^ type;
     if (gmn[6] == 0) { gmn[6] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[6] = 0;
 
     if (gmn_x == 0 || gmn_y == 0) gmn[7] = 1;
-    else gmn[7] = (unsigned char)type ^ (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW - CITY_CELL_BYTES))).base_kind;
+    else gmn[7] = type ^ (*(struct city_cell *)((unsigned char *)city_map + ((gmn_sptr) - CITY_ROW - CITY_CELL_BYTES))).base_kind;
     if (gmn[7] == 0) { gmn[7] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[7] = 0;
 
@@ -3720,42 +3720,42 @@ void test_type_regionmap_neighbours_posedge(unsigned char type)
     gmn_run = gmn_max_run = 0;
 
     if (gmn_y == 0) { gmn[0] = 0; gmn_density--; }
-    else gmn[0] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).base_kind ^ (unsigned char)type;
+    else gmn[0] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).base_kind ^ type;
     if (gmn[0] == 0) { gmn[0] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[0] = 0;
 
     if (gmn_y == 0 || gmn_x == 59) { gmn[1] = 0; gmn_nesw_count--; }
-    else gmn[1] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 472))).base_kind ^ (unsigned char)type;
+    else gmn[1] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 472))).base_kind ^ type;
     if (gmn[1] == 0) { gmn[1] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[1] = 0;
 
     if (gmn_x == 59) { gmn[2] = 0; gmn_density--; }
-    else gmn[2] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).base_kind ^ (unsigned char)type;
+    else gmn[2] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).base_kind ^ type;
     if (gmn[2] == 0) { gmn[2] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[2] = 0;
 
     if (gmn_x == 59 || gmn_y == 59) { gmn[3] = 0; gmn_nwse_count--; }
-    else gmn[3] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 488))).base_kind ^ (unsigned char)type;
+    else gmn[3] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 488))).base_kind ^ type;
     if (gmn[3] == 0) { gmn[3] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[3] = 0;
 
     if (gmn_y == 59) { gmn[4] = 0; gmn_density--; }
-    else gmn[4] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).base_kind ^ (unsigned char)type;
+    else gmn[4] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).base_kind ^ type;
     if (gmn[4] == 0) { gmn[4] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[4] = 0;
 
     if (gmn_x == 0 || gmn_y == 59) { gmn[5] = 0; gmn_nesw_count--; }
-    else gmn[5] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 472))).base_kind ^ (unsigned char)type;
+    else gmn[5] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 472))).base_kind ^ type;
     if (gmn[5] == 0) { gmn[5] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[5] = 0;
 
     if (gmn_x == 0) { gmn[6] = 0; gmn_density--; }
-    else gmn[6] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).base_kind ^ (unsigned char)type;
+    else gmn[6] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).base_kind ^ type;
     if (gmn[6] == 0) { gmn[6] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[6] = 0;
 
     if (gmn_x == 0 || gmn_y == 0) { gmn[7] = 0; gmn_nwse_count--; }
-    else gmn[7] = (unsigned char)type ^ (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 488))).base_kind;
+    else gmn[7] = type ^ (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 488))).base_kind;
     if (gmn[7] == 0) { gmn[7] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[7] = 0;
 
@@ -3778,42 +3778,42 @@ void test_type_regionmap_neighbours_negedge(unsigned char type)
     gmn_run = gmn_max_run = 0;
 
     if (gmn_y == 0) gmn[0] = 1;
-    else gmn[0] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).base_kind ^ (unsigned char)type;
+    else gmn[0] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 480))).base_kind ^ type;
     if (gmn[0] == 0) { gmn[0] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[0] = 0;
 
     if (gmn_y == 0 || gmn_x == 59) gmn[1] = 1;
-    else gmn[1] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 472))).base_kind ^ (unsigned char)type;
+    else gmn[1] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 472))).base_kind ^ type;
     if (gmn[1] == 0) { gmn[1] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[1] = 0;
 
     if (gmn_x == 59) gmn[2] = 1;
-    else gmn[2] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).base_kind ^ (unsigned char)type;
+    else gmn[2] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 8))).base_kind ^ type;
     if (gmn[2] == 0) { gmn[2] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[2] = 0;
 
     if (gmn_x == 59 || gmn_y == 59) gmn[3] = 1;
-    else gmn[3] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 488))).base_kind ^ (unsigned char)type;
+    else gmn[3] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 488))).base_kind ^ type;
     if (gmn[3] == 0) { gmn[3] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[3] = 0;
 
     if (gmn_y == 59) gmn[4] = 1;
-    else gmn[4] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).base_kind ^ (unsigned char)type;
+    else gmn[4] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 480))).base_kind ^ type;
     if (gmn[4] == 0) { gmn[4] = 1; gmn_count++; gmn_polar_count++; gmn_ns_count++; gmn_density++; }
     else gmn[4] = 0;
 
     if (gmn_x == 0 || gmn_y == 59) gmn[5] = 1;
-    else gmn[5] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 472))).base_kind ^ (unsigned char)type;
+    else gmn[5] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr + 472))).base_kind ^ type;
     if (gmn[5] == 0) { gmn[5] = 1; gmn_count++; gmn_nesw_count++; }
     else gmn[5] = 0;
 
     if (gmn_x == 0) gmn[6] = 1;
-    else gmn[6] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).base_kind ^ (unsigned char)type;
+    else gmn[6] = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 8))).base_kind ^ type;
     if (gmn[6] == 0) { gmn[6] = 1; gmn_count++; gmn_polar_count++; gmn_ew_count++; gmn_density++; }
     else gmn[6] = 0;
 
     if (gmn_x == 0 || gmn_y == 0) gmn[7] = 1;
-    else gmn[7] = (unsigned char)type ^ (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 488))).base_kind;
+    else gmn[7] = type ^ (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr - 488))).base_kind;
     if (gmn[7] == 0) { gmn[7] = 1; gmn_count++; gmn_nwse_count++; }
     else gmn[7] = 0;
 
