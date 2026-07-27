@@ -3296,37 +3296,37 @@ void check_region_map_for_port_square(int x, int y)
 // FUNCTION: C2WIN 0x004a8311
 void adjust_regions_coastline(int x, int y, int width, int height)
 {
-    int x0 = x;
-    int y0 = y;
-    int x1 = x + width;
-    int y1 = y + height;
-    int kind;
+    int x2 = x + width;
+    int y2 = y + height;
+    unsigned char t;
+    unsigned char sea;
 
-    if (x0 < 0) x0 = 0;
-    if (y0 < 0) y0 = 0;
-    if (x1 > 60) x1 = 60;
-    if (y1 > 60) y1 = 60;
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x2 > 60) x2 = 60;
+    if (y2 > 60) y2 = 60;
 
     init_choices(coast_data, 0x30);
-    for (gmn_y = y0; gmn_y < y1; gmn_y++) {
-        for (gmn_x = x0; gmn_x < x1; gmn_x++) {
+    for (gmn_y = y; gmn_y < y2; gmn_y++) {
+        for (gmn_x = x; gmn_x < x2; gmn_x++) {
             gmn_sptr = ((gmn_x) + (gmn_y) * 60) * 8;
-            if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 8) != 0 &&
-                ((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 1) == 0) {
+            if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 8) != 0) {
+                if (((*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain & 1) != 0)
+                    continue;
                 test_regionmap_neighbours_posedge(8);
                 invert_gmn();
                 if (choose_from(coast_data, 0x30) == 0)
                     high_beep();
                 (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = first_choice + choice_count - 0x10;
                 (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits |= 1;
-                kind = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind & 0xff;
-                if (kind < 0x7c) {
-                    unsigned char sea = sailable_sea[kind - SAILABLE_SEA_FIRST_TILE];
-                    if (sea)
-                        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain &= 0xef;
-                    else
-                        (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain |= 0x10;
-                }
+                t = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+                if (t >= 0x7c)
+                    continue;
+                sea = sailable_sea[t - SAILABLE_SEA_FIRST_TILE];
+                if (sea)
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain &= 0xef;
+                else
+                    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain |= 0x10;
             }
         }
     }
