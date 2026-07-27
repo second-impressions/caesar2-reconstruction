@@ -2114,7 +2114,7 @@ void garden_an_area(int x1, int y1, int x2, int y2)
             (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr)))).activity_a = 0;
         }
     }
-    stone_random_count = (signed char)prev_random;
+    stone_random_count = prev_random;
     if (particles_built == 0) illegal_build = 1;
 }
 
@@ -2227,7 +2227,7 @@ void clear_an_area(int x1, int y1, int x2, int y2)
             aquaduct_ramifications(x, y);
         }
     }
-    stone_random_count = (signed char)random_backup;
+    stone_random_count = random_backup;
 }
 
 char affected_by_cover1(unsigned char *, int, unsigned char);
@@ -2319,7 +2319,7 @@ void destroy_reg_atom(int sptr)
         }
     }
 restore_random:
-    stone_random_count = (signed char)random_backup;
+    stone_random_count = random_backup;
     particles_cleared = 0;
 }
 
@@ -2357,7 +2357,7 @@ void destroy_an_atom(int sptr, int rubble_kind)
     x = cell_position % 80;
     y = cell_position / 80;
     aquaduct_ramifications(x, y);
-    stone_random_count = (signed char)saved_random_count;
+    stone_random_count = saved_random_count;
     particles_cleared = 0;
 }
 
