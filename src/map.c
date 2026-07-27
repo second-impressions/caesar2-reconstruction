@@ -2615,6 +2615,11 @@ void clear_sized_to_reg_basic(int rm_offset, int size)
             clear_reg_basic(rm_offset);
 }
 
+void clear_reg_basic(int rm_offset);
+void plague_it(int sptr);
+void build_an_area(int x1, int y1, int x2, int y2, char base_kind,
+                   int edge_bits, int color);
+
 // Reset a region cell to terrain appropriate for its underlying land type.
 // FUNCTION: C2 0x6a0a6
 // FUNCTION: C2WIN 0x004a6430
@@ -3120,6 +3125,8 @@ int put_reg_x2_area(int x, int y, unsigned char base_kind, int edge_bits,
 }
 
 void change_reg_sized(int base_kind, int gfx_base_idx, int footprint_size, int cell_offset);
+void flag_rm_area(int x, int y, int size, char mask_byte);
+int put_city_flag(int val);
 
 // Replace a regional building footprint with a new kind and appearance.
 // FUNCTION: C2 0x6aeac
@@ -3226,6 +3233,7 @@ void flag_rm_area(int x, int y, int size, char mask_byte)
 int get_range1(unsigned char *, int, unsigned char);
 int get_range3(unsigned char *, int, unsigned char);
 char affected_by_cover2(unsigned char *, int, unsigned char);
+int get_best_lv(unsigned char *base, int bp);
 int put_city_flag(int);
 
 // Mask terrain flags across a regional footprint.
@@ -3312,6 +3320,7 @@ void check_region_map_for_port_square(int x, int y)
 }
 
 void adjust_regions_coastline(int x, int y, int width, int height);
+int put_city_flag(int val);
 void test_citymap_neighbours_posedge(unsigned char mask);
 void test_type_citymap_neighbours_posedge(unsigned char type);
 void test_type_citymap_neighbours_negedge(unsigned char type);
