@@ -3693,17 +3693,50 @@ void do_act_zoom_out(int decayed_click)
 // FUNCTION: C2WIN 0x004b7196
 void act_zoom_in(void)
 {
+#if PLATFORM_WINDOWS
+    int x_move;
+    int y_move;
+    int x_change;
+    int y_change;
+#endif
+
     if (zoom_level == 0) {
         action_sound = 1;
         return;
     }
     if (pointer_mode == 1) {
         if (zoom_level == 1) {
+#if PLATFORM_WINDOWS
+            x_move = pm_screen_width >> 1;
+            y_move = pm_screen_height >> 1;
+            if ((x_move & 1) > 0) {
+                x_move--;
+            }
+            if ((y_move & 1) > 0) {
+                y_move--;
+            }
+            pm_y_coord = x_move;
+            pm_y_coord = y_move;
+#else
             pm_x_coord = 8;
             pm_y_coord = 0x1c;
+#endif
         } else if (zoom_level == 2) {
+#if PLATFORM_WINDOWS
+            x_change = pm_screen_width / 2.34;
+            y_change = pm_screen_height / 2.34;
+            if ((x_change & 1) > 0) {
+                x_change--;
+            }
+            if ((y_change & 1) > 0) {
+                y_change--;
+            }
+            pm_y_coord = x_change;
+            pm_y_coord = y_change;
+#else
             pm_x_coord = 0x10;
             pm_y_coord = 0x3c;
+#endif
         }
         do_act_zoom_in(0);
         return;
