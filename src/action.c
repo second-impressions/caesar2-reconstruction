@@ -3151,7 +3151,9 @@ void act_set_patrol_markers(void)
             || army_list[tracking_army].state_idx == 0xa) {
         put_message(0x61, 0, 0);
         pointer_mode = 0;
+#if !PLATFORM_WINDOWS
         setup_map_screen_refresh();
+#endif
         update_map = 1;
         clear_mouse();
         return;
@@ -3187,7 +3189,9 @@ void act_set_patrol_markers(void)
     set_route_elastic();
     save_undo_info();
     setup_map_screen_refresh();
+#if !PLATFORM_WINDOWS
     clear_mouse();
+#endif
 }
 
 // Clears the tracked cohort's patrol route and orders it back to its fortress.
