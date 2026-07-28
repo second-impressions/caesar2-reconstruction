@@ -1832,33 +1832,33 @@ void act_null(void)
 // FUNCTION: C2WIN 0x004b4a6f REORDERED
 int perform_battle_strip_action(void)
 {
-    int icon_idx;
-    short icon_x;
-    short icon_y;
-    short icon_width;
-    short icon_height;
+    int count;
+    short xpos;
+    short ypos;
+    short w;
+    short h;
 
     last_icon_over = 0;
     if (mouse_y < 0x168) {
         return 0;
     }
 
-    for (icon_idx = 4; icon_idx < 0x15; icon_idx++) {
-        icon_width = int_battle_header[icon_idx * 8 + 4];
-        icon_height = int_battle_header[icon_idx * 8 + 5];
-        icon_x = int_battle_header[icon_idx * 8 + 8];
-        icon_y = int_battle_header[icon_idx * 8 + 9] + 0xc8;
-        if (mouse_in_area((unsigned short)icon_x, (unsigned short)icon_y,
-                          (unsigned short)icon_width, (unsigned short)icon_height) != 0) {
-            last_icon_over = icon_idx;
+    for (count = 4; count < 0x15; count++) {
+        w = int_battle_header[count * 8 + 4];
+        h = int_battle_header[count * 8 + 5];
+        xpos = int_battle_header[count * 8 + 8];
+        ypos = int_battle_header[count * 8 + 9] + 0xc8;
+        if (mouse_in_area((unsigned short)xpos, (unsigned short)ypos,
+                          (unsigned short)w, (unsigned short)h) != 0) {
+            last_icon_over = count;
             if (mouse_left_preclick == 0) {
                 return 0;
             }
-            battle_actions[icon_idx - 4]();
-            update_icon = icon_idx;
-            if (icon_idx >= 9) {
-                last_icon_used = icon_idx;
-            }
+            battle_actions[count - 4]();
+            update_icon = count;
+            if (count < 9) goto battle_strip_done;
+            last_icon_used = count;
+battle_strip_done:
             return 1;
         }
     }
