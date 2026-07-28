@@ -1654,17 +1654,14 @@ void sf02_death(void)
 // FUNCTION: C2WIN 0x00478269
 void sf03_move(void)
 {
-    int moved;
-
     figure_list[figure_no].is_routing = 1;
     get_fig_walk_image();
-    moved = figure_go_to_target();
-    if (moved == 0)
+    if (figure_go_to_target() == 0)
         return;
-    if ((figure_list[figure_no].is_visible & 2) == 0)
-        return;
-    figure_list[figure_no].is_visible &= 0xfd;
-    figure_list[figure_no].state_idx = 6;
+    if ((figure_list[figure_no].is_visible & 2) != 0) {
+        figure_list[figure_no].is_visible &= 0xfd;
+        figure_list[figure_no].state_idx = 6;
+    }
 }
 
 // Move-and-reform state (state_idx 15): step the figure toward its current target; once it
@@ -2684,6 +2681,7 @@ int try_this_battlemap_square(int cell_offset);
 void target_from_figure_dirc(int direction);
 int get_wf_dirc(int search_mode);
 int arrow_off_map(void);
+int find_adjacent_target(void);
 
 // Mark a clipped rectangle of battle-map cells dirty for redraw.
 // FUNCTION: C2 0x4fea9
