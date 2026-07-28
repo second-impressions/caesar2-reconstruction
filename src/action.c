@@ -4067,7 +4067,12 @@ void act_slave_city_wall_down(void) { alter_slave_reqs(4, -1); gen_refresh2 = 1;
 // Add one slave to the regional-work category. Gated on !c2inf.peace_mode.
 // FUNCTION: C2 0x3456e
 // FUNCTION: C2WIN 0x004b8afd
-void act_slave_reg_work_up(void)    { if (!c2inf.peace_mode) { alter_slave_reqs(5,  1); gen_refresh2 = 1; } }
+void act_slave_reg_work_up(void)
+{
+    if (c2inf.peace_mode != 0) return;
+    alter_slave_reqs(5, 1);
+    gen_refresh2 = 1;
+}
 
 // Take one slave away from the regional-work category. Gated on !c2inf.peace_mode.
 // FUNCTION: C2 0x34590
