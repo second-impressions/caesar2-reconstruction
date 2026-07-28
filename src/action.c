@@ -2231,18 +2231,24 @@ void act_tog_anims(void)
 // FUNCTION: C2WIN 0x004b52af
 void act_toggle_year_end(void)
 {
+#if !PLATFORM_WINDOWS
     int tutorial_active = tutorial_mode;
-    if (tutorial_active != 0) {
+#endif
+    if (FX_TUTORIAL_ACTIVE != 0) {
         click_warning(2, 0x50, 0xa0);
         return;
     }
     show_fx_box(3);
-    out1 = tutorial_active;
+    out1 = FX_INITIAL_OUT1;
     while (out1 == 0) {
         tog_yearend_game_loop();
     }
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
 }
+#undef FX_TUTORIAL_ACTIVE
+#undef FX_INITIAL_OUT1
 
 // Toggle the end-of-year-summary flag and re-render the FX dialog.
 // FUNCTION: C2 0x322d6
