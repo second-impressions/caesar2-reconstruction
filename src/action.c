@@ -3633,6 +3633,8 @@ void act_set_marker1(void)
 // FUNCTION: C2WIN 0x004b7d38
 void act_set_marker2(void)
 {
+    int target_map_ptr;
+
     pointer_mode = 0;
     placing_type = 0;
     placing_flags = 0;
@@ -3645,7 +3647,11 @@ void act_set_marker2(void)
         goto_flag_marker_mode();
         flag_mode_decay_count = 0xa;
     }
-    jump_to_regionmap_ptr(prov_flag_list[last_prov_flag]);
+    target_map_ptr = prov_flag_list[last_prov_flag];
+    jump_to_regionmap_ptr(target_map_ptr);
+#if PLATFORM_WINDOWS
+    redraw_region_window();
+#endif
 }
 
 // Danger-flag cycle. `danger_flag_map_mode` selects whether the flag is on the city map (0) or
