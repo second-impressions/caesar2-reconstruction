@@ -2589,7 +2589,12 @@ void act_industries(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 0xC;
+    control_selection(industry_selection, 0x12, 0x14, 0xC8, 0x10);
+#else
     control_selection(industry_selection, 0x12, mouse_x - 0x80, mouse_y - 0x30, 0x10);
+#endif
     if (selection_is == 1) {
         selected_icon_text = 0x10;
         selected_icon_no = selection_is;
