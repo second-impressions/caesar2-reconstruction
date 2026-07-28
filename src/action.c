@@ -741,8 +741,6 @@ void mouse_hunt_enemies(void)
 // FUNCTION: C2WIN 0x004b2362
 void show_latest_route(void)
 {
-    unsigned char place_state;
-
     if (pointer_mode < 6 || pointer_mode > 8) {
         return;
     }
@@ -753,8 +751,10 @@ void show_latest_route(void)
     pointer_mode = 6;
     get_over_coords();
 
-    place_state = (*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state;
-    if (place_state > 0x20 || place_state < 1) {
+    if ((*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state > 0x20) {
+        return;
+    }
+    if ((*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state < 1) {
         return;
     }
 
@@ -772,9 +772,7 @@ void show_latest_route(void)
             pointer_mode = 6;
         }
     } else {
-        unsigned int destination_flag =
-            (unsigned char)((*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).edge_bits & 0x80);
-        if (destination_flag != 0) {
+        if (((*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).edge_bits & 0x80) != 0) {
             pointer_mode = 7;
         } else {
             pointer_mode = 6;
@@ -782,7 +780,9 @@ void show_latest_route(void)
         }
     }
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(mouse_x - 0x40, mouse_y - 0x40, 9, 9, 2);
+#endif
 }
 
 // Snapshot the current cursor position and current denarii at the instant the player presses LMB
