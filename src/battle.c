@@ -65,6 +65,8 @@ void get_fig_still_image(void);
 void get_fig_tortoise_image(void);
 void get_fig_death_image(void);
 void get_fig_missile_image(void);
+int figure_go_to_target(void);
+int find_nearest_target(int distance);
 void set_figure_map_refresh(int grid_x, int grid_y, int offset_x, int offset_y, int radius, int extra_size);
 void set_missile_fire_range(int weapon_kind);
 void elephant_ai(void);
@@ -2760,10 +2762,15 @@ void update_units_ai(void)
 // FUNCTION: C2WIN 0x0047c4cb
 void elephant_ai(void)
 {
-    ++unit_list[temp_unit].ai_tick;
-    if (unit_list[temp_unit].ai_tick >= unit_list[temp_unit].ai_period) {
+    if (++unit_list[temp_unit].ai_tick < unit_list[temp_unit].ai_period)
+        return;
+
+    {
+        int direction;
+
         unit_list[temp_unit].ai_tick = 0;
-        if ((rand128 & 7) <= 4) {
+        direction = rand128 & 7;
+        if (direction <= 4) {
             set_ai_unit_move(0, 0);
         } else {
             set_ai_unit_move(0, -1);
