@@ -687,38 +687,50 @@ void flag_mode_action(void)
         if (control_menus(main_menu, 4, show_citymap) != 0) {
             flag_mode = 0;
             update_map = 1;
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
+#endif
             goto flag_done;
         }
         if (perform_city_strip_action() != 0) {
             redraw_icons = 1;
             update_map = 1;
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
+#endif
             goto flag_done;
         }
         if (use_city_overmap_to_move() != 0) {
             show_landfill(com_x, com_y);
             update_map = 1;
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
+#endif
             goto flag_done;
         }
     } else if (map_mode == 1) {
         if (control_menus(main_menu, 4, show_regionmap) != 0) {
             flag_mode = 0;
             update_map = 1;
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
+#endif
             goto flag_done;
         }
         if (perform_region_strip_action() != 0) {
             redraw_icons = 1;
             update_map = 1;
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
+#endif
             goto flag_done;
         }
         if (use_region_overmap_to_move() != 0) {
             show_landfill(com_x, com_y);
             update_map = 1;
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
+#endif
             goto flag_done;
         }
     }
@@ -736,13 +748,21 @@ void flag_mode_action(void)
             }
         }
         update_map = 1;
+#if !PLATFORM_WINDOWS
         setup_map_screen_refresh();
+#endif
     }
 
     if (mouse_right_preclick != 0) {
+#if PLATFORM_WINDOWS
+        flag_mode = flag_mode_decay_count = 0;
+#else
         flag_mode_decay_count = 0; flag_mode = 0;
+#endif
         do_pos();
+#if !PLATFORM_WINDOWS
         setup_map_screen_refresh();
+#endif
     }
 
 flag_done:
