@@ -3981,15 +3981,14 @@ void act_demob_cohort(void)
 // FUNCTION: C2WIN 0x004b88e9
 void act_more_mercs(void)
 {
-    if (mercs_in_army < max_mercs_allowed) {
-        mercs_in_army += 0x32;
-        if (mercs_in_army >= max_mercs_allowed) {
-            mercs_in_army = max_mercs_allowed;
-        }
-        gen_refresh3 = 1;
-        gen_refresh1 = 1;
-        gen_refresh2 = 1;
+    if (mercs_in_army >= max_mercs_allowed) return;
+    mercs_in_army += 0x32;
+    if (mercs_in_army >= max_mercs_allowed) {
+        mercs_in_army = max_mercs_allowed;
     }
+    gen_refresh3 = 1;
+    gen_refresh1 = 1;
+    gen_refresh2 = 1;
 }
 
 // "Hire -50 mercs" button: rounds mercs_in_army down to the nearest multiple of 50, then subtracts
