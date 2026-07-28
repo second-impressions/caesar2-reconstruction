@@ -257,38 +257,38 @@ void select_all_figures(void)
 // FUNCTION: C2WIN 0x004731f5
 void select_drag_figures(void)
 {
-    int x0;
-    int x1;
-    int y0;
-    int y1;
-    int row_stride;
+    int left_x;
+    int x_bound;
+    int first_y;
+    int bottom_bound;
+    int line_skip;
     int x;
     int y;
-    int cell_offset;
-    int temp;
-    unsigned char figure_idx;
+    int cell_off;
+    int saved_x;
+    unsigned char occupant;
 
-    x0 = battle_drag_start_x;
-    x1 = act_start_x;
-    y0 = battle_drag_start_y;
-    y1 = act_start_y;
+    left_x = battle_drag_start_x;
+    x_bound = act_start_x;
+    first_y = battle_drag_start_y;
+    bottom_bound = act_start_y;
 
-    if (x1 < x0) { temp = x0; x0 = x1; x1 = temp; }
-    if (y0 > y1) { temp = y0; y0 = y1; y1 = temp; }
+    if (x_bound < left_x) { saved_x = left_x; left_x = x_bound; x_bound = saved_x; }
+    if (first_y > bottom_bound) { saved_x = first_y; first_y = bottom_bound; bottom_bound = saved_x; }
 
-    cell_offset = (y0 * 0x34 + x0) * 4;
-    row_stride = (0x34 - ((x1 - x0) + 1)) * 4;
+    cell_off = (first_y * 0x34 + left_x) * 4;
+    line_skip = (0x34 - ((x_bound - left_x) + 1)) * 4;
 
-    for (y = y0; y <= y1; y++, cell_offset += row_stride) {
-        for (x = x0; x <= x1; x++, cell_offset += 4) {
-            figure_idx = ((unsigned char *)battle_map)[(cell_offset) + 1];
-            if (figure_idx != 0) {
-                select_a_unit(figure_idx, 1);
+    for (y = first_y; y <= bottom_bound; y++, cell_off += line_skip) {
+        for (x = left_x; x <= x_bound; x++, cell_off += 4) {
+            occupant = ((unsigned char *)battle_map)[(cell_off) + 1];
+            if (occupant != 0) {
+                select_a_unit(occupant, 1);
             }
             else {
-                ((unsigned char *)battle_map)[(cell_offset) + 2] |= 2;
-                ((unsigned char *)battle_map)[(cell_offset) + 2] &= 0xf3;
-                ((unsigned char *)battle_map)[(cell_offset) + 2] |= 0xc;
+                ((unsigned char *)battle_map)[(cell_off) + 2] |= 2;
+                ((unsigned char *)battle_map)[(cell_off) + 2] &= 0xf3;
+                ((unsigned char *)battle_map)[(cell_off) + 2] |= 0xc;
             }
         }
     }
