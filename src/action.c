@@ -26,6 +26,9 @@ void get_next_viewed_cohort(int dir);
 /* Selection-box helpers. */
 void get_selection_goods_list(int what);
 int control_selection(struct selection_rec *list, int count, int x, int y, int width);
+#if PLATFORM_WINDOWS
+extern int selection_menu;
+#endif
 void show_fx_box(int what);
 void stop_all_sounds(void);
 void stop_db(void);
@@ -2383,7 +2386,12 @@ void act_houses(void)
     flag_mode = 0;
     if (housing_cheat) {
         get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+        selection_menu = 1;
+        control_selection(houses_selection, 6, mouse_x, mouse_y, 0x18);
+#else
         control_selection(houses_selection, 6, mouse_x - 0x70, mouse_y - 0x30, 0x18);
+#endif
     } else {
         act_house1();
     }
