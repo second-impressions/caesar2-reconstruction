@@ -1820,28 +1820,24 @@ void sf09_look_for_fight(void)
     int direction;
 
     get_fig_still_image();
-    if (figure_list[figure_no].is_defending == 0) {
-        figure_list[figure_no].state_idx = 0xa;
-        return;
+    if (figure_list[figure_no].is_defending == 0) { figure_list[figure_no].state_idx = 0xa; } else {
+        direction = nearest_formation_enemy();
+        if (direction < 8) {
+            figure_list[figure_no].state_idx        = 4;
+            figure_list[figure_no].fight_direction = direction;
+            figure_list[figure_no].opponent         = enemy_figure;
+            figure_list[figure_no].fight_role       = 1;
+            set_attack_count(figure_no);
+
+            if (figure_list[enemy_figure].state_idx != 4) {
+                figure_list[enemy_figure].state_idx        = 4;
+                figure_list[enemy_figure].fight_direction = (direction + 4) % 8;
+                figure_list[enemy_figure].opponent         = figure_no;
+                figure_list[enemy_figure].fight_role       = 2;
+                set_defense_shield(enemy_figure);
+            }
+        }
     }
-
-    direction = nearest_formation_enemy();
-    if (direction >= 8)
-        return;
-
-    figure_list[figure_no].state_idx       = 4;
-    figure_list[figure_no].fight_direction = direction;
-    figure_list[figure_no].opponent        = enemy_figure;
-    figure_list[figure_no].fight_role      = 1;
-    set_attack_count(figure_no);
-
-    if (figure_list[enemy_figure].state_idx == 4)
-        return;
-    figure_list[enemy_figure].state_idx       = 4;
-    figure_list[enemy_figure].fight_direction = ((direction + 4) % 8);
-    figure_list[enemy_figure].opponent        = figure_no;
-    figure_list[enemy_figure].fight_role      = 2;
-    set_defense_shield(enemy_figure);
 }
 
 // Empty state-handler slot for the "berserk" battle state.
