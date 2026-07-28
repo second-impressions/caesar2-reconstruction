@@ -4532,14 +4532,19 @@ void get_region_over(void)
 {
     int x;
     int i;
+#if !PLATFORM_WINDOWS
     int h;
+#endif
     int width;
     int bmp_off;
-    int y;
-    unsigned char pixel_c;
 #if PLATFORM_WINDOWS
     unsigned char *bitmap_ptr;
 #endif
+    int y;
+#if PLATFORM_WINDOWS
+    int h;
+#endif
+    unsigned char pixel_c;
 
     region_over = 0;
     for (i = 0; i < 0x2c; i++) {
@@ -4555,15 +4560,11 @@ void get_region_over(void)
         if (mouse_x < x) continue;
         if (y > mouse_y) continue;
         if (((x) + (width)) <= mouse_x) continue;
-#if PLATFORM_WINDOWS
-        if ((y + h) <= mouse_y) continue;
-#else
         if ((h + y) <= mouse_y) continue;
-#endif
 
         x = mouse_x - x; y = mouse_y - y;
 #if PLATFORM_WINDOWS
-        bitmap_ptr = scratch_buffer + x + bmp_off + y * width;
+        bitmap_ptr = scratch_buffer + bmp_off + x + y * width;
         pixel_c = *bitmap_ptr;
 #else
         pixel_c = *(scratch_buffer + bmp_off + x + y * width);
