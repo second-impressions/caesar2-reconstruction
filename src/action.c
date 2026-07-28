@@ -3601,8 +3601,14 @@ void act_goto_flags(void)
 // decay) and pan the city map to that flag.
 // FUNCTION: C2 0x33b40
 // FUNCTION: C2WIN 0x004b7ca9
+#if PLATFORM_WINDOWS
+void redraw_city_window(void);
+void redraw_region_window(void);
+#endif
 void act_set_marker1(void)
 {
+    int target_map_ptr;
+
     pointer_mode = 0;
     placing_type = 0;
     placing_flags = 0;
@@ -3615,7 +3621,11 @@ void act_set_marker1(void)
         goto_flag_marker_mode();
         flag_mode_decay_count = 0xa;
     }
-    jump_to_citymap_ptr(city_flag_list[last_city_flag]);
+    target_map_ptr = city_flag_list[last_city_flag];
+    jump_to_citymap_ptr(target_map_ptr);
+#if PLATFORM_WINDOWS
+    redraw_city_window();
+#endif
 }
 
 // Cycles to the next province flag and recentres the region map on it.
@@ -3642,10 +3652,6 @@ void act_set_marker2(void)
 // region map (non-zero).
 // FUNCTION: C2 0x33c04
 // FUNCTION: C2WIN 0x004b7dc7
-#if PLATFORM_WINDOWS
-void redraw_city_window(void);
-void redraw_region_window(void);
-#endif
 void act_set_marker3(void)
 {
     int target_map_ptr;
