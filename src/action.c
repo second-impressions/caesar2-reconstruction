@@ -4945,6 +4945,16 @@ void act_set_slaves_to_need_level(int requirement_idx)
     gen_refresh2 = 1;
 }
 
+/* Dialog helpers used by the remaining action handlers. */
+void show_gift_box(void);
+void get_temple_tip(int);
+void clip_battle_zoom_level2(void);
+void show_first_region_box(void);
+void initreg_game_loop(void);
+void show_initreg_box(void);
+void get_new_province_options(void);
+void show_no_provinces_box(void);
+
 // Adjusts one slave-work category while conserving the total through the free-slave pool.
 // FUNCTION: C2 0x3463a
 // FUNCTION: C2WIN 0x004b8c5d
