@@ -3780,19 +3780,26 @@ void act_forum(void)
 // Runs the interaction loop for the active forum department.
 // FUNCTION: C2 0x33ea7
 // FUNCTION: C2WIN 0x004b7e89
+#if PLATFORM_WINDOWS
+#define ACTIVE_FORUM_DEPT forum_dept
+#else
+#define ACTIVE_FORUM_DEPT dept
+#endif
 void forum_game_loop(void)
 {
+#if !PLATFORM_WINDOWS
     int dept = forum_dept;
-    if (dept == FORUM_DEPT_ADMIN) { forum_admin_game_loop();    return; }
-    if (dept == FORUM_DEPT_CAREER) { forum_career_game_loop();   return; }
-    if (dept == FORUM_DEPT_ROME) { forum_rome_game_loop();     return; }
-    if (dept == FORUM_DEPT_CLERKS) { forum_clerks_game_loop();   return; }
-    if (dept == FORUM_DEPT_ARMY) { forum_army_game_loop();     return; }
-    if (dept == FORUM_DEPT_INDUSTRY) { forum_industry_game_loop(); return; }
-    if (dept == FORUM_DEPT_SLAVES) { forum_slaves_game_loop();   return; }
-    if (dept == FORUM_DEPT_EXIT) { out1 = 1; return; }
-    if (dept == FORUM_DEPT_TEMPLE) { forum_temple_game_loop();  return; }
-    if (dept == FORUM_DEPT_EMPIRE) { forum_empire_game_loop();  return; }
+#endif
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_ADMIN) { forum_admin_game_loop();    return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_CAREER) { forum_career_game_loop();   return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_ROME) { forum_rome_game_loop();     return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_CLERKS) { forum_clerks_game_loop();   return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_ARMY) { forum_army_game_loop();     return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_INDUSTRY) { forum_industry_game_loop(); return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_SLAVES) { forum_slaves_game_loop();   return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_EXIT) { out1 = 1; return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_TEMPLE) { forum_temple_game_loop();  return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_EMPIRE) { forum_empire_game_loop();  return; }
     forum_idle_game_loop();
 }
 
