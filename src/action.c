@@ -784,11 +784,7 @@ void flag_mode_action(void)
     }
 
     if (mouse_right_preclick != 0) {
-#if PLATFORM_WINDOWS
         flag_mode = flag_mode_decay_count = 0;
-#else
-        flag_mode_decay_count = 0; flag_mode = 0;
-#endif
         do_pos();
 #if !PLATFORM_WINDOWS
         setup_map_screen_refresh();
