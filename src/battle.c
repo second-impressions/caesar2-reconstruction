@@ -1143,15 +1143,9 @@ void rebuild_figures_image_data(void)
 // FUNCTION: C2WIN 0x00476d34
 void find_attack_spot(void)
 {
-    first_rear = 1;
-    first_back = 1;
-    first_front = 1;
-    xright_rear = 0x1a;
-    xleft_rear = 0x1a;
-    xright_back = 0x1a;
-    xleft_back = 0x1a;
-    xright_front = 0x1a;
-    xleft_front = 0x1a;
+    first_front = first_back = first_rear = 1;
+    xleft_front = xright_front = xleft_back =
+        xright_back = xleft_rear = xright_rear = 0x1a;
     if (bat_side == -1) {
         yfront = 0x12;
         yback = 0xe;
