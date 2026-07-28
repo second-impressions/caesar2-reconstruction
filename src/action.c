@@ -1407,29 +1407,27 @@ int get_region_2x2_start(int rm_ptr)
 // FUNCTION: C2WIN 0x004b40c5
 void get_icon_over(void)
 {
-    int icon_bottom;
-    int icon_idx;
-    short icon_x;
-    short icon_y;
-    short icon_width;
-    short icon_height;
+    int count;
+    short xpos;
+    short ypos;
+    short w;
+    short h;
 
     last_icon_over = 0;
 
     if (mouse_y < 0x18) {
         last_icon_over = 1;
-        return;
+        goto icon_over_end;
     }
 
     if (mouse_x >= com_x && (com_x + com_w) > mouse_x) {
-        icon_bottom = com_y + com_h;
         if (map_mode == 0) {
-            if (com_y - 0x18 <= mouse_y && icon_bottom > mouse_y) {
+            if (com_y - 0x18 <= mouse_y && com_y + com_h > mouse_y) {
                 last_icon_over = 2;
                 return;
             }
         } else {
-            if (mouse_y >= com_y && mouse_y < icon_bottom) {
+            if (mouse_y >= com_y && mouse_y < com_y + com_h) {
                 last_icon_over = 2;
                 return;
             }
@@ -1441,34 +1439,38 @@ void get_icon_over(void)
     }
 
     if (map_mode == 0) {
-        for (icon_idx = 4; icon_idx < 0x1c; icon_idx++) {
-            if (tutorial_mode == 0 || city_icon_allowed(icon_idx - 4) != 0) {
-                icon_width = int_city_header[icon_idx * 8 + 4];
-                icon_height = int_city_header[icon_idx * 8 + 5];
-                icon_x = int_city_header[icon_idx * 8 + 8] + 0xee;
-                icon_y = int_city_header[icon_idx * 8 + 9];
-                if (mouse_in_area((unsigned short)icon_x, (unsigned short)icon_y,
-                                  (unsigned short)icon_width, (unsigned short)icon_height) != 0) {
-                    last_icon_over = icon_idx;
-                    return;
-                }
+        for (count = 4; count < 0x1c; count++) {
+            if (tutorial_mode != 0) {
+                if (city_icon_allowed(count - 4) == 0) continue;
+            }
+            w = int_city_header[count * 8 + 4];
+            h = int_city_header[count * 8 + 5];
+            xpos = int_city_header[count * 8 + 8] + 0xee;
+            ypos = int_city_header[count * 8 + 9];
+            if (mouse_in_area((unsigned short)xpos, (unsigned short)ypos,
+                              (unsigned short)w, (unsigned short)h) != 0) {
+                last_icon_over = count;
+                return;
             }
         }
     } else {
-        for (icon_idx = 4; icon_idx < 0x17; icon_idx++) {
-            if (tutorial_mode == 0 || region_icon_allowed(icon_idx - 4) != 0) {
-                icon_width = int_region_header[icon_idx * 8 + 4];
-                icon_height = int_region_header[icon_idx * 8 + 5];
-                icon_x = int_region_header[icon_idx * 8 + 8] + 0xee;
-                icon_y = int_region_header[icon_idx * 8 + 9];
-                if (mouse_in_area((unsigned short)icon_x, (unsigned short)icon_y,
-                                  (unsigned short)icon_width, (unsigned short)icon_height) != 0) {
-                    last_icon_over = icon_idx;
-                    return;
-                }
+        for (count = 4; count < 0x17; count++) {
+            if (tutorial_mode != 0) {
+                if (region_icon_allowed(count - 4) == 0) continue;
+            }
+            w = int_region_header[count * 8 + 4];
+            h = int_region_header[count * 8 + 5];
+            xpos = int_region_header[count * 8 + 8] + 0xee;
+            ypos = int_region_header[count * 8 + 9];
+            if (mouse_in_area((unsigned short)xpos, (unsigned short)ypos,
+                              (unsigned short)w, (unsigned short)h) != 0) {
+                last_icon_over = count;
+                return;
             }
         }
     }
+icon_over_end:
+    ;
 }
 
 // "Is the cursor over icon `icon_idx`?". Returns 1 if the mouse is in the icon's box (or if `icon_idx==2`,
