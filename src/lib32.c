@@ -244,7 +244,7 @@ unsigned char yclipped;
 unsigned char insert_cursor;
 char highlight;
 unsigned char allow_padding;
-char hot_key_out_off_build;
+unsigned char hot_key_out_off_build;
 char hold_hot_keys;
 char padding_off;
 char screen_refresh_flag;

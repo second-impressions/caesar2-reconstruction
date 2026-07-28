@@ -135,7 +135,7 @@ extern int fb_limit;
 extern int fb_count;
 extern struct dpmi_mem_info memory;
 extern unsigned char allow_padding;
-extern char hot_key_out_off_build;
+extern unsigned char hot_key_out_off_build;
 extern char hold_hot_keys;
 extern char padding_off;
 extern void cycle_colours(int start_idx, int end_idx);

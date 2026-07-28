@@ -474,7 +474,7 @@ extern int hospital_cover;
 extern int hospitals_count;
 extern int hospitals_pass_count;
 extern char hot_exit_flag;
-extern char hot_key_out_off_build;
+extern unsigned char hot_key_out_off_build;
 extern unsigned char * house_data;
 extern unsigned char house_gfxdat[];
 extern int houses_to_income[];

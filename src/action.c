@@ -2,8 +2,8 @@
 #include "c2_data.h"
 #include "c2_types.h"
 
-extern int affected_by_cover1();
-extern int colour_cycle_delay1();
+extern int affected_by_cover1(unsigned char *cell_ptr, int range, unsigned char mask);
+extern int colour_cycle_delay1(int delay_ms);
 
 
 /* Local helper declarations. */
@@ -816,28 +816,33 @@ void prebuild_city_item(void)
 // FUNCTION: C2WIN 0x004b2585
 void build_city_item(void)
 {
-    int second_gfx_idx;
+    int sprite_b_idx;
+#if !PLATFORM_WINDOWS
     unsigned int house_gfx_idx;
-    int first_gfx_idx;
-    int second_y_offset;
-    unsigned int building_edge_bits;
+#endif
+    int first_gfx;
+    int yadd;
+    unsigned int edges;
+#if !PLATFORM_WINDOWS
     unsigned int fountain_gfx_idx;
-    int first_base_kind;
-    int second_base_kind;
-    int placement_ok;
-    unsigned int building_gfx_idx;
-    unsigned int building_shape;
-    unsigned int base_kind;
-    int has_cover;
-    int second_x_offset;
+#endif
+    int primary_kind;
+    int second_building_type;
+    int valid;
+    unsigned int gfx;
+    unsigned int shape;
+    unsigned int item_kind;
+    int can_build;
+    int xdelta;
 
     illegal_build = 2;
     CM_CELL(pm_over_cm_ptr).edge_bits |= 1;
 
     if (slave_requirements[0].current < slave_requirements[0].max) {
-        if (warned_of_not_build != 0) return;
-        warned_of_not_build = 1;
-        put_message(0x65, 0, 0);
+        if (warned_of_not_build == 0) {
+            warned_of_not_build = 1;
+            put_message(0x65, 0, 0);
+        }
         return;
     }
 
@@ -847,17 +852,23 @@ void build_city_item(void)
     if (placing_type == 0x2) {  /* Road */
         restore_city_from_undo_buffer();
         if (hot_key_out_off_build == 0) build_road_from_elastic();
+#if !PLATFORM_WINDOWS
         if (pm_over != 0 && pm_over != old_pm_over) setup_map_screen_refresh();
+#endif
     }
     if (placing_type == 0x3) {  /* Wall */
         restore_city_from_undo_buffer();
         if (hot_key_out_off_build == 0) build_wall_from_elastic();
+#if !PLATFORM_WINDOWS
         if (pm_over != 0 && pm_over != old_pm_over) setup_map_screen_refresh();
+#endif
     }
     if (placing_type == 0x4) {  /* Aqueduct */
         restore_city_from_undo_buffer();
         if (hot_key_out_off_build == 0) build_aquaduct_from_elastic();
+#if !PLATFORM_WINDOWS
         if (pm_over != 0 && pm_over != old_pm_over) setup_map_screen_refresh();
+#endif
         evolve_row = 0; evolve_water_supply_baths_industry(0x50);
     }
 
@@ -873,66 +884,84 @@ void build_city_item(void)
                     confirm(10, 0xa0, 0xa0);
                     if (decision == 0) {
                         CM_CELL(pm_over_cm_ptr).terrain &= 0xdf;
-                        base_kind = CM_CELL(pm_over_cm_ptr).base_kind;
-                        if (base_kind == 0xd5) { CM_CELL(pm_over_cm_ptr).base_kind = 0xcf; CM_CELL(pm_over_cm_ptr).extra_edge = 0x79; }
+                        item_kind = CM_CELL(pm_over_cm_ptr).base_kind;
+                        if (item_kind == 0xd5) { CM_CELL(pm_over_cm_ptr).base_kind = 0xcf; CM_CELL(pm_over_cm_ptr).extra_edge = 0x79; }
                         else { CM_CELL(pm_over_cm_ptr).base_kind = 0xd0; CM_CELL(pm_over_cm_ptr).extra_edge = 0x76; }
                         aquaduct_ramifications(over_x, over_y);
+#if !PLATFORM_WINDOWS
                         setup_map_screen_refresh();
+#endif
                         goto after_clear;
                     }
                 }
             }
         }
         if (hot_key_out_off_build == 0) clear_an_area(act_start_x, act_start_y, over_x, over_y);
+#if !PLATFORM_WINDOWS
         if (pm_over != 0 && pm_over != old_pm_over) setup_map_screen_refresh();
         if ((cycle_count & 7) == 0) setup_map_screen_refresh();
+#endif
     }
     if (placing_type == 0x6) {  /* Gardens */
         restore_city_from_undo_buffer();
         if (hot_key_out_off_build == 0) garden_an_area(act_start_x, act_start_y, over_x, over_y);
+#if !PLATFORM_WINDOWS
         if (pm_over != 0 && pm_over != old_pm_over) setup_map_screen_refresh();
+#endif
     }
     if (placing_type == 0x7) {  /* Plaza */
         restore_city_from_undo_buffer();
         if (hot_key_out_off_build == 0) plaza_an_area(act_start_x, act_start_y, over_x, over_y);
+#if !PLATFORM_WINDOWS
         if (pm_over != 0 && pm_over != old_pm_over) setup_map_screen_refresh();
+#endif
     }
 
     /* Houses use the placement type to select their footprint and graphics. */
     if (placing_type >= 0x82 && placing_type <= 0xa1) {
         restore_city_from_undo_buffer();
-        base_kind = placing_type;
-        house_gfx_idx = house_gfxdat[base_kind * 4 - 0x208];
-        building_shape = house_gfxdat[base_kind * 4 - 0x207];
-        building_edge_bits = house_gfxdat[base_kind * 4 - 0x206];
+        item_kind = placing_type;
+#if PLATFORM_WINDOWS
+        gfx = house_gfxdat[placing_type * 4 - 0x208];
+#else
+        house_gfx_idx = house_gfxdat[placing_type * 4 - 0x208];
+#endif
+        shape = house_gfxdat[placing_type * 4 - 0x207];
+        edges = house_gfxdat[placing_type * 4 - 0x206];
         if (hot_key_out_off_build == 0) {
-            if (building_shape == 3) put_x3_area(over_x, over_y, base_kind, building_edge_bits, house_gfx_idx);
-            else if (building_shape == 2) put_x2_area(over_x, over_y, base_kind, building_edge_bits, house_gfx_idx);
-            else build_an_area(act_start_x, act_start_y, over_x, over_y, base_kind, building_edge_bits, house_gfx_idx);
+#if PLATFORM_WINDOWS
+            if (shape == 3) put_x3_area(over_x, over_y, item_kind, edges, gfx);
+            else if (shape == 2) put_x2_area(over_x, over_y, item_kind, edges, gfx);
+            else build_an_area(act_start_x, act_start_y, over_x, over_y, item_kind, edges, gfx);
+#else
+            if (shape == 3) put_x3_area(over_x, over_y, item_kind, edges, house_gfx_idx);
+            else if (shape == 2) put_x2_area(over_x, over_y, item_kind, edges, house_gfx_idx);
+            else build_an_area(act_start_x, act_start_y, over_x, over_y, item_kind, edges, house_gfx_idx);
+#endif
         }
     }
 
     /* Forums use the placement type to select their footprint and graphics. */
     if (placing_type >= 0xae && placing_type <= 0xb9) {
         restore_city_from_undo_buffer();
-        base_kind = placing_type;
-        building_gfx_idx = forum_gfxdat[base_kind * 4 - 0x2b8];
-        building_shape = forum_gfxdat[base_kind * 4 - 0x2b7];
-        building_edge_bits = forum_gfxdat[base_kind * 4 - 0x2b6];
+        item_kind = placing_type;
+        gfx = forum_gfxdat[placing_type * 4 - 0x2b8];
+        shape = forum_gfxdat[placing_type * 4 - 0x2b7];
+        edges = forum_gfxdat[placing_type * 4 - 0x2b6];
         if (hot_key_out_off_build == 0) {
-            if (building_shape == 2) put_x2_area(over_x, over_y, base_kind, building_edge_bits, building_gfx_idx);
-            else if (building_shape == 3) put_x3_area(over_x, over_y, base_kind, building_edge_bits, building_gfx_idx);
-            else if (building_shape == 4) put_x4_area(over_x, over_y, base_kind, building_edge_bits, building_gfx_idx);
+            if (shape == 2) put_x2_area(over_x, over_y, item_kind, edges, gfx);
+            else if (shape == 3) put_x3_area(over_x, over_y, item_kind, edges, gfx);
+            else if (shape == 4) put_x4_area(over_x, over_y, item_kind, edges, gfx);
         }
     }
 
     if (placing_type == 0xa) {  /* Baths */
         restore_city_from_undo_buffer();
-        has_cover = affected_by_cover1(CM_CELL(pm_over_cm_ptr).b, 2, 4);
-        if (has_cover != 0) building_gfx_idx = 0x20;
-        else building_gfx_idx = 99;
+        can_build = affected_by_cover1(CM_CELL(pm_over_cm_ptr).b, 2, 4);
+        if (can_build != 0) gfx = 0x20;
+        else gfx = 99;
         if (hot_key_out_off_build == 0) {
-            put_x2_area(over_x, over_y, 0xdf, 8, building_gfx_idx);
+            put_x2_area(over_x, over_y, 0xdf, 8, gfx);
             CM_CELL(start_sptr).building = 0x0f;
         }
     }
@@ -1016,47 +1045,57 @@ void build_city_item(void)
     if (placing_type == 0x1b) {
         /* Circus: two 3x3 tiles, orientation chosen from map_direction. */
         restore_city_from_undo_buffer();
-        if (map_direction == 0) { first_base_kind = 0xe9; second_base_kind = 0xea; first_gfx_idx = 0; second_gfx_idx = 9; second_x_offset = 0; second_y_offset = 3; }
-        else if (map_direction == 4) { first_base_kind = 0xe9; second_base_kind = 0xea; first_gfx_idx = 9; second_gfx_idx = 0; second_x_offset = 0; second_y_offset = -3; }
-        else if (map_direction == 2) { first_base_kind = 0xeb; second_base_kind = 0xec; first_gfx_idx = 0x3b; second_gfx_idx = 0x32; second_x_offset = -3; second_y_offset = 0; }
-        else if (map_direction == 6) { first_base_kind = 0xeb; second_base_kind = 0xec; first_gfx_idx = 0x32; second_gfx_idx = 0x3b; second_x_offset = 3; second_y_offset = 0; }
+        if (map_direction == 0) { primary_kind = 0xe9; second_building_type = 0xea; first_gfx = 0; sprite_b_idx = 9; xdelta = 0; yadd = 3; }
+        else if (map_direction == 4) { primary_kind = 0xe9; second_building_type = 0xea; first_gfx = 9; sprite_b_idx = 0; xdelta = 0; yadd = -3; }
+        else if (map_direction == 2) { primary_kind = 0xeb; second_building_type = 0xec; first_gfx = 0x3b; sprite_b_idx = 0x32; xdelta = -3; yadd = 0; }
+        else if (map_direction == 6) { primary_kind = 0xeb; second_building_type = 0xec; first_gfx = 0x32; sprite_b_idx = 0x3b; xdelta = 3; yadd = 0; }
         if (hot_key_out_off_build == 0) {
-            placement_ok = 1;
-            if (put_x3_area(over_x, over_y, first_base_kind, 0x14, first_gfx_idx) == 0) placement_ok = 0;
-            if (put_x3_area(over_x + second_x_offset, over_y + second_y_offset, second_base_kind, 0x14, second_gfx_idx) == 0) placement_ok = 0;
-            if (placement_ok == 0) { restore_city_from_undo_buffer(); particles_built = 0; }
+            valid = 1;
+            if (put_x3_area(over_x, over_y, primary_kind, 0x14, first_gfx) == 0) valid = 0;
+            if (put_x3_area(over_x + xdelta, over_y + yadd, second_building_type, 0x14, sprite_b_idx) == 0) valid = 0;
+            if (valid == 0) { restore_city_from_undo_buffer(); particles_built = 0; }
             else particles_built = 1;
             set_map_ref(over_x, over_y, 3);
-            set_map_ref(over_x + second_x_offset, over_y + second_y_offset, 3);
+            set_map_ref(over_x + xdelta, over_y + yadd, 3);
         }
     }
 
     if (placing_type == 0x1c) {
         /* Circus Maximus: two 4x4 tiles, orientation from map_direction. */
         restore_city_from_undo_buffer();
-        if (map_direction == 0) { first_base_kind = 0xed; second_base_kind = 0xee; first_gfx_idx = 0x12; second_gfx_idx = 0x22; second_x_offset = 0; second_y_offset = 4; }
-        else if (map_direction == 4) { first_base_kind = 0xed; second_base_kind = 0xee; first_gfx_idx = 0x22; second_gfx_idx = 0x12; second_x_offset = 0; second_y_offset = -4; }
-        else if (map_direction == 2) { first_base_kind = 0xef; second_base_kind = 0xf0; first_gfx_idx = 0x54; second_gfx_idx = 0x44; second_x_offset = -4; second_y_offset = 0; }
-        else if (map_direction == 6) { first_base_kind = 0xef; second_base_kind = 0xf0; first_gfx_idx = 0x44; second_gfx_idx = 0x54; second_x_offset = 4; second_y_offset = 0; }
+        if (map_direction == 0) { primary_kind = 0xed; second_building_type = 0xee; first_gfx = 0x12; sprite_b_idx = 0x22; xdelta = 0; yadd = 4; }
+        else if (map_direction == 4) { primary_kind = 0xed; second_building_type = 0xee; first_gfx = 0x22; sprite_b_idx = 0x12; xdelta = 0; yadd = -4; }
+        else if (map_direction == 2) { primary_kind = 0xef; second_building_type = 0xf0; first_gfx = 0x54; sprite_b_idx = 0x44; xdelta = -4; yadd = 0; }
+        else if (map_direction == 6) { primary_kind = 0xef; second_building_type = 0xf0; first_gfx = 0x44; sprite_b_idx = 0x54; xdelta = 4; yadd = 0; }
         if (hot_key_out_off_build == 0) {
-            placement_ok = 1;
-            if (put_x4_area(over_x, over_y, first_base_kind, 0x14, first_gfx_idx) == 0) placement_ok = 0;
-            if (put_x4_area(over_x + second_x_offset, over_y + second_y_offset, second_base_kind, 0x14, second_gfx_idx) == 0) placement_ok = 0;
-            if (placement_ok == 0) { restore_city_from_undo_buffer(); particles_built = 0; }
+            valid = 1;
+            if (put_x4_area(over_x, over_y, primary_kind, 0x14, first_gfx) == 0) valid = 0;
+            if (put_x4_area(over_x + xdelta, over_y + yadd, second_building_type, 0x14, sprite_b_idx) == 0) valid = 0;
+            if (valid == 0) { restore_city_from_undo_buffer(); particles_built = 0; }
             else particles_built = 1;
             set_map_ref(over_x, over_y, 4);
-            set_map_ref(over_x + second_x_offset, over_y + second_y_offset, 4);
+            set_map_ref(over_x + xdelta, over_y + yadd, 4);
         }
     }
 
     if (placing_type == 0xbf) {  /* Tower */
         restore_city_from_undo_buffer();
-        base_kind = placing_type;
+        item_kind = placing_type;
+#if PLATFORM_WINDOWS
+        gfx = 0x94;
+        edges = 8;
+#endif
         if (hot_key_out_off_build == 0) {
             CM_CELL(pm_over_cm_ptr).terrain &= 0xfd;
-            if (put_x1_area(over_x, over_y, base_kind, 8, 0x94) == 0) {
+#if PLATFORM_WINDOWS
+            if (put_x1_area(over_x, over_y, item_kind, edges, gfx) == 0) {
                 restore_city_from_undo_buffer();
             }
+#else
+            if (put_x1_area(over_x, over_y, item_kind, 8, 0x94) == 0) {
+                restore_city_from_undo_buffer();
+            }
+#endif
             if (wall_ramifications(over_x, over_y) == 0) {
                 restore_city_from_undo_buffer();
             }
@@ -1065,12 +1104,22 @@ void build_city_item(void)
 
     if (placing_type == 0xbe) {  /* Reservoir */
         restore_city_from_undo_buffer();
-        base_kind = placing_type;
+        item_kind = placing_type;
+#if PLATFORM_WINDOWS
+        gfx = 0x5a;
+        edges = 0;
+#endif
         if (hot_key_out_off_build == 0) {
             CM_CELL(pm_over_cm_ptr).terrain &= 0xbf;
-            if (put_x1_area(over_x, over_y, base_kind, 0, 0x5a) == 0) {
+#if PLATFORM_WINDOWS
+            if (put_x1_area(over_x, over_y, item_kind, edges, gfx) == 0) {
                 restore_city_from_undo_buffer();
             }
+#else
+            if (put_x1_area(over_x, over_y, item_kind, 0, 0x5a) == 0) {
+                restore_city_from_undo_buffer();
+            }
+#endif
             if (aquaduct_ramifications(over_x, over_y) == 0) {
                 restore_city_from_undo_buffer();
             }
@@ -1080,22 +1129,45 @@ void build_city_item(void)
 
     if (placing_type == 0x8) {  /* Well */
         restore_city_from_undo_buffer();
+#if PLATFORM_WINDOWS
+        item_kind = 0xd7;
+        gfx = 0x10;
+        edges = 8;
+#endif
         if (hot_key_out_off_build == 0) {
+#if PLATFORM_WINDOWS
+            if (put_x1_area(over_x, over_y, item_kind, edges, gfx) == 0) {
+                restore_city_from_undo_buffer();
+            }
+#else
             if (put_x1_area(over_x, over_y, 0xd7, 8, 0x10) == 0) {
                 restore_city_from_undo_buffer();
             }
+#endif
         }
     }
 
     if (placing_type == 0xc) {  /* Fountain */
         restore_city_from_undo_buffer();
-        base_kind = 0xdb;
-        fountain_gfx_idx = fountain_gfxdat[base_kind - 0xdb];
+        item_kind = 0xdb;
+#if PLATFORM_WINDOWS
+        gfx = fountain_gfxdat[item_kind - 0xdb];
+        if ((CM_CELL(pm_over_cm_ptr).education & 4) != 0) gfx++;
+        edges = 8;
+#else
+        fountain_gfx_idx = fountain_gfxdat[item_kind - 0xdb];
         if ((CM_CELL(pm_over_cm_ptr).education & 4) != 0) fountain_gfx_idx++;
+#endif
         if (hot_key_out_off_build == 0) {
-            if (put_x1_area(over_x, over_y, base_kind, 8, fountain_gfx_idx) == 0) {
+#if PLATFORM_WINDOWS
+            if (put_x1_area(over_x, over_y, item_kind, edges, gfx) == 0) {
                 restore_city_from_undo_buffer();
             } else { CM_CELL(pm_over_cm_ptr).building = 0x0f; }
+#else
+            if (put_x1_area(over_x, over_y, item_kind, 8, fountain_gfx_idx) == 0) {
+                restore_city_from_undo_buffer();
+            } else { CM_CELL(pm_over_cm_ptr).building = 0x0f; }
+#endif
         }
     }
 
@@ -1104,7 +1176,6 @@ after_clear:
     total_build_cost = total_build_cost + particles_built * placing_cost;
     denarii = denarii - total_build_cost;
     update_map = 2;
-    return;
 }
 
 // Captures the starting region cell and funds, then prepares the active elastic build preview.
