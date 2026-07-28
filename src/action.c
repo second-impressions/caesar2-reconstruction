@@ -971,8 +971,6 @@ void mouse_hunt_enemies(void)
 {
     static int enemy_tick_gate;
     int enemy_distance;
-    int enemy_screen_x;
-    int enemy_screen_y;
 
     if (map_mode != 1) {
         hunting_army = 0;
@@ -1005,18 +1003,16 @@ void mouse_hunt_enemies(void)
     }
     enemy_tick_gate = enemy_tick_gate + 1;
 
-    enemy_screen_x = army_list[hunting_army].map_x;
-    if (enemy_screen_x < mouse_x) {
+    if (army_list[hunting_army].map_x < mouse_x) {
         mse_x = (short)(mouse_x - 1);
-    } else if (enemy_screen_x > mouse_x) {
+    } else if (army_list[hunting_army].map_x > mouse_x) {
         mse_x = (short)(mouse_x + 1);
     } else {
         mse_x = mouse_x;
     }
-    enemy_screen_y = army_list[hunting_army].map_y;
-    if (enemy_screen_y < mouse_y) {
+    if (army_list[hunting_army].map_y < mouse_y) {
         mse_y = (short)(mouse_y - 1);
-    } else if (enemy_screen_y > mouse_y) {
+    } else if (army_list[hunting_army].map_y > mouse_y) {
         mse_y = (short)(mouse_y + 1);
     } else {
         mse_y = mouse_y;
