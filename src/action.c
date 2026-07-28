@@ -4508,7 +4508,11 @@ void act_tutorial(void)
 void act_dos(void)
 {
     exit_flag = 1;
+#if PLATFORM_WINDOWS
+    out1 = 1;
+#else
     act_goto_message();
+#endif
 }
 
 // Raise the difficulty slider by 1 (clamped at 4).
