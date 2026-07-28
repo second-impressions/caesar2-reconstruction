@@ -3145,8 +3145,6 @@ void raise_all_units_morale(int skip_type, int morale_a_delta, int morale_b_delt
 // FUNCTION: C2WIN 0x0047dcd4
 void set_unit_to_rout(int unit_idx)
 {
-    int figure_state;
-
     unit_list[unit_idx].morale_a = 0;
     unit_list[unit_idx].combat_order = 0xc;
     for (temp_figure = unit_list[unit_idx].first_figure;
@@ -3154,15 +3152,14 @@ void set_unit_to_rout(int unit_idx)
          ++temp_figure) {
         if (figure_list[temp_figure].exists != 0) {
             figure_list[temp_figure].is_defending = 0;
-            figure_state = figure_list[temp_figure].state_idx;
-            if (figure_state != 2) {
-                figure_list[temp_figure].state_idx = 0xc;
-                figure_list[temp_figure].prev_grid_x = figure_list[temp_figure].grid_x;
-                if (figure_list[temp_figure].unit_position == -1)
-                    figure_list[temp_figure].prev_grid_y = -1;
-                else
-                    figure_list[temp_figure].prev_grid_y = 0x34;
-            }
+            if (figure_list[temp_figure].state_idx == 2)
+                continue;
+            figure_list[temp_figure].state_idx = 0xc;
+            figure_list[temp_figure].prev_grid_x = figure_list[temp_figure].grid_x;
+            if (figure_list[temp_figure].unit_position == -1)
+                figure_list[temp_figure].prev_grid_y = -1;
+            else
+                figure_list[temp_figure].prev_grid_y = 0x34;
         }
     }
     battle_tune_mood_from_type(unit_idx);
