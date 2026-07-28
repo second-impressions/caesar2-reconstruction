@@ -4269,10 +4269,9 @@ void act_stop_go(void)
 // FUNCTION: C2WIN 0x004b8fad
 void act_turbo(void)
 {
-    if (battle_state) {
-        battle_turbo ^= 1;
-        battle_turbo_count = 0;
-    }
+    if (battle_state == 0) return;
+    battle_turbo ^= 1;
+    battle_turbo_count = 0;
 }
 
 // Battle: enter "move" pointer mode (1) when stats-control is on; otherwise deselect.
