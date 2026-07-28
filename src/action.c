@@ -2059,19 +2059,30 @@ void act_dont_exit(void)
 // exit refresh the whole screen and re-apply tune volume.
 // FUNCTION: C2 0x32030
 // FUNCTION: C2WIN 0x004b4f73
+#if PLATFORM_WINDOWS
+#define FX_TUTORIAL_ACTIVE tutorial_mode
+#define FX_INITIAL_OUT1 0
+#else
+#define FX_TUTORIAL_ACTIVE tutorial_active
+#define FX_INITIAL_OUT1 tutorial_active
+#endif
 void act_toggle_tunes(void)
 {
+#if !PLATFORM_WINDOWS
     int tutorial_active = tutorial_mode;
-    if (tutorial_active != 0) {
+#endif
+    if (FX_TUTORIAL_ACTIVE != 0) {
         click_warning(2, 0x50, 0xa0);
         return;
     }
     show_fx_box(0);
-    out1 = tutorial_active;
+    out1 = FX_INITIAL_OUT1;
     while (out1 == 0) {
         tune_game_loop();
     }
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     set_sequences_volume();
 }
 
