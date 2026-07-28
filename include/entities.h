@@ -527,7 +527,7 @@ struct figure_rec {
                                                 routing figure walks off
                                                 the map edge instead of
                                                 pursuing a target. */
-    char           sprite_kind;      /* +0x26  sprite-data-table selector
+    unsigned char  sprite_kind;      /* +0x26  sprite-data-table selector
                                                 (rebuild_figures_image_data
                                                 dispatches on this).  Copied
                                                 to arrow_rec.sprite_kind by
@@ -888,7 +888,7 @@ struct arrow_rec {
     char           sprite_anim;      /* +0x1A  per-tick sprite frame to draw
                                                 (sprite_base + rotated heading);
                                                 set by arrow_intelligence. */
-    char           sprite_kind;      /* +0x1B  sprite-data-table selector
+    unsigned char  sprite_kind;      /* +0x1B  sprite-data-table selector
                                                 copied from figure_rec.sprite_kind
                                                 by get_arrow_base_image. */
     unsigned char  sprite_base;      /* +0x1C  base sprite frame for the

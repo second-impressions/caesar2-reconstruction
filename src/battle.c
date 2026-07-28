@@ -1092,45 +1092,37 @@ void build_units_figures(int deployment_idx, int figure_kind, int stampede_kind,
 // FUNCTION: C2WIN 0x004769af
 void rebuild_figures_image_data(void)
 {
-    unsigned char *figure_data_ptr;
-    unsigned char *arrow_data_ptr;
     int sprite_kind;
 
     for (figure_no = 1; figure_no < 0xc9; ++figure_no) {
-        if (figure_list[figure_no].exists == 0) continue;
-        sprite_kind = figure_list[figure_no].sprite_kind;
-        if (sprite_kind == 7) {
-            figure_list[figure_no].arrow_data_ptr = figure7_data;
-            if (figure_list[figure_no].sprite_data_ptr != 0)
-                figure_list[figure_no].sprite_data_ptr = figure8_data;
-        } else if (sprite_kind == 1) {
-            figure_list[figure_no].arrow_data_ptr = figure1_data;
-        } else if (sprite_kind == 2) {
-            figure_list[figure_no].arrow_data_ptr = figure2_data;
-        } else if (sprite_kind == 3) {
-            figure_list[figure_no].arrow_data_ptr = figure3_data;
-        } else if (sprite_kind == 4) {
-            figure_list[figure_no].arrow_data_ptr = figure4_data;
-            if (figure_list[figure_no].sprite_data_ptr != 0)
-                figure_list[figure_no].sprite_data_ptr = figure5_data;
-        } else if (sprite_kind == 5) {
-            figure_list[figure_no].arrow_data_ptr = figure5_data;
-        } else if (sprite_kind == 6) {
-            figure_list[figure_no].arrow_data_ptr = figure6_data;
+        if (figure_list[figure_no].exists != 0) {
+            sprite_kind = figure_list[figure_no].sprite_kind;
+            if (sprite_kind == 7) {
+                figure_list[figure_no].arrow_data_ptr = figure7_data;
+                if (figure_list[figure_no].sprite_data_ptr != 0) figure_list[figure_no].sprite_data_ptr = figure8_data;
+            } else if (sprite_kind == 1) { figure_list[figure_no].arrow_data_ptr = figure1_data;
+            } else if (sprite_kind == 2) { figure_list[figure_no].arrow_data_ptr = figure2_data;
+            } else if (sprite_kind == 3) { figure_list[figure_no].arrow_data_ptr = figure3_data;
+            } else if (sprite_kind == 4) {
+                figure_list[figure_no].arrow_data_ptr = figure4_data;
+                if (figure_list[figure_no].sprite_data_ptr != 0) figure_list[figure_no].sprite_data_ptr = figure5_data;
+            } else if (sprite_kind == 5) { figure_list[figure_no].arrow_data_ptr = figure5_data;
+            } else if (sprite_kind == 6) { figure_list[figure_no].arrow_data_ptr = figure6_data; }
         }
     }
 
     for (arrow_no = 1; arrow_no < 0xc9; arrow_no++) {
-        if (arrow_list[arrow_no].exists == 0) continue;
-        sprite_kind = arrow_list[arrow_no].sprite_kind;
-        if (sprite_kind == 1) arrow_list[arrow_no].arrow_data_ptr = figure1_data;
-        else if (sprite_kind == 2) arrow_list[arrow_no].arrow_data_ptr = figure2_data;
-        else if (sprite_kind == 3) arrow_list[arrow_no].arrow_data_ptr = figure3_data;
-        else if (sprite_kind == 4) arrow_list[arrow_no].arrow_data_ptr = figure4_data;
-        else if (sprite_kind == 5) arrow_list[arrow_no].arrow_data_ptr = figure5_data;
-        else if (sprite_kind == 6) arrow_list[arrow_no].arrow_data_ptr = figure6_data;
-        else if (sprite_kind == 7) arrow_list[arrow_no].arrow_data_ptr = figure7_data;
-        else if (sprite_kind == 8) arrow_list[arrow_no].arrow_data_ptr = figure8_data;
+        if (arrow_list[arrow_no].exists != 0) {
+            sprite_kind = arrow_list[arrow_no].sprite_kind;
+            if (sprite_kind == 1) arrow_list[arrow_no].arrow_data_ptr = figure1_data;
+            else if (sprite_kind == 2) arrow_list[arrow_no].arrow_data_ptr = figure2_data;
+            else if (sprite_kind == 3) arrow_list[arrow_no].arrow_data_ptr = figure3_data;
+            else if (sprite_kind == 4) arrow_list[arrow_no].arrow_data_ptr = figure4_data;
+            else if (sprite_kind == 5) arrow_list[arrow_no].arrow_data_ptr = figure5_data;
+            else if (sprite_kind == 6) arrow_list[arrow_no].arrow_data_ptr = figure6_data;
+            else if (sprite_kind == 7) arrow_list[arrow_no].arrow_data_ptr = figure7_data;
+            else if (sprite_kind == 8) arrow_list[arrow_no].arrow_data_ptr = figure8_data;
+        }
     }
 }
 
