@@ -2669,11 +2669,33 @@ void act_about(void)
 // (city / region / battle) so the help overlay is wiped. Saves and restores `pointer_mode` across
 // the call.
 // FUNCTION: C2 0x32409 REORDERED
+// FUNCTION: C2WIN 0x004b553a
 void helping(int help_page_id)
 {
-    int saved_pointer_mode = pointer_mode;
+    int saved_pointer_mode;
+
+    saved_pointer_mode = pointer_mode;
     pointer_mode = 0;
     launch_help(help_page_id);
+#if PLATFORM_WINDOWS
+    flush_sb_buffer();
+    pointer_mode = saved_pointer_mode;
+    if (map_mode == 0) {
+        if (pointer_mode == 4) {
+            update_icon = 0x17;
+        } else {
+            update_icon = last_icon_over;
+        }
+        redraw_icon_bits();
+    } else if (map_mode == 1) {
+        if (pointer_mode == 4) {
+            update_icon = 0x13;
+        } else {
+            update_icon = last_icon_over;
+        }
+        redraw_icon_bits();
+    }
+#else
     if (map_mode == 0) {
         city_map_screen(1);
     } else if (map_mode == 1) {
@@ -2683,6 +2705,7 @@ void helping(int help_page_id)
     }
     flush_sb_buffer();
     pointer_mode = saved_pointer_mode;
+#endif
 }
 
 // Help modal: rewind history and signal the modal to redisplay (out2 = 10).
