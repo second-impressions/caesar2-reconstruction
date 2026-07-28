@@ -3998,7 +3998,8 @@ void act_more_mercs(void)
 // FUNCTION: C2WIN 0x004b8941
 void act_less_mercs(void)
 {
-    if (mercs_in_army > 0) {
+    if (mercs_in_army <= 0) return;
+    {
         int remainder = mercs_in_army % 0x32;
         if (remainder != 0) {
             mercs_in_army -= remainder;
