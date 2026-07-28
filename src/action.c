@@ -612,12 +612,7 @@ void action(void)
                 industry_build_on = 0;
                 total_build_cost = 0;
                 denarii = starting_denarii;
-#if PLATFORM_WINDOWS
                 particles_cleared = particles_built = 0;
-#else
-                particles_built = 0;
-                particles_cleared = 0;
-#endif
             }
         }
 
