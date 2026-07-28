@@ -28,6 +28,8 @@ void get_selection_goods_list(int what);
 int control_selection(struct selection_rec *list, int count, int x, int y, int width);
 #if PLATFORM_WINDOWS
 extern int selection_menu;
+extern void *main_window;
+extern void *active_window;
 #endif
 void show_fx_box(int what);
 void stop_all_sounds(void);
@@ -4353,6 +4355,9 @@ void act_battle_select_all(void)
 // FUNCTION: C2WIN 0x004b9143
 void act_battle_help(void)
 {
+#if PLATFORM_WINDOWS
+    active_window = main_window;
+#endif
     helping(0x33);
 }
 
