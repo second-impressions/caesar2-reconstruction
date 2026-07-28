@@ -3634,30 +3634,26 @@ int try_a_battlemap_square(int direction)
 // FUNCTION: C2WIN 0x0047fb65
 int try_this_battlemap_square(int cell_offset)
 {
-    int sprite_type;
-    int figure_state;
-
     enemy_figure = (*(struct battle_cell *)((unsigned char *)battle_map + ((cell_offset)))).figure;
     if (enemy_figure != 0) {
-        sprite_type = figure_list[figure_no].sprite_type;
-        if (sprite_type == 0xf) {
-            figure_state = figure_list[figure_no].state_idx;
-            if (figure_state == 2) {
+        if (figure_list[figure_no].sprite_type == 0xf) {
+            if (figure_list[figure_no].state_idx == 2) {
                 figure_list[enemy_figure].state_idx   = 2;
                 figure_list[enemy_figure].death_timer = 0x1e;
                 return 0;
             }
-            if (figure_list[enemy_figure].owner == figure_list[figure_no].owner) {
+            if (figure_list[enemy_figure].owner != figure_list[figure_no].owner) {
+                figure_list[enemy_figure].state_idx   = 2;
+                figure_list[enemy_figure].death_timer = 0x1e;
                 return 0;
             }
-            figure_list[enemy_figure].state_idx   = 2;
-            figure_list[enemy_figure].death_timer = 0x1e;
             return 0;
         }
-        if (figure_list[enemy_figure].owner == figure_list[figure_no].owner) {
+        if (figure_list[enemy_figure].owner != figure_list[figure_no].owner) {
+            return 0x3e7;
+        } else {
             return 0;
         }
-        return 0x3e7;
     }
     return 1;
 }
