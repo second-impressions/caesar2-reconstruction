@@ -4193,11 +4193,10 @@ void act_send_gift(void)
 // FUNCTION: C2WIN 0x004b8db8
 void act_gift_up(void)
 {
-    if (players_denarii > 0) {
-        imperial_gift_level++;
-        if (imperial_gift_level > players_denarii) imperial_gift_level = players_denarii;
-        gen_refresh1 = 1;
-    }
+    if (players_denarii <= 0) return;
+    imperial_gift_level++;
+    if (imperial_gift_level > players_denarii) imperial_gift_level = players_denarii;
+    gen_refresh1 = 1;
 }
 
 // Drop the imperial-gift slider by 1 (floored at 0).
