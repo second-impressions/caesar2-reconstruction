@@ -5218,10 +5218,15 @@ void act_census(void)
 // pointer mode after the panel closes.
 // FUNCTION: C2 0x34e10
 // FUNCTION: C2WIN 0x004b97d7
+#if PLATFORM_WINDOWS
+#define ACTION_QUERY_MAP_MODE screen_mode
+#else
+#define ACTION_QUERY_MAP_MODE map_mode
+#endif
 void act_query(void)
 {
     int saved_pointer_mode;
-    if (map_mode > 1) {
+    if (ACTION_QUERY_MAP_MODE > 1) {
         return;
     }
     get_pm_over_diamond(1);
@@ -5233,7 +5238,7 @@ void act_query(void)
     act_start_y = act_start_ptr / map_actual_width;
 
     evolve_to_current_fabric();
-    if (map_mode == 0) {
+    if (ACTION_QUERY_MAP_MODE == 0) {
         get_query_info();
     } else {
         get_region_query_info();
@@ -5249,8 +5254,7 @@ void act_query(void)
         query_mode = last_house_query_mode;
         queery_buttons[last_house_query_mode + 3].state = 1;
     } else {
-        unsigned int people_query_flag = q_flag & 0x20;
-        if (people_query_flag != 0) {
+        if ((q_flag & 0x20) != 0) {
             query_mode = 1;
             queery_buttons[4].state = 1;
         } else {
@@ -5259,7 +5263,7 @@ void act_query(void)
         }
     }
 
-    if (map_mode == 0) {
+    if (ACTION_QUERY_MAP_MODE == 0) {
         nof_query_buttons = 6;
     } else {
         nof_query_buttons = 3;
@@ -5281,11 +5285,14 @@ void act_query(void)
             && q_type <= 0xa1) {
         last_house_query_mode = query_mode;
     }
+#if !PLATFORM_WINDOWS
     setup_map_screen_refresh();
+#endif
     update_map = 1;
     pointer_mode = saved_pointer_mode;
     clear_mouse();
 }
+#undef ACTION_QUERY_MAP_MODE
 
 // Query-panel "General" tab. Only acts when query_mode != 0: resets the other two button dots,
 // clears query_mode, and re-renders the panel (city map first when in city view).
