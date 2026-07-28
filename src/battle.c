@@ -1894,6 +1894,12 @@ void sf10_hunt_for_fight(void)
 
 // Fire-missile state (state == 11). While the figure hasn't reached its firing stand yet
 // (is_visible bit 1 clear), keep walking via figure_go_to_target.
+#if PLATFORM_WINDOWS
+#define SF11_FIRE_TARGET_FOUND() (find_nearest_target(5) != 0)
+#else
+#define SF11_FIRE_TARGET_FOUND() (get_fire_target(figure_no) != 0)
+#endif
+
 // FUNCTION: C2 0x4e4cc
 // FUNCTION: C2WIN 0x00479337
 void sf11_fire_missile(void)
@@ -1908,58 +1914,65 @@ void sf11_fire_missile(void)
     figure_list[figure_no].missile_max = 0x20;
     figure_list[figure_no].missile_timer++;
     if (figure_list[figure_no].missile_timer
-        <= figure_list[figure_no].missile_max)
-        goto tail;
-
-    if (get_fire_target(figure_no) != 0) {
-        figure_list[figure_no].missile_target = enemy_figure;
+        > figure_list[figure_no].missile_max) {
+#if PLATFORM_WINDOWS
         figure_list[figure_no].missile_timer = 0;
-
-        figure_list[figure_no].direction = (char)get_heading(
-            figure_list[figure_no].grid_x,
-            figure_list[figure_no].grid_y,
-            figure_list[enemy_figure].grid_x,
-            figure_list[enemy_figure].grid_y,
-            figure_list[figure_no].direction);
-        create_arrow(figure_list[figure_no].arrow_data_ptr,
-                     figure_list[figure_no].owner,
-                     figure_list[figure_no].grid_x,
-                     figure_list[figure_no].grid_y,
-                     figure_list[enemy_figure].grid_x,
-                     figure_list[enemy_figure].grid_y);
-        arrow_list[created_arrow_no].weapon_kind = figure_list[figure_no].sprite_type;
-        get_arrow_base_image();
-        set_missile_fire_fx(arrow_list[created_arrow_no].weapon_kind);
-        set_missile_fire_range(arrow_list[created_arrow_no].weapon_kind);
-    } else if (find_nearest_target(5) != 0) {
-        figure_list[figure_no].missile_target = enemy_figure;
-        figure_list[figure_no].missile_timer = 0;
-
-        figure_list[figure_no].direction = (char)get_heading(
-            figure_list[figure_no].grid_x,
-            figure_list[figure_no].grid_y,
-            figure_list[enemy_figure].grid_x,
-            figure_list[enemy_figure].grid_y,
-            figure_list[figure_no].direction);
-        create_arrow(figure_list[figure_no].arrow_data_ptr,
-                     figure_list[figure_no].owner,
-                     figure_list[figure_no].grid_x,
-                     figure_list[figure_no].grid_y,
-                     figure_list[enemy_figure].grid_x,
-                     figure_list[enemy_figure].grid_y);
-        arrow_list[created_arrow_no].weapon_kind = figure_list[figure_no].sprite_type;
-        get_arrow_base_image();
-        set_missile_fire_fx(arrow_list[created_arrow_no].weapon_kind);
-        set_missile_fire_range(arrow_list[created_arrow_no].weapon_kind);
-    } else {
-        figure_list[figure_no].missile_timer = 0xa;
-        figure_list[figure_no].missile_target = 0;
+#endif
+        if (SF11_FIRE_TARGET_FOUND()) {
+            figure_list[figure_no].missile_target = enemy_figure;
+#if PLATFORM_DOS
+            figure_list[figure_no].missile_timer = 0;
+#endif
+            figure_list[figure_no].direction = (char)get_heading(
+                figure_list[figure_no].grid_x,
+                figure_list[figure_no].grid_y,
+                figure_list[enemy_figure].grid_x,
+                figure_list[enemy_figure].grid_y,
+                figure_list[figure_no].direction);
+            create_arrow(figure_list[figure_no].arrow_data_ptr,
+                         figure_list[figure_no].owner,
+                         figure_list[figure_no].grid_x,
+                         figure_list[figure_no].grid_y,
+                         figure_list[enemy_figure].grid_x,
+                         figure_list[enemy_figure].grid_y);
+            arrow_list[created_arrow_no].weapon_kind = figure_list[figure_no].sprite_type;
+            get_arrow_base_image();
+            set_missile_fire_fx(arrow_list[created_arrow_no].weapon_kind);
+            set_missile_fire_range(arrow_list[created_arrow_no].weapon_kind);
+#if PLATFORM_DOS
+        } else if (find_nearest_target(5) != 0) {
+            figure_list[figure_no].missile_target = enemy_figure;
+            figure_list[figure_no].missile_timer = 0;
+            figure_list[figure_no].direction = (char)get_heading(
+                figure_list[figure_no].grid_x,
+                figure_list[figure_no].grid_y,
+                figure_list[enemy_figure].grid_x,
+                figure_list[enemy_figure].grid_y,
+                figure_list[figure_no].direction);
+            create_arrow(figure_list[figure_no].arrow_data_ptr,
+                         figure_list[figure_no].owner,
+                         figure_list[figure_no].grid_x,
+                         figure_list[figure_no].grid_y,
+                         figure_list[enemy_figure].grid_x,
+                         figure_list[enemy_figure].grid_y);
+            arrow_list[created_arrow_no].weapon_kind = figure_list[figure_no].sprite_type;
+            get_arrow_base_image();
+            set_missile_fire_fx(arrow_list[created_arrow_no].weapon_kind);
+            set_missile_fire_range(arrow_list[created_arrow_no].weapon_kind);
+#endif
+        } else {
+#if PLATFORM_DOS
+            figure_list[figure_no].missile_timer = 0xa; figure_list[figure_no].missile_target = 0;
+#else
+            figure_list[figure_no].missile_target = 0;
+#endif
+        }
     }
 
-tail:
-    if (figure_list[figure_no].missile_target != 0)
-        get_fig_missile_image();
+    if (figure_list[figure_no].missile_target != 0) get_fig_missile_image();
 }
+
+#undef SF11_FIRE_TARGET_FOUND
 
 // Routing state handler: mark the figure as routing, update its walk image, advance toward the
 // (panic) target, and despawn it once it reaches the map edge.
