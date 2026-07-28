@@ -5515,6 +5515,7 @@ void act_query_do_help(int page_delta)
 
     if (!is_debarred) {
         launch_help(this_help_page);
+#if !PLATFORM_WINDOWS
         if (map_mode == 0) {
             city_map_screen(1);
         } else if (map_mode == 1) {
@@ -5522,12 +5523,17 @@ void act_query_do_help(int page_delta)
         } else {
             battle_screen(1);
         }
+#endif
         show_query_panel();
     }
     flush_sb_buffer();
     pointer_mode = 0;
+#if PLATFORM_WINDOWS
+    out3 = out2 = 0;
+#else
     out2 = 0;
     out3 = 0;
+#endif
 }
 
 // Toggle query pointer mode (between 4 and 0).
