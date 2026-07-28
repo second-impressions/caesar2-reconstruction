@@ -1554,22 +1554,21 @@ int use_region_overmap_to_move(void)
 {
     int map_x;
     int map_y;
-    int target_rm_ptr;
 
-    if (mouse_left_preclick == 0) {
-        return 0;
-    }
-    if (last_icon_over != 2) {
-        return 0;
-    }
+    if (mouse_left_preclick == 0) return 0;
+    if (last_icon_over != 2) return 0;
 
     map_x = (mouse_x - com_x) / 2;
     map_y = (mouse_y - com_y) / 4 * 2;
-    target_rm_ptr = (map_y * map_actual_width + map_x) * map_actual_atom;
-    if (jump_to_regionmap_ptr(target_rm_ptr) != 0) {
-        return 1;
+    {
+        int target_rm_ptr;
+
+        target_rm_ptr = (map_y * map_actual_width + map_x) * map_actual_atom;
+        if (jump_to_regionmap_ptr(target_rm_ptr) == 0) {
+            return 0;
+        }
     }
-    return 0;
+    return 1;
 }
 
 // Re-centre the city view on the cell whose pseudo_map[] entry matches `target_cm_ptr`. If we're
