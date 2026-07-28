@@ -608,21 +608,23 @@ void get_highlight_position(void)
     hlite_bottom   = 0;
 
     for (figure_no = 1; figure_no < 0xc9; ++figure_no) {
-        if (figure_list[figure_no].exists == 0)    continue;
-        if (figure_list[figure_no].selected == 0)  continue;
-        if (figure_list[figure_no].state_idx == 0x0c) continue;
+        if (figure_list[figure_no].exists != 0
+            && figure_list[figure_no].selected != 0) {
+            if (figure_list[figure_no].state_idx == 0x0c)
+                continue;
 
-        if (figure_list[figure_no].grid_x < hlite_left)
-            hlite_left = figure_list[figure_no].grid_x;
-        if (hlite_right < figure_list[figure_no].grid_x)
-            hlite_right = figure_list[figure_no].grid_x;
+            if (figure_list[figure_no].grid_x < hlite_left)
+                hlite_left = figure_list[figure_no].grid_x;
+            if (hlite_right < figure_list[figure_no].grid_x)
+                hlite_right = figure_list[figure_no].grid_x;
 
-        if (figure_list[figure_no].grid_y < hlite_top)
-            hlite_top = figure_list[figure_no].grid_y;
-        if (hlite_bottom < figure_list[figure_no].grid_y)
-            hlite_bottom = figure_list[figure_no].grid_y;
+            if (figure_list[figure_no].grid_y < hlite_top)
+                hlite_top = figure_list[figure_no].grid_y;
+            if (hlite_bottom < figure_list[figure_no].grid_y)
+                hlite_bottom = figure_list[figure_no].grid_y;
 
-        hlite_squares++;
+            hlite_squares++;
+        }
     }
 
     hlite_centre_x = (hlite_right  - hlite_left) / 2 + hlite_left;
