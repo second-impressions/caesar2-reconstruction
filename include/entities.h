@@ -787,7 +787,7 @@ struct unit_rec {
                                                 update_units_morale (-5 per
                                                 tick when >0x14, capped at
                                                 0x32). */
-    char           combat_order;     /* +0x20  AI/combat order: 3=move, 6=withdraw,
+    unsigned char  combat_order;     /* +0x20  AI/combat order: 3=move, 6=withdraw,
                                                 7/3=flank, 8=withdraw, 0xa=berserk,
                                                 0xc=rout.  Set by set_ai_unit_*
                                                 helpers in battle.c. */

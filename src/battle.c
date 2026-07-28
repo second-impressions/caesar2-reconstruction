@@ -1805,38 +1805,28 @@ void sf07_reform(void)
 // FUNCTION: C2WIN 0x00478901
 void sf08_withdraw(void)
 {
-    int moved;
     int unit_idx;
-    int unit_rank;
-    int morale;
 
     figure_list[figure_no].is_routing   = 1;
     figure_list[figure_no].is_defending = 0;
     get_fig_walk_image();
-    moved = figure_go_to_target();
-    if (moved == 0)
+    if (figure_go_to_target() == 0)
         return;
-    if ((figure_list[figure_no].is_visible & 2) == 0)
-        return;
+    if ((figure_list[figure_no].is_visible & 2) != 0) {
+        unit_idx = figure_list[figure_no].unit_ref;
+        if (unit_list[unit_idx].combat_order == 8)
+            unit_list[unit_idx].combat_order = 6;
 
-    unit_idx = figure_list[figure_no].unit_ref;
-    if (unit_list[unit_idx].combat_order == 8)
-        unit_list[unit_idx].combat_order = 6;
+        figure_list[figure_no].is_visible &= 0xfd;
+        figure_list[figure_no].state_idx    = 6;
+        figure_list[figure_no].is_defending = 1;
+        figure_list[figure_no].morale =
+            tribe_ai_data[bat_tribe].aggression;
 
-    figure_list[figure_no].is_visible &= 0xfd;
-    figure_list[figure_no].state_idx    = 6;
-    figure_list[figure_no].is_defending = 1;
-    figure_list[figure_no].morale =
-        tribe_ai_data[bat_tribe].aggression;
-
-    unit_rank = figure_list[figure_no].figure_rank;
-    if (unit_rank == 1) {
-        morale = figure_list[figure_no].morale;
-        figure_list[figure_no].morale = (morale / 2);
+        if (figure_list[figure_no].figure_rank == 1) figure_list[figure_no].morale = figure_list[figure_no].morale / 2;
+        if (figure_list[figure_no].figure_rank == 2) figure_list[figure_no].morale = 0;
+        figure_list[figure_no].direction = figure_list[figure_no].anim_state;
     }
-    if (figure_list[figure_no].figure_rank == 2)
-        figure_list[figure_no].morale = 0;
-    figure_list[figure_no].direction = figure_list[figure_no].anim_state;
 }
 
 // Look-for-fight state (state_idx 9): if defending, scan the eight neighbour cells via
