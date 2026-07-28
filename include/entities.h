@@ -553,7 +553,7 @@ struct figure_rec {
                                                 sf11_fire_missile). */
     char           _unk2A[1];  /* Mac PPC: also never accessed -- vestigial */
     unsigned char  unit_ref;         /* +0x2B */
-    char           unit_type;        /* +0x2C */
+    unsigned char  unit_type;        /* +0x2C */
     signed char    offset_x;         /* +0x2D */
     signed char    offset_y;         /* +0x2E */
     unsigned char  is_defending;     /* +0x2F  bool gating set_defense_shield's
@@ -838,7 +838,7 @@ struct unit_rec {
     char           stage_slot;        /* +0x35  set in build_units_figures
                                                 from stage_slot arg; no
                                                 current readers */
-    char           formation_mode;   /* +0x36  formation kind 0..3; written
+    unsigned char  formation_mode;   /* +0x36  formation kind 0..3; written
                                                 by reform / instant_reform. */
     char           _unk37[2];  /* Mac PPC: also never accessed -- vestigial */
     unsigned char  unit_sub_kind;     /* +0x39  unit sub-kind tag set by

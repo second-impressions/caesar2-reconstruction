@@ -474,10 +474,10 @@ void show_aim_highlight(void)
 // FUNCTION: C2WIN 0x00473acd
 void start_move(void)
 {
-    int engaged_flag;
+    int flag;
     int new_cell_offset;
     int unit_idx;
-    engaged_flag = 0;
+    flag = 0;
     if (hlite_squares == 0) {
         pointer_mode = 0;
         redraw_icons = 1;
@@ -492,12 +492,12 @@ void start_move(void)
                     return;
                 }
                 if (unit_list[unit_idx].target_lock != 0) {
-                    engaged_flag = 1;
+                    flag = 1;
                     break;
                 }
             }
         }
-        if (engaged_flag) {
+        if (flag) {
             confirm(4, 0xa0, 0xa0);
             if (decision == 0)
                 return;
@@ -518,42 +518,41 @@ void start_move(void)
                 && figure_list[figure_no].selected != 0) {
                 unit_idx = figure_list[figure_no].unit_ref;
                 figure_list[figure_no].selected = 0;
-                if (figure_list[figure_no].state_idx != 0xc) {
-                    if (battle_state == 0) {
-                        pointer_mode = 0;
-                        update_map   = 1;
-                        get_fig_in_unit_position(unit_list[unit_idx].formation_mode, figure_list[figure_no].unit_type, figure_no);
-                        figure_list[figure_no].grid_x = (char)(unit_list[unit_idx].prev_x + x_bit);
-                        figure_list[figure_no].grid_y = (char)(unit_list[unit_idx].prev_y + y_bit);
-                        figure_list[figure_no].offset_x = x_bit;
-                        figure_list[figure_no].offset_y = y_bit;
-                        figure_list[figure_no].map_ref =
-                            (figure_list[figure_no].grid_x +
-                             figure_list[figure_no].grid_y * 0x34) * 4;
-                        ((unsigned char *)battle_map)[figure_list[figure_no].map_ref + 1] = figure_no;
-                    } else if (unit_list[unit_idx].target_lock != 0) {
-                        pointer_mode = 0;
-                        figure_list[figure_no].state_idx = 8;
-                        get_fig_in_unit_position(unit_list[unit_idx].formation_mode, figure_list[figure_no].unit_type, figure_no);
-                        figure_list[figure_no].prev_grid_x = (unit_list[unit_idx].prev_x + x_bit);
-                        figure_list[figure_no].prev_grid_y = (unit_list[unit_idx].prev_y + y_bit);
-                        figure_list[figure_no].offset_x    = x_bit;
-                        figure_list[figure_no].offset_y    = y_bit;
-                    } else {
-                        pointer_mode = 0;
-                        figure_list[figure_no].state_idx = 0xf;
-                        figure_list[figure_no].is_visible &= 0xfd;
-                        get_fig_in_unit_position(unit_list[unit_idx].formation_mode, figure_list[figure_no].unit_type, figure_no);
-                        figure_list[figure_no].prev_grid_x = (unit_list[unit_idx].prev_x + x_bit);
-                        figure_list[figure_no].prev_grid_y = (unit_list[unit_idx].prev_y + y_bit);
-                        figure_list[figure_no].offset_x    = x_bit;
-                        figure_list[figure_no].offset_y    = y_bit;
-                    }
+                if (figure_list[figure_no].state_idx == 0xc)
+                    continue;
+                if (battle_state == 0) {
+                    pointer_mode = 0;
+                    update_map   = 1;
+                    get_fig_in_unit_position(unit_list[unit_idx].formation_mode, figure_list[figure_no].unit_type, figure_no);
+                    figure_list[figure_no].grid_x = (char)(unit_list[unit_idx].prev_x + x_bit);
+                    figure_list[figure_no].grid_y = (char)(unit_list[unit_idx].prev_y + y_bit);
+                    figure_list[figure_no].offset_x = x_bit;
+                    figure_list[figure_no].offset_y = y_bit;
+                    figure_list[figure_no].map_ref =
+                        (figure_list[figure_no].grid_x +
+                         figure_list[figure_no].grid_y * 0x34) * 4;
+                    ((unsigned char *)battle_map)[figure_list[figure_no].map_ref + 1] = figure_no;
+                } else if (unit_list[unit_idx].target_lock != 0) {
+                    pointer_mode = 0;
+                    figure_list[figure_no].state_idx = 8;
+                    get_fig_in_unit_position(unit_list[unit_idx].formation_mode, figure_list[figure_no].unit_type, figure_no);
+                    figure_list[figure_no].prev_grid_x = (unit_list[unit_idx].prev_x + x_bit);
+                    figure_list[figure_no].prev_grid_y = (unit_list[unit_idx].prev_y + y_bit);
+                    figure_list[figure_no].offset_x    = x_bit;
+                    figure_list[figure_no].offset_y    = y_bit;
+                } else {
+                    pointer_mode = 0;
+                    figure_list[figure_no].state_idx = 0xf;
+                    figure_list[figure_no].is_visible &= 0xfd;
+                    get_fig_in_unit_position(unit_list[unit_idx].formation_mode, figure_list[figure_no].unit_type, figure_no);
+                    figure_list[figure_no].prev_grid_x = (unit_list[unit_idx].prev_x + x_bit);
+                    figure_list[figure_no].prev_grid_y = (unit_list[unit_idx].prev_y + y_bit);
+                    figure_list[figure_no].offset_x    = x_bit;
+                    figure_list[figure_no].offset_y    = y_bit;
                 }
             }
         }
     }
-    return;
 }
 
 // Activate "aim" mode for every selected figure.
