@@ -867,48 +867,48 @@ void setup_roman_units(void)
 // FUNCTION: C2WIN 0x00474f9f
 void setup_enemy_units(void)
 {
-    int middle_figure_kind;
-    int cavalry_unit_size;
-    int front_figure_kind;
-    int rear_stampede_kind;
-    int rear_figure_kind;
-    int rear_heavy_count;
-    int middle_sprite_kind;
-    int archer_unit_size;
-    int front_sprite_kind;
-    int cavalry_missile_flag;
+    int second_kind;
+    int merc_unit_size;
+    int figure_front;
+    int stampede_kind;
+    int figure_rear;
+    int aux_count;
+    int tbs_middle_type;
+    int bat_size_archer;
+    int tbs_front_kind;
+    int mercs_missile;
     int front_unit_size;
-    int rear_sprite_kind;
+    int tbs_rear_type;
     int middle_heavy_count;
-    int front_heavy_count;
-    int archer_count;
-    int cavalry_figure_kind;
-    int cavalry_count;
-    int middle_unit_size;
-    unsigned char *sprite_data_ptr;
-    int units_made;
+    int regs_left;
+    int archers_no;
+    int merc_figure;
+    int count_mercs;
+    int middle_target;
+    unsigned char *fig_data;
+    int units_no;
 
-    front_heavy_count = middle_heavy_count = rear_heavy_count = archer_count = cavalry_count = 0;
-    front_heavy_count  = army_list[their_battle_army].num_regulars;
+    regs_left = middle_heavy_count = aux_count = archers_no = count_mercs = 0;
+    regs_left  = army_list[their_battle_army].num_regulars;
     middle_heavy_count = army_list[their_battle_army].num_irregulars;
-    rear_heavy_count   = army_list[their_battle_army].num_auxillaries;
-    cavalry_count      = army_list[their_battle_army].num_horse;
-    archer_count       = army_list[their_battle_army].num_specials;
+    aux_count   = army_list[their_battle_army].num_auxillaries;
+    count_mercs = army_list[their_battle_army].num_horse;
+    archers_no  = army_list[their_battle_army].num_specials;
 
-    if (battle_scale == 4) { front_unit_size = 0x500; middle_unit_size = 0x640; cavalry_unit_size = 0x1e0; archer_unit_size = 0xa0; }
-    else if (battle_scale == 3) { front_unit_size = 0x280; middle_unit_size = 0x320; cavalry_unit_size = 0xf0; archer_unit_size = 0x50; }
-    else if (battle_scale == 2) { front_unit_size = 0x140; middle_unit_size = 0x190; cavalry_unit_size = 0x78; archer_unit_size = 0x28; }
-    else if (battle_scale == 1) { front_unit_size = 0xa0; middle_unit_size = 0xc8; cavalry_unit_size = 0x3c; archer_unit_size = 0x14; }
-    else { front_unit_size = 0x50; middle_unit_size = 0x64; cavalry_unit_size = 0x1e; archer_unit_size = 0xa; }
+    if (battle_scale == 4) { front_unit_size = 0x500; middle_target = 0x640; merc_unit_size = 0x1e0; bat_size_archer = 0xa0; }
+    else if (battle_scale == 3) { front_unit_size = 0x280; middle_target = 0x320; merc_unit_size = 0xf0; bat_size_archer = 0x50; }
+    else if (battle_scale == 2) { front_unit_size = 0x140; middle_target = 0x190; merc_unit_size = 0x78; bat_size_archer = 0x28; }
+    else if (battle_scale == 1) { front_unit_size = 0xa0; middle_target = 0xc8; merc_unit_size = 0x3c; bat_size_archer = 0x14; }
+    else { front_unit_size = 0x50; middle_target = 0x64; merc_unit_size = 0x1e; bat_size_archer = 0xa; }
 
     bat_tribe = army_list[their_battle_army].tribe_id;
-    cavalry_figure_kind = tribe_battle_setup[bat_tribe].u.raw[0];
-    front_figure_kind   = tribe_battle_setup[bat_tribe].u.raw[1];
-    middle_figure_kind  = tribe_battle_setup[bat_tribe].u.raw[2];
-    rear_figure_kind    = tribe_battle_setup[bat_tribe].u.raw[3];
-    front_sprite_kind = tribe_battle_setup[bat_tribe].u.raw[4];
-    middle_sprite_kind = tribe_battle_setup[bat_tribe].u.raw[5];
-    rear_sprite_kind  = tribe_battle_setup[bat_tribe].u.raw[6];
+    merc_figure     = tribe_battle_setup[bat_tribe].u.raw[0];
+    figure_front    = tribe_battle_setup[bat_tribe].u.raw[1];
+    second_kind     = tribe_battle_setup[bat_tribe].u.raw[2];
+    figure_rear     = tribe_battle_setup[bat_tribe].u.raw[3];
+    tbs_front_kind  = tribe_battle_setup[bat_tribe].u.raw[4];
+    tbs_middle_type = tribe_battle_setup[bat_tribe].u.raw[5];
+    tbs_rear_type   = tribe_battle_setup[bat_tribe].u.raw[6];
 
     if (tribe_ai_data[bat_tribe].no_flanks == 0) {
         bat_enemy_left_flank_unit = bat_enemy_right_flank_unit = 1;
@@ -922,52 +922,52 @@ void setup_enemy_units(void)
     if (their_battle_stance != 0) find_attack_spot();
     else find_defensive_spot();
 
-    cavalry_missile_flag = (cavalry_figure_kind == 0xd);
-    rear_stampede_kind   = (rear_figure_kind >= 9);
-    units_made = 0;
+    mercs_missile = (merc_figure == 0xd);
+    stampede_kind = (figure_rear >= 9);
+    units_no = 0;
 
     /* ---- Stage 1: front rank ---- */
-    while (front_unit_size / 10 <= front_heavy_count) {
-        if (front_sprite_kind == 2) sprite_data_ptr = figure5_data;
-        else if (front_sprite_kind == 3) sprite_data_ptr = figure6_data;
-        else sprite_data_ptr = figure4_data;
-        if (front_unit_size <= front_heavy_count) build_units_figures(units_made++, front_figure_kind, 3, 0, 0, their_battle_stance, army_list[their_battle_army].morale, front_unit_size, 2, 1, sprite_data_ptr, 0, front_sprite_kind + 3);
-        else build_units_figures(units_made++, front_figure_kind, 3, 0, 0, their_battle_stance, army_list[their_battle_army].morale, front_heavy_count, 2, 1, sprite_data_ptr, 0, front_sprite_kind + 3);
-        if (front_unit_size <= front_heavy_count) front_heavy_count -= front_unit_size; else front_heavy_count = 0;
+    while (front_unit_size / 10 <= regs_left) {
+        if (tbs_front_kind == 2) fig_data = figure5_data;
+        else if (tbs_front_kind == 3) fig_data = figure6_data;
+        else fig_data = figure4_data;
+        if (front_unit_size <= regs_left) build_units_figures(units_no++, figure_front, 3, 0, 0, their_battle_stance, army_list[their_battle_army].morale, front_unit_size, 2, 1, fig_data, 0, tbs_front_kind + 3);
+        else build_units_figures(units_no++, figure_front, 3, 0, 0, their_battle_stance, army_list[their_battle_army].morale, regs_left, 2, 1, fig_data, 0, tbs_front_kind + 3);
+        if (front_unit_size <= regs_left) regs_left -= front_unit_size; else regs_left = 0;
     }
 
     /* ---- Stage 2: middle rank ---- */
-    while (middle_unit_size / 10 <= middle_heavy_count) {
-        if (middle_sprite_kind == 2) sprite_data_ptr = figure5_data;
-        else if (middle_sprite_kind == 3) sprite_data_ptr = figure6_data;
-        else sprite_data_ptr = figure4_data;
-        if (middle_unit_size <= middle_heavy_count) build_units_figures(units_made++, middle_figure_kind, 2, 0, 1, their_battle_stance, army_list[their_battle_army].morale, middle_unit_size, 2, 1, sprite_data_ptr, 0, middle_sprite_kind + 3);
-        else build_units_figures(units_made++, middle_figure_kind, 2, 0, 1, their_battle_stance, army_list[their_battle_army].morale, middle_heavy_count, 2, 1, sprite_data_ptr, 0, middle_sprite_kind + 3);
-        if (middle_unit_size <= middle_heavy_count) middle_heavy_count -= middle_unit_size; else middle_heavy_count = 0;
+    while (middle_target / 10 <= middle_heavy_count) {
+        if (tbs_middle_type == 2) fig_data = figure5_data;
+        else if (tbs_middle_type == 3) fig_data = figure6_data;
+        else fig_data = figure4_data;
+        if (middle_target <= middle_heavy_count) build_units_figures(units_no++, second_kind, 2, 0, 1, their_battle_stance, army_list[their_battle_army].morale, middle_target, 2, 1, fig_data, 0, tbs_middle_type + 3);
+        else build_units_figures(units_no++, second_kind, 2, 0, 1, their_battle_stance, army_list[their_battle_army].morale, middle_heavy_count, 2, 1, fig_data, 0, tbs_middle_type + 3);
+        if (middle_target <= middle_heavy_count) middle_heavy_count -= middle_target; else middle_heavy_count = 0;
     }
 
     /* ---- Stage 3: rear rank ---- */
-    while (middle_unit_size / 10 <= rear_heavy_count) {
-        if (rear_sprite_kind == 2) sprite_data_ptr = figure5_data;
-        else if (rear_sprite_kind == 3) sprite_data_ptr = figure6_data;
-        else sprite_data_ptr = figure4_data;
-        if (middle_unit_size <= rear_heavy_count) build_units_figures(units_made++, rear_figure_kind, 2, rear_stampede_kind, 2, their_battle_stance, army_list[their_battle_army].morale, middle_unit_size, 2, 1, sprite_data_ptr, 0, rear_sprite_kind + 3);
-        else build_units_figures(units_made++, rear_figure_kind, 2, rear_stampede_kind, 2, their_battle_stance, army_list[their_battle_army].morale, rear_heavy_count, 2, 1, sprite_data_ptr, 0, rear_sprite_kind + 3);
-        if (middle_unit_size <= rear_heavy_count) rear_heavy_count -= middle_unit_size; else rear_heavy_count = 0;
+    while (middle_target / 10 <= aux_count) {
+        if (tbs_rear_type == 2) fig_data = figure5_data;
+        else if (tbs_rear_type == 3) fig_data = figure6_data;
+        else fig_data = figure4_data;
+        if (middle_target <= aux_count) build_units_figures(units_no++, figure_rear, 2, stampede_kind, 2, their_battle_stance, army_list[their_battle_army].morale, middle_target, 2, 1, fig_data, 0, tbs_rear_type + 3);
+        else build_units_figures(units_no++, figure_rear, 2, stampede_kind, 2, their_battle_stance, army_list[their_battle_army].morale, aux_count, 2, 1, fig_data, 0, tbs_rear_type + 3);
+        if (middle_target <= aux_count) aux_count -= middle_target; else aux_count = 0;
     }
 
     /* ---- Stage 4: mercenary cavalry ---- */
-    while (cavalry_unit_size / 10 <= cavalry_count) {
-        if (cavalry_count >= cavalry_unit_size) build_units_figures(units_made++, cavalry_figure_kind, 0, cavalry_missile_flag, 3, their_battle_stance, army_list[their_battle_army].morale, cavalry_unit_size, 1, 1, figure4_data, figure5_data, 4);
-        else build_units_figures(units_made++, cavalry_figure_kind, 0, cavalry_missile_flag, 3, their_battle_stance, army_list[their_battle_army].morale, cavalry_count, 1, 1, figure4_data, figure5_data, 4);
-        if (cavalry_count >= cavalry_unit_size) cavalry_count -= cavalry_unit_size; else cavalry_count = 0;
+    while (merc_unit_size / 10 <= count_mercs) {
+        if (count_mercs >= merc_unit_size) build_units_figures(units_no++, merc_figure, 0, mercs_missile, 3, their_battle_stance, army_list[their_battle_army].morale, merc_unit_size, 1, 1, figure4_data, figure5_data, 4);
+        else build_units_figures(units_no++, merc_figure, 0, mercs_missile, 3, their_battle_stance, army_list[their_battle_army].morale, count_mercs, 1, 1, figure4_data, figure5_data, 4);
+        if (count_mercs >= merc_unit_size) count_mercs -= merc_unit_size; else count_mercs = 0;
     }
 
     /* ---- Stage 5: archers ---- */
-    while (archer_unit_size / 5 <= archer_count) {
-        if (archer_count >= archer_unit_size) build_units_figures(units_made++, 0xf, 2, 0, 4, their_battle_stance, army_list[their_battle_army].morale, archer_unit_size, 1, 2, figure4_data, 0, 4);
-        else build_units_figures(units_made++, 0xf, 2, 0, 4, their_battle_stance, army_list[their_battle_army].morale, 5, 1, 2, figure4_data, 0, 4);
-        if (archer_count >= archer_unit_size) archer_count -= archer_unit_size; else archer_count = 0;
+    while (bat_size_archer / 5 <= archers_no) {
+        if (archers_no >= bat_size_archer) build_units_figures(units_no++, 0xf, 2, 0, 4, their_battle_stance, army_list[their_battle_army].morale, bat_size_archer, 1, 2, figure4_data, 0, 4);
+        else build_units_figures(units_no++, 0xf, 2, 0, 4, their_battle_stance, army_list[their_battle_army].morale, 5, 1, 2, figure4_data, 0, 4);
+        if (archers_no >= bat_size_archer) archers_no -= bat_size_archer; else archers_no = 0;
     }
 }
 
