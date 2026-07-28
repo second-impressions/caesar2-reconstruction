@@ -1266,7 +1266,8 @@ int get_x_spacing(int row_spacing, int formation_cols, int position)
         return (position / 2) * row_spacing;
     if (formation_cols <= 3)
         return (position / 3) * row_spacing;
-    return (position / 4) * row_spacing;
+    else
+        return (position / 4) * row_spacing;
 }
 
 // Return a figure's vertical offset within a formation.
