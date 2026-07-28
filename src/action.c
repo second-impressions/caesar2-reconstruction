@@ -5547,10 +5547,58 @@ void act_query_mode(void)
 // Runs year-end autosave and summary handling outside tutorial mode.
 // FUNCTION: C2 0x35190
 // FUNCTION: C2WIN 0x004b9ca2
+#if PLATFORM_WINDOWS
+extern void update_date_display(void);
+extern void update_denarii_display(int force);
+extern void update_population_display(int force);
+extern void show_native_year_end(void *window);
+#endif
 void act_do_year_end(void)
 {
     int saved_pointer_mode;
 
+#if PLATFORM_WINDOWS
+    if (tutorial_mode != 0) {
+        return;
+    }
+    swap_circus_gfx();
+    if (c2inf.yearend_on == 0) {
+        if (c2inf.autosave_on != 0) {
+            savegame("save\\lastyear.sav");
+        }
+        return;
+    }
+    if (game_state == 3) {
+        return;
+    }
+    if (game_state == 1) {
+        return;
+    }
+    if (game_state == 2) {
+        return;
+    }
+    saved_pointer_mode = pointer_mode;
+    turbo_mode = 0;
+    local_time = time_is;
+    pointer_mode = 0;
+    update_date_display();
+    update_denarii_display(0);
+    update_population_display(0);
+    if (c2inf.autosave_on != 0) {
+        savegame("save\\lastyear.sav");
+    }
+    show_native_year_end(main_window);
+    if (screen_mode == 0) {
+        city_map_screen(1);
+    } else if (screen_mode == 1) {
+        region_map_screen(1);
+    }
+    flush_sb_buffer();
+    pointer_mode = saved_pointer_mode;
+    if (turbo_mode != 0) {
+        act_init_turbo_mode();
+    }
+#else
     if (tutorial_mode != 0) {
         return;
     }
@@ -5599,6 +5647,7 @@ void act_do_year_end(void)
     if (turbo_mode != 0) {
         act_init_turbo_mode();
     }
+#endif
 }
 
 void (*city_actions[24])(void) = {
