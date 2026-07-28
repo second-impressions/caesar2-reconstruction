@@ -2681,6 +2681,7 @@ void get_fig_missile_image(void)
 
 int try_a_battlemap_square(int direction);
 int try_this_battlemap_square(int cell_offset);
+void target_from_figure_dirc(int direction);
 int get_wf_dirc(int search_mode);
 int arrow_off_map(void);
 
