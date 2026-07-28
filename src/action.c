@@ -3932,15 +3932,32 @@ void act_goto_city_map(void)
 // Switches to the region map unless peaceful mode disables it.
 // FUNCTION: C2 0x33783
 // FUNCTION: C2WIN 0x004b7722
+#if PLATFORM_WINDOWS
+#define ACTION_GOTO_MAP_MODE screen_mode
+#else
+#define ACTION_GOTO_MAP_MODE map_mode
+#endif
 void act_goto_prov_map(void)
 {
     if (c2inf.peace_mode != 0) {
         click_warning(4, 0x50, 0xa0);
         return;
     }
-    if (map_mode == 1) {
+#if PLATFORM_WINDOWS
+    show_map_window(1);
+    update_window_menu(1);
+    swap_map_windows(1);
+    BringWindowToTop(game_window);
+#endif
+    if (ACTION_GOTO_MAP_MODE == 1) {
         return;
     }
+#if PLATFORM_WINDOWS
+    last_icon_over = 0;
+    selected_icon_text = 0;
+    selected_icon_no = 0;
+    last_icon_used = 0;
+#endif
     pointer_mode = 0;
     pm_build_shape = 0;
     placing_type = 0;
@@ -3950,8 +3967,15 @@ void act_goto_prov_map(void)
     city_zoom_level = zoom_level;
     map_direction = prov_rotation;
     zoom_level = prov_zoom_level;
-    map_mode = 1;
+    ACTION_GOTO_MAP_MODE = 1;
 
+#if PLATFORM_WINDOWS
+    update_window_titles();
+    SendMessageA(game_window, 0xc, 0, (long)city_window_title);
+    SendMessageA(map_window, 0xc, 0, (long)main_window_title);
+    load_screen_parts(screen_mode);
+    size_game_window(screen_mode);
+#endif
     city_pm_x = pm_x;
     city_pm_y = pm_y;
 
@@ -3966,11 +3990,12 @@ void act_goto_prov_map(void)
         region_pm_x = pm_x;
         region_pm_y = pm_y;
     }
-    map_mode = 1;
+    ACTION_GOTO_MAP_MODE = 1;
     pm_x = region_pm_x;
     pm_y = region_pm_y;
     act_correct_map();
 }
+#undef ACTION_GOTO_MAP_MODE
 
 // After a map-mode change (city/region/battle), set the map_actual_* dimensions, command-strip
 // rectangle, reset placing state, rebuild the pseudo_map, refresh the zoom, reload the graphic
