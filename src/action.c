@@ -3876,7 +3876,11 @@ void act_send_donation(void)
 {
     denarii        += donation_level;
     players_denarii -= donation_level;
+#if PLATFORM_WINDOWS
+    out1 = 1;
+#else
     act_goto_message();
+#endif
 }
 
 // Extend the income-history graph window by one bucket (up to 4).
