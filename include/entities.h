@@ -759,7 +759,7 @@ struct unit_rec {
     int            prev_attack_off;  /* +0x12  best previous attack cell offset
                                                 seen by find_attack_target;
                                                 latched to gate weaker targets. */
-    char           type;             /* +0x16 */
+    unsigned char  type;             /* +0x16 */
     unsigned char  loss_tier;        /* +0x17  count of 20% losses bands the
                                                 unit has crossed (incremented
                                                 by update_units_morale once per
@@ -773,7 +773,7 @@ struct unit_rec {
                                                 (rank==2 → 60-tick period, else
                                                 30) and morale gating in
                                                 drop_all_units_morale. */
-    char           exists;           /* +0x1B */
+    unsigned char  exists;           /* +0x1B */
     char           owner;            /* +0x1C */
     signed char    morale_a;         /* +0x1D  signed-byte morale axis A,
                                                 bumped by raise/drop_all_units
