@@ -583,12 +583,9 @@ void clear_all_highlights_from_battlemap(void)
     gmn_y   = 0;
     cm_sptr = 0;
     for ( ; gmn_y < 0x34; gmn_y++) {
-        gmn_x = 0;
-        do {
+        for (gmn_x = 0; gmn_x < 0x34; gmn_x++, cm_sptr += 4) {
             (*(struct battle_cell *)((unsigned char *)battle_map + ((cm_sptr)))).dirty &= 0xf3;
-            gmn_x++;
-            cm_sptr += 4;
-        } while (gmn_x < 0x34);
+        }
     }
 }
 
