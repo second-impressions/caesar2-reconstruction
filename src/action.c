@@ -2122,17 +2122,21 @@ void act_tunes_level(void)
 // FUNCTION: C2WIN 0x004b5086
 void act_toggle_sound_fx(void)
 {
+#if !PLATFORM_WINDOWS
     int tutorial_active = tutorial_mode;
-    if (tutorial_active != 0) {
+#endif
+    if (FX_TUTORIAL_ACTIVE != 0) {
         click_warning(2, 0x50, 0xa0);
         return;
     }
     show_fx_box(1);
-    out1 = tutorial_active;
+    out1 = FX_INITIAL_OUT1;
     while (out1 == 0) {
         samples_game_loop();
     }
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     set_samples_volume();
 }
 
