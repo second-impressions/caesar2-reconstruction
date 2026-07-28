@@ -1275,21 +1275,14 @@ int get_x_spacing(int row_spacing, int formation_cols, int position)
 // FUNCTION: C2WIN 0x0047726b
 int get_y_spacing(int row_spacing, int formation_cols, int position, int side)
 {
-    int divisor;
-    int column;
-
     if (formation_cols <= 1)
-        return position ^ position;   /* zero via xor-self */
+        return 0;
     if (formation_cols <= 2)
-        divisor = 2;
-    else if (formation_cols <= 3)
-        divisor = 3;
+        return (position % 2) * row_spacing * side;
+    if (formation_cols <= 3)
+        return (position % 3) * row_spacing * side;
     else
-        divisor = 4;
-    column = position % divisor;
-    column *= row_spacing;
-    column *= side;
-    return column;
+        return (position % 4) * row_spacing * side;
 }
 
 // Count active figures and mark their map footprints for redraw.
