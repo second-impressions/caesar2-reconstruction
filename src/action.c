@@ -40,6 +40,7 @@ extern void load_screen_parts(unsigned char mode);
 extern void size_game_window(int mode);
 extern void *game_window;
 extern void *status_window;
+extern void *map_window;
 extern int game_window_x;
 extern int game_window_y;
 extern int game_window_width;
@@ -49,6 +50,16 @@ extern int status_window_y;
 extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
                                     int x, int y, int width, int height,
                                     unsigned int flags);
+extern int (__stdcall *BringWindowToTop)(void *window);
+extern long (__stdcall *SendMessageA)(void *window, unsigned int message,
+                                     unsigned int wparam, long lparam);
+extern void show_map_window(int mode);
+extern void update_window_menu(int mode);
+extern void swap_map_windows(int mode);
+extern void update_window_titles(void);
+extern char city_window_title[];
+extern char main_window_title[];
+extern char *tutorial_window_title;
 #endif
 void show_fx_box(int what);
 void stop_all_sounds(void);
@@ -3864,6 +3875,38 @@ void act_swap_maps(void)
 // FUNCTION: C2WIN 0x004b75b9
 void act_goto_city_map(void)
 {
+#if PLATFORM_WINDOWS
+    show_map_window(0);
+    update_window_menu(0);
+    swap_map_windows(0);
+    BringWindowToTop(map_window);
+    if (screen_mode == 0) {
+        return;
+    }
+    last_icon_over = 0;
+    selected_icon_text = 0;
+    selected_icon_no = 0;
+    last_icon_used = 0;
+    pointer_mode = 0;
+    pm_build_shape = 0;
+    placing_type = 0;
+    placing_flags = 0;
+
+    prov_rotation = map_direction;
+    prov_zoom_level = zoom_level;
+    map_direction = city_rotation;
+    zoom_level = city_zoom_level;
+    screen_mode = 0;
+    update_window_titles();
+    SendMessageA(game_window, 0xc, 0, (long)city_window_title);
+    if (tutorial_mode != 0) {
+        SendMessageA(map_window, 0xc, 0, (long)tutorial_window_title);
+    } else {
+        SendMessageA(map_window, 0xc, 0, (long)main_window_title);
+    }
+    load_screen_parts(screen_mode);
+    size_game_window(screen_mode);
+#else
     if (map_mode == 0) {
         return;
     }
@@ -3877,6 +3920,7 @@ void act_goto_city_map(void)
     map_direction = city_rotation;
     zoom_level = city_zoom_level;
     map_mode = 0;
+#endif
 
     region_pm_x = pm_x;
     region_pm_y = pm_y;
