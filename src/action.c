@@ -2696,10 +2696,12 @@ void act_rewind_help(void)
 
 // Help modal: pause speech playback; ignored while the message queue is busy.
 // FUNCTION: C2 0x32501
+// FUNCTION: C2WIN 0x004b560c
 void act_pause_help(void)
 {
-    if (pause_db() != 0) return;
-    help_buttons[1].state = 0;   /* un-toggle the help play/pause button */
+    if (pause_db() == 0) {
+        help_buttons[1].state = 0;   /* un-toggle the help play/pause button */
+    }
 }
 
 // Help modal: restart from the beginning of the help history (out2 = 10).
