@@ -796,7 +796,7 @@ void flag_mode_action(void)
     }
 
 flag_done:
-    if (old_scrolling != scrolling && old_scrolling == 1) {
+    if (scrolling != old_scrolling && old_scrolling == 1) {
         stopped_scrolling = 1;
     }
 }
