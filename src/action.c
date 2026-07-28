@@ -2455,7 +2455,12 @@ void act_gardens_plaza(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 0xF;
+    control_selection(gardens_plaza_selection, 3, 0x14, 0x118, 0x3A);
+#else
     control_selection(gardens_plaza_selection, 3, mouse_x - 0x70, mouse_y - 0x30, 0x3A);
+#endif
     selected_icon_text = 0x3A;
     selected_icon_no = selection_is;
 }
