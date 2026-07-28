@@ -3128,15 +3128,17 @@ void drop_all_units_morale(int match_type, int morale_a_delta, int morale_b_delt
 void raise_all_units_morale(int skip_type, int morale_a_delta, int morale_b_delta)
 {
     int unit_idx;
+
     for (unit_idx = 1; unit_idx < 0x33; unit_idx++) {
-        if (unit_list[unit_idx].exists == 0) continue;
-        if ((unsigned char)unit_list[unit_idx].type == skip_type) continue;
-        unit_list[unit_idx].morale_a += (char)morale_a_delta;
-        unit_list[unit_idx].morale_b += (char)morale_b_delta;
-        if (unit_list[unit_idx].morale_a > 0x64)
-            unit_list[unit_idx].morale_a = 0x64;
-        if (unit_list[unit_idx].morale_b > 0x64)
-            unit_list[unit_idx].morale_b = 0x64;
+        if (unit_list[unit_idx].exists != 0 &&
+            unit_list[unit_idx].type != skip_type) {
+            unit_list[unit_idx].morale_a += morale_a_delta;
+            unit_list[unit_idx].morale_b += morale_b_delta;
+            if (unit_list[unit_idx].morale_a > 0x64)
+                unit_list[unit_idx].morale_a = 0x64;
+            if (unit_list[unit_idx].morale_b > 0x64)
+                unit_list[unit_idx].morale_b = 0x64;
+        }
     }
 }
 
