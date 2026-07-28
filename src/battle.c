@@ -362,7 +362,7 @@ void select_drag_figures(void)
 // Validate and draw the destination preview for selected moving units.
 // FUNCTION: C2 0x4b438
 // FUNCTION: C2WIN 0x00473345
-int show_move_highlight(void)
+void show_move_highlight(void)
 {
   int cell_offset;
   int unit_idx;
@@ -414,7 +414,6 @@ int show_move_highlight(void)
     }
   }
 
-  return;
 }
 
 
