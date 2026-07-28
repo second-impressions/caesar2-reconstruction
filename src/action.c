@@ -682,7 +682,7 @@ end_of_action:
     } else if (action_sound == 0) {
         do_pos();
     }
-    if (scrolling != old_scrolling && old_scrolling == 1) {
+    if (old_scrolling != scrolling && old_scrolling == 1) {
         stopped_scrolling = 1;
     }
 
@@ -782,7 +782,7 @@ void flag_mode_action(void)
     }
 
 flag_done:
-    if (scrolling != old_scrolling && old_scrolling == 1) {
+    if (old_scrolling != scrolling && old_scrolling == 1) {
         stopped_scrolling = 1;
     }
 }
@@ -866,7 +866,7 @@ void battle_action(void)
         if (battle_setup_count != 0) battle_setup_count = 2;
     }
 end_battle_action:
-    if (scrolling != old_scrolling && old_scrolling == 1) stopped_scrolling = 1;
+    if (old_scrolling != scrolling && old_scrolling == 1) stopped_scrolling = 1;
 }
 
 // Edge-of-screen panning. When the mouse is at one of the screen edges, advances `pm_x`/`pm_y` by
