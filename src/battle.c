@@ -1367,9 +1367,9 @@ void figure_update(void)
                 temp_unit = (short)figure_list[figure_no].unit_ref;
                 if (pointer_mode == 2 && unit_list[temp_unit].unit_sub_kind == 0) {
                     figure_list[figure_no].selected = 0;
-                } else {
-                    ((unsigned char *)battle_map)[figure_list[figure_no].map_ref + 2] |= 4;
+                    continue;
                 }
+                ((unsigned char *)battle_map)[figure_list[figure_no].map_ref + 2] |= 4;
             }
         }
     }
