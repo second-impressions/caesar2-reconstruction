@@ -1119,6 +1119,7 @@ void prebuild_region_item(void)
         get_reg_road_elastic();
     } else if (reg_placing_type == 0x1f) {
         get_reg_wall_elastic();
+        return;
     }
 }
 
