@@ -634,7 +634,7 @@ struct figure_rec {
                                                 slot set by f01_regular,
                                                 f02_irregular, f03_auxillary,
                                                 f05_barb_sword, etc. */
-    char           sub_state;        /* +0x46  paired sub-state (3, 2, 1, …)
+    unsigned char  sub_state;        /* +0x46  paired sub-state (3, 2, 1, …)
                                                 set by the same dispatchers */
     unsigned char  figure_rank;      /* +0x47  troop role/class within its
                                                 unit; values seen so far:
