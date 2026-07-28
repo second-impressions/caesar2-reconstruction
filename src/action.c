@@ -2072,11 +2072,11 @@ int perform_city_strip_action(void)
     city_actions[last_icon_over - 4]();
 
     if (last_icon_over >= 0xe) {
-        if (last_icon_over == 0x12) goto city_strip_done;
+        if (last_icon_over == 0x12) goto region_strip_done;
         last_icon_used = last_icon_over;
         update_icon = last_icon_over;
     }
-city_strip_done:
+region_strip_done:
     return 1;
 }
 
@@ -2098,12 +2098,11 @@ int perform_region_strip_action(void)
 
     region_actions[last_icon_over - 4]();
 
-    if (last_icon_over >= 0xe) {
-        if (last_icon_over == 0x12) goto region_strip_done;
+    if (last_icon_over < 0xe || last_icon_over == 0x12) {
+    } else {
         last_icon_used = last_icon_over;
         update_icon = last_icon_over;
     }
-region_strip_done:
     return 1;
 }
 
