@@ -206,12 +206,12 @@ void select_a_unit(int figure_idx, int select_mode)
     for (figure_no = 1; figure_no < 0xc9; ++figure_no) {
         if (figure_list[figure_no].unit_ref == unit_ref) {
             battle_stats_type = 0;
-            if (figure_list[figure_no].state_idx != 2) {
-                if (select_mode == 0) {
-                    figure_list[figure_no].selected ^= 1;
-                } else {
-                    figure_list[figure_no].selected = 1;
-                }
+            if (figure_list[figure_no].state_idx == 2)
+                continue;
+            if (select_mode == 0) {
+                figure_list[figure_no].selected ^= 1;
+            } else {
+                figure_list[figure_no].selected = 1;
             }
         }
     }
