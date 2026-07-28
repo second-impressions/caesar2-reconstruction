@@ -3533,20 +3533,20 @@ void act_set_patrol_markers(void)
 
 // Clears the tracked cohort's patrol route and orders it back to its fortress.
 // FUNCTION: C2 0x3329b
+// FUNCTION: C2WIN 0x004b6ae2
 void act_set_return_home(void)
 {
-    int fortress_cell_idx;
-    int fortress_x;
-    int route_row;
+    int home;
+    int i;
 
     pointer_mode = 0;
     army_list[tracking_army].dest_y = 0;
     army_list[tracking_army].dest_x = 0;
     unflag_all_rm_xwarehouse();
 
-    for (route_row = 0; route_row < 10; route_row++) {
+    for (i = 0; i < 10; i++) {
         army_routes[(signed char)
-            army_list[tracking_army].cohort_id].row_len[route_row] = 0;
+            army_list[tracking_army].cohort_id].row_len[i] = 0;
     }
     army_routes[(signed char)
         army_list[tracking_army].cohort_id].row_count = 0;
@@ -3555,14 +3555,15 @@ void act_set_return_home(void)
     army_routes[(signed char)
         army_list[tracking_army].cohort_id].target_army = 0;
 
-    fortress_cell_idx = army_list[tracking_army].fort_ref / 8;
-    fortress_x = fortress_cell_idx % 60;
-    army_list[tracking_army].target_x = fortress_x;
-    army_list[tracking_army].target_y = (fortress_cell_idx / 60);
+    home = army_list[tracking_army].fort_ref / 8;
+    army_list[tracking_army].target_x = home % 60;
+    army_list[tracking_army].target_y = (home / 60);
     army_list[tracking_army].state_idx = 5;
     army_list[tracking_army].flags &= ~2;
     army_list[tracking_army].order_progress = 1;
+#if !PLATFORM_WINDOWS
     setup_map_screen_refresh();
+#endif
     clear_mouse();
 }
 
