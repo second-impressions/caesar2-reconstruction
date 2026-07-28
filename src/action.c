@@ -884,7 +884,7 @@ void battle_action(void)
         if (battle_setup_count != 0) battle_setup_count = 2;
     }
 end_battle_action:
-    if (old_scrolling != scrolling && old_scrolling == 1) stopped_scrolling = 1;
+    if (scrolling != old_scrolling && old_scrolling == 1) stopped_scrolling = 1;
 }
 
 // Edge-of-screen panning. When the mouse is at one of the screen edges, advances `pm_x`/`pm_y` by
