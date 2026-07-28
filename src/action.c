@@ -2517,7 +2517,12 @@ void act_forums(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 5;
+    control_selection(forum_selection, 4, 0x14, 0xFA, 0x14);
+#else
     control_selection(forum_selection, 4, mouse_x - 0x80, mouse_y - 0x30, 0x14);
+#endif
     selected_icon_text = 0x14;
     selected_icon_no = selection_is;
 }
