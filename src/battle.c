@@ -1773,19 +1773,16 @@ void sf06_defend(void)
 // FUNCTION: C2WIN 0x00478820
 void sf07_reform(void)
 {
-    int moved;
-
     figure_list[figure_no].is_routing = 1;
     get_fig_walk_image();
-    moved = figure_go_to_target();
-    if (moved == 0)
+    if (figure_go_to_target() == 0)
         return;
-    if ((figure_list[figure_no].is_visible & 2) == 0)
-        return;
-    figure_list[figure_no].is_visible   &= 0xfd;
-    figure_list[figure_no].state_idx     = 6;
-    figure_list[figure_no].is_defending  = 1;
-    figure_list[figure_no].direction     = figure_list[figure_no].anim_state;
+    if ((figure_list[figure_no].is_visible & 2) != 0) {
+        figure_list[figure_no].is_visible   &= 0xfd;
+        figure_list[figure_no].state_idx     = 6;
+        figure_list[figure_no].is_defending  = 1;
+        figure_list[figure_no].direction     = figure_list[figure_no].anim_state;
+    }
 }
 
 // Withdraw state (state_idx 8): step the figure backward to its target tile; on arrival drop into
