@@ -3232,10 +3232,17 @@ void act_set_return_home(void)
 // Stop the selected cohort's patrol, return it to idle state, and refresh the map controls.
 // FUNCTION: C2 0x33360
 // FUNCTION: C2WIN 0x004b6ce8
+#if PLATFORM_WINDOWS
+#define TRACKED_ARMY_STATE ((signed char)army_list[tracking_army].state_idx)
+#else
+#define TRACKED_ARMY_STATE army_state
+#endif
 void act_set_patrol_stop(void)
 {
     int route_row;
+#if !PLATFORM_WINDOWS
     int army_state;
+#endif
 
     pointer_mode = 0;
     army_list[tracking_army].dest_y = 0;
@@ -3257,8 +3264,10 @@ void act_set_patrol_stop(void)
         army_list[tracking_army].x;
     army_list[tracking_army].target_y =
         army_list[tracking_army].y;
+#if !PLATFORM_WINDOWS
     army_state = (signed char)army_list[tracking_army].state_idx;
-    if (army_state == 4 || army_state == 8) {
+#endif
+    if (TRACKED_ARMY_STATE == 4 || TRACKED_ARMY_STATE == 8) {
         army_list[tracking_army].order_progress = 1;
     } else {
         army_list[tracking_army].order_progress = 0;
@@ -3266,9 +3275,12 @@ void act_set_patrol_stop(void)
     army_list[tracking_army].state_idx = 3;
     army_list[tracking_army].flags &= ~2;
 
+#if !PLATFORM_WINDOWS
     setup_map_screen_refresh();
+#endif
     clear_mouse();
 }
+#undef TRACKED_ARMY_STATE
 
 // Rotate the map view clockwise by 90 degrees and refresh.
 // FUNCTION: C2 0x3342f
