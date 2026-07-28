@@ -2157,16 +2157,14 @@ battle_strip_done:
 // FUNCTION: C2WIN 0x004b4b98
 int perform_cohort_box_action(void)
 {
-    int army_record_offset;
-    int button_size;
-
     if (exit_screen() != 0) {
         pointer_mode = 0;
         update_map = 1;
+#if !PLATFORM_WINDOWS
         setup_map_screen_refresh();
+#endif
         return 1;
     }
-    army_record_offset = tracking_army * 0xaf;
     if (army_list[tracking_army].type != 1) {
         return 0;
     }
@@ -2177,16 +2175,15 @@ int perform_cohort_box_action(void)
     }
 
     /* Three 34x34 buttons at the bottom of the cohort box. */
-    button_size = 0x22;
-    if (mouse_in_area(0x28, 0x126, button_size, button_size) != 0) {
+    if (mouse_in_area(0x28, 0x126, 0x22, 0x22) != 0) {
         act_set_patrol_markers();
         return 1;
     }
-    if (mouse_in_area(0xb8, 0x126, button_size, button_size) != 0) {
+    if (mouse_in_area(0xb8, 0x126, 0x22, 0x22) != 0) {
         act_set_return_home();
         return 1;
     }
-    if (mouse_in_area(0x148, 0x126, button_size, button_size) != 0) {
+    if (mouse_in_area(0x148, 0x126, 0x22, 0x22) != 0) {
         act_set_patrol_stop();
         return 1;
     }
