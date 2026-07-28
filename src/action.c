@@ -1751,8 +1751,6 @@ found:
 // FUNCTION: C2WIN 0x004b4937
 int perform_city_strip_action(void)
 {
-    int cleared_selection;
-
     if (mouse_left_preclick == 0) {
         return 0;
     }
@@ -1760,17 +1758,18 @@ int perform_city_strip_action(void)
         return 0;
     }
 
-    cleared_selection = 0;
-    selected_icon_no   = cleared_selection;
-    selected_icon_text = cleared_selection;
+    selected_icon_no = 0;
+    selected_icon_text = selected_icon_no;
     icon_strip_toggle  = 0x1f;
 
     city_actions[last_icon_over - 4]();
 
-    if (last_icon_over >= 0xe && last_icon_over != 0x12) {
+    if (last_icon_over >= 0xe) {
+        if (last_icon_over == 0x12) goto city_strip_done;
         last_icon_used = last_icon_over;
-        update_icon    = last_icon_over;
+        update_icon = last_icon_over;
     }
+city_strip_done:
     return 1;
 }
 
