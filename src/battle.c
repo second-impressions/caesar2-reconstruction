@@ -2971,18 +2971,19 @@ void set_ai_unit_withdraw(int offset_x, int offset_y)
 // FUNCTION: C2WIN 0x0047d1b6
 void set_ai_unit_beserk(void)
 {
-    int figure_state;
-
     unit_list[temp_unit].combat_order = 10;
     for (temp_figure = unit_list[temp_unit].first_figure;
          unit_list[temp_unit].last_figure >= temp_figure;
          ++temp_figure) {
         if (figure_list[temp_figure].exists != 0) {
             figure_list[temp_figure].is_defending = 0;
-            figure_state = figure_list[temp_figure].state_idx;
-            if (figure_state != 2 && figure_state != 0xc && figure_state != 4) {
-                figure_list[temp_figure].state_idx = 10;
-            }
+            if (figure_list[temp_figure].state_idx == 2)
+                continue;
+            if (figure_list[temp_figure].state_idx == 0xc)
+                continue;
+            if (figure_list[temp_figure].state_idx == 4)
+                continue;
+            figure_list[temp_figure].state_idx = 10;
         }
     }
 }
