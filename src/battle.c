@@ -422,48 +422,49 @@ void show_move_highlight(void)
 // FUNCTION: C2WIN 0x0047388d
 void show_aim_highlight(void)
 {
-    int eligible_count;
-    int x0;
-    int x1;
-    int y0;
-    int y1;
+    int firing_figures;
+    int left_x;
+    int x_bound;
+    int first_y;
+    int bottom_bound;
+    int line_skip;
     int x;
     int y;
-    int cell_offset;
-    int row_skip;
+    int cell_off;
 
     if (pm_over == 0) return;
 
-    figure_no = 1; eligible_count = 0;
+    figure_no = 1; firing_figures = 0;
     for (; figure_no < 0xc9; ++figure_no) {
         if (figure_list[figure_no].exists != 0 && figure_list[figure_no].selected != 0) {
             temp_unit = figure_list[figure_no].unit_ref;
-            if (unit_list[temp_unit].target_lock == 0) {
-                if (unit_list[temp_unit].unit_sub_kind != 0) eligible_count++;
-            }
+            if (unit_list[temp_unit].target_lock != 0)
+                continue;
+            if (unit_list[temp_unit].unit_sub_kind != 0) firing_figures++;
         }
     }
-    if (eligible_count == 0) return;
+    if (firing_figures == 0) return;
 
-    x0 = act_start_x - 5; hlite_left = x0;
-    y0 = act_start_y - 5; hlite_top  = y0;
-    x1 = act_start_x + 5;
-    y1 = act_start_y + 5;
+    left_x = act_start_x - 5; hlite_left = left_x;
+    first_y = act_start_y - 5; hlite_top  = first_y;
+    x_bound = act_start_x + 5;
+    bottom_bound = act_start_y + 5;
 
-    if (x0 < 0)    x0 = 0;
-    if (x1 >= 0x34) x1 = 0x33;
-    if (y0 < 0)    y0 = 0;
-    if (y1 >= 0x34) y1 = 0x33;
+    if (left_x < 0) left_x = 0;
+    if (x_bound >= 0x34) x_bound = 0x33;
+    if (first_y < 0) first_y = 0;
+    if (bottom_bound >= 0x34) bottom_bound = 0x33;
 
-    cell_offset = (y0 * 0x34 + x0) * 4;
-    row_skip = (0x34 - (x1 - x0 + 1)) * 4;
+    cell_off = (first_y * 0x34 + left_x) * 4;
+    line_skip = (0x34 - (x_bound - left_x + 1)) * 4;
 
-    y = y0;
-    for (; y <= y1; y++, cell_offset += row_skip) {
-        x = x0;
-        for (; x <= x1; x++, cell_offset += 4) {
-            ((unsigned char *)battle_map)[(cell_offset) + 2] &= 0xf1;
-            ((unsigned char *)battle_map)[(cell_offset) + 2] |= 0xe;
+    y = first_y;
+    for (; y <= bottom_bound; y++, cell_off += line_skip) {
+        x = left_x;
+        for (; x <= x_bound; x++, cell_off += 4) {
+            ((unsigned char *)battle_map)[cell_off + 2] |= 2;
+            ((unsigned char *)battle_map)[cell_off + 2] &= 0xf3;
+            ((unsigned char *)battle_map)[cell_off + 2] |= 0xc;
         }
     }
 }
