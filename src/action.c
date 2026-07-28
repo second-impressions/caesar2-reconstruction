@@ -2404,7 +2404,12 @@ void act_water(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 2;
+    control_selection(water_selection, 5, 0x14, 0x122, 0xD);
+#else
     control_selection(water_selection, 5, mouse_x - 0x80, mouse_y - 0x30, 0xD);
+#endif
     selected_icon_text = 0xD;
     selected_icon_no = selection_is;
 }
