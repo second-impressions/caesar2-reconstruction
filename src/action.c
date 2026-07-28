@@ -5694,12 +5694,7 @@ void act_query_do_help(int page_delta)
     }
     flush_sb_buffer();
     pointer_mode = 0;
-#if PLATFORM_WINDOWS
     out3 = out2 = 0;
-#else
-    out2 = 0;
-    out3 = 0;
-#endif
 }
 
 // Toggle query pointer mode (between 4 and 0).
