@@ -872,7 +872,7 @@ end_battle_action:
 // Edge-of-screen panning. When the mouse is at one of the screen edges, advances `pm_x`/`pm_y` by
 // `scroll_amount` (or twice that for the top/bottom rows).
 // FUNCTION: C2 0x2fc9b
-// FUNCTION: C2WIN 0x004b1df5
+// FUNCTION: C2WIN 0x0041792e
 void scroll(void)
 {
     int saved_pm_x = pm_x;
@@ -2132,7 +2132,7 @@ void act_null(void)
 
 // Finds the battle-screen icon under the cursor and dispatches its action on a left click.
 // FUNCTION: C2 0x31c9f
-// FUNCTION: C2WIN 0x004b4a6f REORDERED
+// FUNCTION: C2WIN 0x004b4b98
 int perform_battle_strip_action(void)
 {
     int count;

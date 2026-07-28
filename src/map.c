@@ -5460,7 +5460,7 @@ void count_danger_flags(void)
 
 // Select the next active city marker.
 // FUNCTION: C2 0x6f3b3
-// FUNCTION: C2WIN 0x004ae761
+// FUNCTION: C2WIN 0x004ae6db
 int next_city_flag(void)
 {
     int i;
@@ -5477,7 +5477,7 @@ int next_city_flag(void)
 
 // Select the next active province marker.
 // FUNCTION: C2 0x6f405
-// FUNCTION: C2WIN 0x004ae7e7
+// FUNCTION: C2WIN 0x004ae761
 int next_prov_flag(void)
 {
     int i;
@@ -5494,7 +5494,7 @@ int next_prov_flag(void)
 
 // Select the next active danger marker.
 // FUNCTION: C2 0x6f457
-// FUNCTION: C2WIN 0x004ae6db REORDERED
+// FUNCTION: C2WIN 0x004ae7e7
 int next_danger_flag(void)
 {
     int i;
