@@ -2699,7 +2699,12 @@ void act_entertainment(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 8;
+    control_selection(entertainment_selection, 7, 0x14, 0x11D, 0x17);
+#else
     control_selection(entertainment_selection, 7, mouse_x - 0x90, mouse_y - 0x30, 0x17);
+#endif
     selected_icon_text = 0x17;
     selected_icon_no = selection_is;
 }
