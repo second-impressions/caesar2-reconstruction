@@ -3818,7 +3818,9 @@ void act_goto_message(void)
 // FUNCTION: C2WIN 0x004b7fa2
 void show_forum_screen(void)
 {
+#if !PLATFORM_WINDOWS
     int dept;
+#endif
 
     if (last_forum_dept == FORUM_DEPT_TEMPLE) {
         black_out();
@@ -3827,19 +3829,22 @@ void show_forum_screen(void)
         black_out();
     }
 
+#if !PLATFORM_WINDOWS
     dept = forum_dept;
-    if (dept == FORUM_DEPT_ADMIN) { forum_admin_screen();    return; }
-    if (dept == FORUM_DEPT_CAREER) { forum_career_screen();   return; }
-    if (dept == FORUM_DEPT_ROME) { forum_rome_screen();     return; }
-    if (dept == FORUM_DEPT_CLERKS) { forum_clerks_screen();   return; }
-    if (dept == FORUM_DEPT_ADVISOR) { forum_advisor_screen();  return; }
-    if (dept == FORUM_DEPT_ARMY) { forum_army_screen();     return; }
-    if (dept == FORUM_DEPT_INDUSTRY) { forum_industry_screen(); return; }
-    if (dept == FORUM_DEPT_SLAVES) { forum_slaves_screen();   return; }
-    if (dept == FORUM_DEPT_TEMPLE) { forum_temple_screen();  return; }
-    if (dept == FORUM_DEPT_EMPIRE) { forum_empire_screen();  return; }
+#endif
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_ADMIN) { forum_admin_screen();    return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_CAREER) { forum_career_screen();   return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_ROME) { forum_rome_screen();     return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_CLERKS) { forum_clerks_screen();   return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_ADVISOR) { forum_advisor_screen();  return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_ARMY) { forum_army_screen();     return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_INDUSTRY) { forum_industry_screen(); return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_SLAVES) { forum_slaves_screen();   return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_TEMPLE) { forum_temple_screen();  return; }
+    if (ACTIVE_FORUM_DEPT == FORUM_DEPT_EMPIRE) { forum_empire_screen();  return; }
     forum_empty_screen();
 }
+#undef ACTIVE_FORUM_DEPT
 
 // Hit-test the bottom-of-screen forum menu strip (FORUM_DEPT_END entries, 0..FORUM_DEPT_EMPIRE).
 // Each is 0x18 wide x 0xa0 tall — coordinates from forum_menu[i*2] for x and forum_menu[i*2+1] for
