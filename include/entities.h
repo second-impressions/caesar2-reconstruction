@@ -766,7 +766,7 @@ struct unit_rec {
                                                 additional 20% strength lost). */
     char           state;            /* +0x18 */
     char           _unk19[1];  /* Mac PPC: also never accessed -- vestigial */
-    char           unit_rank;        /* +0x1A  mirrored from leader figure's
+    unsigned char  unit_rank;        /* +0x1A  mirrored from leader figure's
                                                 .figure_rank by
                                                 build_units_figures.  Drives
                                                 AI period in do_light_ai

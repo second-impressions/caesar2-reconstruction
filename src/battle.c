@@ -2779,12 +2779,14 @@ void elephant_ai(void)
 // FUNCTION: C2WIN 0x0047c57e
 void do_light_ai(void)
 {
-    int berserk_tick;
+    if (++unit_list[temp_unit].ai_tick < unit_list[temp_unit].ai_period)
+        return;
 
-    ++unit_list[temp_unit].ai_tick;
-    if (unit_list[temp_unit].ai_tick >= unit_list[temp_unit].ai_period) {
+    {
+        int berserk_tick;
+
         unit_list[temp_unit].ai_tick = 0;
-        if ((unit_list[temp_unit].unit_rank & 0xff) == 2) {
+        if (unit_list[temp_unit].unit_rank == 2) {
             berserk_tick = 60;
         } else {
             berserk_tick = 30;
