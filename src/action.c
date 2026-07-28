@@ -4003,6 +4003,11 @@ void act_goto_prov_map(void)
 // tiles, and finally show the destination screen.
 // FUNCTION: C2 0x33899
 // FUNCTION: C2WIN 0x004b78ff
+#if PLATFORM_WINDOWS
+void start_cityprov_tune(void);
+void start_battle_tune(void);
+void redraw_game_window(void *window);
+#endif
 void act_correct_map(void)
 {
     if (map_mode == 1) {
@@ -4049,7 +4054,9 @@ void act_correct_map(void)
         refresh_zoom_mode(zoom_level);
     }
     pm_limits();
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     clear_edge_info();
     update_landfill = 1;
 
@@ -4067,19 +4074,31 @@ void act_correct_map(void)
         init_city_ambients();
         tune_mood = last_city_mood;
         if (city_tune_playing == 0) {
+#if PLATFORM_WINDOWS
+            start_cityprov_tune();
+#else
             play_tune("cityprov.xmi", 0);
+#endif
         }
         city_tune_playing = 1;
     } else if (map_mode == 1) {
         init_prov_ambients();
         tune_mood = last_city_mood;
         if (city_tune_playing == 0) {
+#if PLATFORM_WINDOWS
+            start_cityprov_tune();
+#else
             play_tune("cityprov.xmi", 0);
+#endif
         }
         city_tune_playing = 1;
     } else if (map_mode == 2) {
         init_battle_ambients();
+#if PLATFORM_WINDOWS
+        start_battle_tune();
+#else
         play_tune("batest2.xmi", 1);
+#endif
         city_tune_playing = 0;
     }
 
@@ -4092,6 +4111,10 @@ void act_correct_map(void)
     }
     flush_sb_buffer();
     pointer_mode = 0;
+#if PLATFORM_WINDOWS
+    show_landfill(com_x, com_y);
+    redraw_game_window(game_window);
+#endif
 }
 
 // Enter flag-marker pointer mode and clear the placing context.
