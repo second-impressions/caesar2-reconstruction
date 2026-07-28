@@ -2635,7 +2635,12 @@ void act_temple(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 7;
+    control_selection(temple_selection, 4, 0x14, 0x118, 0x16);
+#else
     control_selection(temple_selection, 4, mouse_x - 0x70, mouse_y - 0x30, 0x16);
+#endif
     selected_icon_text = 0x16;
     selected_icon_no = selection_is;
 }
