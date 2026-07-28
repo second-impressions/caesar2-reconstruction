@@ -1710,12 +1710,10 @@ void sf15_move_and_reform(void)
 // FUNCTION: C2WIN 0x004783ca
 void sf04_fight(void)
 {
-    int not_visible;
-
     figure_list[figure_no].is_routing = 0;
     get_fig_fight_image();
     enemy_figure = (short)figure_list[figure_no].opponent;
-    if (figure_list[figure_list[figure_no].opponent].exists == 0) {
+    if (figure_list[enemy_figure].exists == 0) {
         figure_list[figure_no].state_idx = 9;
         return;
     }
@@ -1724,9 +1722,10 @@ void sf04_fight(void)
         return;
     }
     do_the_fight();
-    not_visible = (figure_list[figure_no].is_visible == 0);
-    if (not_visible)
+    if ((!(unsigned int)figure_list[figure_no].is_visible) & 1) {
         figure_go_to_target();
+        return;
+    }
 }
 
 // Empty state-handler slot for the "mop-up" battle state.

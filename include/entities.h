@@ -574,7 +574,7 @@ struct figure_rec {
                                                 elephant figure begins its
                                                 stampede death animation. */
     char           _unk34[1];  /* Mac PPC: also never accessed -- vestigial */
-    char           opponent;         /* +0x35  current combat opponent's
+    unsigned char  opponent;         /* +0x35  current combat opponent's
                                                 figure index (read by
                                                 sf04_fight to look up the
                                                 enemy figure_rec). */
