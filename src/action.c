@@ -2421,7 +2421,12 @@ void act_security(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 3;
+    control_selection(security_selection, 5, 0x14, 0x122, 0xE);
+#else
     control_selection(security_selection, 5, mouse_x - 0x90, mouse_y - 0x30, 0xE);
+#endif
     selected_icon_text = 0xE;
     selected_icon_no = selection_is;
 }
