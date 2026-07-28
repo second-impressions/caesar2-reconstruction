@@ -940,8 +940,6 @@ void mouse_follow_cohort(void)
 {
     static int cohort_tick_gate;
     int army_distance;
-    int army_screen_x;
-    int army_screen_y;
 
     if (map_mode != 1) { tracking_army = 0; return; }
     if (pointer_mode <= 1) { tracking_army = 0; return; }
@@ -957,11 +955,11 @@ void mouse_follow_cohort(void)
     pointer_mode = 3;
     if (cohort_tick_gate >= 2) { cohort_tick_gate = 0; return; }
     cohort_tick_gate = cohort_tick_gate + 1;
-    army_screen_x = army_list[tracking_army].map_x; if (army_screen_x < mouse_x) { mse_x = (short)(mouse_x - 1); }
-    else if (army_screen_x > mouse_x) { mse_x = (short)(mouse_x + 1); }
+    if (army_list[tracking_army].map_x < mouse_x) { mse_x = (short)(mouse_x - 1); }
+    else if (army_list[tracking_army].map_x > mouse_x) { mse_x = (short)(mouse_x + 1); }
     else { mse_x = mouse_x; }
-    army_screen_y = army_list[tracking_army].map_y; if (army_screen_y < mouse_y) { mse_y = (short)(mouse_y - 1); }
-    else if (army_screen_y > mouse_y) { mse_y = (short)(mouse_y + 1); }
+    if (army_list[tracking_army].map_y < mouse_y) { mse_y = (short)(mouse_y - 1); }
+    else if (army_list[tracking_army].map_y > mouse_y) { mse_y = (short)(mouse_y + 1); }
     else { mse_y = mouse_y; }
     set_mouse();
 }
