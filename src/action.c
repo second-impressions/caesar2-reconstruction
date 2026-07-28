@@ -61,6 +61,10 @@ extern void show_native_census(void *window);
 extern char city_window_title[];
 extern char main_window_title[];
 extern char *tutorial_window_title;
+extern void update_date_display(void);
+extern void update_denarii_display(int force);
+extern void update_population_display(int force);
+extern void show_native_year_end(void *window);
 #endif
 void show_fx_box(int what);
 void stop_all_sounds(void);
@@ -1934,6 +1938,12 @@ int use_city_overmap_to_move(void)
     return 0;
 }
 
+#if PLATFORM_WINDOWS
+void start_cityprov_tune(void);
+void start_battle_tune(void);
+void redraw_game_window(void *window);
+#endif
+
 // Converts a click on the region overview map into a region cell and recentres the view there.
 // FUNCTION: C2 0x31997
 // FUNCTION: C2WIN 0x004b459d
@@ -3525,10 +3535,10 @@ void act_set_patrol_markers(void)
     }
     set_route_elastic();
     save_undo_info();
-    setup_map_screen_refresh();
 #if !PLATFORM_WINDOWS
-    clear_mouse();
+    setup_map_screen_refresh();
 #endif
+    clear_mouse();
 }
 
 // Clears the tracked cohort's patrol route and orders it back to its fortress.
@@ -4029,11 +4039,6 @@ void act_goto_prov_map(void)
 // tiles, and finally show the destination screen.
 // FUNCTION: C2 0x33899
 // FUNCTION: C2WIN 0x004b78ff
-#if PLATFORM_WINDOWS
-void start_cityprov_tune(void);
-void start_battle_tune(void);
-void redraw_game_window(void *window);
-#endif
 void act_correct_map(void)
 {
     if (map_mode == 1) {
@@ -5716,12 +5721,6 @@ void act_query_mode(void)
 // Runs year-end autosave and summary handling outside tutorial mode.
 // FUNCTION: C2 0x35190
 // FUNCTION: C2WIN 0x004b9ca2
-#if PLATFORM_WINDOWS
-extern void update_date_display(void);
-extern void update_denarii_display(int force);
-extern void update_population_display(int force);
-extern void show_native_year_end(void *window);
-#endif
 void act_do_year_end(void)
 {
     int saved_pointer_mode;
