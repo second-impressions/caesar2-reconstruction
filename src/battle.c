@@ -620,8 +620,7 @@ void generate_battle_map(void)
 // FUNCTION: C2WIN 0x00474716
 void setup_battle(void)
 {
-    int our_men;
-    int their_men;
+    int count[3];
     int total_men;
 
     total_men = army_list[our_battle_army].total_troops
@@ -633,8 +632,7 @@ void setup_battle(void)
     else if (total_men >= 0x708) battle_scale = 2;
     else if (total_men >= 0x384) battle_scale = 1;
 
-    their_battle_routs            = 0;
-    our_battle_routs              = 0;
+    our_battle_routs = their_battle_routs = 0;
     bat_attacker_clock            = 0;
     battle_ai_count               = 0;
     battle_npc_retreat_count      = 0;
@@ -647,14 +645,17 @@ void setup_battle(void)
 
     get_battle_odds();
 
-    /* Re-read the troop totals after the odds calculation. */
-    our_men   = army_list[our_battle_army].total_troops;
-    their_men = army_list[their_battle_army].total_troops;
+    {
+        int total1;
+        int total2;
 
-    their_battle_stance = 0;
-    our_battle_stance   = 0;
-    if (our_men   > (their_men + their_men / 3)) their_battle_stance = 1;
-    if (their_men > (our_men   + our_men   / 3)) our_battle_stance   = 1;
+        total1 = army_list[our_battle_army].total_troops;
+        total2 = army_list[their_battle_army].total_troops;
+
+        our_battle_stance = their_battle_stance = 0;
+        if (total1 > (total2 + total2 / 3)) their_battle_stance = 1;
+        if (total2 > (total1 + total1 / 3)) our_battle_stance   = 1;
+    }
 
     bat_no_selected = 0;
     retreat_flag    = 0;
