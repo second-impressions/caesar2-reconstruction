@@ -636,7 +636,7 @@ struct figure_rec {
                                                 f05_barb_sword, etc. */
     char           sub_state;        /* +0x46  paired sub-state (3, 2, 1, …)
                                                 set by the same dispatchers */
-    char           figure_rank;      /* +0x47  troop role/class within its
+    unsigned char  figure_rank;      /* +0x47  troop role/class within its
                                                 unit; values seen so far:
                                                   1 = front-rank back row
                                                   2 = back row (zeros .+0x4F
