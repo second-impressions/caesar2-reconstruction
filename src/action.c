@@ -30,6 +30,11 @@ int control_selection(struct selection_rec *list, int count, int x, int y, int w
 extern int selection_menu;
 extern void *main_window;
 extern void *active_window;
+extern unsigned char shifted_mouse_click;
+extern unsigned long tutorial_start_time;
+extern void act_query_windows(void);
+extern void clear_mouse_input(void);
+extern unsigned long (*GetTickCount)(void);
 #endif
 void show_fx_box(int what);
 void stop_all_sounds(void);
@@ -72,6 +77,15 @@ void forum_game_loop(void);
 void show_forum_screen(void);
 void act_query(void);
 
+#if PLATFORM_WINDOWS
+#define ACTION_PLACE_STATE ((unsigned char)(*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state)
+#define ACTION_SELECTION_X mouse_x
+#define ACTION_SELECTION_Y mouse_y
+#else
+#define ACTION_PLACE_STATE ((*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state & 0xff)
+#define ACTION_SELECTION_X (mouse_x - 0x50)
+#define ACTION_SELECTION_Y (mouse_y - 0x50)
+#endif
 
 // Main per-frame action dispatcher. Snapshots `scrolling`, dispatches based on `pointer_mode` and
 // the various mouse-button flags, then triggers sounds and the scrolling-stop hook on exit.
@@ -79,8 +93,15 @@ void act_query(void);
 // FUNCTION: C2WIN 0x004b0630
 void action(void)
 {
-    int help_page_id;             /* Index into the active map's icon-help table. */
-    int saved_reg_placing_type;   /* Preserves the region placement type across the selection dialog. */
+#if PLATFORM_WINDOWS
+    int selection_no;
+    int old_placing_type;
+    int icons_helped;
+    int tutorial_pause_time;
+#else
+    int icons_helped;
+    int old_placing_type;
+#endif
 
     old_scrolling = scrolling;
     scrolling = 0;
@@ -88,21 +109,64 @@ void action(void)
     illegal_build = 0;
 
     if (turbo_mode > 1) {
+#if PLATFORM_WINDOWS
+        if (mouse_left_preclick != 0 || mouse_right_preclick != 0) {
+            act_exit_turbo_mode();
+            clear_mouse();
+        }
+        return;
+#else
         if (mouse_left_preclick == 0 && mouse_right_preclick == 0) {
             return;
         }
         act_exit_turbo_mode();
         clear_mouse();
         return;
+#endif
     }
 
     action_sound = 0;
     if (zoom_in_decay_count != 0) zoom_in_decay_count++;
 
+#if PLATFORM_WINDOWS
+    if (shifted_mouse_click != 0 && pm_over != 0) {
+        if (tutorial_mode != 0) {
+            tutorial_pause_time = GetTickCount() - tutorial_start_time;
+            tutorial_start_time = GetTickCount();
+        }
+        act_query_windows();
+        if (tutorial_mode != 0) {
+            tutorial_start_time = GetTickCount() - tutorial_pause_time;
+        }
+        shifted_mouse_click = 0;
+        goto end_of_action;
+    }
+
+    if (pointer_mode == 0 || pointer_mode == 2 || pointer_mode == 6) {
+    } else {
+        if (pointer_mode == 5) {
+            if (perform_battle_strip_action() != 0) { goto end_of_action; }
+        } else if (pointer_mode == 1 && last_icon_over == 0xd) {
+            if (map_mode == 0) {
+                if (perform_city_strip_action() != 0) {
+                    redraw_icons = 1;
+                    update_map = 1;
+                    clear_mouse_input();
+                    goto end_of_action;
+                }
+            } else if (map_mode == 1) {
+                if (perform_region_strip_action() != 0) {
+                    redraw_icons = 1;
+                    update_map = 1;
+                    clear_mouse_input();
+                    goto end_of_action;
+                }
+            }
+        }
+    }
+#else
     if (tutorial_mode != 0 && exit_screen_at(0x250, 0x1b0) != 0) { out4 = 1; goto end_of_action; }
-
     get_icon_over();
-
     if (pointer_mode == 0 || pointer_mode == 2 || pointer_mode == 6) {
         if (map_mode == 0) {
             if (control_menus(main_menu, 4, show_citymap) != 0) { pointer_mode = 0; goto end_of_action; }
@@ -117,19 +181,41 @@ void action(void)
         if (perform_cohort_box_action() != 0) { goto end_of_action; }
     } else if (pointer_mode == 1 && last_icon_over == 0xd) {
         if (map_mode == 0) {
-            if (perform_city_strip_action() != 0) { redraw_icons = 1; update_map = 1; goto end_of_action; }
+            if (perform_city_strip_action() != 0) {
+                redraw_icons = 1;
+                update_map = 1;
+                goto end_of_action;
+            }
         } else if (map_mode == 1) {
-            if (perform_region_strip_action() != 0) { redraw_icons = 1; update_map = 1; goto end_of_action; }
+            if (perform_region_strip_action() != 0) {
+                redraw_icons = 1;
+                update_map = 1;
+                goto end_of_action;
+            }
         }
     }
+#endif
 
     if (mouse_right_preclick != 0) {
         had_clear_sound = 0;
         unflag_all_rm_xwarehouse();
+#if !PLATFORM_WINDOWS
         setup_whole_screen_refresh();
+#endif
         update_map = 1;
         flag_for_workhouse_request = 0;
 
+#if PLATFORM_WINDOWS
+        if (pointer_mode == 4) {
+        } else {
+            if (pointer_mode >= 6) {
+                pointer_mode = 5; gen_refresh1 = 1; goto end_of_action;
+            } else if (pointer_mode >= 1) {
+                pointer_mode = 0;
+                goto end_of_action;
+            }
+        }
+#else
         if (!(pointer_mode == 4)) {
             if (pointer_mode >= 6) {
                 pointer_mode = 5; gen_refresh1 = 1; goto end_of_action;
@@ -139,23 +225,55 @@ void action(void)
                 goto end_of_action;
             }
         }
+#endif
 
         if (over_an_army != 0) {
             tracking_army = over_an_army;
             pointer_mode = 5;
             gen_refresh1 = 1;
+#if !PLATFORM_WINDOWS
             setup_whole_screen_refresh();
-        } else if (pm_over != 0) {
+#else
+            goto end_of_action;
+#endif
+        }
+#if !PLATFORM_WINDOWS
+        else
+#endif
+        if (pm_over != 0) {
+#if PLATFORM_WINDOWS
+            if (tutorial_mode != 0) {
+                tutorial_pause_time = GetTickCount() - tutorial_start_time;
+                tutorial_start_time = GetTickCount();
+            }
+            act_query_windows();
+            if (tutorial_mode != 0) {
+                tutorial_start_time = GetTickCount() - tutorial_pause_time;
+            }
+#else
             act_query();
+#endif
         } else if (last_icon_over != 0) {
             if (map_mode == 0) {
-                help_page_id = city_icons_to_help[last_icon_over];
+                icons_helped = city_icons_to_help[last_icon_over];
             } else {
-                help_page_id = region_icons_to_help[last_icon_over];
+                icons_helped = region_icons_to_help[last_icon_over];
             }
-            if (help_page_id != 0) {
+            if (icons_helped != 0) {
                 clear_mouse();
-                helping(help_page_id);
+#if PLATFORM_WINDOWS
+                if (tutorial_mode != 0) {
+                    tutorial_pause_time = GetTickCount() - tutorial_start_time;
+                    tutorial_start_time = GetTickCount();
+                }
+                active_window = main_window;
+#endif
+                helping(icons_helped);
+#if PLATFORM_WINDOWS
+                if (tutorial_mode != 0) {
+                    tutorial_start_time = GetTickCount() - tutorial_pause_time;
+                }
+#endif
             }
         }
         goto end_of_action;
@@ -165,8 +283,12 @@ void action(void)
     mouse_follow_cohort();
     show_latest_route();
     mouse_hunt_enemies();
+#if PLATFORM_WINDOWS
+    particles_built = particles_cleared = 0;
+#else
     particles_cleared = 0;
     particles_built = 0;
+#endif
 
     if (mouse_left_preclick != 0 && pm_over != 0) {
         update_map = 1;
@@ -174,39 +296,84 @@ void action(void)
         industry_build_on = 0;
         industry_build_ok = 0;
 
+#if PLATFORM_WINDOWS
+        if (over_an_army != 0) {
+            if (reg_placing_type == 0x21
+                && (unsigned char)(*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).base_kind == 0xd2) {
+            } else {
+                tracking_army = over_an_army;
+                pointer_mode = 5;
+                gen_refresh1 = 1;
+                goto end_of_action;
+            }
+        }
+#else
         if (over_an_army != 0
          && (reg_placing_type != 0x21
              || ((unsigned char)(*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).base_kind) != 0xd2)) {
             tracking_army = over_an_army;
             pointer_mode = 5;
             gen_refresh1 = 1;
+#if !PLATFORM_WINDOWS
             setup_whole_screen_refresh();
+#endif
             goto end_of_action;
         }
+#endif
 
         if (pointer_mode == 1) {
             zoom_in_decay_count = 1;
             goto end_of_action;
         }
+#if PLATFORM_WINDOWS
+        else
+#endif
         if (pointer_mode == 2) {
             goto end_of_action;
         }
+#if PLATFORM_WINDOWS
+        else
+#endif
         if (!(pointer_mode != 3)) {
             pointer_mode = 5;
             gen_refresh1 = 1;
+#if !PLATFORM_WINDOWS
             setup_whole_screen_refresh();
+#endif
             goto end_of_action;
         }
+#if PLATFORM_WINDOWS
+        else
+#endif
         if (pointer_mode == 4) {
+#if PLATFORM_WINDOWS
+            if (tutorial_mode != 0) {
+                tutorial_pause_time = GetTickCount() - tutorial_start_time;
+                tutorial_start_time = GetTickCount();
+            }
+            act_query_windows();
+            if (tutorial_mode != 0) {
+                tutorial_start_time = GetTickCount() - tutorial_pause_time;
+            }
+#else
             act_query();
+#endif
             goto end_of_action;
         }
+#if PLATFORM_WINDOWS
+        else
+#endif
         if (pointer_mode == 5) {
             goto end_of_action;
         }
+#if PLATFORM_WINDOWS
+        else
+#endif
         if (pointer_mode == 6 || pointer_mode == 7 || pointer_mode == 8) {
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
-            if (((*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).place_state & 0xff) == 0xff) {
+#endif
+            if (ACTION_PLACE_STATE == 0xff) {
                 return;
             }
             get_over_coords();
@@ -233,10 +400,19 @@ void action(void)
                 army_routes[army_list[tracking_army].cohort_id].chase_row = 0;
                 army_routes[army_list[tracking_army].cohort_id].target_army = 0;
                 unflag_all_rm_xwarehouse();
+#if PLATFORM_WINDOWS
+                flag_for_workhouse_request = 0;
+                pointer_mode = 0;
+#else
                 pointer_mode = 2;
+#endif
                 update_map = 1;
                 goto end_of_action;
-            } else if (pointer_mode == 8) {
+            }
+#if !PLATFORM_WINDOWS
+            else
+#endif
+            if (pointer_mode == 8) {
                 if (army_list[tracking_army].state_idx == 1) {
                     army_list[tracking_army].flags |= 1;
                 }
@@ -261,17 +437,24 @@ void action(void)
                     army_list[tracking_army].state_idx = 4;
                 }
                 unflag_all_rm_xwarehouse();
+#if PLATFORM_WINDOWS
+                flag_for_workhouse_request = 0;
+                pointer_mode = 0;
+#else
                 pointer_mode = 2;
+#endif
                 update_map = 1;
                 goto end_of_action;
-            } else {
-                if (this_route_number < 9) {
-                    this_route_number = this_route_number + 1;
-                    set_route_elastic();
-                    save_undo_info();
-                }
-                goto end_of_action;
             }
+#if !PLATFORM_WINDOWS
+            else
+#endif
+            if (this_route_number < 9) {
+                this_route_number = this_route_number + 1;
+                set_route_elastic();
+                save_undo_info();
+            }
+            goto end_of_action;
         }
 
         if (map_mode == 0) {
@@ -297,12 +480,24 @@ void action(void)
             redraw_icons = 1;
         } else if (last_icon_over != 0) {
             if (map_mode == 0) {
-                help_page_id = city_icons_to_help[last_icon_over];
+                icons_helped = city_icons_to_help[last_icon_over];
             } else {
-                help_page_id = region_icons_to_help[last_icon_over];
+                icons_helped = region_icons_to_help[last_icon_over];
             }
-            if (help_page_id != 0) {
-                helping(help_page_id);
+            if (icons_helped != 0) {
+#if PLATFORM_WINDOWS
+                if (tutorial_mode != 0) {
+                    tutorial_pause_time = GetTickCount() - tutorial_start_time;
+                    tutorial_start_time = GetTickCount();
+                }
+                active_window = main_window;
+#endif
+                helping(icons_helped);
+#if PLATFORM_WINDOWS
+                if (tutorial_mode != 0) {
+                    tutorial_start_time = GetTickCount() - tutorial_pause_time;
+                }
+#endif
             }
             goto end_of_action;
         }
@@ -319,8 +514,10 @@ void action(void)
         } else if (map_mode == 1) {
             build_region_item();
         }
+#if !PLATFORM_WINDOWS
         refresh_big_action_square((mouse_x - 0x50) >> 4,
                                   (mouse_y - 0x78) >> 4);
+#endif
     }
 
     if (mouse_left_click != 0) {
@@ -342,27 +539,36 @@ void action(void)
 
         if (reg_placing_type >= 0x25 && reg_placing_type <= 0x29) {
             if (industry_build_on != 0 && industry_build_ok == 0) {
-                saved_reg_placing_type = reg_placing_type;
+                old_placing_type = reg_placing_type;
                 if (reg_placing_type == 0x25) {
                     get_selection_goods_list(1);
+#if PLATFORM_WINDOWS
+                    selection_menu = 0x10;
+#endif
                     control_selection(farm_selection, 5,
-                                      mouse_x - 0x50, mouse_y - 0x50,
+                                      ACTION_SELECTION_X, ACTION_SELECTION_Y,
                                       0x11);
                     if (selection_is == 0) {
                         industry_build_ok = 1;
                     }
                 } else if (reg_placing_type == 0x26) {
                     get_selection_goods_list(2);
+#if PLATFORM_WINDOWS
+                    selection_menu = 0xa;
+#endif
                     control_selection(mine_selection, 5,
-                                      mouse_x - 0x50, mouse_y - 0x50,
+                                      ACTION_SELECTION_X, ACTION_SELECTION_Y,
                                       0x12);
                     if (selection_is == 0) {
                         industry_build_ok = 1;
                     }
                 } else if (reg_placing_type == 0x27) {
                     get_selection_goods_list(3);
+#if PLATFORM_WINDOWS
+                    selection_menu = 0xb;
+#endif
                     control_selection(quarry_selection, 5,
-                                      mouse_x - 0x50, mouse_y - 0x50,
+                                      ACTION_SELECTION_X, ACTION_SELECTION_Y,
                                       0x13);
                     if (selection_is == 0) {
                         industry_build_ok = 1;
@@ -373,7 +579,7 @@ void action(void)
                 } else {
                     industry_build_on = 0;
                 }
-                reg_placing_type = saved_reg_placing_type;
+                reg_placing_type = old_placing_type;
             }
             if (industry_build_ok != 0) {
                 restore_region_from_undo_buffer();
@@ -381,8 +587,12 @@ void action(void)
                 industry_build_on = 0;
                 total_build_cost = 0;
                 denarii = starting_denarii;
+#if PLATFORM_WINDOWS
+                particles_cleared = particles_built = 0;
+#else
                 particles_built = 0;
                 particles_cleared = 0;
+#endif
             }
         }
 
@@ -398,6 +608,12 @@ void action(void)
                 extended_confirm(0xb, 0xa0, 0xa0);
                 clear_mouse();
                 if (decision == 1) {
+#if PLATFORM_WINDOWS
+                    selected_icon_text = 0x37;
+                    selected_icon_no = 4;
+                    last_icon_over = 0x14;
+                    last_icon_used = last_icon_over;
+#endif
                     if (reg_placing_type >= 0x25 && reg_placing_type <= 0x27) {
                         flag_for_workhouse_request = 1;
                     }
@@ -408,6 +624,12 @@ void action(void)
                 extended_confirm(0xc, 0xa0, 0xa0);
                 clear_mouse();
                 if (decision == 1) {
+#if PLATFORM_WINDOWS
+                    selected_icon_text = 0x37;
+                    selected_icon_no = 5;
+                    last_icon_over = 0x14;
+                    last_icon_used = last_icon_over;
+#endif
                     act_rm_workhouse();
                 }
                 flag_for_workhouse_request = 0;
@@ -445,6 +667,9 @@ end_of_action:
     }
 
 }
+#undef ACTION_PLACE_STATE
+#undef ACTION_SELECTION_X
+#undef ACTION_SELECTION_Y
 
 // Per-frame dispatcher used while the player is in flag-marker (banner) placement mode. Mostly
 // delegates to the city/region strip-action helpers and lets the user toggle a flag at the cell
