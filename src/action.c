@@ -57,6 +57,7 @@ extern void show_map_window(int mode);
 extern void update_window_menu(int mode);
 extern void swap_map_windows(int mode);
 extern void update_window_titles(void);
+extern void show_native_census(void *window);
 extern char city_window_title[];
 extern char main_window_title[];
 extern char *tutorial_window_title;
@@ -5286,6 +5287,14 @@ void act_preload(void)
 // FUNCTION: C2WIN 0x004b9795
 void act_census(void)
 {
+#if PLATFORM_WINDOWS
+    if (screen_mode == 2) {
+        return;
+    }
+    in_census_mode = 1;
+    show_native_census(main_window);
+    in_census_mode = 0;
+#else
     if (map_mode == 2) {
         return;
     }
@@ -5305,6 +5314,7 @@ void act_census(void)
     cover_mouse_droppings();
     setup_map_screen_refresh();
     in_census_mode = 0;
+#endif
 }
 
 // Opens the city or region query panel for the cell under the cursor and restores the prior
