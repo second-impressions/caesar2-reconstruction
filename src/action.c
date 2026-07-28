@@ -2893,8 +2893,13 @@ void act_rm_security(void)
     flag_mode = 0;
     pointer_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 0xD;
+    control_selection(rm_security_selection, 3, 0x14, 0xFA, 0x36);
+#else
     control_selection(rm_security_selection, 3,
                       mouse_x - 0x90, mouse_y - 0x20, 0x36);
+#endif
     selected_icon_text = 0x36;
     selected_icon_no = selection_is;
 }
