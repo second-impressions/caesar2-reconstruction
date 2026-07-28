@@ -2196,8 +2196,10 @@ void act_nof_samples(void)
 // FUNCTION: C2WIN 0x004b5210
 void act_toggle_anims(void)
 {
+#if !PLATFORM_WINDOWS
     int tutorial_active = tutorial_mode;
-    if (tutorial_active != 0) {
+#endif
+    if (FX_TUTORIAL_ACTIVE != 0) {
         click_warning(2, 0x50, 0xa0);
         return;
     }
@@ -2206,11 +2208,13 @@ void act_toggle_anims(void)
         return;
     }
     show_fx_box(2);
-    out1 = tutorial_active;
+    out1 = FX_INITIAL_OUT1;
     while (out1 == 0) {
         tog_anims_game_loop();
     }
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
 }
 
 // Toggle the animations flag and re-render the FX dialog (anims tab).
