@@ -35,6 +35,20 @@ extern unsigned long tutorial_start_time;
 extern void act_query_windows(void);
 extern void clear_mouse_input(void);
 extern unsigned long (*GetTickCount)(void);
+extern void set_main_menu_enabled(int enabled);
+extern void load_screen_parts(unsigned char mode);
+extern void size_game_window(int mode);
+extern void *game_window;
+extern void *status_window;
+extern int game_window_x;
+extern int game_window_y;
+extern int game_window_width;
+extern int game_window_height;
+extern int status_window_x;
+extern int status_window_y;
+extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
+                                    int x, int y, int width, int height,
+                                    unsigned int flags);
 #endif
 void show_fx_box(int what);
 void stop_all_sounds(void);
@@ -5083,6 +5097,15 @@ void this_region(void)
 // FUNCTION: C2WIN 0x004b9590
 void act_tutorial(void)
 {
+#if PLATFORM_WINDOWS
+    set_main_menu_enabled(0);
+    load_screen_parts(screen_mode);
+    size_game_window(screen_mode);
+    SetWindowPos(game_window, 0, game_window_x, game_window_y,
+                 game_window_width, game_window_height, 0x10);
+    SetWindowPos(status_window, 0, status_window_x, status_window_y,
+                 0, 0, 0x11);
+#endif
     do_tutorial();
     if (continue_tutorial_status == 0) {
         show_skill1_box();
@@ -5090,6 +5113,9 @@ void act_tutorial(void)
     } else {
         out1 = 1;
     }
+#if PLATFORM_WINDOWS
+    set_main_menu_enabled(1);
+#endif
 }
 
 // New-game flow: "quit to DOS" — set exit_flag and dismiss the modal.
