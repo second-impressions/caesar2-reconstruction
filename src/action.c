@@ -1204,76 +1204,66 @@ void prebuild_region_item(void)
 // FUNCTION: C2WIN 0x004b35f0
 void build_region_item(void)
 {
-
+    unsigned int gfx;
+    int xdelta;
+    unsigned int shape;
+    unsigned int edges;
+    unsigned int item_kind;
 
     (*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).edge_bits |= 1;
     illegal_build = 2;
 
     if (slave_requirements[0].current < slave_requirements[0].max) {
-        if (warned_of_not_build != 0) {
-            return;
+        if (warned_of_not_build == 0) {
+            warned_of_not_build = 1;
+            put_message(0x65, 0, 0);
         }
-        warned_of_not_build = 1;
-        put_message(0x65, 0, 0);
-        return;
-    }
-
-    denarii = starting_denarii;
-    particles_built = 0;
-    particles_cleared = 0;
-    industry_build_on = 0;
+    } else {
+        denarii = starting_denarii;
+        particles_cleared = particles_built = 0;
+        industry_build_on = 0;
 
     if (reg_placing_type == 0x1e) {
         /* Region road. */
         restore_region_from_undo_buffer();
-        if (hot_key_out_off_build == 0) {
-            build_reg_road_from_elastic();
-        }
-        if (pm_over != 0 && old_pm_over != pm_over) {
-            setup_map_screen_refresh();
-        }
+        if (hot_key_out_off_build == 0) { build_reg_road_from_elastic(); }
+#if !PLATFORM_WINDOWS
+        if (pm_over != 0 && old_pm_over != pm_over) { setup_map_screen_refresh(); }
+#endif
     }
 
     if (reg_placing_type == 0x1f) {
         /* Region wall. */
         restore_region_from_undo_buffer();
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (at_edge_of_map(act_start_x, act_start_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
-            build_reg_wall_from_elastic();
-        }
-        if (pm_over != 0 && old_pm_over != pm_over) {
-            setup_map_screen_refresh();
-        }
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (at_edge_of_map(act_start_x, act_start_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) { build_reg_wall_from_elastic(); }
+#if !PLATFORM_WINDOWS
+        if (pm_over != 0 && old_pm_over != pm_over) { setup_map_screen_refresh(); }
+#endif
     }
 
     if (reg_placing_type == 0x21) {
         /* Clear region area. */
         restore_region_from_undo_buffer();
-        if (hot_key_out_off_build == 0) {
-            clear_a_reg_area(act_start_x, act_start_y,
-                             over_x, over_y, 0);
-        }
-        if (pm_over != 0 && old_pm_over != pm_over) {
-            setup_map_screen_refresh();
-        }
+        if (hot_key_out_off_build == 0) { clear_a_reg_area(act_start_x, act_start_y, over_x, over_y, 0); }
+#if !PLATFORM_WINDOWS
+        if (pm_over != 0 && old_pm_over != pm_over) { setup_map_screen_refresh(); }
+#endif
     }
 
     if (reg_placing_type == 0x23) {
         /* Workhouse */
         restore_region_from_undo_buffer();
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
+        gfx = 0x3c;
+        edges = 0;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
             if (get_reg_industries_in_radius(over_x, over_y) == 0) {
-                restore_region_from_undo_buffer();
-                illegal_build = 1;
-            } else if (put_reg_x1_area(over_x, over_y, 0xd3, 0,
-                                        0x3c, 0) == 0) {
-                restore_region_from_undo_buffer();
-                illegal_build = 1;
+                restore_region_from_undo_buffer(); illegal_build = 1;
+            } else if (put_reg_x1_area(over_x, over_y, 0xd3, edges,
+                                        gfx, 0) == 0) {
+                restore_region_from_undo_buffer(); illegal_build = 1;
             }
         }
     }
@@ -1281,16 +1271,15 @@ void build_region_item(void)
     if (reg_placing_type == 0x24) {
         /* Warehouse */
         restore_region_from_undo_buffer();
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
+        gfx = 0x0b;
+        edges = 0;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
             if (get_reg_industries_in_radius(over_x, over_y) == 0) {
-                restore_region_from_undo_buffer();
-                illegal_build = 1;
-            } else if (put_reg_x1_area(over_x, over_y, 0xd4, 0,
-                                        0x0b, 0) == 0) {
-                restore_region_from_undo_buffer();
-                illegal_build = 1;
+                restore_region_from_undo_buffer(); illegal_build = 1;
+            } else if (put_reg_x1_area(over_x, over_y, 0xd4, edges,
+                                        gfx, 0) == 0) {
+                restore_region_from_undo_buffer(); illegal_build = 1;
             }
         }
     }
@@ -1298,13 +1287,13 @@ void build_region_item(void)
     if (reg_placing_type == 0x2a) {
         /* Bridge */
         restore_region_from_undo_buffer();
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0
-                && put_reg_x2_area(over_x, over_y, 0xd5, 0,
-                                    0x46, 0) == 0) {
-            restore_region_from_undo_buffer();
-            illegal_build = 1;
+        gfx = 0x46;
+        edges = 0;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
+            if (put_reg_x2_area(over_x, over_y, 0xd5, edges, gfx, 0) == 0) {
+                restore_region_from_undo_buffer(); illegal_build = 1;
+            }
         }
     }
 
@@ -1313,15 +1302,16 @@ void build_region_item(void)
         industry_build_on = 1;
         restore_region_from_undo_buffer();
         check_region_map_for_farm_square(over_x, over_y, 0x80);
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
-            if (put_reg_x2_area(over_x, over_y, 0xdc, 8,
-                                0x30, 1) == 0) {
+        gfx = 0x30;
+        edges = 8;
+        item_kind = 0xdc;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
+            if (put_reg_x2_area(over_x, over_y, item_kind, edges,
+                                gfx, 1) == 0) {
                 illegal_build = 1;
                 restore_region_from_undo_buffer();
-                industry_build_ok = 0;
-                industry_build_on = 0;
+                industry_build_ok = 0; industry_build_on = 0;
             }
         }
     }
@@ -1331,15 +1321,16 @@ void build_region_item(void)
         industry_build_on = 1;
         restore_region_from_undo_buffer();
         check_region_map_for_farm_square(over_x, over_y, 0x40);
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
-            if (put_reg_x2_area(over_x, over_y, 0xe0, 8,
-                                0x40, 1) == 0) {
+        gfx = 0x40;
+        edges = 8;
+        item_kind = 0xe0;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
+            if (put_reg_x2_area(over_x, over_y, item_kind, edges,
+                                gfx, 1) == 0) {
                 illegal_build = 1;
                 restore_region_from_undo_buffer();
-                industry_build_ok = 0;
-                industry_build_on = 0;
+                industry_build_ok = 0; industry_build_on = 0;
             }
         }
     }
@@ -1349,15 +1340,16 @@ void build_region_item(void)
         industry_build_on = 1;
         restore_region_from_undo_buffer();
         check_region_map_for_farm_square(over_x, over_y, 0x40);
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
-            if (put_reg_x2_area(over_x, over_y, 0xe4, 8,
-                                0x20, 1) == 0) {
+        gfx = 0x20;
+        edges = 8;
+        item_kind = 0xe4;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
+            if (put_reg_x2_area(over_x, over_y, item_kind, edges,
+                                gfx, 1) == 0) {
                 illegal_build = 1;
                 restore_region_from_undo_buffer();
-                industry_build_ok = 0;
-                industry_build_on = 0;
+                industry_build_ok = 0; industry_build_on = 0;
             }
         }
     }
@@ -1366,15 +1358,16 @@ void build_region_item(void)
         /* Logging camp */
         industry_build_on = 1;
         restore_region_from_undo_buffer();
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
-            if (put_reg_x2_area(over_x, over_y, 0xe8, 8,
-                                0x60, 1) == 0) {
+        gfx = 0x60;
+        edges = 8;
+        item_kind = 0xe8;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
+            if (put_reg_x2_area(over_x, over_y, item_kind, edges,
+                                gfx, 1) == 0) {
                 illegal_build = 1;
                 restore_region_from_undo_buffer();
-                industry_build_ok = 0;
-                industry_build_on = 0;
+                industry_build_ok = 0; industry_build_on = 0;
             }
         }
     }
@@ -1384,11 +1377,12 @@ void build_region_item(void)
         industry_build_on = 1;
         restore_region_from_undo_buffer();
         check_region_map_for_port_square(over_x, over_y);
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
-            if (put_reg_x2_area(over_x, over_y, 0xec, 8,
-                                0x50, 2) == 0) {
+        gfx = 0x50;
+        edges = 8;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
+            if (put_reg_x2_area(over_x, over_y, 0xec, edges,
+                                gfx, 2) == 0) {
                 illegal_build = 1;
                 restore_region_from_undo_buffer();
                 industry_build_ok = 0;
@@ -1404,12 +1398,13 @@ void build_region_item(void)
     if (reg_placing_type == 0x22) {
         /* Fortress */
         restore_region_from_undo_buffer();
-        if (at_edge_of_map(over_x, over_y) != 0) {
-            illegal_build = 1;
-        } else if (hot_key_out_off_build == 0) {
+        gfx = 0x46;
+        edges = 0;
+        if (at_edge_of_map(over_x, over_y) != 0) { illegal_build = 1; }
+        else if (hot_key_out_off_build == 0) {
             get_cohorts_in_action();
             (*(struct region_cell *)((unsigned char *)region_map + (pm_over_cm_ptr))).terrain &= 0xfd;
-            if (put_reg_x1_area(over_x, over_y, 0xd2, 0, 0x46, 1) == 0) {
+            if (put_reg_x1_area(over_x, over_y, 0xd2, edges, gfx, 1) == 0) {
                 restore_region_from_undo_buffer();
                 illegal_build = 1;
             } else if (reg_wall_ramifications(over_x, over_y) == 0) {
@@ -1422,13 +1417,21 @@ void build_region_item(void)
                     put_message(0x5a, 0, 0);
                 }
             } else if (create_army(1, over_x, over_y, 0) != 0) {
-                int new_army_idx = created_army_no;
-                army_list[new_army_idx].state_idx = 1;
+#if PLATFORM_WINDOWS
+                army_list[created_army_no].state_idx = 1;
+                army_list[created_army_no].saved_state_idx = 1;
+                army_list[created_army_no].exists = 2;
+                army_list[created_army_no].cohort_id = next_cohort_free;
+                army_list[created_army_no].departure_year = year;
+                army_list[created_army_no].morale_timer = 2;
+#else
+                int new_army_idx = created_army_no; army_list[new_army_idx].state_idx = 1;
                 army_list[new_army_idx].saved_state_idx = 1;
                 army_list[new_army_idx].exists = 2;
                 army_list[new_army_idx].cohort_id = next_cohort_free;
                 army_list[new_army_idx].departure_year = year;
                 army_list[new_army_idx].morale_timer = 2;
+#endif
             }
         } else {
             restore_region_from_undo_buffer();
@@ -1437,7 +1440,8 @@ void build_region_item(void)
 
     total_build_cost = particles_cleared * region_costs[1];
     total_build_cost = total_build_cost + particles_built * placing_cost;
-    denarii -= total_build_cost;
+    denarii = denarii - total_build_cost;
+    }
 }
 
 // Stores the selected farm type in the origin cell of the current 2x2 farm.
