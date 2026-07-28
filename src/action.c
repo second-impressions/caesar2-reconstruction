@@ -3159,6 +3159,7 @@ void act_show_ov_legend(void)
     get_landfill(1);
     load_overlay_graphics(1);
     show_ov_legend_panel();
+#if !PLATFORM_WINDOWS
     do {
         read_mouse();
         if (mse_button == 0) {
@@ -3168,10 +3169,13 @@ void act_show_ov_legend(void)
             pulse_red(0x48, 6);
         }
     } while (1);
+#endif
     load_overlay_graphics(0);
     show_landfill(com_x, com_y);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x1e0, 0x30, 0xa, 0xb, 1);
     setup_whole_screen_refresh();
+#endif
 }
 
 // Pop the overview-map "select map type" selection. `get_selection_goods_list(0)` builds the
