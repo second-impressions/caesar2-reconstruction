@@ -1387,19 +1387,16 @@ int get_region_2x2_start(int rm_ptr)
 {
     int row_offset;
     int col_offset;
-    int footprint_width;
 
     if ((*(struct region_cell *)((unsigned char *)region_map + (rm_ptr))).base_kind == 0xd4) {
-        row_offset = 0;
-        col_offset = 0;
+        col_offset = row_offset = 0;
     } else {
         row_offset = (*(struct region_cell *)((unsigned char *)region_map + (rm_ptr))).occupant & 3;
         col_offset = row_offset;
     }
 
-    footprint_width = 2;
-    col_offset = col_offset % footprint_width;
-    row_offset = row_offset / footprint_width;
+    col_offset = col_offset % 2;
+    row_offset = row_offset / 2;
     rm_ptr = rm_ptr - col_offset * 8;
     rm_ptr = rm_ptr - row_offset * 480;
     return rm_ptr;
