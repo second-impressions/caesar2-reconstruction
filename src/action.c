@@ -4097,7 +4097,12 @@ void act_slave_reg_upkeep_up(void)
 // Take one slave away from the regional-upkeep category. Gated on !c2inf.peace_mode.
 // FUNCTION: C2 0x345d4
 // FUNCTION: C2WIN 0x004b8b93
-void act_slave_reg_upkeep_down(void){ if (!c2inf.peace_mode) { alter_slave_reqs(6, -1); gen_refresh2 = 1; } }
+void act_slave_reg_upkeep_down(void)
+{
+    if (c2inf.peace_mode != 0) return;
+    alter_slave_reqs(6, -1);
+    gen_refresh2 = 1;
+}
 
 // Moves a slave-work category's allocation toward its required level.
 // FUNCTION: C2 0x345f6
