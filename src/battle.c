@@ -2685,6 +2685,11 @@ void get_fig_missile_image(void)
     figure_list[figure_no].sprite_anim = dir_base;
 }
 
+int try_a_battlemap_square(int direction);
+int try_this_battlemap_square(int cell_offset);
+int get_wf_dirc(int search_mode);
+int arrow_off_map(void);
+
 // Mark a clipped rectangle of battle-map cells dirty for redraw.
 // FUNCTION: C2 0x4fea9
 // FUNCTION: C2WIN 0x0047c1a2
