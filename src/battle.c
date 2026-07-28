@@ -4372,57 +4372,55 @@ int find_adjacent_target(void)
 // Anchor is the unit's grid; the scan span is clamped to [0, 0x33].
 // FUNCTION: C2 0x52cc3
 // FUNCTION: C2WIN 0x00482837
-int get_fire_target(int figure_idx)
+int get_fire_target(int fig_no)
 {
-
-    int marker_x;
-    int marker_y;
-    int start_x;
+    int next_row;
+    int y_position;
+    int x_min;
     int end_x;
     int start_y;
-    int x;
-    int end_y;
-    int y;
-    int cell_offset;
-    int fallback_offset;
-    int row_skip;
-    int fallback_figure_idx;
-    int previous_offset;
-    int target_idx;
+    int x_index;
+    int y_bound;
+    int scan_y;
+    int square_ref;
+    int found_offset;
+    int origin_x;
+    int found_figure;
+    int prev_offset;
 
-    fallback_figure_idx = 0;
+    found_figure = 0;
 
-    temp_unit = figure_list[figure_idx].unit_ref;
-    marker_x = unit_list[temp_unit].attack_marker_x;
-    marker_y = unit_list[temp_unit].attack_marker_y;
-    previous_offset = unit_list[temp_unit].prev_attack_off;
+    temp_unit = figure_list[fig_no].unit_ref;
+    origin_x = unit_list[temp_unit].attack_marker_x;
+    y_position = unit_list[temp_unit].attack_marker_y;
+    prev_offset = unit_list[temp_unit].prev_attack_off;
 
-    start_x = marker_x; start_y = marker_y;
-    end_x = marker_x + 0xb;
-    end_y = marker_y + 0xb;
-    if (start_x < 0) start_x = 0;
+    x_min = origin_x; start_y = y_position;
+    end_x = origin_x + 0xb;
+    y_bound = y_position + 0xb;
+    if (x_min < 0) x_min = 0;
     if (end_x  >= 0x34) end_x = 0x33;
     if (start_y < 0) start_y = 0;
-    if (end_y  >= 0x34) end_y = 0x33;
+    if (y_bound >= 0x34) y_bound = 0x33;
 
-    cell_offset = (start_y * 0x34 + start_x) * 4;
-    row_skip = (0x34 - (end_x - start_x + 1)) * 4;
+    square_ref = (x_min + start_y * 0x34) * 4;
+    next_row = (0x34 - (end_x - x_min + 1)) * 4;
 
-    for (y = start_y; y <= end_y; y++, cell_offset += row_skip) {
-        x = start_x;
-        for (; x <= end_x; x++, cell_offset += 4) {
-            enemy_figure = ((unsigned char *)battle_map)[cell_offset + 1];
-            if (enemy_figure != 0 && figure_list[(target_idx = enemy_figure)].exists != 0) {
-                if (figure_list[target_idx].owner != figure_list[figure_idx].owner) {
-                if (cell_offset > previous_offset) { unit_list[temp_unit].prev_attack_off = cell_offset; return 1; }
-                if (fallback_figure_idx == 0) { fallback_figure_idx = target_idx; fallback_offset = cell_offset; }
+    for (scan_y = start_y; scan_y <= y_bound; scan_y++, square_ref += next_row) {
+        x_index = x_min;
+        for (; x_index <= end_x; x_index++, square_ref += 4) {
+            enemy_figure = ((unsigned char *)battle_map)[square_ref + 1];
+            if (enemy_figure != 0 && figure_list[enemy_figure].exists != 0) {
+                if (figure_list[enemy_figure].owner != figure_list[fig_no].owner) {
+                if (square_ref > prev_offset) { unit_list[temp_unit].prev_attack_off = square_ref; return 1; }
+                if (found_figure == 0) { found_figure = enemy_figure; found_offset = square_ref; }
                 }
             }
         } }
 
-    if (fallback_figure_idx == 0) return 0;
-    unit_list[temp_unit].prev_attack_off = fallback_offset;
-    enemy_figure = fallback_figure_idx;
+    if (found_figure == 0) return 0;
+    unit_list[temp_unit].prev_attack_off = found_offset;
+    enemy_figure = found_figure;
     return 1;
 }
 

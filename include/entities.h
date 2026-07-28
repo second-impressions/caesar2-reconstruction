@@ -848,8 +848,8 @@ struct unit_rec {
                                                 attack-marker logic in
                                                 sf06_defend, show_aim_highlight,
                                                 start_aim, update_units_ai. */
-    char           attack_marker_x;   /* +0x3A  hlite_left at the moment of aim */
-    char           attack_marker_y;   /* +0x3B  hlite_top  at the moment of aim */
+    unsigned char  attack_marker_x;   /* +0x3A  hlite_left at the moment of aim */
+    unsigned char  attack_marker_y;   /* +0x3B  hlite_top  at the moment of aim */
     char           _unk3C;            /* +0x3C ; Mac PPC: also never accessed -- vestigial */
     char           flank_pending;     /* +0x3D  pending flank manoeuvre kind
                                                 (1..4 dispatch index); cleared
