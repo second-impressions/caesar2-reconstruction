@@ -2912,8 +2912,13 @@ void act_rm_industry(void)
     flag_mode = 0;
     pointer_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 0xE;
+    control_selection(rm_industry_selection, 7, 0x14, 0xE6, 0x37);
+#else
     control_selection(rm_industry_selection, 7,
                       mouse_x - 0x90, mouse_y - 0x30, 0x37);
+#endif
     selected_icon_text = 0x37;
     selected_icon_no = selection_is;
 }
