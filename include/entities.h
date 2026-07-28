@@ -547,7 +547,7 @@ struct figure_rec {
                                                 halved value (>>1, capped at 7)
                                                 indexes the death animation
                                                 pose. */
-    char           missile_target;   /* +0x29  latched enemy figure index
+    unsigned char  missile_target;   /* +0x29  latched enemy figure index
                                                 for missile-fire targeting
                                                 (sf10_hunt_for_fight,
                                                 sf11_fire_missile). */

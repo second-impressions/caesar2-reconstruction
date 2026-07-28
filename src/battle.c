@@ -1852,37 +1852,25 @@ void sf16_beserk(void)
 // FUNCTION: C2WIN 0x00478c7b
 void sf10_hunt_for_fight(void)
 {
-    short target_idx;
-
     figure_list[figure_no].is_routing   = 1;
     figure_list[figure_no].wf_searching = 0;
     figure_list[figure_no].is_defending = 0;
     enemy_figure = figure_list[figure_no].missile_target;
 
     if ((figure_list[figure_no].is_visible & 1) != 0) {
-        target_idx = enemy_figure;
-        if (target_idx != 0) {
-            if (figure_list[target_idx].exists != 0)
-                goto have_target;
+        if (enemy_figure == 0 || figure_list[enemy_figure].exists == 0) {
+            if (find_nearest_enemy() == 0)
+                figure_list[figure_no].state_idx = 6;
+        } else {
+            figure_list[figure_no].prev_grid_x = figure_list[enemy_figure].grid_x; figure_list[figure_no].prev_grid_y = figure_list[enemy_figure].grid_y;
         }
-        if (find_nearest_enemy() != 0)
-            goto tail;
-        figure_list[figure_no].state_idx = 6;
-        goto tail;
-    have_target:
-        figure_list[figure_no].prev_grid_x = figure_list[enemy_figure].grid_x;
-        figure_list[figure_no].prev_grid_y = figure_list[enemy_figure].grid_y;
     }
 
-tail:
-    if (figure_list[enemy_figure].state_idx == 2) {
-        figure_list[figure_no].missile_target = 0;
-    }
-    if (figure_list[enemy_figure].state_idx == 0xc) {
-        figure_list[figure_no].missile_target = 0;
-    }
+    if (figure_list[enemy_figure].state_idx == 2) { figure_list[figure_no].missile_target = 0; }
+    if (figure_list[enemy_figure].state_idx == 0xc) { figure_list[figure_no].missile_target = 0; }
     get_fig_walk_image();
-    figure_go_to_target();
+    if (figure_go_to_target() == 0)
+        return;
 }
 
 // Fire-missile state (state == 11). While the figure hasn't reached its firing stand yet
