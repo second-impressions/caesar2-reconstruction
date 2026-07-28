@@ -761,12 +761,12 @@ void get_battle_men(void)
 // FUNCTION: C2WIN 0x00474a86
 void setup_roman_units(void)
 {
-    int light_count;
-    int heavy_count;
-    int archer_count;
-    int mercenary_count;
-    int target_unit_size;
-    int units_made;
+    int light;
+    int reg_men;
+    int auxs;
+    int target_men;
+    int merc_count;
+    int made;
 
     bat_which   = 0;
     bat_spacing = 1;
@@ -778,86 +778,87 @@ void setup_roman_units(void)
     else
         find_defensive_spot();
 
-    heavy_count = army_list[our_battle_army].num_regulars;
-    light_count = army_list[our_battle_army].num_irregulars;
-    archer_count = army_list[our_battle_army].num_auxillaries;
-    mercenary_count = army_list[our_battle_army].num_specials;
+    reg_men = light = auxs = merc_count = 0;
+    reg_men = army_list[our_battle_army].num_regulars;
+    light = army_list[our_battle_army].num_irregulars;
+    auxs = army_list[our_battle_army].num_auxillaries;
+    merc_count = army_list[our_battle_army].num_specials;
 
     if (battle_scale == 4)
-        target_unit_size = 0x3c0;
+        target_men = 0x3c0;
     else if (battle_scale == 3)
-        target_unit_size = 0x1e0;
+        target_men = 0x1e0;
     else if (battle_scale == 2)
-        target_unit_size = 0xf0;
+        target_men = 0xf0;
     else if (battle_scale == 1)
-        target_unit_size = 0x78;
+        target_men = 0x78;
     else
-        target_unit_size = 0x3c;
+        target_men = 0x3c;
 
-    units_made = 0;
+    made = 0;
 
     /* Stage 1: heavy infantry */
-    while (target_unit_size / 12 <= heavy_count) {
-        if (target_unit_size <= heavy_count)
-            build_units_figures(units_made++, 1, 3, 0, 0, our_battle_stance,
-                army_list[our_battle_army].morale, target_unit_size, 2, 1,
+    while (target_men / 12 <= reg_men) {
+        if (target_men <= reg_men)
+            build_units_figures(made++, 1, 3, 0, 0, our_battle_stance,
+                army_list[our_battle_army].morale, target_men, 2, 1,
                 figure1_data, 0, 1);
         else
-            build_units_figures(units_made++, 1, 3, 0, 0, our_battle_stance,
-                army_list[our_battle_army].morale, heavy_count, 2, 1,
+            build_units_figures(made++, 1, 3, 0, 0, our_battle_stance,
+                army_list[our_battle_army].morale, reg_men, 2, 1,
                 figure1_data, 0, 1);
-        if (target_unit_size <= heavy_count)
-            heavy_count -= target_unit_size;
+        if (target_men <= reg_men)
+            reg_men -= target_men;
         else
-            heavy_count = 0;
+            reg_men = 0;
     }
 
     /* Stage 2: light infantry */
-    while (light_count >= target_unit_size / 12) {
-        if (light_count >= target_unit_size)
-            build_units_figures(units_made++, 2, 2, 0, 1, our_battle_stance,
-                army_list[our_battle_army].morale, target_unit_size, 2, 1,
+    while (light >= target_men / 12) {
+        if (light >= target_men)
+            build_units_figures(made++, 2, 2, 0, 1, our_battle_stance,
+                army_list[our_battle_army].morale, target_men, 2, 1,
                 figure2_data, 0, 2);
         else
-            build_units_figures(units_made++, 2, 2, 0, 1, our_battle_stance,
-                army_list[our_battle_army].morale, light_count, 2, 1,
+            build_units_figures(made++, 2, 2, 0, 1, our_battle_stance,
+                army_list[our_battle_army].morale, light, 2, 1,
                 figure2_data, 0, 2);
-        if (light_count >= target_unit_size)
-            light_count -= target_unit_size;
+        if (light >= target_men)
+            light -= target_men;
         else
-            light_count = 0;
+            light = 0;
     }
 
     /* Stage 3: archers */
-    while (target_unit_size / 12 <= archer_count) {
-        if (target_unit_size <= archer_count)
-            build_units_figures(units_made++, 3, 2, 1, 2, our_battle_stance,
-                army_list[our_battle_army].morale, target_unit_size, 2, 1,
+    while (target_men / 12 <= auxs) {
+        if (target_men <= auxs)
+            build_units_figures(made++, 3, 2, 1, 2, our_battle_stance,
+                army_list[our_battle_army].morale, target_men, 2, 1,
                 figure3_data, 0, 3);
         else
-            build_units_figures(units_made++, 3, 2, 1, 2, our_battle_stance,
-                army_list[our_battle_army].morale, archer_count, 2, 1,
+            build_units_figures(made++, 3, 2, 1, 2, our_battle_stance,
+                army_list[our_battle_army].morale, auxs, 2, 1,
                 figure3_data, 0, 3);
-        if (target_unit_size <= archer_count)
-            archer_count -= target_unit_size;
+        if (target_men <= auxs)
+            auxs -= target_men;
         else
-            archer_count = 0;
+            auxs = 0;
     }
 
     /* Stage 4: mercenary cavalry */
-    while (target_unit_size / 12 <= mercenary_count) {
-        if (target_unit_size <= mercenary_count)
-            build_units_figures(units_made++, mercs_type, mercs_speed, mercs_missile,
+    while (target_men / 12 <= merc_count) {
+        if (target_men <= merc_count)
+            build_units_figures(made++, mercs_type, mercs_speed, mercs_missile,
                 4, our_battle_stance, army_list[our_battle_army].morale,
-                target_unit_size, 2, 1, figure7_data, figure8_data, 7);
+                target_men, 2, 1, figure7_data, figure8_data, 7);
         else
-            build_units_figures(units_made++, mercs_type, mercs_speed, mercs_missile,
+            build_units_figures(made++, mercs_type, mercs_speed, mercs_missile,
                 4, our_battle_stance, army_list[our_battle_army].morale,
-                mercenary_count, 2, 1, figure7_data, figure8_data, 7);
-        if (target_unit_size <= mercenary_count)
-            mercenary_count -= target_unit_size;
+                merc_count, 2, 1, figure7_data, figure8_data, 7);
+        if (target_men <= merc_count)
+            merc_count -= target_men;
         else
-            mercenary_count = 0;
+            merc_count = 0;
     }
 }
 
