@@ -1739,16 +1739,13 @@ void sf05_mop_up(void)
 // FUNCTION: C2WIN 0x004784c6
 void sf06_defend(void)
 {
-    int fire_tick;
-
     get_fig_still_image();
     temp_unit = (short)figure_list[figure_no].unit_ref;
 
-    if (unit_list[figure_list[figure_no].unit_ref].unit_sub_kind != 0) {
+    if (unit_list[temp_unit].unit_sub_kind != 0) {
         figure_list[figure_no].missile_max = 0x20;
-        fire_tick = figure_list[figure_no].missile_max / 2;
-        figure_list[figure_no].missile_timer++;
-        if (figure_list[figure_no].missile_timer == fire_tick) {
+        if (++figure_list[figure_no].missile_timer
+            == figure_list[figure_no].missile_max / 2) {
             if (find_nearest_target(5)) {
                 figure_list[figure_no].missile_target = enemy_figure;
                 figure_list[figure_no].direction = (char)get_heading(
@@ -1757,9 +1754,7 @@ void sf06_defend(void)
                     figure_list[enemy_figure].grid_x,
                     figure_list[enemy_figure].grid_y,
                     figure_list[figure_no].direction);
-            } else {
-                figure_list[figure_no].missile_target = 0;
-                figure_list[figure_no].missile_timer = 4;
+            } else { figure_list[figure_no].missile_target = 0; figure_list[figure_no].missile_timer = 4;
             }
         }
 
@@ -1781,8 +1776,7 @@ void sf06_defend(void)
             }
         }
 
-        if (figure_list[figure_no].missile_target != 0)
-            get_fig_missile_image();
+        if (figure_list[figure_no].missile_target != 0) get_fig_missile_image();
     }
 }
 

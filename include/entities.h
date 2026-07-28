@@ -588,7 +588,7 @@ struct figure_rec {
                                                 next combat resolution */
     unsigned char  fight_role;       /* +0x37  1 = attacker, 2 = defender
                                                 (set by sf09_look_for_fight). */
-    char           missile_max;     /* +0x38  per-figure missile cooldown
+    unsigned char  missile_max;     /* +0x38  per-figure missile cooldown
                                                 threshold; set to 0x20 by
                                                 sf06_defend / sf11_fire_missile
                                                 and compared against
@@ -926,7 +926,7 @@ struct arrow_rec {
                                                  from weapon kind; read by
                                                  fly_to_target as unsigned).
                                                 Values seen: 30, 50, 100, 120. */
-    char           weapon_kind;      /* +0x26  weapon-class tag copied from
+    unsigned char  weapon_kind;      /* +0x26  weapon-class tag copied from
                                                 the firing figure's sprite_kind
                                                 (figure_rec.sprite_kind at +5)
                                                 and consumed by
