@@ -5534,7 +5534,7 @@ void act_query(void)
     if (q_type >= 0x82
             && q_type <= 0xa1) {
         query_mode = last_house_query_mode;
-        queery_buttons[last_house_query_mode + 3].state = 1;
+        queery_buttons[query_mode + 3].state = 1;
     } else {
         if ((q_flag & 0x20) != 0) {
             query_mode = 1;
