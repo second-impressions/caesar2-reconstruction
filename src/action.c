@@ -3860,34 +3860,46 @@ int over_forum_menu(void)
 // FUNCTION: C2WIN 0x004b8163
 void get_region_over(void)
 {
-    int region_x;
-    int region_idx;
-    int region_height;
-    int region_width;
-    int bitmap_offset;
-    int region_y;
-    unsigned char pixel;
+    int x;
+    int i;
+    int h;
+    int width;
+    int bmp_off;
+    int y;
+    unsigned char pixel_c;
+#if PLATFORM_WINDOWS
+    unsigned char *bitmap_ptr;
+#endif
 
     region_over = 0;
-    for (region_idx = 0; region_idx < 0x2c; region_idx++) {
-        data_ptr = region_idx * 16 + 8;
+    for (i = 0; i < 0x2c; i++) {
+        data_ptr = i * 16 + 8;
 
-        region_width = ((scratch_buffer)[data_ptr + 1] << 8) + (scratch_buffer)[data_ptr];
-        region_height = (scratch_buffer)[data_ptr + 2] + ((scratch_buffer)[data_ptr + 3] << 8);
-        region_x = empire_positions[region_idx].x;
-        region_y = empire_positions[region_idx].y;
-        bitmap_offset = (scratch_buffer)[data_ptr + 4] + ((scratch_buffer)[data_ptr + 5] << 8)
+        width = ((scratch_buffer)[data_ptr + 1] << 8) + (scratch_buffer)[data_ptr];
+        h = (scratch_buffer)[data_ptr + 2] + ((scratch_buffer)[data_ptr + 3] << 8);
+        x = empire_positions[i].x;
+        y = empire_positions[i].y;
+        bmp_off = (scratch_buffer)[data_ptr + 4] + ((scratch_buffer)[data_ptr + 5] << 8)
                 + (scratch_buffer)[data_ptr + 6] * 0x10000;
 
-        if (mouse_x < region_x) continue;
-        if (region_y > mouse_y) continue;
-        if (((region_x) + (region_width)) <= mouse_x) continue;
-        if ((region_height + region_y) <= mouse_y) continue;
+        if (mouse_x < x) continue;
+        if (y > mouse_y) continue;
+        if (((x) + (width)) <= mouse_x) continue;
+#if PLATFORM_WINDOWS
+        if ((y + h) <= mouse_y) continue;
+#else
+        if ((h + y) <= mouse_y) continue;
+#endif
 
-        region_x = mouse_x - region_x; region_y = mouse_y - region_y;
-        pixel = *(scratch_buffer + bitmap_offset + region_x + region_y * region_width);
-        if (pixel != 0) {
-            region_over = region_idx + 1; return;
+        x = mouse_x - x; y = mouse_y - y;
+#if PLATFORM_WINDOWS
+        bitmap_ptr = scratch_buffer + x + bmp_off + y * width;
+        pixel_c = *bitmap_ptr;
+#else
+        pixel_c = *(scratch_buffer + bmp_off + x + y * width);
+#endif
+        if (pixel_c != 0) {
+            region_over = i + 1; return;
         }
     }
 }
