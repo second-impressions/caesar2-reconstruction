@@ -595,17 +595,12 @@ void generate_battle_map(void)
     clear_all_bm(1);
     clear_all_bm(3);
 
-    gmn_y   = 0;
-    cm_sptr = 0;
-    for ( ; gmn_y < 0x34; gmn_y++) {
-        gmn_x = 0;
-        do {
+    gmn_y = 0; cm_sptr = 0;
+    for ( ; gmn_y < 0x34; gmn_y++)
+        for (gmn_x = 0; gmn_x < 0x34; cm_sptr += (gmn_x++, 4)) {
             random();
             (*(struct battle_cell *)((unsigned char *)battle_map + ((cm_sptr)))).terrain = rand128 & 0x1f;
-            gmn_x++;
-            cm_sptr += 4;
-        } while (gmn_x < 0x34);
-    }
+        }
 
     map_actual_width      = 0x34;
     map_actual_height     = 0x34;
