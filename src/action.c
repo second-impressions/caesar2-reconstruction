@@ -777,13 +777,23 @@ flag_done:
 // FUNCTION: C2WIN 0x004b1b8f
 void battle_action(void)
 {
+#if PLATFORM_WINDOWS
+    int i;
+#endif
+
     old_scrolling = scrolling;
     scrolling = 0; stopped_scrolling = 0; illegal_build = 0;
 
+#if PLATFORM_WINDOWS
+    if (zoom_in_decay_count != 0) zoom_in_decay_count++;
+#else
     if (zoom_in_decay_count != 0) zoom_in_decay_count = zoom_in_decay_count + 1;
+#endif
 
+#if !PLATFORM_WINDOWS
     if (control_menus(main_menu, 4, show_battlemap) != 0) goto end_battle_action;
     if (perform_battle_strip_action() != 0) { redraw_icons = 1; update_map = 1; goto end_battle_action; }
+#endif
 
     scroll();
 
