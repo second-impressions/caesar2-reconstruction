@@ -1633,53 +1633,42 @@ void sf01_wait(void)
 // FUNCTION: C2WIN 0x00477fe7
 void sf02_death(void)
 {
-    int sprite_type;
-    signed char death_count;
     unsigned char terrain;
-    unsigned char stampede_value = 1;
-    int terrain_value;
 
-    sprite_type = figure_list[figure_no].sprite_type;
-    if (sprite_type == 0xf) {
-        int stampede_idx;
-        figure_list[figure_no].stampede_kind = stampede_value;
-        figure_list[figure_no].stampede_flag = stampede_value;
-        stampede_idx = figure_no & 7;
-        figure_list[figure_no].prev_grid_x = elephant_stampede[stampede_idx].dx;
-        figure_list[figure_no].prev_grid_y = elephant_stampede[stampede_idx].dy;
+    if (figure_list[figure_no].sprite_type == 0xf) {
+        figure_list[figure_no].stampede_kind = 1;
+        figure_list[figure_no].stampede_flag = 1;
+        figure_list[figure_no].prev_grid_x = elephant_stampede[figure_no & 7].dx;
+        figure_list[figure_no].prev_grid_y = elephant_stampede[figure_no & 7].dy;
         sf12_rout();
         if (figure_list[figure_no].death_timer <= 0) {
             set_battle_death_fx(figure_list[figure_no].sprite_type);
         }
         ++figure_list[figure_no].death_timer;
         if (figure_list[figure_no].death_timer > 0x40)
-            figure_list[figure_no].death_timer =
-                ((unsigned char)rand8 + (unsigned char)rand8);
+            figure_list[figure_no].death_timer = rand8 * 2;
         return;
     }
 
     if (figure_list[figure_no].death_timer <= 0)
-        set_battle_death_fx(sprite_type);
+        set_battle_death_fx(figure_list[figure_no].sprite_type);
 
     get_fig_death_image();
     ++figure_list[figure_no].death_timer;
-    if (figure_list[figure_no].death_timer <= 0x1e)
-        return;
-
-    figure_list[figure_no].death_timer = 0x1e;
-    terrain  = (*(struct battle_cell *)((unsigned char *)battle_map + ((figure_list[figure_no].map_ref)))).terrain;
-    terrain_value = terrain;
-    if (terrain_value < 0x28) {
-        if (terrain_value >= 0x24) {
+    if (figure_list[figure_no].death_timer > 0x1e) {
+        figure_list[figure_no].death_timer = 0x1e;
+        terrain  = (*(struct battle_cell *)((unsigned char *)battle_map + ((figure_list[figure_no].map_ref)))).terrain;
+        if (terrain >= 0x28) {
+        } else if (terrain >= 0x24) {
             terrain = terrain + 4;
-        } else if (terrain_value >= 0x20) {
+        } else if (terrain >= 0x20) {
             terrain = terrain + 4;
         } else {
-            terrain = (unsigned char)((terrain & 3) + 0x24);
+            terrain = (terrain & 3) + 0x24;
         }
+        (*(struct battle_cell *)((unsigned char *)battle_map + ((figure_list[figure_no].map_ref)))).terrain = terrain;
+        remove_figure(figure_no);
     }
-    (*(struct battle_cell *)((unsigned char *)battle_map + ((figure_list[figure_no].map_ref)))).terrain = terrain;
-    remove_figure(figure_no);
 }
 
 // Move state (state_idx 3): step the figure toward its current target; on arrival drop the routing
