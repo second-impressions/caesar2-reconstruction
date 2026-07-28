@@ -692,7 +692,7 @@ end_of_action:
     } else if (action_sound == 0) {
         do_pos();
     }
-    if (old_scrolling != scrolling && old_scrolling == 1) {
+    if (scrolling != old_scrolling && old_scrolling == 1) {
         stopped_scrolling = 1;
     }
 
