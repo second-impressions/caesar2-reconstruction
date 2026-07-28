@@ -4603,23 +4603,18 @@ void act_prev_cohort(void)
 // FUNCTION: C2WIN 0x004b8771
 void act_demob_cohort(void)
 {
-    short army_idx = (short)get_actual_viewed_army();
-    temp_army = army_idx;
-
-    if (army_list[army_idx].cohort_size_class == 0) {
-        army_list[army_idx].cohort_size_class = 1;
+    temp_army = get_actual_viewed_army();
+    if (army_list[temp_army].cohort_size_class == 0) {
+        army_list[temp_army].cohort_size_class = 1;
+    } else if (army_list[temp_army].cohort_size_class == 1) {
+        army_list[temp_army].cohort_size_class = 2;
+    } else if (army_list[temp_army].cohort_size_class == 2) {
+        army_list[temp_army].cohort_size_class = 3;
+        army_list[temp_army].saved_state_idx = army_list[temp_army].state_idx;
+        army_list[temp_army].state_idx = 0xa;
     } else {
-        unsigned int size_class = army_list[army_idx].cohort_size_class;
-        if (size_class == 1) {
-            army_list[army_idx].cohort_size_class = 2;
-        } else if (size_class == 2) {
-            army_list[army_idx].cohort_size_class = 3;
-            army_list[army_idx].saved_state_idx = army_list[army_idx].state_idx;
-            army_list[army_idx].state_idx = 0xa;
-        } else {
-            army_list[army_idx].cohort_size_class = 0;
-            army_list[army_idx].state_idx = army_list[army_idx].saved_state_idx;
-        }
+        army_list[temp_army].cohort_size_class = 0;
+        army_list[temp_army].state_idx = army_list[temp_army].saved_state_idx;
     }
     gen_refresh1 = 1;
     gen_refresh2 = 1;
