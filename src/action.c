@@ -3751,17 +3751,50 @@ void act_zoom_in(void)
 // FUNCTION: C2WIN 0x004b72fc
 void do_act_zoom_in(int decayed_click)
 {
+#if PLATFORM_WINDOWS
+    int x_move;
+    int y_move;
+#endif
+
     if (zoom_level == 1 || decayed_click == 1) {
+#if PLATFORM_WINDOWS
+        x_move = pm_screen_width >> 2;
+        y_move = pm_screen_height >> 2;
+        if (x_move % 2 > 0) {
+            x_move--;
+        }
+        if (y_move % 2 > 0) {
+            y_move--;
+        }
+        pm_x += pm_x_coord - x_move;
+        pm_y = ((pm_y_coord + pm_y) & 0xfffe) - y_move;
+#else
         pm_x = pm_x_coord + pm_x - 4;
         pm_y = ((pm_y_coord + pm_y) & 0xfffe) - 0xe;
+#endif
         refresh_zoom_mode(0);
     } else if (zoom_level == 2) {
+#if PLATFORM_WINDOWS
+        x_move = pm_screen_width / 4.68;
+        y_move = pm_screen_height / 4.68;
+        if (x_move % 2 > 0) {
+            x_move--;
+        }
+        if (y_move % 2 > 0) {
+            y_move--;
+        }
+        pm_x += pm_x_coord - x_move;
+        pm_y = ((pm_y_coord + pm_y) & 0xfffe) - y_move;
+#else
         pm_x = pm_x_coord + pm_x - 8;
         pm_y = ((pm_y_coord + pm_y) & 0xfffe) - 0x1e;
+#endif
         refresh_zoom_mode(1);
     }
     pm_limits();
+#if !PLATFORM_WINDOWS
     setup_map_screen_refresh();
+#endif
     clip_zoom_level1();
     clear_edge_info();
     update_landfill = 1;
