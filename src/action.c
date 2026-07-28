@@ -2438,7 +2438,12 @@ void act_health(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 4;
+    control_selection(health_selection, 3, 0x32, 0x11D, 0xF);
+#else
     control_selection(health_selection, 3, mouse_x - 0x90, mouse_y - 0x30, 0xF);
+#endif
     selected_icon_text = 0xF;
     selected_icon_no = selection_is;
 }
