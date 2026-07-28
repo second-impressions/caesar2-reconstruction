@@ -313,12 +313,7 @@ void action(void)
     mouse_follow_cohort();
     show_latest_route();
     mouse_hunt_enemies();
-#if PLATFORM_WINDOWS
     particles_built = particles_cleared = 0;
-#else
-    particles_cleared = 0;
-    particles_built = 0;
-#endif
 
     if (mouse_left_preclick != 0 && pm_over != 0) {
         update_map = 1;
