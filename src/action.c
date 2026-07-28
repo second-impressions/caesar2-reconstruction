@@ -2667,7 +2667,12 @@ void act_education(void)
 {
     flag_mode = 0;
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 6;
+    control_selection(education_selection, 4, 0x14, 0x118, 0x15);
+#else
     control_selection(education_selection, 4, mouse_x - 0xA0, mouse_y - 0x30, 0x15);
+#endif
     selected_icon_text = 0x15;
     selected_icon_no = selection_is;
 }
