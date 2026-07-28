@@ -499,6 +499,7 @@ void start_move(void)
 void start_aim(void)
 {
     int  hit_count;
+    int  i;
     int  unit_idx;
 
     hit_count    = 0;
@@ -508,29 +509,24 @@ void start_aim(void)
         if (figure_list[figure_no].exists != 0
             && figure_list[figure_no].selected != 0) {
             unit_idx = figure_list[figure_no].unit_ref;
-            if (unit_list[unit_idx].type == 0) {
-                deselect_all_figures();
-                return;
-            }
+            if (unit_list[unit_idx].type == 0) { deselect_all_figures(); return; }
             figure_list[figure_no].selected = 0;
-            if (figure_list[figure_no].state_idx != 0xc
-                && unit_list[unit_idx].target_lock == 0
-                && unit_list[unit_idx].unit_sub_kind != 0)
-            {
-                unit_list[unit_idx].attack_marker_x = hlite_left;
-                unit_list[unit_idx].attack_marker_y = hlite_top;
-                figure_list[figure_no].state_idx = 0xb;
-                figure_list[figure_no].prev_grid_x = figure_list[figure_no].grid_x;
-                figure_list[figure_no].prev_grid_y = figure_list[figure_no].grid_y;
-                hit_count++;
-            }
+            if (figure_list[figure_no].state_idx == 0xc)
+                continue;
+            if (unit_list[unit_idx].target_lock != 0)
+                continue;
+            if (unit_list[unit_idx].unit_sub_kind == 0)
+                continue;
+            unit_list[unit_idx].attack_marker_x = hlite_left;
+            unit_list[unit_idx].attack_marker_y = hlite_top;
+            figure_list[figure_no].state_idx = 0xb;
+            figure_list[figure_no].prev_grid_x = figure_list[figure_no].grid_x;
+            figure_list[figure_no].prev_grid_y = figure_list[figure_no].grid_y;
+            hit_count++;
         }
     }
 
-    if (hit_count == 0) {
-        pointer_mode = 0;
-        redraw_icons = 1;
-    }
+    if (hit_count == 0) { pointer_mode = 0; redraw_icons = 1; }
 }
 
 // Compute the selected figures' bounding box and its offset from the cursor.

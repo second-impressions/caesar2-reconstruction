@@ -841,7 +841,7 @@ struct unit_rec {
     char           formation_mode;   /* +0x36  formation kind 0..3; written
                                                 by reform / instant_reform. */
     char           _unk37[2];  /* Mac PPC: also never accessed -- vestigial */
-    char           unit_sub_kind;     /* +0x39  unit sub-kind tag set by
+    unsigned char  unit_sub_kind;     /* +0x39  unit sub-kind tag set by
                                                 build_units_figures from
                                                 sub_kind2 argument; readers
                                                 check non-zero to gate
