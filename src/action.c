@@ -2781,7 +2781,12 @@ void act_show_ov_legend(void)
 void act_select_ov_map(void)
 {
     get_selection_goods_list(0);
+#if PLATFORM_WINDOWS
+    selection_menu = 9;
+    control_selection(ovmap_selection, 0xb, 0, 0, 0x35);
+#else
     control_selection(ovmap_selection, 0xb, 0x1f4, 0x36, 0x35);
+#endif
     update_ov_bar = 1;
     redraw_icons = 1;
     update_map = 1;
