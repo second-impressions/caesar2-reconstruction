@@ -4247,12 +4247,130 @@ void act_set_marker3(void)
     }
 }
 
+#if PLATFORM_WINDOWS
+struct action_rect {
+    long left;
+    long top;
+    long right;
+    long bottom;
+};
+extern int forum_dialog_selection;
+extern int forum_dialog_last_selection;
+extern unsigned char forum_slave_warning;
+extern void *application_instance;
+extern char forum_background[];
+extern char forum_window_title[];
+extern char forum_dialog_name[];
+extern int (__stdcall *GetClientRect)(void *window, struct action_rect *rect);
+extern int (__stdcall *DialogBoxParamA)(void *instance, char *name,
+                                       void *parent, void *dialog_proc,
+                                       long init_param);
+extern long __stdcall forum_dialog_proc(void *window, unsigned int message,
+                                       unsigned int wparam, long lparam);
+extern void draw_window_buffer(void *window, void *buffer, int source_x,
+                               int source_y, int width, int height,
+                               int dest_x, int dest_y);
+extern void grey_all_windows(void);
+extern void set_forum_tune(int tune);
+extern void pause_cityprov_tune(void);
+extern void start_forum_tune(void);
+extern void prepare_native_forum(void);
+extern void set_forum_window_title(char *title);
+extern void set_menu_bar_enabled(int enabled);
+#endif
 // Open the forum (advisor) screen. Picks an entry tune based on `rand8`, resets `tracking_army`,
 // primes the chosen department (slave_warning forces dept 8), then loops on `forum_game_loop`
 // while the modal is up.
 // FUNCTION: C2 0x33c77
+// FUNCTION: C2WIN 0x0048ed84 REORDERED
 void act_forum(void)
 {
+#if PLATFORM_WINDOWS
+    struct action_rect rect;
+    int window_width;
+    int window_y_size;
+    int saved_mode;
+    int tutorial_pause_time;
+
+    forum_dialog_selection = 0;
+    forum_dialog_last_selection = -1;
+    if (turbo_mode > 1) {
+        act_exit_turbo_mode();
+    }
+    if (tutorial_mode != 0) {
+        tutorial_pause_time = GetTickCount() - tutorial_start_time;
+        tutorial_start_time = GetTickCount();
+    }
+    GetClientRect(active_window, &rect);
+    window_width = rect.right - rect.left;
+    window_y_size = rect.bottom - rect.top;
+    draw_window_buffer(active_window, forum_background, 0, 0,
+                       window_width, window_y_size, 0, 0);
+    grey_all_windows();
+    pointer_mode = 0;
+    stop_all_sounds();
+    in_the_forum = 1;
+    if (rand8 <= 1) {
+        set_forum_tune(0);
+    } else if (rand8 <= 4) {
+        set_forum_tune(1);
+    } else {
+        set_forum_tune(2);
+    }
+    if (tutorial_mode != 0) {
+    } else {
+        pause_cityprov_tune();
+        city_tune_playing = 0;
+    }
+    start_forum_tune();
+    tracking_army = 0;
+    last_forum_dept = FORUM_DEPT_OVERVIEW;
+    forum_slave_warning = 0;
+    if (slave_warning != 0) {
+        forum_dept = FORUM_DEPT_SLAVES;
+        last_forum_dept = forum_dept;
+        forum_slave_warning = 1;
+    }
+    evolve_to_current_fabric();
+    forum_update_census();
+    current_temple_tip = 0;
+    prepare_native_forum();
+    set_forum_window_title(forum_window_title);
+    set_menu_bar_enabled(0);
+    DialogBoxParamA(application_instance, forum_dialog_name, active_window,
+                    forum_dialog_proc, 0);
+    if (flag_mode != 0) {
+        flag_mode = 0;
+    }
+    clear_mouse_input();
+    stop_db();
+    set_menu_bar_enabled(1);
+    in_the_forum = 0;
+    forum_update_census();
+    forum_dept = FORUM_DEPT_OVERVIEW;
+    forum_dept_over = FORUM_DEPT_OVERVIEW;
+    update_window_titles();
+    load_screen_parts(map_mode);
+    size_game_window(map_mode);
+    if (map_mode == 0) {
+        city_map_screen(1);
+    } else if (map_mode == 1) {
+        region_map_screen(1);
+    }
+    redraw_game_window(game_window);
+    if (tutorial_mode != 0) {
+        set_forum_tune(0);
+        start_forum_tune();
+    } else {
+        start_cityprov_tune();
+        city_tune_playing = 1;
+    }
+    flush_sb_buffer();
+    in_the_forum = 0;
+    if (tutorial_mode != 0) {
+        tutorial_start_time = GetTickCount() - tutorial_pause_time;
+    }
+#else
     pointer_mode = 0;
     stop_all_sounds();
 
@@ -4309,6 +4427,7 @@ void act_forum(void)
     city_tune_playing = 1;
     flush_sb_buffer();
     in_the_forum = 0;
+#endif
 }
 
 // Runs the interaction loop for the active forum department.
