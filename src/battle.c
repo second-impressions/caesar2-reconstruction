@@ -1669,21 +1669,15 @@ void sf03_move(void)
 // FUNCTION: C2WIN 0x00478307
 void sf15_move_and_reform(void)
 {
-    int moved;
-    int unit_ref;
-    int formation;
-
     figure_list[figure_no].is_routing = 1;
     get_fig_walk_image();
-    moved = figure_go_to_target();
-    if (moved == 0)
+    if (figure_go_to_target() == 0)
         return;
-    if ((figure_list[figure_no].is_visible & 2) == 0)
-        return;
-    figure_list[figure_no].is_visible &= 0xfd;
-    formation = figure_list[figure_no].shield_class;
-    unit_ref  = figure_list[figure_no].unit_ref;
-    reform(unit_ref, formation, 1);
+    if ((figure_list[figure_no].is_visible & 2) != 0) {
+        figure_list[figure_no].is_visible &= 0xfd;
+        reform(figure_list[figure_no].unit_ref,
+               figure_list[figure_no].shield_class, 1);
+    }
 }
 
 // Fight state (state_idx 4): if the opponent is still alive and also fighting us, resolve one tick
@@ -2218,6 +2212,8 @@ void arrow_intelligence(void)
     }
 }
 
+int test_reform_pattern(int unit_ref, int formation);
+
 // Deselect the player's selected unit or reform a selected enemy unit for the current map mode.
 // FUNCTION: C2 0x4f27d
 // FUNCTION: C2WIN 0x0047a7db
@@ -2547,6 +2543,8 @@ void get_fig_still_image(void)
     else if (map_direction == 6) dir_base = ((figure_list[figure_no].direction + 2) % 8) * stride;
     figure_list[figure_no].sprite_anim = dir_base;
 }
+
+int test_for_same_fig_to(int direction);
 
 // Pick the facing for a tortoise figure (the locked-shield Roman formation): prefer to face the
 // same-army figure that's one step E (4), N (2), S (6), or W (0); fall back to E (4) when no
