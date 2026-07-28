@@ -3642,6 +3642,10 @@ void act_set_marker2(void)
 // region map (non-zero).
 // FUNCTION: C2 0x33c04
 // FUNCTION: C2WIN 0x004b7dc7
+#if PLATFORM_WINDOWS
+void redraw_city_window(void);
+void redraw_region_window(void);
+#endif
 void act_set_marker3(void)
 {
     int target_map_ptr;
@@ -3661,8 +3665,14 @@ void act_set_marker3(void)
     target_map_ptr = danger_flag_list[last_danger_flag];
     if (danger_flag_map_mode == 0) {
         jump_to_citymap_ptr(target_map_ptr);
+#if PLATFORM_WINDOWS
+        redraw_city_window();
+#endif
     } else {
         jump_to_regionmap_ptr(target_map_ptr);
+#if PLATFORM_WINDOWS
+        redraw_region_window();
+#endif
     }
 }
 
