@@ -876,15 +876,52 @@ void scroll(void)
     }
 
     /* Top edge — scroll up. */
-    if (mouse_y <= 0 && pm_y > 0) { pm_y = pm_y - scroll_amount * 2; scrolling = 1; update_map = 1; setup_map_screen_refresh(); }
+    if (mouse_y <= 0 && pm_y > 0) {
+        pm_y = pm_y - scroll_amount * 2;
+        scrolling = 1;
+        update_map = 1;
+#if !PLATFORM_WINDOWS
+        setup_map_screen_refresh();
+#endif
+    }
     /* Bottom edge — scroll down. */
-    if (mouse_y >= screen_height && (0xa0 - pm_screen_height) > pm_y) { pm_y = pm_y + scroll_amount * 2; scrolling = 1; update_map = 1; setup_map_screen_refresh(); }
+    if (mouse_y >= screen_height && (0xa0 - pm_screen_height) > pm_y) {
+        pm_y = pm_y + scroll_amount * 2;
+        scrolling = 1;
+        update_map = 1;
+#if !PLATFORM_WINDOWS
+        setup_map_screen_refresh();
+#endif
+    }
     /* Left edge — scroll left. */
-    if (mouse_x <= 0 && pm_x > 0) { pm_x = pm_x - scroll_amount; scrolling = 1; update_map = 1; setup_map_screen_refresh(); }
+    if (mouse_x <= 0 && pm_x > 0) {
+        pm_x = pm_x - scroll_amount;
+        scrolling = 1;
+        update_map = 1;
+#if !PLATFORM_WINDOWS
+        setup_map_screen_refresh();
+#endif
+    }
     /* Right edge — scroll right. */
-    if (mouse_x >= screen_width && (0x50 - pm_screen_width) > pm_x)
-    { pm_x = pm_x + scroll_amount; scrolling = 1; update_map = 1; setup_map_screen_refresh(); }
+    if (mouse_x >= screen_width && (0x50 - pm_screen_width) > pm_x) {
+        pm_x = pm_x + scroll_amount;
+        scrolling = 1;
+        update_map = 1;
+#if !PLATFORM_WINDOWS
+        setup_map_screen_refresh();
+#endif
+    }
 
+#if PLATFORM_WINDOWS
+    if (scrolling == 0) {
+        return;
+    }
+    if (scroll_speed() == 0) {
+        pm_x = saved_pm_x;
+        pm_y = saved_pm_y;
+        scrolling = 0;
+    }
+#else
     if (scrolling != 0) {
         if (scroll_speed() == 0) {
             pm_x = saved_pm_x;
@@ -892,6 +929,7 @@ void scroll(void)
             scrolling = 0;
         }
     }
+#endif
 }
 
 // On the region map (map_mode == 1) and only while the player is in pointer_mode 2 or 3 (over-army
