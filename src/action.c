@@ -4783,29 +4783,27 @@ int alter_slave_reqs(int requirement_idx, int allocation_delta)
     int donor_idx;
 
     if (allocation_delta == -1) {
-        if (slave_requirements[requirement_idx].current <= 0) {
-            return 0;
+        if (slave_requirements[requirement_idx].current > 0) {
+            slave_requirements[requirement_idx].current -= 1;
+            slave_requirements[7].current += 1;
+            return 1;
         }
-        slave_requirements[requirement_idx].current -= 1;
-        slave_requirements[7].current += 1;
-        return 1;
-    }
-
-    if (allocation_delta == 1) {
+    } else if (allocation_delta == 1) {
         if (slave_requirements[7].current != 0) {
             slave_requirements[requirement_idx].current += 1;
             slave_requirements[7].current -= 1;
             return 1;
+        } else {
+            /* Take from another category, kinds 6 → 1. */
+            for (donor_idx = 6; donor_idx > 0; donor_idx--) {
+                if (donor_idx != requirement_idx
+                        && slave_requirements[donor_idx].current != 0) {
+                    slave_requirements[requirement_idx].current += 1;
+                    slave_requirements[donor_idx].current -= 1;
+                    return 1;
+                }
+            }
         }
-        /* Take from another category, kinds 6 → 1. */
-        for (donor_idx = 6; donor_idx > 0; donor_idx--) {
-            if (donor_idx == requirement_idx) continue;
-            if (slave_requirements[donor_idx].current == 0) continue;
-            slave_requirements[requirement_idx].current += 1;
-            slave_requirements[donor_idx].current -= 1;
-            return 1;
-        }
-        return 0;
     }
 
     return 0;
