@@ -3633,20 +3633,53 @@ void act_zoom_out(void)
 // FUNCTION: C2WIN 0x004b7001
 void do_act_zoom_out(int decayed_click)
 {
+#if PLATFORM_WINDOWS
+    int x_move;
+    int y_move;
+#endif
+
     if (zoom_level == 2) {
         return;
     }
     if (zoom_level == 1 || decayed_click != 0) {
+#if PLATFORM_WINDOWS
+        x_move = pm_screen_width / 2.34;
+        y_move = pm_screen_height / 2.34;
+        if ((x_move & 1) > 0) {
+            x_move--;
+        }
+        if ((y_move & 1) > 0) {
+            y_move--;
+        }
+        pm_x -= x_move;
+        pm_y -= y_move;
+#else
         pm_x -= 0xc;
         pm_y -= 0x28;
+#endif
         refresh_zoom_mode(2);
     } else if (zoom_level == 0) {
+#if PLATFORM_WINDOWS
+        x_move = pm_screen_width >> 1;
+        y_move = pm_screen_height >> 1;
+        if ((x_move & 1) > 0) {
+            x_move--;
+        }
+        if ((y_move & 1) > 0) {
+            y_move--;
+        }
+        pm_x -= x_move;
+        pm_y -= y_move;
+#else
         pm_x -= 4;
         pm_y -= 0x10;
+#endif
         refresh_zoom_mode(1);
     }
     pm_limits();
+#if !PLATFORM_WINDOWS
     setup_map_screen_refresh();
+#endif
     clip_zoom_level1();
     clear_edge_info();
     update_landfill = 1;
