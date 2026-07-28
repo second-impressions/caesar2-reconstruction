@@ -4353,23 +4353,25 @@ int find_nearest_enemy(void)
 // FUNCTION: C2WIN 0x00482654
 int find_nearest_target(int max_distance)
 {
+    int distance;
     int best_distance = 0x68;
     int best_figure_idx = 0;
-    int distance;
 
     for (temp_figure = 1; temp_figure < 0xc9; temp_figure++) {
-        if (figure_list[temp_figure].exists == 0) continue;
-        if (figure_list[temp_figure].owner == figure_list[figure_no].owner) continue;
-        if (figure_list[temp_figure].state_idx == 2) continue;
-        if (figure_list[temp_figure].state_idx == 0xc) continue;
-        if (figure_list[temp_figure].unit_ref == target_unit_debar) continue;
-        distance = get_distance(figure_list[figure_no].grid_x,
-                                figure_list[figure_no].grid_y,
-                                figure_list[temp_figure].grid_x,
-                                figure_list[temp_figure].grid_y);
-        if (distance <= max_distance && distance < best_distance) {
-            best_distance = distance;
-            best_figure_idx = temp_figure;
+        if (figure_list[temp_figure].exists != 0) {
+            if (figure_list[temp_figure].owner == figure_list[figure_no].owner) continue;
+            if (figure_list[temp_figure].state_idx == 2) continue;
+            if (figure_list[temp_figure].state_idx == 0xc) continue;
+            if (figure_list[temp_figure].unit_ref == target_unit_debar) continue;
+            distance = get_distance(figure_list[figure_no].grid_x,
+                                    figure_list[figure_no].grid_y,
+                                    figure_list[temp_figure].grid_x,
+                                    figure_list[temp_figure].grid_y);
+            if (distance > max_distance) continue;
+            if (distance < best_distance) {
+                best_distance = distance;
+                best_figure_idx = temp_figure;
+            }
         }
     }
     if (best_figure_idx == 0) return 0;
