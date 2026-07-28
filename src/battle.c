@@ -2,6 +2,32 @@
 #include "battle.h"
 #include "c2_data.h"
 
+#if PLATFORM_WINDOWS
+#include <windows.h>
+
+extern unsigned char battle_window_mode;
+extern unsigned char window_status[];
+extern unsigned char game_paused;
+extern int saved_game_window_status;
+extern RECT game_window_rect;
+extern HWND game_window;
+extern HWND main_window;
+extern void show_map_window(int mode);
+extern void update_window_menu(int mode);
+extern void update_window_titles(void);
+extern void update_game_window_title(void);
+extern void size_game_window(int mode);
+extern void update_mouse_window(void *point, int mode);
+extern void set_battle_tune(int tune);
+extern void start_battle_tune(void);
+extern void show_native_battle_setup(void *window);
+#define BATTLE_MAP_MODE screen_mode
+#define BATTLE_PAUSED game_paused
+#else
+#define BATTLE_MAP_MODE map_mode
+#define BATTLE_PAUSED c2inf.paused
+#endif
+
 /* File-local state. */
 int bat_ai_trig_count;
 int bat_attack_rate;
@@ -99,6 +125,11 @@ void set_defense_shield(int figure_idx);
 // FUNCTION: C2WIN 0x00472bc0
 void do_fight_battle(int continuing)
 {
+#if PLATFORM_WINDOWS
+    unsigned char battle_tune;
+
+    battle_tune = 0;
+#endif
     update_icon         = 0;
     pointer_mode        = 0;
     reg_placing_type    = 0;
@@ -108,13 +139,28 @@ void do_fight_battle(int continuing)
     battle_state        = 0;
     nomansland_ptr      = 0x1380;
     battle_turbo        = 0;
-    c2inf.paused        = 1;
+    BATTLE_PAUSED       = 1;
     redraw_icons        = 1;
 
+#if PLATFORM_WINDOWS
+    if (battle_window_mode == 0) {
+        saved_game_window_status = window_status[0];
+        if (saved_game_window_status != 0) {
+            GetWindowRect(game_window, &game_window_rect);
+            show_map_window(0);
+            update_window_menu(0);
+        }
+    } else {
+        battle_window_mode = 0;
+        if (saved_game_window_status != 0) {
+        }
+    }
+#endif
+
     if (continuing == 0) {
-        return_map_mode   = map_mode;
+        return_map_mode   = BATTLE_MAP_MODE;
         return_zoom_level = zoom_level;
-        if (map_mode == 0) {
+        if (BATTLE_MAP_MODE == 0) {
             city_pm_x       = pm_x;
             city_pm_y       = pm_y;
             city_direction  = map_direction;
@@ -127,18 +173,31 @@ void do_fight_battle(int continuing)
         map_direction = 0;
         pm_x          = 0x1c;
         pm_y          = 0x38;
-        map_mode      = 2;
-        load_battle_graphics(1);
+        BATTLE_MAP_MODE = 2;
+        load_battle_graphics(zoom_level);
         refresh_battle_zoom_mode(zoom_level);
         get_pseudo_map(map_direction);
         generate_battle_map();
         setup_battle();
         figure_intelligence();
+#if PLATFORM_WINDOWS
+        update_window_titles();
+        update_game_window_title();
+#endif
         battle_screen(1);
         init_battle_ambients();
     }
 
+#if PLATFORM_WINDOWS
+    size_game_window(0);
+    update_window_titles();
+    set_battle_tune(rand() % 2);
+    start_battle_tune();
+    if (battle_setup_count > 1)
+        show_native_battle_setup(main_window);
+#else
     play_tune("batest2.xmi", 1);
+#endif
 
     while (battle_state < 4) {
         battle_game_loop();
@@ -146,23 +205,23 @@ void do_fight_battle(int continuing)
 
         if (our_battle_men <= 0) {
             battle_state = 2;
-            tune_mood    = 0x12;
             battle_over_count++;
+            tune_mood    = 0x12;
         }
         if (their_battle_men <= 0) {
             battle_state = 2;
-            tune_mood    = 0x11;
             battle_over_count++;
+            tune_mood    = 0x11;
         }
         if (our_battle_morale <= 0) {
             battle_state = 2;
-            tune_mood    = 0x12;
             battle_over_count++;
+            tune_mood    = 0x12;
         }
         if (their_battle_morale <= 0) {
             battle_state = 2;
-            tune_mood    = 0x11;
             battle_over_count++;
+            tune_mood    = 0x11;
         }
         if (battle_over_count > 0x32)
             battle_state = 4;
@@ -173,12 +232,16 @@ void do_fight_battle(int continuing)
     }
 
     pointer_mode                  = 0;
-    c2inf.paused                   = 0;
+    BATTLE_PAUSED                   = 0;
+#if PLATFORM_WINDOWS
+    update_mouse_window(0, 0);
+#endif
 
-    if (battle_state != 0xa) {
+    if (battle_state == 0xa) {
+    } else {
         zoom_level = return_zoom_level;
-        map_mode   = return_map_mode;
-        if (map_mode == 0) {
+        BATTLE_MAP_MODE = return_map_mode;
+        if (BATTLE_MAP_MODE == 0) {
             pm_x          = city_pm_x;
             pm_y          = city_pm_y;
             map_direction = city_direction;
