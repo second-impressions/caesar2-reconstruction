@@ -981,23 +981,20 @@ void get_battle_centuries_left(void)
     army_list[their_battle_army].num_specials = 0; army_list[their_battle_army].num_horse = 0; army_list[their_battle_army].num_regulars = 0; army_list[their_battle_army].num_irregulars = 0; army_list[their_battle_army].num_auxillaries = 0;
 
     for (temp_figure = 1; temp_figure < 0xc9; temp_figure++) {
-        if (figure_list[temp_figure].exists == 0) continue;
-
-        if (figure_list[temp_figure].owner != 0) {
-
-            if (figure_list[temp_figure].figure_rank == 4)      army_list[our_battle_army].num_specials    += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 3) army_list[our_battle_army].num_horse       += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 0) army_list[our_battle_army].num_regulars    += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 1) army_list[our_battle_army].num_irregulars  += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 2) army_list[our_battle_army].num_auxillaries += figure_list[temp_figure].stampede_flag;
-        }
-        else {
-
-            if (figure_list[temp_figure].figure_rank == 4)      army_list[their_battle_army].num_specials    += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 3) army_list[their_battle_army].num_horse       += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 0) army_list[their_battle_army].num_regulars    += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 1) army_list[their_battle_army].num_irregulars  += figure_list[temp_figure].stampede_flag;
-            else if (figure_list[temp_figure].figure_rank == 2) army_list[their_battle_army].num_auxillaries += figure_list[temp_figure].stampede_flag;
+        if (figure_list[temp_figure].exists != 0) {
+            if (figure_list[temp_figure].owner != 0) {
+                if (figure_list[temp_figure].figure_rank == 4)      army_list[our_battle_army].num_specials    += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 3) army_list[our_battle_army].num_horse       += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 0) army_list[our_battle_army].num_regulars    += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 1) army_list[our_battle_army].num_irregulars  += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 2) army_list[our_battle_army].num_auxillaries += figure_list[temp_figure].stampede_flag;
+            } else {
+                if (figure_list[temp_figure].figure_rank == 4)      army_list[their_battle_army].num_specials    += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 3) army_list[their_battle_army].num_horse       += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 0) army_list[their_battle_army].num_regulars    += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 1) army_list[their_battle_army].num_irregulars  += figure_list[temp_figure].stampede_flag;
+                else if (figure_list[temp_figure].figure_rank == 2) army_list[their_battle_army].num_auxillaries += figure_list[temp_figure].stampede_flag;
+            }
         }
     }
 
