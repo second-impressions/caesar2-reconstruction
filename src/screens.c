@@ -186,17 +186,43 @@ void region_map_screen(int do_black_out)
     hold_mouse_replace = 1;
 }
 
+#if PLATFORM_WINDOWS
+extern unsigned char *window_buffer;
+extern void *map_window;
+extern void update_window_titles(void);
+extern void load_screen_parts(unsigned char mode);
+extern void size_map_window(int mode);
+extern void show_window_battle_landfill(int start_row, int row_count,
+                                        int screen_x, int screen_y,
+                                        unsigned char *buffer);
+extern void refresh_map_window(void *window);
+#endif
+
 // Set up the in-battle UI screen.
 // FUNCTION: C2 0x5b3cb
 // FUNCTION: C2WIN 0x004226d5
 void battle_screen(int do_black_out)
 {
+    int i;
+
+#if PLATFORM_WINDOWS
+    if (do_black_out == 1) {
+    }
+#else
     if (do_black_out == 1) black_out();
+#endif
 
     hold_mouse_replace = 1;
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
 
     readfile("batlfix2.256", temp_palette, 0x300, 0);
+#if PLATFORM_WINDOWS
+    if (readfile("int_batl.pl8", ((void *)scratch_buffer), 0x1d4c0, 0) == 0) {
+        test_beeps();
+    } else {
+#else
     if (readfile("int_batl.pl8", ((void *)scratch_buffer), 0x1d4c0, 0) == 0) {
         test_beeps();
         return;
@@ -211,26 +237,48 @@ void battle_screen(int do_black_out)
               army_list[their_battle_army].source_region,
               0x32, 0x172, font1, 0x10);
     font_list(7, 0, 0x32, 0x1a8, font1, 0x10);
+#endif
 
     clip_battle_zoom_level2();
     flush_sb_buffer();
+#if PLATFORM_WINDOWS
+    update_map = 1;
+    pm_limits();
+#else
     show_menus(main_menu, 4, 0);
 
     update_map = 1;
+#endif
     show_battlemap();
 
+#if PLATFORM_WINDOWS
+    write_image(misc, map_direction / 2, 2, 2);
+    update_window_titles();
+    load_screen_parts(screen_mode);
+    size_map_window(screen_mode);
+    show_window_battle_landfill(0, 0x34, 6, 9, window_buffer);
+    refresh_map_window(map_window);
+#else
     write_image(misc, map_direction / 2, 0x264, 0x1a);
     show_battle_landfill(0, 0x34, 0xb1, 0x170);
+#endif
 
     redraw_topline = 1;
     update_ov_bar  = 1;
     update_map     = 4;
     redraw_icons   = 2;
+#if PLATFORM_WINDOWS
+    redraw_window_icons();
+#else
     redraw_icon_bits();
+#endif
 
     refresh_svga_screen();
     set_palette(temp_palette);
     hold_mouse_replace = 1;
+#if PLATFORM_WINDOWS
+    }
+#endif
 }
 
 // Update the battle statistics panel when its unit data or pointer context changes.
