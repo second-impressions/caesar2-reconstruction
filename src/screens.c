@@ -2547,10 +2547,10 @@ void forum_industry_screen(void)
 // FUNCTION: C2WIN 0x004291b5
 void forum_slaves_screen(void)
 {
-    int delta;
-
     cover_mouse_droppings();
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
 
     if (forum_repapering[last_forum_dept] != 0) {
         show_pl8file("forum.pl8",
@@ -2572,14 +2572,15 @@ void forum_slaves_screen(void)
     if (slave_population_change < 0) {
         font_list(0x25, 2, 0x18, 0x53, font1, 0x10);
         font_no(-slave_population_change, 0x20, " ", x_is + 0x18, 0x53, font1, 0x10);
+        font_list(0x25, 5, x_is + 0x18, 0x53, font1, 0x10);
     } else if (slave_population_change > 0) {
         font_list(0x25, 3, 0x18, 0x53, font1, 0x10);
         font_no(slave_population_change,  0x20, " ", x_is + 0x18, 0x53, font1, 0x10);
+        font_list(0x25, 5, x_is + 0x18, 0x53, font1, 0x10);
     } else {
         font_list(0x25, 4, 0x18, 0x53, font1, 0x10);
+        font_list(0x25, 5, x_is + 0x18, 0x53, font1, 0x10);
     }
-
-    font_list(0x25, 5, x_is + 0x18, 0x53, font1, 0x10);
 
     show_slave_welfare_bill();
     show_slave_allocation();
