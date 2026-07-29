@@ -711,33 +711,34 @@ void sa03_army_move(void)
 // FUNCTION: C2WIN 0x00406517
 int new_army_route_point(void)
 {
-    int cell_offset;
-    int waypoint_y;
-    unsigned char tile_flags;
-    unsigned char cell_kind;
-    int waypoint_x;
+    int ptr;
+    int y;
+    unsigned char flags;
+    unsigned char map_value;
+    int x;
 
     if (goto_army_attack() != 0) return 1;
 
-    waypoint_x = army_routes[army_list[army_no].cohort_id]
+    x = army_routes[army_list[army_no].cohort_id]
                .points[army_list[army_no].dest_y][army_list[army_no].dest_x].x;
-    waypoint_y = army_routes[army_list[army_no].cohort_id]
+    y = army_routes[army_list[army_no].cohort_id]
                .points[army_list[army_no].dest_y][army_list[army_no].dest_x].y;
-    cell_offset = (waypoint_x + waypoint_y * REGION_W) * REGION_CELL_BYTES;
-    tile_flags = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).terrain;
-    army_list[army_no].dest_x++;
+    ptr = (x + y * REGION_W) * REGION_CELL_BYTES;
+    flags = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).terrain;
+    army_list[army_no].dest_x += 1;
 
-    if ((tile_flags & 1) != 0) {
-        cell_kind = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).base_kind;
-        if (cell_kind < 0x93 || cell_kind > 0x96) return 0;
+    if ((flags & 1) != 0) {
+        map_value = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).base_kind;
+        if (map_value < 0x93 || map_value > 0x96) return 0;
     } else {
-        if ((tile_flags & 0x12) != 0) return 0;
+        if ((flags & 0x12) != 0) return 0;
     }
 
-    army_list[army_no].target_x = waypoint_x;
-    army_list[army_no].target_y = waypoint_y;
-    if (army_list[army_no].target_x != army_list[army_no].x) return 1;
-    if (army_list[army_no].target_y == army_list[army_no].y) return 0;
+    army_list[army_no].target_x = x;
+    army_list[army_no].target_y = y;
+    if (army_list[army_no].target_x == army_list[army_no].x) {
+        if (army_list[army_no].target_y == army_list[army_no].y) return 0;
+    }
     return 1;
 }
 

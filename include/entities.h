@@ -280,8 +280,8 @@ extern struct slave_req slave_requirements[8];
 /* Per-cohort patrol/route table.  One route record is selected by
  * army_rec.cohort_id and has a 0x15a-byte stride in PS.EXE. */
 struct army_route_point {
-    char x;
-    char y;
+    unsigned char x;
+    unsigned char y;
 };
 
 struct army_route_rec {
@@ -369,7 +369,7 @@ struct army_rec {
     char           target_flag;        /* +0x27  set when army has a chosen target */
     signed char    cohort_id;          /* +0x28  cohort/route slot id; PS emits movsx on read */
     unsigned char  dest_y;             /* +0x29  destination tile Y for sail-to-port */
-    char           dest_x;             /* +0x2A  destination tile X for sail-to-port */
+    unsigned char  dest_x;             /* +0x2A  destination tile X for sail-to-port */
     char           _unk2B[1];          /* Mac PPC: also never accessed -- vestigial */
     int            fort_ref;           /* +0x2C */
     char           army_id;              /* +0x30 */
