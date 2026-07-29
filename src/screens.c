@@ -3832,13 +3832,20 @@ int general_business_cause(void)
 // FUNCTION: C2 0x639b4
 // FUNCTION: C2WIN 0x0042c330
 void test_range_for(int x, int y, int radius, int mode);
+int mouse_in_area(int x, int y, int w, int h);
+int test_range_for_road(int x, int y, int range);
 
 void show_people_query_panel(void)
 {
-    int i;
-    int ratio1;
-    int ratio2;
     int word_health;
+    int i;
+    int people_ratio;
+#if PLATFORM_WINDOWS
+    int display_mode;
+
+    display_mode = screen_mode;
+    if (display_mode > 1) display_mode = 0;
+#endif
 
     if (q_no_of_people == 0) {
         font_list(0x40, 0, 0x58,
@@ -3875,7 +3882,7 @@ void show_people_query_panel(void)
                     (query_panel_reduction + 9) * 0x10 + 0x19,
                     0x16, 0x1e, 0x14);
         citizen_a = (short)(unsigned char)q_people_list[i];
-        write_image(people_data,
+        write_image(SCREEN_PEOPLE_DATA(display_mode),
                     citizen_list[citizen_a].image_id,
                     i * 0x28 + 0x37,
                     (query_panel_reduction + 9) * 0x10 + 0x20);
@@ -3889,11 +3896,11 @@ void show_people_query_panel(void)
 
     x_is = 0;
     if (citizen_list[citizen_a].type == 3)
-        font_list(0x42, citizen_list[citizen_a].name_id, 0x58,
+        font_list(0x42, (unsigned char)citizen_list[citizen_a].name_id, 0x58,
                   (query_panel_reduction + 0xc) * 0x10 + 0x1c,
                   font1, 0x10);
     else
-        font_list(0x41, citizen_list[citizen_a].name_id, 0x58,
+        font_list(0x41, (unsigned char)citizen_list[citizen_a].name_id, 0x58,
                   (query_panel_reduction + 0xc) * 0x10 + 0x1c,
                   font1, 0x10);
     font_list(0x43, citizen_list[citizen_a].type - 1, x_is + 0x58,
@@ -3904,15 +3911,15 @@ void show_people_query_panel(void)
     if (citizen_list[citizen_a].type == 1) {
         test_range_for(citizen_list[citizen_a].x,
                        citizen_list[citizen_a].y, 5, 0);
-        ratio1 = valueDIVtotal(test_result2, test_result1);
-        if      (ratio1 > 0x32) word_health = 4;
-        else if (ratio1 > 0xa)  word_health = 5;
-        else if (ratio1 != 0)   word_health = 6;
+        people_ratio = valueDIVtotal(test_result2, test_result1);
+        if      (people_ratio > 0x32) word_health = 4;
+        else if (people_ratio > 0xa)  word_health = 5;
+        else if (people_ratio != 0)   word_health = 6;
         else {
-            ratio2 = valueDIVtotal(test_result3, test_result1 * 3);
-            if      (ratio2 < 0x3c) word_health = 7;
-            else if (ratio2 < 0x5a) word_health = 8;
-            else                     word_health = 9;
+            people_ratio = valueDIVtotal(test_result3, test_result1 * 3);
+            if      (people_ratio < 0x3c) word_health = 7;
+            else if (people_ratio < 0x5a) word_health = 8;
+            else                          word_health = 9;
         }
     }
     if (citizen_list[citizen_a].type == 2) {
@@ -3929,10 +3936,10 @@ void show_people_query_panel(void)
         } else {
             test_range_for(citizen_list[citizen_a].x,
                            citizen_list[citizen_a].y, 5, 1);
-            ratio1 = valueDIVtotal(test_result2, test_result1);
-            if      (ratio1 > 0x32) word_health = 0x10;
-            else if (ratio1 > 0xa)  word_health = 0x11;
-            else                     word_health = 0x12;
+            people_ratio = valueDIVtotal(test_result2, test_result1);
+            if      (people_ratio > 0x32) word_health = 0x10;
+            else if (people_ratio > 0xa)  word_health = 0x11;
+            else                          word_health = 0x12;
         }
     }
     if (citizen_list[citizen_a].type == 5) {
@@ -3943,12 +3950,12 @@ void show_people_query_panel(void)
         } else {
             test_range_for(citizen_list[citizen_a].x,
                            citizen_list[citizen_a].y, 5, 2);
-            ratio1 = valueDIVtotal(test_result2, test_result1 << 4);
-            if      (ratio1 > 0x50) word_health = 0x14;
-            else if (ratio1 > 0x3c) word_health = 0x15;
-            else if (ratio1 > 0x28) word_health = 0x16;
-            else if (ratio1 > 0x14) word_health = 0x17;
-            else                     word_health = 0x18;
+            people_ratio = valueDIVtotal(test_result2, test_result1 << 4);
+            if      (people_ratio > 0x50) word_health = 0x14;
+            else if (people_ratio > 0x3c) word_health = 0x15;
+            else if (people_ratio > 0x28) word_health = 0x16;
+            else if (people_ratio > 0x14) word_health = 0x17;
+            else                          word_health = 0x18;
         }
     }
     if (citizen_list[citizen_a].type == 6) {
@@ -3969,8 +3976,6 @@ void show_people_query_panel(void)
 // Select the person clicked in the query-panel resident list.
 // FUNCTION: C2 0x63ef3
 // FUNCTION: C2WIN 0x0042cba3
-int mouse_in_area(int x, int y, int w, int h);
-int test_range_for_road(int x, int y, int range);
 int test_area_for_population(int extra, int x, int y, int radius);
 
 void get_queried_person(void)
