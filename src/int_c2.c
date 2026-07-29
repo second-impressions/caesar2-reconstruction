@@ -3003,19 +3003,22 @@ int test_zone_for_closest_fire(void)
 // FUNCTION: C2WIN 0x0040ed63
 int putting_out_fire(void)
 {
-    int cell_offset;
-    unsigned char cell_value;
+    unsigned char fire;
+    unsigned char tile_type;
 
-    cell_offset = citizen_list[citizen_no].map_ref;
-    cell_value = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset)))).base_kind;
-    if (cell_value < 8) {
-        cell_value = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset)))).edge_bits;
-        if ((cell_value & 0x80) != 0) {
-            cell_value = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset)))).fire;
-            if (--cell_value != 0)
-                (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset)))).fire--;
+    tile_type = (*(struct city_cell *)((unsigned char *)city_map +
+        citizen_list[citizen_no].map_ref)).base_kind;
+    if (tile_type < 8) {
+        if (((*(struct city_cell *)((unsigned char *)city_map +
+                citizen_list[citizen_no].map_ref)).edge_bits & 0x80) != 0) {
+            fire = (*(struct city_cell *)((unsigned char *)city_map +
+                citizen_list[citizen_no].map_ref)).fire - 1;
+            if (fire != 0)
+                (*(struct city_cell *)((unsigned char *)city_map +
+                    citizen_list[citizen_no].map_ref)).fire--;
             else
-                (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset)))).edge_bits &= 0x7f;
+                (*(struct city_cell *)((unsigned char *)city_map +
+                    citizen_list[citizen_no].map_ref)).edge_bits &= 0x7f;
             return 1;
         }
     }
