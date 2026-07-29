@@ -4234,31 +4234,29 @@ int find_nearest_enemy(void)
 {
     int distance;
     int best_figure_idx;
-    int prefer_cohesion;
+    int formation_bias;
     int best_distance;
 
     best_distance = 0x68;
     best_figure_idx = 0;
-    prefer_cohesion = tribe_ai_data[bat_tribe].prefer_cohesion;
+    formation_bias = tribe_ai_data[bat_tribe].prefer_cohesion;
 
-    if (figure_list[figure_no].owner != 0) prefer_cohesion = 0;
+    if (figure_list[figure_no].owner != 0) formation_bias = 0;
 
     for (temp_figure = 1; temp_figure < 0xc9; temp_figure++) {
-        if (figure_list[temp_figure].exists == 0) continue;
-        if (figure_list[temp_figure].owner == figure_list[figure_no].owner) continue;
-        if (figure_list[temp_figure].state_idx == 2) continue;
-        if (figure_list[temp_figure].state_idx == 0xc) continue;
-        if (figure_list[temp_figure].engaged_count > 1) continue;
+        if (figure_list[temp_figure].exists != 0) {
+            if (figure_list[temp_figure].owner == figure_list[figure_no].owner) continue;
+            if (figure_list[temp_figure].state_idx == 2) continue;
+            if (figure_list[temp_figure].state_idx == 0xc) continue;
+            if (figure_list[temp_figure].engaged_count > 1) continue;
 
-        distance = get_longest_distance(figure_list[figure_no].grid_x,
-                                        figure_list[figure_no].grid_y,
-                                        figure_list[temp_figure].grid_x,
-                                        figure_list[temp_figure].grid_y);
-        if (figure_list[temp_figure].sprite_type != 3 && prefer_cohesion == 1) distance += 10;
+            distance = get_longest_distance(figure_list[figure_no].grid_x,
+                                            figure_list[figure_no].grid_y,
+                                            figure_list[temp_figure].grid_x,
+                                            figure_list[temp_figure].grid_y);
+            if (figure_list[temp_figure].sprite_type != 3 && formation_bias == 1) distance += 10;
 
-        if (distance < best_distance) {
-            best_distance = distance;
-            best_figure_idx = temp_figure;
+            if (distance < best_distance) { best_distance = distance; best_figure_idx = temp_figure; }
         }
     }
 
