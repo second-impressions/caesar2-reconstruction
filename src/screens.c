@@ -2863,34 +2863,32 @@ void show_top_line(void)
 // FUNCTION: C2WIN 0x00429f9c
 void show_icon_strip(void)
 {
-    int any_text;
-    int has_sel;
-    int has_cost;
+    int force_redraw;
+    int selected_flag;
+    int cost_exists;
     int cost;
     int text_id;
 
     if (pointer_mode > 0)
         icon_strip_toggle = 0x21;
 
-    any_text = 0;
-    has_sel  = 0;
-    has_cost = 0;
-    cost     = 0;
+    selected_flag = force_redraw = 0;
+    cost_exists = 0;
+    cost = 0;
     if (total_build_cost != 0) {
-        has_cost = 1;
-        cost     = total_build_cost;
+        cost_exists = 1;
+        cost = total_build_cost;
     } else if (pm_over != 0) {
         if (placing_cost != 0) {
             icon_strip_toggle = icon_strip_toggle + 1;
             if (icon_strip_toggle > 0x40) icon_strip_toggle = 0;
-            if (icon_strip_toggle == 0x20) any_text = 1;
+            if (icon_strip_toggle == 0x20) force_redraw = 1;
             if (icon_strip_toggle < 0x20) {
-                has_cost = 1;
-                cost     = placing_cost;
+                cost_exists = 1;
+                cost = placing_cost;
             } else if (selected_icon_no != 0) {
-                int sel = selected_icon_no;
-                text_id  = sel - 1;
-                has_sel  = 1;
+                text_id = selected_icon_no - 1;
+                selected_flag = 1;
             } else {
                 text_id = last_icon_used;
             }
@@ -2902,17 +2900,17 @@ void show_icon_strip(void)
     } else if (last_icon_over == 0) {
         text_id = last_icon_used;
     } else {
-        if (last_icon_over == 0) {
-        } else {
+        if (last_icon_over != 0) {
             text_id = last_icon_over;
         }
     }
 
-    if (!(any_text == 1)) {
-        if (has_cost != 0
+    if (force_redraw == 1) {
+    } else {
+        if (cost_exists != 0
             && cost == request_message.cached_cost)
             return;
-        if (text_id == request_message.cached_text_id)
+        else if (text_id == request_message.cached_text_id)
             return;
     }
 
@@ -2920,7 +2918,7 @@ void show_icon_strip(void)
     sprite_height = 0xf;
     show_fast_rect(0x1e8, 0x10b, 0x1a);
 
-    if (has_cost != 0) {
+    if (cost_exists != 0) {
         request_message.cached_text_id = -1;
         x_is = 0;
         font_list(0x34, 0, 0x1ea, 0x10c, font1, 0x10);
@@ -2929,13 +2927,13 @@ void show_icon_strip(void)
         request_message.cached_cost = cost;
     } else {
         request_message.cached_cost = -1;
-        if (map_mode == 0) {
-            if (has_sel != 0)
+        if (SCREEN_MAP_MODE == 0) {
+            if (selected_flag != 0)
                 font_list(selected_icon_text, text_id, 0x1ea,
                           0x10c, font1, 0x10);
             else
                 font_list(0x32, text_id, 0x1ea, 0x10c, font1, 0x10);
-        } else if (has_sel != 0) {
+        } else if (selected_flag != 0) {
             font_list(selected_icon_text, text_id, 0x1ea,
                       0x10c, font1, 0x10);
         } else {
@@ -2944,7 +2942,9 @@ void show_icon_strip(void)
         request_message.cached_text_id = text_id;
     }
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x1e0, 0x10b, 0xa, 2, 1);
+#endif
 }
 
 // Update the city overview-mode selector when its state changes.
