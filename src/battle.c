@@ -1,5 +1,11 @@
 
 #include "battle.h"
+extern struct citizen_rec citizen_list[];
+extern struct unit_rec unit_list[];
+extern struct figure_rec figure_list[];
+extern short our_battle_army;
+extern struct army_rec army_list[];
+extern short their_battle_army;
 #include "c2_data.h"
 
 #if PLATFORM_WINDOWS
@@ -689,8 +695,8 @@ void setup_battle(void)
     int total1;
     int total2;
 
-    total_men = army_list[their_battle_army].total_troops
-              + army_list[our_battle_army].total_troops;
+    total_men = army_list[our_battle_army].total_troops
+              + army_list[their_battle_army].total_troops;
 
     battle_scale = 0;
     if (total_men >= 0x1c20) battle_scale = 8;
