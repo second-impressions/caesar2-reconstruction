@@ -1,4 +1,5 @@
-
+extern int current_no_of_irregulars;
+extern int current_no_of_regulars;
 #include "c2_data.h"
 #include "c2_types.h"
 
@@ -29,11 +30,13 @@ extern void redraw_window_icons(void);
 #define SCREEN_PEOPLE_DATA(mode) (((unsigned char **)&people_data)[mode])
 #define COHORT_AUTO_FIGHT army_list[tracking_army].state_idx
 #define NON_COHORT_TYPE army_list[tracking_army].type
+#define CURRENT_AUXILIARIES total_no_of_cohorts
 #else
 #define SCREEN_MAP_MODE map_mode
 #define SCREEN_PEOPLE_DATA(mode) people_data
 #define COHORT_AUTO_FIGHT auto_fight
 #define NON_COHORT_TYPE army_type
+#define CURRENT_AUXILIARIES current_no_of_auxillaries
 #endif
 
 /* Forward declarations (functions defined later in this file). */
@@ -2340,8 +2343,8 @@ void show_this_tribune(void)
                 0x110, 0x5c, font1, 0x10);
         font_list(0x23, 0x10, x_is + 0x110, 0x5c, font1, 0x10);
         x_is = 0;
-        if (total_no_of_auxillaries >= current_no_of_auxillaries)
-            font_no(current_no_of_auxillaries, 0x20, " ", 0x190, 0x5c, font1, 0x10);
+        if (total_no_of_auxillaries >= CURRENT_AUXILIARIES)
+            font_no(CURRENT_AUXILIARIES, 0x20, " ", 0x190, 0x5c, font1, 0x10);
         else
             font_no(total_no_of_auxillaries, 0x20, " ", 0x190, 0x5c, font1, 0x10);
         font_list(0x23, 0x11, x_is + 0x190, 0x5c, font1, 0x10);
@@ -2379,7 +2382,9 @@ void show_this_tribune(void)
     }
 
     update_tribune_flag(1);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x108, 0x1e, 0x17, 0xb, 1);
+#endif
 }
 
 // Animate the selected cohort's flag in the city or forum panel.
