@@ -59,6 +59,8 @@ extern int bat_spacing;
 extern int first_back;
 extern int battle_stats_type;
 extern int battle_turbo;
+extern short temp_figure;
+extern short figure_no;
 extern int our_battle_men;
 extern int our_battle_morale;
 extern int our_battle_units;
@@ -73,7 +75,5 @@ extern int retreat_flag;
 extern int bat_attack_rate;
 
 extern short figure_a;
-extern short figure_no;
-extern short temp_figure;
 
 #endif /* C2_BATTLE_DECLS_H */
