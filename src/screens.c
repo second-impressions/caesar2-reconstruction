@@ -1869,13 +1869,12 @@ void show_temple_tip(void)
     stone_random_count = 0x1e;
     show_a_mosaic_blank(0x10, 0x19c, 0x26, 3);
     draw_a_dias(0xf, 0x19b, 0x262, 0x32);
-    if (c2inf.peace_mode != 0) {
-        if (current_temple_tip < 9)
-            current_temple_tip = 0x11;
-    }
+    if (c2inf.peace_mode != 0 && current_temple_tip < 9) current_temple_tip = 0x11;
     font_format_split(0x20, current_temple_tip + 7, 0x18, 0x19e,
                       0x258, 0x64, 0, 0, font1, 0x10);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0, 0x190, 0x28, 5, 1);
+#endif
 }
 
 // Show the clerks forum with historical graphs and range controls.
