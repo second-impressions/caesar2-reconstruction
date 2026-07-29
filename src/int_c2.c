@@ -517,36 +517,40 @@ void s08_vigile_patrol(void)
 void s09_fire_fight(void)
 {
     citizen_list[citizen_no].saved_state_idx = 9;
-    if (citizen_maraude_to_target(2) == 0) return;
-    if ((citizen_list[citizen_no].flag_bits & 2) != 0) {
-        citizen_list[citizen_no].state_idx   = 9;
-        citizen_list[citizen_no].target_kind = 0;
-        citizen_list[citizen_no].flag_bits  &= 0xfd;
+    if (citizen_maraude_to_target(2) == 0) {
+    } else {
+        if (citizen_list[citizen_no].flag_bits & 2) {
+            citizen_list[citizen_no].state_idx = 9;
+            citizen_list[citizen_no].target_kind = 0;
+            citizen_list[citizen_no].flag_bits &= 0xfd;
+        }
+        if (citizen_list[citizen_no].flag_bits & 1) {
+            if (putting_out_fire() != 0) {
+                citizen_list[citizen_no].action_kind = 0;
+                citizen_list[citizen_no].target_kind = 0;
+            } else {
+                if (confirm_fire_target() != 0) {
+                    citizen_list[citizen_no].action_kind = 1;
+                } else {
+                    citizen_list[citizen_no].target_kind = 0;
+                    citizen_list[citizen_no].action_kind = 0;
+                    citizen_list[citizen_no].target_ref = 0;
+                    if (test_fire_zones() != 0) {
+                        if (test_zone_for_closest_fire() != 0) {
+                            citizen_list[citizen_no].dest_x = z_x;
+                            citizen_list[citizen_no].dest_y = z_y;
+                            citizen_list[citizen_no].target_ref = z_ptr;
+                            citizen_list[citizen_no].wf_active = 0;
+                            citizen_list[citizen_no].target_kind = 1;
+                            citizen_list[citizen_no].action_kind = 1;
+                        }
+                    } else {
+                        citizen_list[citizen_no].state_idx = 2;
+                    }
+                }
+            }
+        }
     }
-    if ((citizen_list[citizen_no].flag_bits & 1) == 0) return;
-    if (putting_out_fire() != 0) {
-        citizen_list[citizen_no].action_kind = 0;
-        citizen_list[citizen_no].target_kind = 0;
-        return;
-    }
-    if (confirm_fire_target() != 0) {
-        citizen_list[citizen_no].action_kind = 1;
-        return;
-    }
-    citizen_list[citizen_no].target_kind = 0;
-    citizen_list[citizen_no].action_kind = 0;
-    citizen_list[citizen_no].target_ref  = 0;
-    if (test_fire_zones() != 0) {
-        if (test_zone_for_closest_fire() == 0) return;
-        citizen_list[citizen_no].dest_x     = z_x;
-        citizen_list[citizen_no].dest_y     = z_y;
-        citizen_list[citizen_no].target_ref = z_ptr;
-        citizen_list[citizen_no].wf_active  = 0;
-        citizen_list[citizen_no].target_kind = 1;
-        citizen_list[citizen_no].action_kind = 1;
-        return;
-    }
-    citizen_list[citizen_no].state_idx = 2;
 }
 
 // Update local market demand at a business destination, then choose the trader's next road tile.
