@@ -2444,18 +2444,20 @@ void show_recruitment(void)
 // FUNCTION: C2WIN 0x00428be0
 void forum_industry_screen(void)
 {
-    int i;
-    int hasup;
+    int count;
+    int availability;
     int kind;
-    int trader;
+    int is_trader;
     int pipe2;
-    int supply;
-    int diff;
-    int citysup;
-    int image;
+    int stock;
+    int difficulty;
+    int supply_percent;
+    int image_number;
 
     cover_mouse_droppings();
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     if (forum_repapering[last_forum_dept] != 0) show_pl8file("forum.pl8", forum_repapering[last_forum_dept]);
     explain_forum();
     show_a_mosaic_frame(0, 0, 0x28, 0xe);
@@ -2466,57 +2468,57 @@ void forum_industry_screen(void)
     font_list(0x24, 0, 0x18, 0x14, font2, 0x10);
 
     if (c2inf.peace_mode == 0) {
-        for (i = 0; i < 8; i++) {
-            kind   = province_industries[i].kind;
-            trader = province_industries[i].is_trader;
-            if (i >= 4) diff = ((unsigned char *)provincial_difficulty + 0xac)[i + province_is * 4];
-            supply  = industry[kind].supply;
-            pipe2   = industry[kind].supply_pipeline[2];
-            hasup   = industry[kind].has_supply;
-            citysup = industry[kind].city_supply;
+        for (count = 0; count < 8; count++) {
+            kind          = province_industries[count].kind;
+            is_trader     = province_industries[count].is_trader;
+            if (count >= 4) difficulty = region_borders[province_is].u.dir[count - 4];
+            stock          = industry[kind].supply;
+            pipe2          = industry[kind].supply_pipeline[2];
+            availability   = industry[kind].has_supply;
+            supply_percent = industry[kind].city_supply;
 
-            write_image(game_panels, kind + 0x3b, 0x20, i * 0x13 + 0x37);
-            font_list(0x10, kind + 1, 0x38, i * 0x13 + 0x39, font1, 0x10);
+            write_image(game_panels, kind + 0x3b, 0x20, count * 0x13 + 0x37);
+            font_list(0x10, kind + 1, 0x38, count * 0x13 + 0x39, font1, 0x10);
 
-            if (trader == 0) {
+            if (is_trader == 0) {
                 x_is = 0;
-                font_no(pipe2, 0x20, " ", 0x7c, i * 0x13 + 0x39, font1, 0x10);
-                font_list(0x24, 1, x_is + 0x7c, i * 0x13 + 0x39, font1, 0x10);
+                font_no(pipe2, 0x20, " ", 0x7c, count * 0x13 + 0x39, font1, 0x10);
+                font_list(0x24, 1, x_is + 0x7c, count * 0x13 + 0x39, font1, 0x10);
             } else {
-                if (trader == 1) image = 0x4b;
-                else             image = 0x4c;
-                write_image(game_panels, image, 0x7c, i * 0x13 + 0x37);
-                font_list(6, diff + 1, 0x90, i * 0x13 + 0x39, font1, 0x10);
+                if (is_trader == 1) image_number = 0x4b;
+                else                image_number = 0x4c;
+                write_image(game_panels, image_number, 0x7c, count * 0x13 + 0x37);
+                font_list(6, difficulty + 1, 0x90, count * 0x13 + 0x39, font1, 0x10);
             }
 
-            font_no(supply, 0x20, " ", 0x140, i * 0x13 + 0x39, font1, 0x10);
-            font_list(0x24, 2, 0x154, i * 0x13 + 0x39, font1, 0x10);
-            if (hasup == 0) font_list(0x24, 3, 0x1ae, i * 0x13 + 0x39, font1, 0x10);
+            font_no(stock, 0x20, " ", 0x140, count * 0x13 + 0x39, font1, 0x10);
+            font_list(0x24, 2, 0x154, count * 0x13 + 0x39, font1, 0x10);
+            if (availability == 0) font_list(0x24, 3, 0x1ae, count * 0x13 + 0x39, font1, 0x10);
             else {
                 x_is = 0;
-                font_no(hasup, 0x20, " ", 0x1ae, i * 0x13 + 0x39, font1, 0x10);
-                if (hasup == 1) font_list(0x24, 4, x_is + 0x1ae, i * 0x13 + 0x39, font1, 0x10);
-                else            font_list(0x24, 5, x_is + 0x1ae, i * 0x13 + 0x39, font1, 0x10);
-                font_no(citysup, 0x20, "%", x_is + 0x1ae, i * 0x13 + 0x39, font1, 0x10);
-                font_list(0x24, 6, x_is + 0x1ae, i * 0x13 + 0x39, font1, 0x10);
+                font_no(availability, 0x20, " ", 0x1ae, count * 0x13 + 0x39, font1, 0x10);
+                if (availability == 1) font_list(0x24, 4, x_is + 0x1ae, count * 0x13 + 0x39, font1, 0x10);
+                else                   font_list(0x24, 5, x_is + 0x1ae, count * 0x13 + 0x39, font1, 0x10);
+                font_no(supply_percent, 0x20, "%", x_is + 0x1ae, count * 0x13 + 0x39, font1, 0x10);
+                font_list(0x24, 6, x_is + 0x1ae, count * 0x13 + 0x39, font1, 0x10);
             }
         }
     } else {
-        for (i = 0; i < 8; i++) {
-            kind    = i * 2 + 1;
-            hasup   = industry[kind].has_supply;
-            citysup = industry[kind].city_supply;
+        for (count = 0; count < 8; count++) {
+            kind           = count * 2 + 1;
+            availability   = industry[kind].has_supply;
+            supply_percent = industry[kind].city_supply;
 
-            write_image(game_panels, kind + 0x3b, 0x20, i * 0x13 + 0x37);
-            font_list(0x10, kind + 1, 0x38, i * 0x13 + 0x39, font1, 0x10);
-            if (hasup == 0) font_list(0x24, 3, 0x8c, i * 0x13 + 0x39, font1, 0x10);
+            write_image(game_panels, kind + 0x3b, 0x20, count * 0x13 + 0x37);
+            font_list(0x10, kind + 1, 0x38, count * 0x13 + 0x39, font1, 0x10);
+            if (availability == 0) font_list(0x24, 3, 0x8c, count * 0x13 + 0x39, font1, 0x10);
             else {
                 x_is = 0;
-                font_no(hasup, 0x20, " ", 0x8c, i * 0x13 + 0x39, font1, 0x10);
-                if (hasup == 1) font_list(0x24, 4, x_is + 0x8c, i * 0x13 + 0x39, font1, 0x10);
-                else            font_list(0x24, 5, x_is + 0x8c, i * 0x13 + 0x39, font1, 0x10);
-                font_no(citysup, 0x20, "%", x_is + 0x8c, i * 0x13 + 0x39, font1, 0x10);
-                font_list(0x24, 6, x_is + 0x8c, i * 0x13 + 0x39, font1, 0x10);
+                font_no(availability, 0x20, " ", 0x8c, count * 0x13 + 0x39, font1, 0x10);
+                if (availability == 1) font_list(0x24, 4, x_is + 0x8c, count * 0x13 + 0x39, font1, 0x10);
+                else                   font_list(0x24, 5, x_is + 0x8c, count * 0x13 + 0x39, font1, 0x10);
+                font_no(supply_percent, 0x20, "%", x_is + 0x8c, count * 0x13 + 0x39, font1, 0x10);
+                font_list(0x24, 6, x_is + 0x8c, count * 0x13 + 0x39, font1, 0x10);
             }
         }
     }
