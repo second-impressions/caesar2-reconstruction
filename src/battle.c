@@ -1629,7 +1629,7 @@ void sf01_wait(void)
     figure_list[figure_no].wf_step_x    = 0;
     figure_list[figure_no].is_routing   = 0;
     figure_list[figure_no].state_idx    = figure_list[figure_no].next_state_idx;
-#if C2_FEAT_WAIT_KEEP_VISIBLE
+#if PLATFORM_WINDOWS
     figure_list[figure_no].is_visible  &= 0xfd;
 #else
     figure_list[figure_no].is_visible  &= 0xfc;

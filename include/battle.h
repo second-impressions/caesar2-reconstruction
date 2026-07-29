@@ -1,21 +1,12 @@
 #ifndef C2_BATTLE_DECLS_H
 #define C2_BATTLE_DECLS_H
 
-/*
- * Watcom allocates file-scope symbols from 25-entry symbol pages.  These
- * declarations reconstruct the four pages visible in battle.c's two PS BSS
- * hash runs.  The non-owned declarations are real battle state consumed by
- * this translation unit; they occupy the otherwise invisible header slots.
- */
-
-/* Page 0: high-hash tail of the second owned dword run. */
 extern int bat_no;
 extern int bat_width;
 extern int yrear;
 extern int xright_back;
 extern int yback;
 
-/* Page 1: low-hash head of the second run plus battle-state header slots. */
 extern int xright_front;
 extern int bat_control;
 extern int bat_size;
@@ -42,7 +33,6 @@ extern int battle_stats_morale;
 extern int battle_stats_nof_units;
 extern int battle_stats_start_men;
 
-/* Page 2: remainder of the first run plus both armies' live state. */
 extern int bat_order;
 extern int bat_ai_trig_count;
 extern int first_rear;
@@ -71,7 +61,6 @@ extern int their_battle_units;
 extern int their_battle_stance;
 extern int retreat_flag;
 
-/* Page 3: low-hash head emitted first. */
 extern int bat_attack_rate;
 
 extern short figure_a;
