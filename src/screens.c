@@ -208,23 +208,6 @@ extern void draw_window_buffer(unsigned char *dest, int dest_x, int dest_y,
 extern void window_font_list(int idx, int word_count, int x, int y,
                              unsigned char *font, int color,
                              unsigned char *buffer);
-extern void show_window_ov_legend(void);
-extern unsigned char colour_cycle_delay1(int delay_ms);
-extern void window_pulse_red(int idx, int delta);
-extern void continue_db(void);
-struct screen_message {
-    void *window;
-    unsigned int message;
-    unsigned int wparam;
-    long lparam;
-    unsigned int time;
-    long x;
-    long y;
-};
-extern int (__stdcall *PeekMessageA)(struct screen_message *message,
-                                    void *window, unsigned int min_message,
-                                    unsigned int max_message,
-                                    unsigned int remove_message);
 #endif
 
 // Set up the in-battle UI screen.
@@ -3014,6 +2997,26 @@ void show_ov_bar(void)
     }
 #endif
 }
+
+#if PLATFORM_WINDOWS
+extern void show_window_ov_legend(void);
+extern unsigned char colour_cycle_delay1(int delay_ms);
+extern void window_pulse_red(int idx, int delta);
+extern void continue_db(void);
+struct screen_message {
+    void *window;
+    unsigned int message;
+    unsigned int wparam;
+    long lparam;
+    unsigned int time;
+    long x;
+    long y;
+};
+extern int (__stdcall *PeekMessageA)(struct screen_message *message,
+                                    void *window, unsigned int min_message,
+                                    unsigned int max_message,
+                                    unsigned int remove_message);
+#endif
 
 // Draw the legend for the active city analysis overlay.
 // FUNCTION: C2 0x62462
