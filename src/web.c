@@ -148,10 +148,10 @@ int get_web_regroad_dircs(void)
 int get_aqua_start_node(int x, int y)
 {
     web_start_x = x;
-    web_x       = x;
+    web_x       = web_start_x;
     web_start_y = y;
-    web_y       = y;
-    web_ptr     = (x + y * 80) * 20;
+    web_y       = web_start_y;
+    web_ptr     = (web_x + web_y * 80) * 20;
     if ((CM_CELL(web_ptr).terrain & 0xc0) == 0) return 0;
     web_nof_dircs = get_web_aqua_dircs();
     web[0].kind   = 4;
@@ -161,7 +161,8 @@ int get_aqua_start_node(int x, int y)
     CM_CELL(web_ptr).edge_bits |= 0x20;
     CM_CELL(web_ptr).range_flag &= 0xfc;
     CM_CELL(web_ptr).extra_edge = CM_CELL(web_ptr).building;
-    web_first_actual_node = ((CM_CELL(web_ptr).terrain & 0x80) == 0);
+    if (CM_CELL(web_ptr).terrain & 0x80) web_first_actual_node = 0;
+    else web_first_actual_node = 1;
     web_node_count   = 1;
     web_total_length = 1;
     return 1;
