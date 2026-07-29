@@ -3516,206 +3516,212 @@ void show_general_query_panel(void)
 // FUNCTION: C2WIN 0x0042b5ad
 void show_query_house_advice(void)
 {
-    int next_lv;
-    int demote_lv;
-    int word;
+    int next_promotion_level;
+    int demote_level;
+    int advice_id;
 
-    next_lv = (((signed char *)promotion_av_levels)[q_type * 2 + 0x186]);
-    demote_lv = (((signed char *)promotion_av_levels)[q_type * 2 + 0x187]);
+#if PLATFORM_WINDOWS
+#define HOUSE_PROMOTION_LEVELS (((signed char *)province_completion_to_promotion) + 4)
+#else
+#define HOUSE_PROMOTION_LEVELS (((signed char *)promotion_av_levels) + 0x186)
+#endif
+    next_promotion_level = HOUSE_PROMOTION_LEVELS[q_type * 2];
+    demote_level = HOUSE_PROMOTION_LEVELS[q_type * 2 + 1];
+#undef HOUSE_PROMOTION_LEVELS
 
-    if (q_lv > demote_lv)              { word = 0x57; goto render; }
+    if (q_lv > demote_level)           { advice_id = 0x57; goto render; }
     if (!q_aqua && !q_sub_aqua) {
-        if (q_lv == 2)                  word = 0x3d;
-        else                                word = 0x3c;
+        if (q_lv == 2)                 advice_id = 0x3d;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_admin) {
-        if (q_lv == 6)                  word = 0x3e;
-        else                                word = 0x3c;
+        if (q_lv == 6)                 advice_id = 0x3e;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_business) {
-        if (q_lv == 0xa)                word = 0x40;
-        else                                word = 0x3c;
+        if (q_lv == 0xa)               advice_id = 0x40;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_market) {
-        if (q_lv == 0xc)                word = 0x3f;
-        else                                word = 0x3c;
+        if (q_lv == 0xc)               advice_id = 0x3f;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_aqua) {
-        if (q_lv == 0xe)                word = 0x41;
-        else                                word = 0x3c;
+        if (q_lv == 0xe)               advice_id = 0x41;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_business_low) {
-        if (q_lv == 0x10)               word = 0x4f;
-        else                                word = 0x3c;
+        if (q_lv == 0x10)              advice_id = 0x4f;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_baths) {
-        if (q_lv == 0x12)               word = 0x42;
-        else                                word = 0x3c;
+        if (q_lv == 0x12)              advice_id = 0x42;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_entertainment) {
-        if (q_lv == 0x14)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x14)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_barracks) {
-        if (q_lv == 0x18)               word = 0x44;
-        else                                word = 0x3c;
+        if (q_lv == 0x18)              advice_id = 0x44;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_security) {
-        if (q_lv == 0x18)               word = 0x45;
-        else                                word = 0x3c;
+        if (q_lv == 0x18)              advice_id = 0x45;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_business_vlow) {
-        if (q_lv == 0x1a)               word = 0x50;
-        else                                word = 0x3c;
+        if (q_lv == 0x1a)              advice_id = 0x50;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 1) {
-        if (q_lv == 0x1a)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x1a)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_wall) {
-        if (q_lv == 0x1a)               word = 0x46;
-        else                                word = 0x3c;
+        if (q_lv == 0x1a)              advice_id = 0x46;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 2) {
-        if (q_lv == 0x1c)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x1c)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_gate) {
-        if (q_lv == 0x1e)               word = 0x47;
-        else                                word = 0x3c;
+        if (q_lv == 0x1e)              advice_id = 0x47;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (hospital_cover < 0x14) {
-        if (q_lv == 0x1e)               word = 0x4a;
-        else                                word = 0x3c;
+        if (q_lv == 0x1e)              advice_id = 0x4a;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 3) {
-        if (q_lv == 0x20)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x20)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_grammaticus) {
-        if (q_lv == 0x22)               word = 0x48;
-        else                                word = 0x3c;
+        if (q_lv == 0x22)              advice_id = 0x48;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_prefecture) {
-        if (q_lv == 0x22)               word = 0x49;
-        else                                word = 0x3c;
+        if (q_lv == 0x22)              advice_id = 0x49;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (hospital_cover < 0x28) {
-        if (q_lv == 0x24)               word = 0x4a;
-        else                                word = 0x3c;
+        if (q_lv == 0x24)              advice_id = 0x4a;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 4) {
-        if (q_lv == 0x26)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x26)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_near_market) {
-        if (q_lv == 0x28)               word = 0x4c;
-        else                                word = 0x3c;
+        if (q_lv == 0x28)              advice_id = 0x4c;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_security <= 1) {
-        if (q_lv == 0x2a)               word = 0x4d;
-        else                                word = 0x3c;
+        if (q_lv == 0x2a)              advice_id = 0x4d;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (hospital_cover < 0x3c) {
-        if (q_lv == 0x2c)               word = 0x4a;
-        else                                word = 0x3c;
+        if (q_lv == 0x2c)              advice_id = 0x4a;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 5) {
-        if (q_lv == 0x2c)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x2c)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (!q_rhetor) {
-        if (q_lv == 0x2e)               word = 0x4b;
-        else                                word = 0x3c;
+        if (q_lv == 0x2e)              advice_id = 0x4b;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (library_cover < 0x14) {
-        if (q_lv == 0x2e)               word = 0x4e;
-        else                                word = 0x3c;
+        if (q_lv == 0x2e)              advice_id = 0x4e;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 6) {
-        if (q_lv == 0x30)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x30)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (library_cover < 0x28) {
-        if (q_lv == 0x32)               word = 0x4e;
-        else                                word = 0x3c;
+        if (q_lv == 0x32)              advice_id = 0x4e;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (hospital_cover < 0x50) {
-        if (q_lv == 0x34)               word = 0x4a;
-        else                                word = 0x3c;
+        if (q_lv == 0x34)              advice_id = 0x4a;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (library_cover < 0x3c) {
-        if (q_lv == 0x36)               word = 0x4e;
-        else                                word = 0x3c;
+        if (q_lv == 0x36)              advice_id = 0x4e;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 7) {
-        if (q_lv == 0x38)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x38)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (hospital_cover < 0x64) {
-        if (q_lv == 0x3a)               word = 0x4a;
-        else                                word = 0x3c;
+        if (q_lv == 0x3a)              advice_id = 0x4a;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (library_cover < 0x50) {
-        if (q_lv == 0x3a)               word = 0x4e;
-        else                                word = 0x3c;
+        if (q_lv == 0x3a)              advice_id = 0x4e;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_entertainment <= 8) {
-        if (q_lv == 0x3c)               word = 0x43;
-        else                                word = 0x3c;
+        if (q_lv == 0x3c)              advice_id = 0x43;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (library_cover < 0x64) {
-        if (q_lv == 0x3e)               word = 0x4e;
-        else                                word = 0x3c;
+        if (q_lv == 0x3e)              advice_id = 0x4e;
+        else                           advice_id = 0x3c;
         goto render;
     }
     if (q_lv < 0x40) {
-        word = 0x3c;
+        advice_id = 0x3c;
         goto render;
     }
-    word = 0x51;
+    advice_id = 0x51;
 
 render:
-    font_format_split(0x3d, word, 0x38,
+    font_format_split(0x3d, advice_id, 0x38,
                       (query_panel_reduction + 9) * 0x10 + 0x20,
                       0x160, 0x64, 0, 0, font1, 0x10);
 
-    if (q_lv < next_lv) {
+    if (q_lv < next_promotion_level) {
         font_list(0x3d, 0x56, 0x48,
                   query_panel_reduction * 0x10 + 0x88, font1, 0xd);
     }
