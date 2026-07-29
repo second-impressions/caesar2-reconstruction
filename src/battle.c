@@ -1289,6 +1289,9 @@ void get_start_points(int deployment_idx)
     }
 }
 
+int swap_2_figures(void);
+int get_fire_target(int fig_no);
+
 // Return a figure's horizontal offset within a formation.
 // FUNCTION: C2 0x4d7d3
 // FUNCTION: C2WIN 0x004771f6
@@ -1309,12 +1312,9 @@ int get_x_spacing(int row_spacing, int formation_cols, int position)
 // FUNCTION: C2WIN 0x0047726b
 int get_y_spacing(int row_spacing, int formation_cols, int position, int side)
 {
-    if (formation_cols <= 1)
-        return 0;
-    if (formation_cols <= 2)
-        return (position % 2) * row_spacing * side;
-    if (formation_cols <= 3)
-        return (position % 3) * row_spacing * side;
+    if (formation_cols <= 1) return 0;
+    if (formation_cols <= 2) return (position % 2) * row_spacing * side;
+    if (formation_cols <= 3) return (position % 3) * row_spacing * side;
     else
         return (position % 4) * row_spacing * side;
 }
@@ -2214,6 +2214,14 @@ void arrow_intelligence(void)
 }
 
 int test_reform_pattern(int unit_ref, int formation);
+void init_bd(int start_x, int start_y, int end_x, int end_y);
+int nearest_formation_enemy(void);
+int find_nearest_enemy(void);
+int find_adjacent_target(void);
+int arrow_off_map(void);
+void general_reform(int formation);
+void update_units_ai(void);
+void set_unit_to_fight(int start_fig);
 
 // Deselect the player's selected unit or reform a selected enemy unit for the current map mode.
 // FUNCTION: C2 0x4f27d
@@ -2253,8 +2261,7 @@ void reform(int unit_ref, int mode, int force)
   int unit_y;
   unit_list[unit_ref].formation_mode = mode;
   pos = 0;
-  unit_x = unit_list[unit_ref].x;
-  unit_y = unit_list[unit_ref].y;
+  unit_x = unit_list[unit_ref].x; unit_y = unit_list[unit_ref].y;
   for (temp_figure = unit_list[unit_ref].first_figure; temp_figure <= unit_list[unit_ref].last_figure; temp_figure++)
   {
     if (figure_list[temp_figure].exists != 0)
@@ -2267,8 +2274,7 @@ void reform(int unit_ref, int mode, int force)
         figure_list[temp_figure].offset_x = x_bit;
         figure_list[temp_figure].offset_y = y_bit;
         figure_list[temp_figure].shield_class = mode;
-        if (force != 0)
-          figure_list[temp_figure].state_idx = 7;
+        if (force != 0) figure_list[temp_figure].state_idx = 7;
         if (figure_list[temp_figure].state_idx == 0xc)
           figure_list[temp_figure].state_idx = 7;
       }
@@ -2346,8 +2352,7 @@ int test_reform_pattern(int unit_ref, int dir)
     if (dir == 3)
         return 1;
     position = 0;
-    unit_x = unit_list[unit_ref].x;
-    unit_y = unit_list[unit_ref].y;
+    unit_x = unit_list[unit_ref].x; unit_y = unit_list[unit_ref].y;
     for (temp_figure = unit_list[unit_ref].first_figure;
          temp_figure <= unit_list[unit_ref].last_figure;
          temp_figure++) {
@@ -2359,8 +2364,7 @@ int test_reform_pattern(int unit_ref, int dir)
             cell_off += (unit_y + y_bit) * BATTLE_ROW;
             occupant_idx = ((unsigned char *)battle_map)[cell_off + 1];
             position++;
-            if (cell_off >= nomansland_ptr)
-                return 0;
+            if (cell_off >= nomansland_ptr) return 0;
             if (occupant_idx == 0)
                 continue;
             if (figure_list[occupant_idx].unit_ref != figure_list[temp_figure].unit_ref) {
@@ -2693,10 +2697,8 @@ void set_figure_map_refresh(int grid_x, int grid_y, int offset_x, int offset_y,
     int map_pos;
     int row_stride;
 
-    x_from = grid_x + offset_x - radius;
-    y_begin = grid_y + offset_y - radius;
-    last_bound = (grid_x + offset_x + extra_size) + radius;
-    bottom_row = (grid_y + offset_y + extra_size) + radius;
+    x_from = grid_x + offset_x - radius; y_begin = grid_y + offset_y - radius;
+    last_bound = (grid_x + offset_x + extra_size) + radius; bottom_row = (grid_y + offset_y + extra_size) + radius;
 
     if (x_from < 0) x_from = 0;
     if (last_bound >= 0x34) last_bound = 0x33;
@@ -2707,10 +2709,10 @@ void set_figure_map_refresh(int grid_x, int grid_y, int offset_x, int offset_y,
     row_stride = (0x34 - ((last_bound - x_from) + 1)) * 4;
     for (y = y_begin; y <= bottom_row; ++y, map_pos += row_stride) {
         for (x = x_from; x <= last_bound; ++x, map_pos += 4) {
-            ((unsigned char *)battle_map)[map_pos + 2] |= 2;
-        }
-    }
+            ((unsigned char *)battle_map)[map_pos + 2] |= 2; } }
 }
+
+void clear_arrow(struct arrow_rec *record_ptr);
 
 // Set the new projectile's firing range and speed from its `weapon_kind`.
 // FUNCTION: C2 0x4ff22
@@ -2786,15 +2788,11 @@ void do_light_ai(void)
         int berserk_tick;
 
         unit_list[temp_unit].ai_tick = 0;
-        if (unit_list[temp_unit].unit_rank == 2) {
-            berserk_tick = 60;
-        } else {
-            berserk_tick = 30;
+        if (unit_list[temp_unit].unit_rank == 2) { berserk_tick = 60;
+        } else { berserk_tick = 30;
         }
-        if (berserk_tick <= battle_ai_count) {
-            set_ai_unit_beserk();
-        } else {
-            set_ai_unit_auto_fire();
+        if (berserk_tick <= battle_ai_count) { set_ai_unit_beserk();
+        } else { set_ai_unit_auto_fire();
         }
     }
 }
