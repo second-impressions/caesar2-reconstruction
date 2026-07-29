@@ -933,7 +933,7 @@ struct arrow_rec {
                                                 set_missile_fire_range to drive
                                                 fire_range (+0x20) and
                                                 fire_speed (+0x25). */
-    char           heading;          /* +0x27 */
+    unsigned char  heading;          /* +0x27 */
     unsigned char  owner;            /* +0x28  owner_id of the figure that
                                                 fired this arrow; checked in
                                                 fly_to_target friend/foe
