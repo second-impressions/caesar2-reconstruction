@@ -2224,14 +2224,16 @@ void show_mercs(void)
 {
     if (max_mercs_allowed != 0) {
         show_a_mosaic_blank(0x16, 0x9c, 0xa, 3);
+#if !PLATFORM_WINDOWS
         setup_refresh_area(0x16, 0x9c, 0xb, 4, 2);
+#endif
 
         x_is = 0;
         font_no(mercs_in_army, 0x20, " ", 0x18, 0x9e, font1, 0x10);
         font_list(0x23, 0x1f, x_is + 0x18, 0x9e, font1, 0x10);
 
         x_is = 0;
-        font_list(7,    mercs_from,        0x18, 0xae, font1, 0x10);
+        font_list(7,    mercs_from,        x_is + 0x18, 0xae, font1, 0x10);
         font_list(0x47, mercs_type + 0xa,  x_is + 0x18, 0xae, font1, 0x10);
 
         x_is = 0;
