@@ -72,4 +72,8 @@ extern int retreat_flag;
 /* Page 3: low-hash head emitted first. */
 extern int bat_attack_rate;
 
+extern short figure_a;
+extern short figure_no;
+extern short temp_figure;
+
 #endif /* C2_BATTLE_DECLS_H */

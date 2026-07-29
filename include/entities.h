@@ -35,11 +35,12 @@
 extern struct figure_rec figure_list[];
 extern struct citizen_rec citizen_list[];
 extern struct unit_rec unit_list[];
-extern struct arrow_rec arrow_list[];
 extern struct army_rec army_list[];
 extern struct army_route_rec army_routes[];
 extern struct web_node web[];
 extern struct province_industry province_industries[];
+extern int pseudo_map[][81];
+extern struct arrow_rec arrow_list[];
 extern struct mercs_class      mercenary_type[];
 extern struct industry_rec     industry[];
 /* Map dimensions and strides used pervasively in the code base.
@@ -90,8 +91,6 @@ extern struct industry_rec     industry[];
 
 /* city_map / region_map / battle_map are declared as struct <cell>[] after
  * each cell struct's definition (below). */
-extern          int  pseudo_map[PM_H][PM_W];
-
 /* Map cells are accessed by inline byte offset, not via macros or a
  * cached struct pointer (a cached `struct *` materialises the cell base
  * in a register and diverges from PS's folded `[base + disp32]`).  The
@@ -911,7 +910,7 @@ struct arrow_rec {
                                                  fly_to_target via movsx).
                                                 Values seen: 30, 40, 60, 70. */
     char           flight_done;      /* +0x21  cleared before fly_to_target */
-    char           axis_dominant;     /* +0x22  Bresenham axis tag set by
+    unsigned char  axis_dominant;     /* +0x22  Bresenham axis tag set by
                                                 init_bd: 2 = vertical-dominant
                                                 (dy>dx), 1 = horizontal-or-
                                                 equal.  Read by bd() to choose
@@ -935,7 +934,7 @@ struct arrow_rec {
                                                 fire_range (+0x20) and
                                                 fire_speed (+0x25). */
     char           heading;          /* +0x27 */
-    char           owner;            /* +0x28  owner_id of the figure that
+    unsigned char  owner;            /* +0x28  owner_id of the figure that
                                                 fired this arrow; checked in
                                                 fly_to_target friend/foe
                                                 filter (fig->owner ==

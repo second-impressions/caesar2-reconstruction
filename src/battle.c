@@ -2343,6 +2343,7 @@ int find_adjacent_target(void);
 void set_ai_unit_move(int offset_x, int offset_y);
 void set_ai_unit_withdraw(int offset_x, int offset_y);
 void set_missile_fire_range(int weapon_kind);
+void set_ai_flank_move(int flank_mode);
 
 // Test whether a unit can use the requested `formation` at its current position.
 // FUNCTION: C2 0x4f5e0
@@ -2380,7 +2381,6 @@ int test_reform_pattern(int unit_ref, int dir)
     return 1;
 }
 
-void set_ai_flank_move(int flank_mode);
 void drop_all_units_morale(int match_type, int morale_a_delta, int morale_b_delta);
 void raise_all_units_morale(int skip_type, int morale_a_delta, int morale_b_delta);
 void set_unit_to_rout(int unit_idx);
@@ -3841,17 +3841,16 @@ int get_wf_dirc(int search_mode)
 // FUNCTION: C2WIN 0x004809d7
 void fly_to_target(void)
 {
-    int step_idx;
-    int range_bonus;
-    int damage;
+    int i;
+    int score;
 
-    arrow_list[arrow_no].flight_age = arrow_list[arrow_no].flight_age + 1;
+    arrow_list[arrow_no].flight_age++;
     if (arrow_list[arrow_no].flight_age > arrow_list[arrow_no].fire_speed) {
         clear_arrow(&arrow_list[arrow_no]);
         return;
     }
 
-    for (step_idx = 0; step_idx < 2; step_idx++) {
+    for (i = 0; i < 2; i++) {
         if (arrow_list[arrow_no].step_x + arrow_list[arrow_no].step_y <= 0) {
             loose_arrow_move();
         } else {
@@ -3878,48 +3877,47 @@ void fly_to_target(void)
 
         arrow_list[arrow_no].grid_x = arrow_list[arrow_no].start_x / 7;
         arrow_list[arrow_no].grid_y = arrow_list[arrow_no].start_y / 7;
-        arrow_list[arrow_no].map_ref = (arrow_list[arrow_no].grid_y * 0x34 + arrow_list[arrow_no].grid_x) * 4;
+        arrow_list[arrow_no].map_ref = (arrow_list[arrow_no].grid_x + arrow_list[arrow_no].grid_y * 0x34) * 4;
 
         enemy_figure = ((unsigned char *)battle_map)[arrow_list[arrow_no].map_ref + 1];
-        if (enemy_figure == 0) continue;
-        if (figure_list[enemy_figure].state_idx == 2) continue;
-        if (figure_list[enemy_figure].owner == arrow_list[arrow_no].owner) continue;
+        if (enemy_figure != 0
+            && figure_list[enemy_figure].state_idx != 2) {
+            if (figure_list[enemy_figure].owner != arrow_list[arrow_no].owner) {
 
-        temp_unit = figure_list[enemy_figure].unit_ref;
-        unit_list[temp_unit].fatigue++;
+                temp_unit = figure_list[enemy_figure].unit_ref;
+                unit_list[temp_unit].fatigue += 1;
 
-        range_bonus = (arrow_list[arrow_no].fire_speed - arrow_list[arrow_no].flight_age) / 4;
-        damage = (arrow_list[arrow_no].fire_range + range_bonus) / 0x14;
+                score = (arrow_list[arrow_no].fire_range
+                    + (arrow_list[arrow_no].fire_speed - arrow_list[arrow_no].flight_age) / 4) / 0x14;
 
-        if (figure_list[enemy_figure].defense > 0) {
-            if (figure_list[enemy_figure].sub_state > 2) damage--;
-            if (figure_list[enemy_figure].is_defending != 0 && figure_list[enemy_figure].shield_class == 2)
-                damage--;
-        }
-        if (damage > 0) {
-            figure_list[enemy_figure].kill_counter += damage;
-            if (figure_list[enemy_figure].kill_counter >= 0xa) {
-                figure_list[enemy_figure].kill_counter = 0;
-                figure_list[enemy_figure].stampede_flag--;
-                set_missile_fight_fx(arrow_list[arrow_no].weapon_kind);
+                if (figure_list[enemy_figure].defense > 0) {
+                    if (figure_list[enemy_figure].sub_state > 2) score--;
+                    if (figure_list[enemy_figure].is_defending != 0 && figure_list[enemy_figure].shield_class == 2)
+                        score--;
+                }
+                if (score > 0) {
+                    figure_list[enemy_figure].kill_counter += score;
+                    if (figure_list[enemy_figure].kill_counter >= 0xa) {
+                        figure_list[enemy_figure].kill_counter = 0;
+                        figure_list[enemy_figure].stampede_flag--;
+                        set_missile_fight_fx(arrow_list[arrow_no].weapon_kind);
+                    }
+                    if (figure_list[enemy_figure].stampede_flag <= 0) {
+                        figure_list[enemy_figure].stampede_flag = 0;
+                        figure_list[enemy_figure].state_idx = 2;
+                    }
+                }
+
+                clear_arrow(&arrow_list[arrow_no]);
             }
-            if (figure_list[enemy_figure].stampede_flag <= 0) {
-                figure_list[enemy_figure].stampede_flag = 0;
-                figure_list[enemy_figure].state_idx = 2;
-            }
         }
-
-        clear_arrow(&arrow_list[arrow_no]);
     }
 
-    {
-        int cell_offset;
-        cell_offset = arrow_list[arrow_no].map_ref; arrow_a = ((unsigned char *)battle_map)[cell_offset + 3];
-        if (arrow_a != 0) {
-            arrow_list[arrow_a].flight_done = arrow_no;
-        } else {
-            ((unsigned char *)battle_map)[cell_offset + 3] = arrow_no;
-        }
+    arrow_a = ((unsigned char *)battle_map)[arrow_list[arrow_no].map_ref + 3];
+    if (arrow_a != 0) {
+        arrow_list[arrow_a].flight_done = arrow_no;
+    } else {
+        ((unsigned char *)battle_map)[arrow_list[arrow_no].map_ref + 3] = arrow_no;
     }
 }
 
