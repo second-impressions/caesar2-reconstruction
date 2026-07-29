@@ -51,17 +51,6 @@ void show_peace_level(void);
 void show_skill_level(void);
 void show_directory(int scroll_top);
 void background_screen(void);
-void show_tax_rates(void);
-void show_accounts(void);
-void show_estimate(void);
-void show_personal_cash_stats(void);
-void show_donation_level(void);
-void show_gift_amount(int gift_index);
-void basic_temple_screen(void);
-void show_temple_tip(void);
-void history_selection(void);
-void history_graphs(void);
-void basic_empire_screen(void);
 void show_regions_in_empire(void);
 void show_regions_on_offer(void);
 void show_empire_top_slab(void);
@@ -1250,6 +1239,18 @@ void show_directory(int scroll_top)
         if (no >= 0x13) break;
     }
 }
+
+void basic_empire_screen(void);
+void show_tax_rates(void);
+void show_accounts(void);
+void show_estimate(void);
+void show_personal_cash_stats(void);
+void show_donation_level(void);
+void show_gift_amount(int gift_index);
+void basic_temple_screen(void);
+void show_temple_tip(void);
+void history_selection(void);
+void history_graphs(void);
 
 // Load the forum artwork, palette, and department explanation panels.
 // FUNCTION: C2 0x5da18
