@@ -1776,49 +1776,44 @@ ret2:
 // FUNCTION: C2WIN 0x0040a702
 void handle_collision(int other_idx)
 {
-    int citizen_type;
-
     if (citizen_list[citizen_no].state_idx == 2) return;
-    citizen_type = citizen_list[citizen_no].type;
-    if (citizen_type == 4 || citizen_type == 5) {
+    if (citizen_list[citizen_no].type == 4
+        || citizen_list[citizen_no].type == 5) {
         if (citizen_list[other_idx].type == 3) {
             fight_barbarian(other_idx);
-            return;
-        }
-        if (citizen_list[other_idx].type == 7) {
+        } else if (citizen_list[other_idx].type == 7) {
             citizen_list[other_idx].state_idx = 2;
+        } else {
             return;
         }
         return;
     }
-    if (citizen_type == 7) {
+    if (citizen_list[citizen_no].type == 7) {
         if (citizen_list[other_idx].type == 3) {
             citizen_list[citizen_no].state_idx = 2;
-            return;
-        }
-        if (citizen_list[other_idx].type == 4) {
+        } else if (citizen_list[other_idx].type == 4) {
             citizen_list[citizen_no].state_idx = 2;
-            return;
-        }
-        if (citizen_list[other_idx].type == 5) {
+        } else if (citizen_list[other_idx].type == 5) {
             citizen_list[citizen_no].state_idx = 2;
+        } else if (citizen_list[other_idx].type == 7) {
             return;
-        }
-        if (citizen_list[other_idx].type != citizen_type)
+        } else {
             citizen_list[other_idx].state_idx = 2;
+        }
         return;
     }
-    if (citizen_type == 3) {
-        if (citizen_list[other_idx].type == citizen_type) return;
-        if (citizen_list[other_idx].type == 4) {
-            fight_centurian(other_idx);
+    if (citizen_list[citizen_no].type == 3) {
+        if (citizen_list[other_idx].type == 3) {
             return;
+        } else {
+            if (citizen_list[other_idx].type == 4) {
+                fight_centurian(other_idx);
+            } else if (citizen_list[other_idx].type == 5) {
+                fight_centurian(other_idx);
+            } else {
+                citizen_list[other_idx].state_idx = 2;
+            }
         }
-        if (citizen_list[other_idx].type == 5) {
-            fight_centurian(other_idx);
-            return;
-        }
-        citizen_list[other_idx].state_idx = 2;
         return;
     }
     if (citizen_list[other_idx].type == 3) {
@@ -1829,6 +1824,7 @@ void handle_collision(int other_idx)
         citizen_list[citizen_no].state_idx = 2;
         return;
     }
+    return;
 }
 
 // Resolve a centurion or vigile fighting a barbarian and award the patrol citizen experience.
