@@ -705,7 +705,7 @@ int new_army_route_point(void)
 {
     int cell_offset;
     int waypoint_y;
-    char tile_flags;
+    unsigned char tile_flags;
     unsigned char cell_kind;
     int waypoint_x;
 
