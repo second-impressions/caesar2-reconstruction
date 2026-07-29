@@ -641,13 +641,18 @@ void sa00_null(void)
 void sa01_wait(void)
 {
     if (cnt4) return;
-    if (--army_list[army_no].wait_count <= 0) {
+    if (--army_list[army_no].wait_count > 0) {
+    } else {
         army_list[army_no].wait_count   = 5;
         army_list[army_no].target_count      = 0;
         army_list[army_no].target_kind   = 0;
         army_list[army_no].return_flag  = 0;
         army_list[army_no].state_idx    = army_list[army_no].saved_state_idx;
+#if PLATFORM_WINDOWS
+        army_list[army_no].flags       &= 0xFD;
+#else
         army_list[army_no].flags       &= 0xFC;
+#endif
         army_list[army_no].flags       |= 1;
         army_list[army_no].heading      = 5;
         test_for_army_attack();
