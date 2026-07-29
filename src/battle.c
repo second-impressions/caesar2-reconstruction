@@ -98,7 +98,7 @@ void set_missile_fire_range(int weapon_kind);
 void elephant_ai(void);
 void do_light_ai(void);
 void do_heavy_ai(void);
-void set_ai_flank_move(int flank_mode);
+void set_ai_flank_move(int);
 void set_ai_unit_move(int offset_x, int offset_y);
 void set_ai_unit_withdraw(int offset_x, int offset_y);
 void set_ai_unit_beserk(void);
@@ -2804,51 +2804,48 @@ void do_light_ai(void)
 // FUNCTION: C2WIN 0x0047c653
 void do_heavy_ai(void)
 {
-    int wedge_move;
-    int berserk_count;
-    int delayed_berserk;
+    int beserk_count;
+    int delayed_beserk;
     int base_morale;
-    int forward_move;
-    int order;
-    int unit_x;
+    int move_wedge;
+    int forward;
 
-    delayed_berserk = tribe_ai_data[bat_tribe].delayed_berserk;
-    berserk_count = tribe_ai_data[bat_tribe].berserk_count;
+    delayed_beserk = tribe_ai_data[bat_tribe].delayed_berserk;
+    beserk_count = tribe_ai_data[bat_tribe].berserk_count;
     base_morale = tribe_ai_data[bat_tribe].base_morale;
-    wedge_move = tribe_ai_data[bat_tribe].wedge_move;
-    forward_move = tribe_ai_data[bat_tribe].forward_move;
+    move_wedge = tribe_ai_data[bat_tribe].wedge_move;
+    forward = tribe_ai_data[bat_tribe].forward_move;
 
-    /* Wait until the unit's next AI decision tick. */
-    unit_list[temp_unit].ai_tick = (unit_list[temp_unit].ai_tick + 1);
-    if (unit_list[temp_unit].ai_tick < unit_list[temp_unit].ai_period)
+    if (++unit_list[temp_unit].ai_tick < unit_list[temp_unit].ai_period)
         return;
     unit_list[temp_unit].ai_tick = 0;
 
     if (unit_list[temp_unit].target_lock > 2) {
-        if (base_morale != 0 && unit_list[temp_unit].withdraw_flag == 0) set_ai_unit_withdraw(0, 8);
+        if (base_morale == 0)
+            return;
+        if ((unsigned char)unit_list[temp_unit].withdraw_flag != 0)
+            return;
+        set_ai_unit_withdraw(0, 8);
+        return; } if (unit_list[temp_unit].combat_order == 0xa) {
+        return;
+    } else if (unit_list[temp_unit].combat_order == 8) {
+        return;
+    } else if (delayed_beserk == 1) { set_ai_unit_delayed_beserk();
+    } else if (battle_ai_count >= beserk_count) { set_ai_unit_beserk();
+    } else if (unit_list[temp_unit].flank_pending == 1) { set_ai_flank_move(1); unit_list[temp_unit].flank_pending = 0; return;
+    } else if (unit_list[temp_unit].flank_pending == 2) { set_ai_flank_move(2); unit_list[temp_unit].flank_pending = 0; return;
+    } else if (unit_list[temp_unit].flank_pending == 3) { set_ai_flank_move(3); unit_list[temp_unit].flank_pending = 0; return;
+    } else if (unit_list[temp_unit].flank_pending == 4) { set_ai_flank_move(4); unit_list[temp_unit].flank_pending = 0; return;
+    } else if ((unsigned char)unit_list[temp_unit].manoeuvre_done == 0
+               && move_wedge != 0) {
+        if ((unsigned char)unit_list[temp_unit].x < 0x12) { set_ai_unit_move(8, -12); return;
+        } else if ((unsigned char)unit_list[temp_unit].x > 0x1e) { set_ai_unit_move(-10, -12); return;
+        }
+        set_ai_unit_move(0, -18);
+        return;
+    } else if ((unsigned char)unit_list[temp_unit].manoeuvre_done == 0 && forward != 0) { set_ai_unit_move(0, -4); unit_list[temp_unit].manoeuvre_done = 0;
         return;
     }
-
-    order = unit_list[temp_unit].combat_order;
-    if (order == 0xa || order == 8) return;
-
-    if (delayed_berserk == 1) { set_ai_unit_delayed_beserk(); return; }
-    if (berserk_count <= battle_ai_count) { set_ai_unit_beserk(); return; }
-
-    order = unit_list[temp_unit].flank_pending;
-    if (order == 1) { set_ai_flank_move(order); unit_list[temp_unit].flank_pending = 0; return; }
-    if (order == 2) { set_ai_flank_move(order); unit_list[temp_unit].flank_pending = 0; return; }
-    if (order == 3) { set_ai_flank_move(order); unit_list[temp_unit].flank_pending = 0; return; }
-    if (order == 4) { set_ai_flank_move(order); unit_list[temp_unit].flank_pending = 0; return; }
-
-    if (unit_list[temp_unit].manoeuvre_done == 0 && wedge_move != 0) {
-        unit_x = unit_list[temp_unit].x; if (unit_x < 0x12) set_ai_unit_move(8, -12);
-        else if (unit_x > 0x1e) set_ai_unit_move(-10, -12);
-        else set_ai_unit_move(0, -18);
-        return;
-    }
-
-    if (unit_list[temp_unit].manoeuvre_done != 0) return; if (forward_move == 0) return; set_ai_unit_move(0, -4); unit_list[temp_unit].manoeuvre_done = 0;
 }
 
 // Position every figure of temp_unit in a flank-line or flank-column formation. `flank_mode` selects the
@@ -4360,10 +4357,7 @@ int find_nearest_target(int max_distance)
                                     figure_list[temp_figure].grid_x,
                                     figure_list[temp_figure].grid_y);
             if (distance > max_distance) continue;
-            if (distance < best_distance) {
-                best_distance = distance;
-                best_figure_idx = temp_figure;
-            }
+            if (distance < best_distance) { best_distance = distance; best_figure_idx = temp_figure; }
         }
     }
     if (best_figure_idx == 0) return 0;
