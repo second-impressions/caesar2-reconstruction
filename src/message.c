@@ -8,6 +8,12 @@ extern void put_a_font_string(char *str, int x, int y, unsigned char *font, int 
 extern void font_list(int idx, int word_count, int x, int y, unsigned char *font, int color);
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
 extern void font_format_split(int idx, int word_skip, int x, int y_start, int max_width, int line_limit, int x_overflow, int max_width_overflow, unsigned char *font, int color);
+#if PLATFORM_WINDOWS
+extern unsigned char *message_screen;
+extern unsigned char *game_screen;
+extern void start_windows_smacking(char *filename, int x, int y, int mode,
+                                   unsigned char *screen);
+#endif
 
 // Globals owned by this translation unit
 struct request_message  request_message;
@@ -218,10 +224,18 @@ void message(int message_idx, int is_emperor, int message_param) {
 // FUNCTION: C2 0x595d1
 // FUNCTION: C2WIN 0x0045a701
 void show_basic_message(int message_idx, int message_param) {
+#if PLATFORM_WINDOWS
+    int i;
+#endif
+
+#if PLATFORM_WINDOWS
+    internal_screen = message_screen;
+#else
     cover_mouse_droppings();
     grey_a_screen();
     setup_whole_screen_refresh();
     refresh_svga_screen();
+#endif
     show_a_mosaic_frame(0x50, 0x40, 22, 23);
     show_a_mosaic_blank(0x60, 0x50, 20, 21);
     mosaic_frame_divider(0x50, 0xe8, 22, 23);
@@ -246,8 +260,14 @@ void show_basic_message(int message_idx, int message_param) {
         font_list(0x4f, 1, 0xd0, 0x178, font1, 16);
         show_buttons(0x130, 0x170, goto_mess_buttons, 1);
     }
+#if PLATFORM_WINDOWS
+    internal_screen = game_screen;
+    start_windows_smacking(smacks[message_idx - 0x50], 0x60, 0x50, 1,
+                           message_screen);
+#else
     setup_whole_screen_refresh();
     start_smacking(smacks[message_idx - 0x50], 0x60, 0x50, 1);
+#endif
     hold_mouse_replace = 1;
 }
 
