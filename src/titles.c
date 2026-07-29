@@ -12,6 +12,9 @@ extern void show_map_window(int mode);
 extern void tile_main_window(unsigned char tile);
 extern void play_windows_smacked_anim(char *filename);
 extern int show_native_promotion(void *window, int rank);
+extern void show_native_defeat(void *window);
+extern void redraw_game_windows(void);
+extern void hide_game_windows(void);
 #endif
 /* Forward declarations (functions defined later in this file). */
 void lose_game_screen(void);
@@ -19,8 +22,18 @@ void lose_game_screen(void);
 
 // Shows the defeat screen, waits for a right click, then plays the defeat animation.
 // FUNCTION: C2 0x59f76
+// FUNCTION: C2WIN 0x004ae950
 void do_lose_game(void)
 {
+#if PLATFORM_WINDOWS
+    pointer_mode = 0;
+    stop_tune();
+    show_native_defeat(main_window);
+    redraw_game_windows();
+    play_windows_smacked_anim("losegame.smk");
+    hide_game_windows();
+    tile_main_window(background_tile);
+#else
     pointer_mode = 0;
     stop_tune();
     lose_game_screen();
@@ -34,6 +47,7 @@ void do_lose_game(void)
     }
     stop_db();
     do_vga_smacked_anim("losegame.smk");
+#endif
 }
 
 // Displays the defeat screen and waits for the player to continue.
