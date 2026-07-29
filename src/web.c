@@ -192,31 +192,29 @@ int get_aqua_web(int x, int y)
 // FUNCTION: C2WIN 0x0045147a
 int run_to_new_aqua_node(void)
 {
-    int           steps;
-    unsigned char unused_dx;
+    int steps;
 
     steps = 0;
-    while (1) {
-        steps++;
-        if (steps >= 0x3e8) break;
+    while (++steps < 0x3e8) {
         if      (web_dirc == 1) { web_y--; web_ptr -= 0x640; }
         else if (web_dirc == 2) { web_x++; web_ptr += 0x14;  }
         else if (web_dirc == 4) { web_y++; web_ptr += 0x640; }
         else if (web_dirc == 8) { web_x--; web_ptr -= 0x14;  }
         web_nof_dircs = get_web_aqua_dircs();
         if ((CM_CELL(web_ptr).edge_bits & 0x20) == 0) web_total_length++;
-        CM_CELL(web_ptr).edge_bits   |= 0x21;
+        CM_CELL(web_ptr).edge_bits   |= 0x20;
         CM_CELL(web_ptr).range_flag &= 0xfc;
         CM_CELL(web_ptr).extra_edge    = CM_CELL(web_ptr).building;
+        CM_CELL(web_ptr).edge_bits   |= 1;
         if (CM_CELL(web_ptr).terrain & 0x80) {
             put_new_node();
             return 1;
         }
         if (web_x == web_start_x && web_y == web_start_y) {
             web[0].from_dir |= web_from;
-            break;
+            return 0;
         }
-        if (web_nof_dircs <= 1) break;
+        if (web_nof_dircs <= 1) return 0;
         web_directions ^= web_from;
         if      (web_directions & 1) { web_dirc = 1; web_from = 4; }
         else if (web_directions & 2) { web_dirc = 2; web_from = 8; }
