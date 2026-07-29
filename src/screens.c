@@ -1125,7 +1125,9 @@ void show_skill_level(void)
     font_list(0x2b, 1, 0x6a, 0xa8, font1, 0x10);
     font_list(0x2c, c2inf.skill_level, 0x160, 0xa2, font2, 0x10);
     font_list(0x2b, c2inf.skill_level + 2, 0x70, 0xc8, font1, 0x10);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x60, 0x90, 0x1c, 6, 1);
+#endif
 }
 
 // Show the dialog for entering a new player name.
