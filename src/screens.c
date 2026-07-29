@@ -1632,7 +1632,9 @@ void forum_rome_screen(void)
     int favour_word;
 
     cover_mouse_droppings();
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
 
     if (forum_repapering[last_forum_dept] != 0)
         show_pl8file("forum.pl8",
@@ -1656,9 +1658,9 @@ void forum_rome_screen(void)
 
     x_is = 0;
     if (imperial_req_amount == 0) {
-        font_list(0x26, 0x14, 0x20, 0x60, font1, 0x10);
+        font_list(0x26, 0x14, x_is + 0x20, 0x60, font1, 0x10);
     } else {
-        font_list(0x26, 0x15, 0x20, 0x60, font1, 0x10);
+        font_list(0x26, 0x15, x_is + 0x20, 0x60, font1, 0x10);
         font_no(imperial_req_amount, 0x20, " ",
                 x_is + 0x20, 0x60, font1, 0x10);
         font_list(0x26, 0xf, x_is + 0x20, 0x60, font1, 0x10);
