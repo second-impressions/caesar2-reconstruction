@@ -242,7 +242,7 @@ int get_web_aqua_dircs(void)
     web_directions = 0;
     if (web_y > 0) {
         if (CM_CELL((web_ptr - 80 * CITY_CELL_BYTES)).terrain & 0xC0) {
-            web_directions = 1; count = 1;
+            web_directions += 1; count++;
         }
     }
     if (web_x < 0x4f) {
