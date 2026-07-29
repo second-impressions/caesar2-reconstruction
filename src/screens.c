@@ -1941,7 +1941,7 @@ void history_selection(void)
 // Draw the population, treasury, employment, and reputation history graphs.
 // FUNCTION: C2 0x5f9f0
 // FUNCTION: C2WIN 0x004273b1
-int get_history_from_buffer(int *history_buf, int, int);
+int get_history_from_buffer(int *history_buf, int row_idx, int col_idx);
 int show_history_graph(int graph_x, int graph_y, int statistic_idx);
 
 void history_graphs(void)
