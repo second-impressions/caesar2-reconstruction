@@ -598,7 +598,8 @@ void s10_get_business(void)
 void s11_riot(void)
 {
     citizen_list[citizen_no].action_kind = 0;
-    if (--citizen_list[citizen_no].wait_count <= 0) {
+    if (--citizen_list[citizen_no].wait_count > 0) {
+    } else {
         citizen_list[citizen_no].state_idx   = 12;
         citizen_list[citizen_no].dest_x      = top_lv_x;
         citizen_list[citizen_no].dest_y      = top_lv_y;
