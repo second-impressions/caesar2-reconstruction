@@ -719,7 +719,7 @@ struct citizen_rec {
                                           (bits 2/3 of city_cell.+9) */
     int            target_ref;       /* +0x28  cm_ptr of action target
                                          (fire / patrol / quell / etc.) */
-    char           target_kind;      /* +0x2C  non-zero ⇒ target_ref valid
+    unsigned char  target_kind;      /* +0x2C  non-zero ⇒ target_ref valid
                                          (fire-fight, vigile-patrol, …) */
     char           target_count;     /* +0x2D  per-target tick (inc'd by
                                          s06_quell_trouble) */
