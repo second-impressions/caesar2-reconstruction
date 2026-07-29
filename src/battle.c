@@ -756,6 +756,9 @@ void get_battle_men(void)
     their_battle_auxs     = army_list[their_battle_army].num_auxillaries;
 }
 
+int get_x_spacing(int row_spacing, int formation_cols, int position);
+int get_y_spacing(int row_spacing, int formation_cols, int position, int side);
+
 // Create and deploy the Roman units for the battle.
 // FUNCTION: C2 0x4c016
 // FUNCTION: C2WIN 0x00474a86
@@ -861,6 +864,15 @@ void setup_roman_units(void)
             merc_count = 0;
     }
 }
+
+int swap_2_figures(void);
+int get_fire_target(int fig_no);
+int test_reform_pattern(int unit_ref, int formation);
+void init_bd(int start_x, int start_y, int end_x, int end_y);
+int nearest_formation_enemy(void);
+int find_nearest_enemy(void);
+int find_adjacent_target(void);
+int arrow_off_map(void);
 
 // Build the enemy army from its tribe's formation, unit-kind, and sprite-set configuration.
 // FUNCTION: C2 0x4c399
@@ -1288,9 +1300,6 @@ void get_start_points(int deployment_idx)
         }
     }
 }
-
-int swap_2_figures(void);
-int get_fire_target(int fig_no);
 
 // Return a figure's horizontal offset within a formation.
 // FUNCTION: C2 0x4d7d3
@@ -2213,15 +2222,15 @@ void arrow_intelligence(void)
     }
 }
 
-int test_reform_pattern(int unit_ref, int formation);
-void init_bd(int start_x, int start_y, int end_x, int end_y);
-int nearest_formation_enemy(void);
-int find_nearest_enemy(void);
-int find_adjacent_target(void);
-int arrow_off_map(void);
 void general_reform(int formation);
 void update_units_ai(void);
 void set_unit_to_fight(int start_fig);
+void drop_all_units_morale(int match_type, int morale_a_delta, int morale_b_delta);
+void raise_all_units_morale(int skip_type, int morale_a_delta, int morale_b_delta);
+void set_unit_to_rout(int unit_idx);
+void battle_tune_mood_from_type(int unit_idx);
+void backtrack_figure(int figure_idx);
+void bd(int dominant_axis);
 
 // Deselect the player's selected unit or reform a selected enemy unit for the current map mode.
 // FUNCTION: C2 0x4f27d
@@ -2381,12 +2390,6 @@ int test_reform_pattern(int unit_ref, int dir)
     return 1;
 }
 
-void drop_all_units_morale(int match_type, int morale_a_delta, int morale_b_delta);
-void raise_all_units_morale(int skip_type, int morale_a_delta, int morale_b_delta);
-void set_unit_to_rout(int unit_idx);
-void battle_tune_mood_from_type(int unit_idx);
-void backtrack_figure(int figure_idx);
-void bd(int dominant_axis);
 void set_attack_count(int figure_idx);
 
 // Compute the (x_bit, y_bit) offsets for `figure_idx` in the requested `formation`.
@@ -2685,6 +2688,23 @@ void get_fig_missile_image(void)
         dir_base += bow_images[cnt8];
     figure_list[figure_no].sprite_anim = dir_base;
 }
+
+void clear_arrow(struct arrow_rec *record_ptr);
+void update_units_morale(void);
+void set_missile_fight_fx(int event);
+int get_distance(int x1, int y1, int x2, int y2);
+int get_longest_distance(int x1, int y1, int x2, int y2);
+void low_beep(void);
+void set_battle_march_fx(int unit_type);
+void set_battle_fight_fx(int event);
+void set_this_ambient(int ambient_idx);
+void set_unit_to_fight(int start_fig);
+void set_defense_shield(int figure_idx);
+int find_nearest_target(int distance);
+int get_fire_target(int fig_no);
+void set_missile_fire_range(int weapon_kind);
+void battle_tune_mood_from_type(int unit_idx);
+void set_unit_to_rout(int unit_idx);
 
 // Mark a clipped rectangle of battle-map cells dirty for redraw.
 // FUNCTION: C2 0x4fea9
@@ -4219,6 +4239,9 @@ int nearest_formation_enemy(void)
     return 8;
 }
 
+void set_battle_fight_fx(int event);
+void set_this_ambient(int ambient_idx);
+
 // Pick the closest still-fightable hostile figure for figure_no and set it up as our melee target.
 // Distance is the Chebyshev metric (get_longest_distance), capped at 0x68 = "no candidate".
 // FUNCTION: C2 0x52a8c
@@ -4301,6 +4324,10 @@ int find_adjacent_target(void)
 {
     return 0;
 }
+
+int get_longest_distance(int x1, int y1, int x2, int y2);
+void set_battle_march_fx(int unit_type);
+void set_defense_shield(int figure_idx);
 
 // Scan an 11x11 box of battle_map cells around the firing unit for a hostile figure to shoot at.
 // Anchor is the unit's grid; the scan span is clamped to [0, 0x33].
