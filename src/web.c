@@ -31,11 +31,11 @@ void push_node_value(char pressure_value);
 int get_regroad_start_node(int x, int y)
 {
     web_start_x = x;
-    web_x = x;
+    web_x = web_start_x;
     web_start_y = y;
-    web_y = y;
+    web_y = web_start_y;
 
-    web_ptr = (y * REGION_W + x) * REGION_CELL_BYTES;
+    web_ptr = (web_y * REGION_W + web_x) * REGION_CELL_BYTES;
 
     if ((RM_CELL(web_ptr).terrain & 0x25) == 0) return 0;
 
