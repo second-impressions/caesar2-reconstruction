@@ -2908,87 +2908,84 @@ int test_fire_zones(void)
 // FUNCTION: C2WIN 0x0040eb06
 int test_zone_for_closest_fire(void)
 {
-  int covered_offset;
-  int uncovered_x;
-  int uncovered_y;
-  int cell_offset;
-  int min_covered_distance;
-  int uncovered_offset;
-  int min_uncovered_distance;
-  int cell_y;
+  int cover_cell;
   int cell_x;
-  int covered_x;
-  int covered_y;
-  int zone_idx;
-  cell_offset = (zone_y * ((8 * CITY_W) * CITY_CELL_BYTES));
-  cell_offset += (zone_x * (8 * CITY_CELL_BYTES));
-  min_uncovered_distance = 100;
-  min_covered_distance = 100;
-  for (cell_y = zone_y * 8; cell_y < ((zone_y * 8) + 8); cell_y++, cell_offset += 1440)
+  int cover_x;
+  int map_cell;
+  int min_cover_dist;
+  int uncovered_ref;
+  int min_distance;
+  int uncover_y;
+  int uncover_x;
+  int cell_y;
+  int covered_cell_y;
+  unsigned char map_kind;
+  int current_distance;
+  map_cell = (zone_y * ((8 * CITY_W) * CITY_CELL_BYTES));
+  map_cell += (zone_x * (8 * CITY_CELL_BYTES));
+  min_distance = 100;
+  min_cover_dist = 100;
+  for (cell_y = zone_y * 8; cell_y < ((zone_y * 8) + 8); cell_y++, map_cell += 1440)
   {
-    for (cell_x = zone_x * 8; cell_x < ((zone_x * 8) + 8); cell_x++, cell_offset += 20)
+    for (cell_x = zone_x * 8; cell_x < ((zone_x * 8) + 8); cell_x++, map_cell += 20)
     {
-      unsigned char cell_value;
-      cell_value = (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).base_kind;
-      if (cell_value < 8)
+      map_kind = (*(struct city_cell *)((unsigned char *)city_map + (map_cell))).base_kind;
+      if (map_kind < 8)
       {
-        cell_value = (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).edge_bits;
-        if ((cell_value & 0x80) != 0)
+        if (((*(struct city_cell *)((unsigned char *)city_map + (map_cell))).edge_bits & 0x80) != 0)
         {
-          int distance;
-          distance = get_distance(cell_x, cell_y, citizen_list[citizen_no].x, citizen_list[citizen_no].y);
-          if (distance < min_uncovered_distance)
+          current_distance = get_distance(cell_x, cell_y, citizen_list[citizen_no].x, citizen_list[citizen_no].y);
+          if (current_distance < min_distance)
           {
-            if (is_fire_covered(cell_offset) != 0)
+            if (is_fire_covered(map_cell) != 0)
             {
-              min_covered_distance = distance;
-              covered_x = cell_x;
-              covered_y = cell_y;
-              covered_offset = cell_offset;
+              min_cover_dist = current_distance;
+              cover_x = cell_x;
+              covered_cell_y = cell_y;
+              cover_cell = map_cell;
               continue;
             }
-            min_uncovered_distance = distance;
-            uncovered_x = cell_x;
-            uncovered_y = cell_y;
-            uncovered_offset = cell_offset;
+            min_distance = current_distance;
+            uncover_x = cell_x;
+            uncover_y = cell_y;
+            uncovered_ref = map_cell;
           }
         }
       }
     }
   }
 
-  if ((min_uncovered_distance > 0x28) && (min_covered_distance < 0x24))
+  if ((min_distance > 0x28) && (min_cover_dist < 0x24))
   {
-    z_x = covered_x;
-    z_y = covered_y;
-    z_ptr = covered_offset;
+    z_x = cover_x;
+    z_y = covered_cell_y;
+    z_ptr = cover_cell;
     return 1;
   }
-  if ((min_uncovered_distance > 0xc) && (min_covered_distance < 6))
+  if ((min_distance > 0xc) && (min_cover_dist < 6))
   {
-    z_x = covered_x;
-    z_y = covered_y;
-    z_ptr = covered_offset;
+    z_x = cover_x;
+    z_y = covered_cell_y;
+    z_ptr = cover_cell;
     return 1;
   }
-  if ((min_uncovered_distance > 8) && (min_covered_distance < 4))
+  if ((min_distance > 8) && (min_cover_dist < 4))
   {
-    z_x = covered_x;
-    z_y = covered_y;
-    z_ptr = covered_offset;
+    z_x = cover_x;
+    z_y = covered_cell_y;
+    z_ptr = cover_cell;
     return 1;
   }
-  if (min_uncovered_distance < 100)
+  if (min_distance < 100)
   {
-    z_x = uncovered_x;
-    z_y = uncovered_y;
-    z_ptr = uncovered_offset;
+    z_x = uncover_x;
+    z_y = uncover_y;
+    z_ptr = uncovered_ref;
     return 1;
   }
-  if (min_covered_distance >= 100)
+  if (min_cover_dist >= 100)
   {
-    zone_idx = (zone_y * 10) + zone_x;
-    fire_zones[zone_idx] = 0;
+    fire_zones[(zone_y * 10) + zone_x] = 0;
   }
   return 0;
 }
