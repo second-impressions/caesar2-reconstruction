@@ -1048,6 +1048,8 @@ void build_units_figures(int deployment_idx, int figure_kind, int stampede_kind,
                          int row_spacing, unsigned char *arrow_data_ptr,
                          unsigned char *sprite_data_ptr, int sprite_kind)
 {
+    int i;
+
     random();
 
     if      (battle_scale == 4) bat_size = target_men / 0x50;
@@ -1106,50 +1108,46 @@ void build_units_figures(int deployment_idx, int figure_kind, int stampede_kind,
     }
 
     /* Create and configure the unit's figures. */
-    {
-        int i;
+    for (i = 0; i < bat_size; i++) {
+        random();
+        x_bit = get_x_spacing(row_spacing, formation_cols, i);
+        y_bit = get_y_spacing(row_spacing, formation_cols, i, bat_side);
 
-        for (i = 0; i < bat_size; i++) {
-            random();
-            x_bit = get_x_spacing(row_spacing, formation_cols, i);
-            y_bit = get_y_spacing(row_spacing, formation_cols, i, bat_side);
+        if (create_figure(figure_kind, x, x_bit, y, y_bit, bat_control,
+                          created_unit_no) == 0)
+            break;
 
-            if (create_figure(figure_kind, x, x_bit, y, y_bit, bat_control,
-                              created_unit_no) == 0)
-                break;
+        figure_list[created_figure_no].state_idx     = 6;
+        figure_list[created_figure_no].unit_position = bat_side;
+        figure_list[created_figure_no].figure_rank   = unit_rank;
+        figure_list[created_figure_no].unit_grid_x   = row_spacing;
+        figure_list[created_figure_no].unit_grid_y   = formation_cols;
+        figure_list[created_figure_no].fight_swing_active = unit_sub_kind;
 
-            figure_list[created_figure_no].state_idx     = 6;
-            figure_list[created_figure_no].unit_position = bat_side;
-            figure_list[created_figure_no].figure_rank   = unit_rank;
-            figure_list[created_figure_no].unit_grid_x   = row_spacing;
-            figure_list[created_figure_no].unit_grid_y   = formation_cols;
-            figure_list[created_figure_no].fight_swing_active = unit_sub_kind;
+        if (bat_control == 0) figure_list[created_figure_no].morale = tribe_ai_data[bat_tribe].aggression;
+        if (figure_list[created_figure_no].figure_rank == 1) figure_list[created_figure_no].morale = figure_list[created_figure_no].morale / 2;
+        if (figure_list[created_figure_no].figure_rank == 2) figure_list[created_figure_no].morale = 0;
 
-            if (bat_control == 0) figure_list[created_figure_no].morale = tribe_ai_data[bat_tribe].aggression;
-            if (figure_list[created_figure_no].figure_rank == 1) figure_list[created_figure_no].morale = figure_list[created_figure_no].morale / 2;
-            if (figure_list[created_figure_no].figure_rank == 2) figure_list[created_figure_no].morale = 0;
+        figure_list[created_figure_no].stampede_kind = stampede_kind;
+        figure_list[created_figure_no].is_defending = 1;
+        figure_list[created_figure_no].shield_class = 0;
 
-            figure_list[created_figure_no].stampede_kind = stampede_kind;
-            figure_list[created_figure_no].is_defending = 1;
-            figure_list[created_figure_no].shield_class = 0;
+        if      (battle_scale == 0) figure_list[created_figure_no].stampede_flag = 5;
+        else if (battle_scale == 1) figure_list[created_figure_no].stampede_flag = 0xa;
+        else if (battle_scale == 2) figure_list[created_figure_no].stampede_flag = 0x14;
+        else if (battle_scale == 3) figure_list[created_figure_no].stampede_flag = 0x28;
+        else if (battle_scale == 4) figure_list[created_figure_no].stampede_flag = 0x50;
 
-            if      (battle_scale == 0) figure_list[created_figure_no].stampede_flag = 5;
-            else if (battle_scale == 1) figure_list[created_figure_no].stampede_flag = 0xa;
-            else if (battle_scale == 2) figure_list[created_figure_no].stampede_flag = 0x14;
-            else if (battle_scale == 3) figure_list[created_figure_no].stampede_flag = 0x28;
-            else if (battle_scale == 4) figure_list[created_figure_no].stampede_flag = 0x50;
+        figure_list[created_figure_no].arrow_data_ptr = arrow_data_ptr;
+        figure_list[created_figure_no].sprite_data_ptr = sprite_data_ptr;
+        figure_list[created_figure_no].sprite_kind = sprite_kind;
 
-            figure_list[created_figure_no].arrow_data_ptr = arrow_data_ptr;
-            figure_list[created_figure_no].sprite_data_ptr = sprite_data_ptr;
-            figure_list[created_figure_no].sprite_kind = sprite_kind;
+        if (sprite_data_ptr != 0) figure_list[created_figure_no].fight_state = 1;
+        else if (figure_kind == 0xf) figure_list[created_figure_no].fight_state = 2;
+        figure_list[created_figure_no].missile_timer = rand128 & 0x1f;
 
-            if (sprite_data_ptr != 0) figure_list[created_figure_no].fight_state = 1;
-            else if (figure_kind == 0xf) figure_list[created_figure_no].fight_state = 2;
-            figure_list[created_figure_no].missile_timer = rand128 & 0x1f;
-
-            if (i == 0) unit_list[created_unit_no].first_figure = created_figure_no;
-            unit_list[created_unit_no].fig_count++;
-        }
+        if (i == 0) unit_list[created_unit_no].first_figure = created_figure_no;
+        unit_list[created_unit_no].fig_count++;
     }
 
     unit_list[created_unit_no].last_figure = created_figure_no;
