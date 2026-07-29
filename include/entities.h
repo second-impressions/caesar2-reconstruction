@@ -729,7 +729,7 @@ struct citizen_rec {
                                          s06_quell_trouble + s08_vigile_patrol
                                          when locking a target */
     char           name_id;          /* +0x32 */
-    char           state;            /* +0x33 */
+    unsigned char  state;            /* +0x33 */
     short          image_id;         /* +0x34  current sprite image ID */
     char           wobble_counter;   /* +0x36  per-citizen vertical-wobble
                                                 counter consumed in

@@ -369,16 +369,15 @@ void s05_maraude_to_top_spot(void)
         random_target();
         citizen_list[citizen_no].wait_count = 0;
         citizen_list[citizen_no].state = 3;
-        return;
+    } else if (citizen_list[citizen_no].flag_bits & 1) {
+        if (citizen_list[citizen_no].state != 0) {
+            citizen_list[citizen_no].state--;
+        } else {
+            citizen_list[citizen_no].state = 3;
+            citizen_list[citizen_no].dest_x = top_lv_x;
+            citizen_list[citizen_no].dest_y = top_lv_y;
+        }
     }
-    if ((citizen_list[citizen_no].flag_bits & 1) == 0) return;
-    if (citizen_list[citizen_no].state != 0) {
-        citizen_list[citizen_no].state--;
-        return;
-    }
-    citizen_list[citizen_no].state = 3;
-    citizen_list[citizen_no].dest_x = top_lv_x;
-    citizen_list[citizen_no].dest_y = top_lv_y;
 }
 
 // Advance a trouble-quelling citizen toward its rioter target and reject recycled target slots.
