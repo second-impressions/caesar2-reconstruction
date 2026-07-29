@@ -14,7 +14,6 @@ extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsign
 extern void font_format_split(int idx, int word_skip, int x, int y_start, int max_width, int line_limit, int x_overflow, int max_width_overflow, unsigned char *font, int color);
 extern void show_cursor(unsigned char *font);
 extern void show_fast_rect(int x, int y, int color);
-extern void show_a_system_blank(int x, int y, int w, int h);
 extern void show_a_system_window(int x, int y, int cols, int rows);
 #if PLATFORM_WINDOWS
 extern unsigned char *screen_buffer;
@@ -1089,6 +1088,8 @@ void show_about_box(void)
 // Show the player's current name in the new-game settings.
 // FUNCTION: C2 0x5d581
 // FUNCTION: C2WIN 0x00424dd3
+extern void show_a_system_blank(int x, int y, int w, int h);
+
 void show_name_choice(void)
 {
     show_a_system_blank(0x60, 0x110, 0x1c, 3);
