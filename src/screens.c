@@ -3639,6 +3639,8 @@ int general_business_cause(void)
 // List the people living in the queried house, or report that it is empty.
 // FUNCTION: C2 0x639b4
 // FUNCTION: C2WIN 0x0042c330
+void test_range_for(int x, int y, int radius, int mode);
+
 void show_people_query_panel(void)
 {
     int i;
