@@ -1599,7 +1599,9 @@ void show_donation_level(void)
     x_is = 0;
     font_list(0x1f, 4, 0xc0, 0x40, font1, 0x10);
     font_no(donation_level, ' ', " Dn", x_is + 0xc0, 0x40, font1, 0x10);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0xb0, 0x30, 0xa, 3, 1);
+#endif
 }
 
 // Show the forum's imperial-relations department.
