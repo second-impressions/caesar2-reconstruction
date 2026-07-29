@@ -743,7 +743,7 @@ void show_non_cohort_box(void)
 // FUNCTION: C2WIN 0x00423bef
 void show_tribunes_report(int army_idx, int panel_x, int panel_y, int sprite_mode)
 {
-    int sprite_x;
+    int esi;
     int drill_step;
     int i;
 
@@ -754,35 +754,35 @@ void show_tribunes_report(int army_idx, int panel_x, int panel_y, int sprite_mod
     draw_a_dias(panel_x, panel_y + 0x10, 0x3e, 0x3e);
     show_cohort_landfill(army_idx, panel_x + 1, panel_y + 0x11);
 
-    sprite_x = 0x44;
+    esi = 0x44;
     drill_step = cohort_drill_spacing[army_list[army_idx].num_centuries];
 
     for (i = 0; i < 14; i++) {
         if (army_list[army_idx].centuries[i].type == 1) {
-            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x2b, panel_x + sprite_x, panel_y + 0x14);
-            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0xa, panel_x + sprite_x, panel_y + 0x14);
-            sprite_x += drill_step;
+            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x2b, panel_x + esi, panel_y + 0x14);
+            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0xa, panel_x + esi, panel_y + 0x14);
+            esi += drill_step;
         }
     }
     for (i = 0; i < 14; i++) {
         if (army_list[army_idx].centuries[i].type == 2) {
-            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x30, panel_x + sprite_x, panel_y + 0x14);
-            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0xf, panel_x + sprite_x, panel_y + 0x14);
-            sprite_x += drill_step;
+            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x30, panel_x + esi, panel_y + 0x14);
+            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0xf, panel_x + esi, panel_y + 0x14);
+            esi += drill_step;
         }
     }
     for (i = 0; i < 14; i++) {
         if (army_list[army_idx].centuries[i].type == 3) {
-            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x35, panel_x + sprite_x, panel_y + 0x14);
-            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x14, panel_x + sprite_x, panel_y + 0x14);
-            sprite_x += drill_step;
+            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x35, panel_x + esi, panel_y + 0x14);
+            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x14, panel_x + esi, panel_y + 0x14);
+            esi += drill_step;
         }
     }
     for (i = 0; i < 14; i++) {
         if (army_list[army_idx].centuries[i].type == 4) {
-            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x2e, panel_x + sprite_x, panel_y + 0x14);
-            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0xd, panel_x + sprite_x, panel_y + 0x14);
-            sprite_x += drill_step;
+            if (sprite_mode == 0) write_general_sprite(army_list[army_idx].centuries[i].damaged + 0x2e, panel_x + esi, panel_y + 0x14);
+            else write_general_sprite(army_list[army_idx].centuries[i].damaged + 0xd, panel_x + esi, panel_y + 0x14);
+            esi += drill_step;
         }
     }
 
