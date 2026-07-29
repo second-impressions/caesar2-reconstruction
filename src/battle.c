@@ -686,6 +686,8 @@ void setup_battle(void)
 {
     int count[3];
     int total_men;
+    int total1;
+    int total2;
 
     total_men = army_list[their_battle_army].total_troops
               + army_list[our_battle_army].total_troops;
@@ -709,17 +711,12 @@ void setup_battle(void)
 
     get_battle_odds();
 
-    {
-        int total1;
-        int total2;
+    total1 = army_list[our_battle_army].total_troops;
+    total2 = army_list[their_battle_army].total_troops;
 
-        total1 = army_list[our_battle_army].total_troops;
-        total2 = army_list[their_battle_army].total_troops;
-
-        our_battle_stance = their_battle_stance = 0;
-        if (total1 > (total2 + total2 / 3)) their_battle_stance = 1;
-        if (total2 > (total1 + total1 / 3)) our_battle_stance   = 1;
-    }
+    our_battle_stance = their_battle_stance = 0;
+    if (total1 > (total2 + total2 / 3)) their_battle_stance = 1;
+    if (total2 > (total1 + total1 / 3)) our_battle_stance   = 1;
 
     bat_no_selected = 0;
     retreat_flag    = 0;
