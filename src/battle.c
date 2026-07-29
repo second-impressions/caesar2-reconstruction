@@ -2780,19 +2780,17 @@ void update_units_ai(void)
 // FUNCTION: C2WIN 0x0047c4cb
 void elephant_ai(void)
 {
+    int direction;
+
     if (++unit_list[temp_unit].ai_tick < unit_list[temp_unit].ai_period)
         return;
 
-    {
-        int direction;
-
-        unit_list[temp_unit].ai_tick = 0;
-        direction = rand128 & 7;
-        if (direction <= 4) {
-            set_ai_unit_move(0, 0);
-        } else {
-            set_ai_unit_move(0, -1);
-        }
+    unit_list[temp_unit].ai_tick = 0;
+    direction = rand128 & 7;
+    if (direction <= 4) {
+        set_ai_unit_move(0, 0);
+    } else {
+        set_ai_unit_move(0, -1);
     }
 }
 
