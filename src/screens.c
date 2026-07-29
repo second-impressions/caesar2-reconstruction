@@ -1380,26 +1380,24 @@ void show_tax_rates(void)
     font_list(0x1e, 5, 0x1d8, 0x1a, font1, 0x10);
     font_no(average_pop_tax_denariis, 0x20, ".",
             x_is + 0x1d8, 0x1a, font1, 0x10);
-    if (average_pop_tax_asses < 0xa) {
-        font_no(average_pop_tax_asses, 0x30,
+    if (average_pop_tax_asses < 0xa) { font_no(average_pop_tax_asses, 0x30,
                 "Dn )", x_is + 0x1d8, 0x1a, font1, 0x10);
-    } else {
-        font_no(average_pop_tax_asses, 0x20,
+    } else { font_no(average_pop_tax_asses, 0x20,
                 "Dn )", x_is + 0x1d8, 0x1a, font1, 0x10);
     }
     x_is = 0;
     font_list(0x1e, 5, 0x1d8, 0x32, font1, 0x10);
     font_no(average_ind_tax_denariis, 0x20, ".",
             x_is + 0x1d8, 0x32, font1, 0x10);
-    if (average_ind_tax_asses < 0xa) {
-        font_no(average_ind_tax_asses, 0x30,
+    if (average_ind_tax_asses < 0xa) { font_no(average_ind_tax_asses, 0x30,
                 "Dn )", x_is + 0x1d8, 0x32, font1, 0x10);
-    } else {
-        font_no(average_ind_tax_asses, 0x20,
+    } else { font_no(average_ind_tax_asses, 0x20,
                 "Dn )", x_is + 0x1d8, 0x32, font1, 0x10);
     }
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x158, -14, 0x12, 6, 1);
+#endif
 }
 
 // Show last year's treasury income, expenses, and surplus or deficit.
