@@ -1110,7 +1110,9 @@ void show_peace_level(void)
     show_a_system_blank(0x60, 0xe0, 0x1c, 3);
     font_list(0x2b, 7, 0x6a, 0xf6, font1, 0x10);
     font_list(0x2b, (signed char)c2inf.peace_mode + 8, 0x140, 0xf6, font1, 0x10);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x60, 0xe0, 0x1c, 3, 1);
+#endif
 }
 
 // Show the selected difficulty level and its explanation.
