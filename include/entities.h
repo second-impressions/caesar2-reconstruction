@@ -412,7 +412,7 @@ struct army_rec {
     unsigned char  source_region;      /* +0x9B  attacker's home province id
                                                   (set by attack_with_tribe /
                                                   raider_trouble / horde_trouble) */
-    char           landed_flag;        /* +0x9C  set when ship has reached shore */
+    unsigned char  landed_flag;        /* +0x9C  set when ship has reached shore */
     unsigned char  tribe_id;           /* +0x9D  index into tribe_to_standard[] */
     char           quick_respawn;      /* +0x9E  set by sa13 ground-out; sa15 uses
                                             it to shorten the trader respawn delay
