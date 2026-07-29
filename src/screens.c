@@ -3345,92 +3345,169 @@ void show_query_panel_heading(int y)
 // FUNCTION: C2WIN 0x0042b109
 void show_general_query_panel(void)
 {
+#if PLATFORM_WINDOWS
+#define GENERAL_QUERY_TYPE q_type
+#else
     int q;
+#define GENERAL_QUERY_TYPE q
+#endif
     int word;
 
+#if !PLATFORM_WINDOWS
     q = q_type;
-    if (q >= 0x82 && q < 0xa2) {
+#endif
+    if (GENERAL_QUERY_TYPE >= 0x82 && GENERAL_QUERY_TYPE < 0xa2) {
         show_query_house_advice();
         return;
-    }
-
-    q = q_type;
-    if (q == 0xfb || q == 0xf5) {
-        if (!q_road_access)        word = 0x5a;
-        else if (q_hospital_access) word = 0x52;
-        else                        word = 0x53;
-    } else if (q == 0xfa) {
-        show_query_business_advice();
-        return;
-    } else if (q == 0x7c) {
-        word = 0x24;
-    } else if (q == 0x7d) {
-        word = 0x25;
-    } else if (q == 0x7e) {
-        word = 0x26;
-    } else if (q >= 0x82) {
-        if (q <= 0xa5) {
-            word = (unsigned char)q;
-            word -= 0x7b;
-        } else if (q <= 0xa9) {
-            word = (unsigned char)q;
-            word -= 0x7f;
-        } else if (q <= 0xad) {
-            word = (unsigned char)q;
-            word -= 0x83;
-        } else if (q <= 0xb1) {
-            if (!q_road_access)        word = 0x5a;
-            else {                     word = (unsigned char)q; word -= 0x87; }
-        } else if (q <= 0xb5) {
-            if (!q_road_access)        word = 0x5a;
-            else {                     word = (unsigned char)q; word -= 0x8b; }
-        } else if (q <= 0xb9) {
-            if (!q_road_access)        word = 0x5a;
-            else {                     word = (unsigned char)q; word -= 0x8f; }
-        } else if (q >= 0xd7) {
-            if (q <= 0xda) {
-                word = (unsigned char)q;
-                word -= 0xb0;
-            } else if (q <= 0xe2) {
+    } else {
+#if !PLATFORM_WINDOWS
+        q = q_type;
+#endif
+        if (GENERAL_QUERY_TYPE == 0xfb || GENERAL_QUERY_TYPE == 0xf5) {
+            if (!q_road_access) word = 0x5a;
+            else if (q_hospital_access) word = 0x52;
+            else word = 0x53;
+        } else if (GENERAL_QUERY_TYPE == 0xfa) {
+            show_query_business_advice();
+            return;
+        } else if (GENERAL_QUERY_TYPE == 0x7c) {
+            word = 0x24;
+        } else if (GENERAL_QUERY_TYPE == 0x7d) {
+            word = 0x25;
+        } else if (GENERAL_QUERY_TYPE == 0x7e) {
+            word = 0x26;
+        } else {
+#if PLATFORM_WINDOWS
+            if (GENERAL_QUERY_TYPE < 0x82) {
+                word = 0x23;
+            } else if (GENERAL_QUERY_TYPE <= 0xa5) {
+                word = GENERAL_QUERY_TYPE - 0x7b;
+            } else if (GENERAL_QUERY_TYPE <= 0xa9) {
+                word = GENERAL_QUERY_TYPE - 0x7f;
+            } else if (GENERAL_QUERY_TYPE <= 0xad) {
+                word = GENERAL_QUERY_TYPE - 0x83;
+            } else if (GENERAL_QUERY_TYPE <= 0xb1) {
+                if (!q_road_access) word = 0x5a;
+                else word = GENERAL_QUERY_TYPE - 0x87;
+            } else if (GENERAL_QUERY_TYPE <= 0xb5) {
+                if (!q_road_access) word = 0x5a;
+                else word = GENERAL_QUERY_TYPE - 0x8b;
+            } else if (GENERAL_QUERY_TYPE <= 0xb9) {
+                if (!q_road_access) word = 0x5a;
+                else word = GENERAL_QUERY_TYPE - 0x8f;
+            } else if (GENERAL_QUERY_TYPE < 0xd7) {
+                word = 0x23;
+            } else if (GENERAL_QUERY_TYPE <= 0xda) {
+                word = GENERAL_QUERY_TYPE - 0xb0;
+            } else if (GENERAL_QUERY_TYPE <= 0xe2) {
                 if (!q_supply) {
                     word = 0x2b;
-                } else if (q <= 0xde) {
-                    word = q - 0xb4;
-                } else if (q <= 0xe2) {
-                    word = q - 0xb8;
+                } else if (GENERAL_QUERY_TYPE <= 0xde) {
+                    word = GENERAL_QUERY_TYPE - 0xb4;
+                } else if (GENERAL_QUERY_TYPE <= 0xe2) {
+                    word = GENERAL_QUERY_TYPE - 0xb8;
                 }
-            } else if (q < 0xe5) {
+            } else if (GENERAL_QUERY_TYPE < 0xe5) {
                 if (!q_road_access) word = 0x5a;
                 else word = 0x23;
-            } else if (q >= 0xfc && q <= 0xff) {
+            } else if (GENERAL_QUERY_TYPE < 0xfc) {
+                word = 0x23;
+            } else if (GENERAL_QUERY_TYPE <= 0xff) {
                 if (!q_road_access) word = 0x5a;
-                else {              word = q - 0xd0; }
+                else word = GENERAL_QUERY_TYPE - 0xd0;
             } else {
                 word = 0x23;
             }
-        } else {
-            word = 0x23;
+#else
+            if (GENERAL_QUERY_TYPE >= 0x82) {
+                if (GENERAL_QUERY_TYPE <= 0xa5) {
+                    word = (unsigned char)GENERAL_QUERY_TYPE;
+                    word -= 0x7b;
+                } else if (GENERAL_QUERY_TYPE <= 0xa9) {
+                    word = (unsigned char)GENERAL_QUERY_TYPE;
+                    word -= 0x7f;
+                } else if (GENERAL_QUERY_TYPE <= 0xad) {
+                    word = (unsigned char)GENERAL_QUERY_TYPE;
+                    word -= 0x83;
+                } else if (GENERAL_QUERY_TYPE <= 0xb1) {
+                    if (!q_road_access) word = 0x5a;
+                    else {
+                        word = (unsigned char)GENERAL_QUERY_TYPE;
+                        word -= 0x87;
+                    }
+                } else if (GENERAL_QUERY_TYPE <= 0xb5) {
+                    if (!q_road_access) word = 0x5a;
+                    else {
+                        word = (unsigned char)GENERAL_QUERY_TYPE;
+                        word -= 0x8b;
+                    }
+                } else if (GENERAL_QUERY_TYPE <= 0xb9) {
+                    if (!q_road_access) word = 0x5a;
+                    else {
+                        word = (unsigned char)GENERAL_QUERY_TYPE;
+                        word -= 0x8f;
+                    }
+                } else if (GENERAL_QUERY_TYPE >= 0xd7) {
+                    if (GENERAL_QUERY_TYPE <= 0xda) {
+                        word = (unsigned char)GENERAL_QUERY_TYPE;
+                        word -= 0xb0;
+                    } else if (GENERAL_QUERY_TYPE <= 0xe2) {
+                        if (!q_supply) {
+                            word = 0x2b;
+                        } else if (GENERAL_QUERY_TYPE <= 0xde) {
+                            word = GENERAL_QUERY_TYPE;
+                            word -= 0xb4;
+                        } else if (GENERAL_QUERY_TYPE <= 0xe2) {
+                            word = GENERAL_QUERY_TYPE;
+                            word -= 0xb8;
+                        }
+                    } else if (GENERAL_QUERY_TYPE < 0xe5) {
+                        if (!q_road_access) word = 0x5a;
+                        else word = 0x23;
+                    } else if (GENERAL_QUERY_TYPE >= 0xfc &&
+                               GENERAL_QUERY_TYPE <= 0xff) {
+                        if (!q_road_access) word = 0x5a;
+                        else {
+                            word = GENERAL_QUERY_TYPE;
+                            word -= 0xd0;
+                        }
+                    } else {
+                        word = 0x23;
+                    }
+                } else {
+                    word = 0x23;
+                }
+            } else {
+                word = 0x23;
+            }
+#endif
         }
-    } else {
-        word = 0x23;
     }
 
+#undef GENERAL_QUERY_TYPE
     font_format_split(0x3d, word, 0x38,
-                      (query_panel_reduction + 9) * 0x10 + 0x20, 0x160, 0x64,
-                      0, 0, font1, 0x10);
+                      (query_panel_reduction + 9) * 0x10 + 0x20,
+                      0x160, 0x64, 0, 0, font1, 0x10);
 
     if (word == 0x52) {
         x_is = 0;
         if (q_type == 0xfb) {
             font_no(0x3e8, 0x20, " ", 0x38,
-                    (query_panel_reduction + 0xa) * 0x10 + 0x20, font1, 0x10);
+                    (query_panel_reduction + 0xa) * 0x10 + 0x20,
+                    font1, 0x10);
         } else {
             font_no(0x4b0, 0x20, " ", 0x38,
-                    (query_panel_reduction + 0xa) * 0x10 + 0x20, font1, 0x10);
+                    (query_panel_reduction + 0xa) * 0x10 + 0x20,
+                    font1, 0x10);
         }
+#if PLATFORM_WINDOWS
+#define GENERAL_QUERY_FINAL_Y ((query_panel_reduction + 0xa) * 0x10 + 0x20)
+#else
+#define GENERAL_QUERY_FINAL_Y ((query_panel_reduction + 0xa) * 0x10 + 0x20 + (font1[0] - font1[0]))
+#endif
         font_list(0x3d, 0x5b, x_is + 0x38,
-                  (query_panel_reduction + 0xa) * 0x10 + 0x20
-                      + (font1[0] - font1[0]), font1, 0x10);
+                  GENERAL_QUERY_FINAL_Y, font1, 0x10);
+#undef GENERAL_QUERY_FINAL_Y
     }
 }
 
