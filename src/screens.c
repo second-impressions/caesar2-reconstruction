@@ -523,12 +523,14 @@ void clip_zoom_level1(void)
 void clip_battle_zoom_level2(void)
 {
     int i;
+#if !PLATFORM_WINDOWS
     if (zoom_level == 2) {
         for (i = 0x18; i < 0x168; i++) {
             show_internal_4point(0, i, 0);
             show_internal_2point(4, i, 0);
         }
     }
+#endif
 }
 
 // Mask the exposed rows beneath the map.
