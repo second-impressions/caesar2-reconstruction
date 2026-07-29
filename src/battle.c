@@ -3609,16 +3609,11 @@ int try_this_battlemap_square(int cell_offset)
 // FUNCTION: C2WIN 0x0047fccd
 void move_figure(int figure_idx)
 {
-    int   old_cell_offset = figure_list[figure_idx].map_ref;
-    int   new_cell_offset;
-    int   previous_occupant;
-
-    previous_occupant = ((unsigned char *)battle_map)[(old_cell_offset) + 1];
-    if (previous_occupant == figure_idx) {
-        ((unsigned char *)battle_map)[(old_cell_offset) + 1] = 0;
+    if (((unsigned char *)battle_map)[figure_list[figure_idx].map_ref + 1] == figure_idx) {
+        ((unsigned char *)battle_map)[figure_list[figure_idx].map_ref + 1] = 0;
     }
 
-    switch ((unsigned char)figure_list[figure_idx].direction) {
+    switch (figure_list[figure_idx].direction) {
     case 0:
         figure_list[figure_idx].grid_y--;
         figure_list[figure_idx].map_ref -= 0xd0;
@@ -3626,7 +3621,8 @@ void move_figure(int figure_idx)
     case 1:
         figure_list[figure_idx].grid_y--;
         figure_list[figure_idx].grid_x++;
-        figure_list[figure_idx].map_ref -= 0xcc;
+        figure_list[figure_idx].map_ref -= 0xd0;
+        figure_list[figure_idx].map_ref += 0x04;
         break;
     case 2:
         figure_list[figure_idx].grid_x++;
@@ -3635,7 +3631,8 @@ void move_figure(int figure_idx)
     case 3:
         figure_list[figure_idx].grid_y++;
         figure_list[figure_idx].grid_x++;
-        figure_list[figure_idx].map_ref += 0xd4;
+        figure_list[figure_idx].map_ref += 0xd0;
+        figure_list[figure_idx].map_ref += 0x04;
         break;
     case 4:
         figure_list[figure_idx].grid_y++;
@@ -3644,7 +3641,8 @@ void move_figure(int figure_idx)
     case 5:
         figure_list[figure_idx].grid_y++;
         figure_list[figure_idx].grid_x--;
-        figure_list[figure_idx].map_ref += 0xcc;
+        figure_list[figure_idx].map_ref += 0xd0;
+        figure_list[figure_idx].map_ref -= 0x04;
         break;
     case 6:
         figure_list[figure_idx].grid_x--;
@@ -3653,15 +3651,16 @@ void move_figure(int figure_idx)
     case 7:
         figure_list[figure_idx].grid_y--;
         figure_list[figure_idx].grid_x--;
-        figure_list[figure_idx].map_ref -= 0xd4;
+        figure_list[figure_idx].map_ref -= 0xd0;
+        figure_list[figure_idx].map_ref -= 0x04;
         break;
     default:
         return;
+        break;
     }
-    new_cell_offset = figure_list[figure_idx].map_ref;
 
-    if (((unsigned char *)battle_map)[(new_cell_offset) + 1] == 0) {
-        ((unsigned char *)battle_map)[(new_cell_offset) + 1] = figure_idx;
+    if (((unsigned char *)battle_map)[figure_list[figure_idx].map_ref + 1] == 0) {
+        ((unsigned char *)battle_map)[figure_list[figure_idx].map_ref + 1] = figure_idx;
         return;
     }
     low_beep();
