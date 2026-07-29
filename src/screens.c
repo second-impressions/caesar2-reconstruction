@@ -399,18 +399,18 @@ void battle_stats_panel(void)
 // FUNCTION: C2WIN 0x00422e53
 void battle_totals_panel(void)
 {
-    int dirty = 0;
-    int ratio;
-    int bars;
-    int rem;
-    int i;
+    int a;
+    int b;
+    int c;
 
-    if (request_message.bt_their_men    != their_battle_men)    dirty = 1;
-    if (request_message.bt_our_men      != our_battle_men)      dirty = 1;
-    if (request_message.bt_their_morale != their_battle_morale) dirty = 1;
-    if (request_message.bt_our_morale   != our_battle_morale)   dirty = 1;
-    if (redraw_icons != 0)                          dirty = 1;
-    if (!dirty) return;
+    c = 0;
+
+    if (request_message.bt_their_men    != their_battle_men)    c = 1;
+    if (request_message.bt_our_men      != our_battle_men)      c = 1;
+    if (request_message.bt_their_morale != their_battle_morale) c = 1;
+    if (request_message.bt_our_morale   != our_battle_morale)   c = 1;
+    if (redraw_icons != 0)                                      c = 1;
+    if (c == 0) return;
 
     request_message.bt_their_men    = their_battle_men;
     request_message.bt_our_men      = our_battle_men;
@@ -425,38 +425,42 @@ void battle_totals_panel(void)
     show_fast_rect(0x1d, 0x1b4, 0x1a);
 
     font_no(their_battle_men, 0x20, " ", 0xc, 0x182, font1, 0x10);
-    ratio = valueDIVtotal(their_battle_men, their_battle_start_men);
-    rem   = ratio % 10;
-    bars  = ratio / 10;
-    if (rem != 0) bars = bars + 1;
-    for (i = 0; i < bars; i++)
+    a = valueDIVtotal(their_battle_men, their_battle_start_men);
+    if (a % 10 != 0)
+        a = a / 10 + 1;
+    else
+        a = a / 10;
+    for (b = 0; b < a; b++)
         write_image(game_panels, 0x39,
-                    i * 9 + 0x2e, 0x181);
+                    b * 9 + 0x2e, 0x181);
 
     font_no(their_battle_morale, 0x20, " ", 0xc, 0x194, font1, 0x10);
-    bars = their_battle_morale / 10;
-    if (their_battle_morale % 10 != 0) bars = bars + 1;
-    for (i = 0; i < bars; i++)
+    a = their_battle_morale / 10;
+    if (their_battle_morale % 10 != 0) a++;
+    for (b = 0; b < a; b++)
         write_image(game_panels, 0x38,
-                    i * 8 + 0x30, 0x194);
+                    b * 8 + 0x30, 0x194);
 
     font_no(our_battle_men, 0x20, " ", 0x82, 0x1b6, font1, 0x10);
-    ratio = valueDIVtotal(our_battle_men, our_battle_start_men);
-    rem   = ratio % 10;
-    bars  = ratio / 10;
-    if (rem != 0) bars = bars + 1;
-    for (i = 0; i < bars; i++)
+    a = valueDIVtotal(our_battle_men, our_battle_start_men);
+    if (a % 10 != 0)
+        a = a / 10 + 1;
+    else
+        a = a / 10;
+    for (b = 0; b < a; b++)
         write_image(game_panels, 0x3a,
-                    0x73 - i * 9, 0x1b5);
+                    0x73 - b * 9, 0x1b5);
 
     font_no(our_battle_morale, 0x20, " ", 0x82, 0x1c8, font1, 0x10);
-    bars = our_battle_morale / 10;
-    if (our_battle_morale % 10 != 0) bars = bars + 1;
-    for (i = 0; i < bars; i++)
+    a = our_battle_morale / 10;
+    if (our_battle_morale % 10 != 0) a++;
+    for (b = 0; b < a; b++)
         write_image(game_panels, 0x38,
-                    0x73 - i * 8, 0x1c8);
+                    0x73 - b * 8, 0x1c8);
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0, 0x180, 0xb, 6, 1);
+#endif
 }
 
 // Show the battle setup message and continue prompt.
