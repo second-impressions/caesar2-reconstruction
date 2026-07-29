@@ -80,9 +80,7 @@ int run_to_new_regroad_node(void)
     int steps;
 
     steps = 0;
-    while (1) {
-        steps++;
-        if (steps >= 0x3e8) break;
+    while (++steps < 0x3e8) {
         if      (web_dirc == 1) { web_y--; web_ptr -= 0x1e0; }
         else if (web_dirc == 2) { web_x++; web_ptr += 8;     }
         else if (web_dirc == 4) { web_y++; web_ptr += 0x1e0; }
@@ -102,9 +100,9 @@ int run_to_new_regroad_node(void)
         }
         if (web_x == web_start_x && web_y == web_start_y) {
             web[0].from_dir |= web_from;
-            break;
+            return 0;
         }
-        if (web_nof_dircs <= 1) break;
+        if (web_nof_dircs <= 1) return 0;
         web_directions ^= web_from;
         if      (web_directions & 1) { web_dirc = 1; web_from = 4; }
         else if (web_directions & 2) { web_dirc = 2; web_from = 8; }
