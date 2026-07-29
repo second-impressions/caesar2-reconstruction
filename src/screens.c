@@ -208,6 +208,23 @@ extern void draw_window_buffer(unsigned char *dest, int dest_x, int dest_y,
 extern void window_font_list(int idx, int word_count, int x, int y,
                              unsigned char *font, int color,
                              unsigned char *buffer);
+extern void show_window_ov_legend(void);
+extern unsigned char colour_cycle_delay1(int delay_ms);
+extern void window_pulse_red(int idx, int delta);
+extern void continue_db(void);
+struct screen_message {
+    void *window;
+    unsigned int message;
+    unsigned int wparam;
+    long lparam;
+    unsigned int time;
+    long x;
+    long y;
+};
+extern int (__stdcall *PeekMessageA)(struct screen_message *message,
+                                    void *window, unsigned int min_message,
+                                    unsigned int max_message,
+                                    unsigned int remove_message);
 #endif
 
 // Set up the in-battle UI screen.
@@ -3003,6 +3020,30 @@ void show_ov_bar(void)
 // FUNCTION: C2WIN 0x0042a52e
 void show_ov_legend_panel(void)
 {
+#if PLATFORM_WINDOWS
+    struct screen_message message;
+
+    cover_mouse_droppings();
+    stone_random_count = 0xa;
+    overlays_on = 1;
+    show_citymap();
+    write_image(misc, map_direction / 2, 2, 2);
+    refresh_svga_screen();
+    show_window_ov_legend();
+    refresh_map_window(map_window);
+    while (1) {
+        if (PeekMessageA(&message, 0, 0x202, 0x202, 1) != 0) {
+            break;
+        }
+        if (colour_cycle_delay1(0x3c) != 0) {
+            window_pulse_red(0x48, 6);
+        }
+        continue_db();
+    }
+    overlays_on = 0;
+    hold_mouse_replace = 1;
+    refresh_svga_screen();
+#else
     cover_mouse_droppings();
     stone_random_count = 0xa;
     overlays_on = 1;
@@ -3042,6 +3083,7 @@ void show_ov_legend_panel(void)
     hold_mouse_replace = 1;
     setup_whole_screen_refresh();
     refresh_svga_screen();
+#endif
 }
 
 // Draw three vertically stacked legend entries with ascending captions.
