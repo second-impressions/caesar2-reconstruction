@@ -1717,8 +1717,8 @@ int try_this_citymap_square(int cell_offset, int movement_kind, int unused_arg)
     if ((terrain & 0x20) != 0) return 1;
 
     if (movement_kind != 1) {
-        if (terrain == 0) goto ret2;
-        return 0;
+        if (terrain != 0) return 0;
+        return 2;
     }
 
     if ((terrain & 4) != 0) return 0;
@@ -1729,7 +1729,7 @@ int try_this_citymap_square(int cell_offset, int movement_kind, int unused_arg)
         industry++;
         if (industry > 0xc) {
             destroy_an_atom(cell_offset, 0);
-            goto ret2;
+            return 2;
         }
         (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).industrial = industry;
         return 0;
@@ -1752,10 +1752,9 @@ int try_this_citymap_square(int cell_offset, int movement_kind, int unused_arg)
         citizen_list[citizen_no].wait_count = 0x20;
         citizen_list[citizen_no].wf_active = 1;
         return 0;
+    } else {
+        destroy_an_atom(cell_offset, 0);
     }
-    destroy_an_atom(cell_offset, 0);
-    return 2;
-ret2:
     return 2;
 }
 
