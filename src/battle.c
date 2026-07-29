@@ -687,8 +687,8 @@ void setup_battle(void)
     int count[3];
     int total_men;
 
-    total_men = army_list[our_battle_army].total_troops
-              + army_list[their_battle_army].total_troops;
+    total_men = army_list[their_battle_army].total_troops
+              + army_list[our_battle_army].total_troops;
 
     battle_scale = 0;
     if (total_men >= 0x1c20) battle_scale = 8;
