@@ -288,23 +288,24 @@ void s02_death(void)
 // FUNCTION: C2WIN 0x00404bf7
 void s03_map_admin(void)
 {
-    int road_dir;
+    unsigned char road_dir;
 
-    if (citizen_go_to_target(0) == 0) return;
-    if ((citizen_list[citizen_no].flag_bits & 1) == 0) return;
-    flag_range(0, citizen_list[citizen_no].x, citizen_list[citizen_no].y,
-               3, 0xa, 0xc);
-    road_dir = (unsigned char)city_test_for_road(
-            citizen_list[citizen_no].x,
-            citizen_list[citizen_no].y,
-            citizen_list[citizen_no].map_ref,
-            citizen_list[citizen_no].world_dir);
-    if (road_dir >= 8) {
-        citizen_list[citizen_no].state_idx = 2;
-        return;
+    if (citizen_go_to_target(0) == 0) {
+    } else if (citizen_list[citizen_no].flag_bits & 1) {
+        flag_range(0, citizen_list[citizen_no].x, citizen_list[citizen_no].y,
+                   3, 0xa, 0xc);
+        road_dir = (unsigned char)city_test_for_road(
+                citizen_list[citizen_no].x,
+                citizen_list[citizen_no].y,
+                citizen_list[citizen_no].map_ref,
+                citizen_list[citizen_no].world_dir);
+        if (road_dir >= 8) {
+            citizen_list[citizen_no].state_idx = 2;
+            return;
+        }
+        target_from_dirc(road_dir);
+        citizen_list[citizen_no].action_kind = 1;
     }
-    target_from_dirc(road_dir);
-    citizen_list[citizen_no].action_kind = 1;
 }
 
 // Citizen state-4 "map markets" tick -- market traders stamp per-cell demand bits into the
