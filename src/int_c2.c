@@ -1044,66 +1044,63 @@ void sa12_army_sail_home(void)
 void sa13_army_sail_round_coast(void)
 {
     int heading;
-    int attempts;
-    int cell_result;
-    signed char phase_count;
+    int i;
+    int ret;
 
     army_list[army_no].return_flag = 1;
     if (sail_to_target(0) == 0) return;
-    if ((army_list[army_no].flags & 0xa) == 0) return;
-    army_list[army_no].flags &= 0xfd;
-    phase_count = ++army_list[army_no].wf_phase;
-    if (phase_count > 0x14) {
-        army_list[army_no].state_idx = 0xc;
-        return;
-    }
-    army_list[army_no].target_x = army_list[army_no].dest_x;
-    army_list[army_no].target_y = army_list[army_no].dest_y;
-    heading = get_heading(army_list[army_no].x,
-                          army_list[army_no].y,
-                          army_list[army_no].target_x,
-                          army_list[army_no].target_y,
-                          army_list[army_no].world_dir);
-    for (attempts = 0; attempts < 8; attempts++) {
-        cell_result = try_a_seamap_square(heading, 0, 0);
-        if (cell_result == 1) {
-            army_list[army_no].target_x =
-                army_list[army_no].x +
-                gmn_ofsets[heading].dx;
-            army_list[army_no].target_y =
-                army_list[army_no].y +
-                gmn_ofsets[heading].dy;
+    if ((army_list[army_no].flags & 0xa) != 0) {
+        army_list[army_no].flags &= 0xfd;
+        if (++army_list[army_no].wf_phase > 0x14) {
+            army_list[army_no].state_idx = 0xc;
             return;
         }
-        if (cell_result == 2) {
-            army_list[army_no].state_idx = 0xf;
-            return;
+        army_list[army_no].target_x = army_list[army_no].dest_x;
+        army_list[army_no].target_y = army_list[army_no].dest_y;
+        heading = get_heading(army_list[army_no].x,
+                              army_list[army_no].y,
+                              army_list[army_no].target_x,
+                              army_list[army_no].target_y,
+                              army_list[army_no].world_dir);
+        for (i = 0; i < 8; i++) {
+            ret = try_a_seamap_square(heading, 0, 0);
+            if (ret == 1) {
+                army_list[army_no].target_x =
+                    army_list[army_no].x +
+                    gmn_ofsets[heading].dx;
+                army_list[army_no].target_y =
+                    army_list[army_no].y +
+                    gmn_ofsets[heading].dy;
+                return;
+            } else if (ret == 2) {
+                army_list[army_no].state_idx = 0xf;
+                return;
+            } else if (ret == 3 && (heading & 1) == 0) {
+                army_list[army_no].state_idx       = 1;
+                army_list[army_no].saved_state_idx = 0xc;
+                if (dock_the_ship_in_good_port(heading) != 0)
+                    army_list[army_no].wait_count = 0xa;
+                else
+                    army_list[army_no].wait_count = 0x64;
+                army_list[army_no].quick_respawn = 1;
+            } else {
+                army_list[army_no].dest_x =
+                    army_list[army_no].x +
+                    gmn_ofsets[heading].dx;
+                army_list[army_no].dest_y =
+                    army_list[army_no].y +
+                    gmn_ofsets[heading].dy;
+            }
+            if (army_list[army_no].army_id != 0) {
+                heading--;
+                if (heading < 0) heading = 7;
+            } else {
+                heading++;
+                if (heading >= 8) heading = 0;
+            }
+            if (i >= 7)
+                army_list[army_no].state_idx = 0xf;
         }
-        if (cell_result == 3 && (heading & 1) == 0) {
-            army_list[army_no].state_idx       = 1;
-            army_list[army_no].saved_state_idx = 0xc;
-            if (dock_the_ship_in_good_port(heading) != 0)
-                army_list[army_no].wait_count = 0xa;
-            else
-                army_list[army_no].wait_count = 0x64;
-            army_list[army_no].quick_respawn = 1;
-        } else {
-            army_list[army_no].dest_x =
-                army_list[army_no].x +
-                gmn_ofsets[heading].dx;
-            army_list[army_no].dest_y =
-                army_list[army_no].y +
-                gmn_ofsets[heading].dy;
-        }
-        if (army_list[army_no].army_id != 0) {
-            heading--;
-            if (heading < 0) heading = 7;
-        } else {
-            heading++;
-            if (heading >= 8) heading = 0;
-        }
-        if (attempts >= 7)
-            army_list[army_no].state_idx = 0xf;
     }
 }
 
