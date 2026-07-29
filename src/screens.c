@@ -2610,7 +2610,9 @@ void show_slave_welfare_bill(void)
     font_no(slave_population_final_estimate, 0x20, " ",
             x_is + 0x18, 0xbe, font1, 0x10);
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x18, 0x62, 0x14, 9, 1);
+#endif
 }
 
 // Show current and maximum slave allocations for each industry.
