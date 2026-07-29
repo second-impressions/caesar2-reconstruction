@@ -3825,62 +3825,62 @@ void get_queried_person(void)
 // FUNCTION: C2WIN 0x0042cc37
 void show_detailed_query_panel(void)
 {
-    int row;
+    int count;
     int text_idx;
     int colour;
 
-    for (row = 0; row < 0xb; row++) {
+    for (count = 0; count < 0xb; count++) {
         colour = 0x10;
-        if (row == 0) { if (q_aqua) text_idx = 2; else if (q_sub_aqua) text_idx = 3; else { text_idx = 4; colour = 0xb; } }
-        if (row == 1) { if (q_admin) text_idx = 5; else { text_idx = 6; colour = 0xb; } }
-        if (row == 2) {
+        if (count == 0) { if (q_aqua) text_idx = 2; else if (q_sub_aqua) text_idx = 3; else { text_idx = 4; colour = 0xb; } }
+        if (count == 1) { if (q_admin) text_idx = 5; else { text_idx = 6; colour = 0xb; } }
+        if (count == 2) {
             if (q_security > 1) text_idx = 0x5c;
             else if (q_patrol) text_idx = 7;
             else if (q_security > 0) text_idx = 8;
             else { text_idx = 9; colour = 0xb; }
         }
-        if (row == 3) { if (q_market) text_idx = 0xa; else { text_idx = 0xb; colour = 0xb; } }
-        if (row == 4) { if (q_grammaticus) text_idx = 0xc; else { text_idx = 0xd; colour = 0xb; } }
-        if (row == 5) { if (q_rhetor) text_idx = 0xe; else { text_idx = 0xf; colour = 0xb; } }
-        if (row == 6) text_idx = 0x10;
-        if (row == 7) { if (q_baths) text_idx = 0x11; else { text_idx = 0x12; colour = 0xb; } }
-        if (row == 8) {
+        if (count == 3) { if (q_market) text_idx = 0xa; else { text_idx = 0xb; colour = 0xb; } }
+        if (count == 4) { if (q_grammaticus) text_idx = 0xc; else { text_idx = 0xd; colour = 0xb; } }
+        if (count == 5) { if (q_rhetor) text_idx = 0xe; else { text_idx = 0xf; colour = 0xb; } }
+        if (count == 6) text_idx = 0x10;
+        if (count == 7) { if (q_baths) text_idx = 0x11; else { text_idx = 0x12; colour = 0xb; } }
+        if (count == 8) {
             if (hospital_cover >= 0x64) text_idx = 0x13;
-            else { if (hospital_cover <= 0) text_idx = 0x54;
-                else text_idx = 0x14; colour = 0xb; }
+            else if (hospital_cover <= 0) { text_idx = 0x54; colour = 0xb; }
+            else { text_idx = 0x14; colour = 0xb; }
         }
-        if (row == 9) {
+        if (count == 9) {
             if (library_cover >= 0x64) text_idx = 0x15;
-            else { if (library_cover <= 0) text_idx = 0x55;
-                else text_idx = 0x16; colour = 0xb; }
+            else if (library_cover <= 0) { text_idx = 0x55; colour = 0xb; }
+            else { text_idx = 0x16; colour = 0xb; }
         }
-        if (row == 0xa) {
+        if (count == 0xa) {
             if (q_road_access) text_idx = 0x58; else { text_idx = 0x59; colour = 0xb; }
         }
 
-        if (not_pertinant_statistic1(row) != 0) colour = 0x29;
+        if (not_pertinant_statistic1(count) != 0) colour = 0x29;
 
         x_is = 0;
-        font_list(0x3d, text_idx, 0x38, row * 0x10 + 0xac, font1, colour);
-        if (row == 6) font_no(q_entertainment, 0x20, " ", x_is + 0x38, row * 0x10 + 0xac, font1, colour);
-        if (row == 8 && text_idx == 0x14) font_no(hospital_cover, 0x20, "%", x_is + 0x38, row * 0x10 + 0xac, font1, colour);
-        if (row == 9 && text_idx == 0x16) font_no(library_cover, 0x20, "%", x_is + 0x38, row * 0x10 + 0xac, font1, colour);
+        font_list(0x3d, text_idx, 0x38, (count + 9) * 0x10 + 0x1c, font1, colour);
+        if (count == 6) font_no(q_entertainment, 0x20, " ", x_is + 0x38, (count + 9) * 0x10 + 0x1c, font1, colour);
+        if (count == 8 && text_idx == 0x14) font_no(hospital_cover, 0x20, "%", x_is + 0x38, (count + 9) * 0x10 + 0x1c, font1, colour);
+        if (count == 9 && text_idx == 0x16) font_no(library_cover, 0x20, "%", x_is + 0x38, (count + 9) * 0x10 + 0x1c, font1, colour);
     }
 
-    for (row = 0; row < 6; row++) {
+    for (count = 0; count < 6; count++) {
         colour = 0x10;
-        if (row == 0) {
+        if (count == 0) {
             if (q_business) { text_idx = 0x17; colour = 0xb; }
             else if (q_business_low) { text_idx = 0x17; colour = 0xb; }
             else if (q_business_vlow) { text_idx = 0x17; colour = 0xb; }
             else text_idx = 0x18;
         }
-        if (row == 1) { if (!q_barracks) text_idx = 0x1a; else { text_idx = 0x19; colour = 0xb; } }
-        if (row == 2) { if (!q_wall) text_idx = 0x1c; else { text_idx = 0x1b; colour = 0xb; } }
-        if (row == 3) { if (!q_prefecture) text_idx = 0x1e; else { text_idx = 0x1d; colour = 0xb; } }
-        if (row == 4) { if (!q_near_market) text_idx = 0x20; else { text_idx = 0x1f; colour = 0xb; } }
-        if (row == 5) { if (!q_gate) text_idx = 0x22; else { text_idx = 0x21; colour = 0xb; } }
-        font_list(0x3d, text_idx, 0xf8, row * 0x10 + 0xac, font1, colour);
+        if (count == 1) { if (!q_barracks) text_idx = 0x1a; else { text_idx = 0x19; colour = 0xb; } }
+        if (count == 2) { if (!q_wall) text_idx = 0x1c; else { text_idx = 0x1b; colour = 0xb; } }
+        if (count == 3) { if (!q_prefecture) text_idx = 0x1e; else { text_idx = 0x1d; colour = 0xb; } }
+        if (count == 4) { if (!q_near_market) text_idx = 0x20; else { text_idx = 0x1f; colour = 0xb; } }
+        if (count == 5) { if (!q_gate) text_idx = 0x22; else { text_idx = 0x21; colour = 0xb; } }
+        font_list(0x3d, text_idx, 0xf8, (count + 9) * 0x10 + 0x1c, font1, colour);
     }
 
     draw_a_dias(0x28, 0x160, 0x180, 0x28);
