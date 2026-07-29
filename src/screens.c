@@ -1983,6 +1983,9 @@ void history_graphs(void)
 // Plot one historical statistic over the selected number of years.
 // FUNCTION: C2 0x5fbba
 // FUNCTION: C2WIN 0x004275a1
+void draw_a_rect(int x, int y, int w, int h, int colour);
+void check_viewed_cohort(void);
+
 int show_history_graph(int graph_x, int graph_y, int statistic_idx)
 {
     int no_years = history_graph_years[history_graph_length];
