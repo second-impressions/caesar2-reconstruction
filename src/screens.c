@@ -1933,11 +1933,13 @@ void history_selection(void)
     font_list(0x21, 7, x_is + 0x38, 0x90, font1, 0x10);
     x_is = 0;
 
-    show_date(year - years, 0x12, 0xb0, 1);
+    show_date(year - years, x_is + 0x12, 0xb0, 1);
     font_list(0x21, 8, x_is + 0x14, 0xb0, font1, 0x10);
     show_date(year, x_is + 0x16, 0xb0, 1);
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x10, 0x84, 0xb, 7, 1);
+#endif
 }
 
 // Draw the population, treasury, employment, and reputation history graphs.
