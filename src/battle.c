@@ -3027,43 +3027,40 @@ void set_ai_unit_auto_fire(void)
 // FUNCTION: C2WIN 0x0047d64e
 void update_units_morale(void)
 {
-    struct unit_rec *unit_ptr;
-    int losses_pct;
-    int loss_tier;
-    unsigned char morale_drop;
+    int loss_percent;
+    unsigned char morale_change;
 
     for (temp_unit = 1; temp_unit < 0x33; temp_unit++) {
-        if (unit_list[temp_unit].exists == 0)        continue;
-        if (unit_list[temp_unit].combat_order == 0xc) continue;
-
-        losses_pct = valueDIVtotal(
-            unit_list[temp_unit].start_men - unit_list[temp_unit].current_men,
-            unit_list[temp_unit].start_men);
-        loss_tier = losses_pct / 5;
-        if (loss_tier > unit_list[temp_unit].loss_tier) {
-            morale_drop = losses_to_morale[unit_list[temp_unit].loss_tier
-                                           + (unit_list[temp_unit].owner - 1) * 5 * 4];
-            unit_list[temp_unit].morale_a -= morale_drop;
-            unit_list[temp_unit].morale_b -= morale_drop / 3;
-            unit_list[temp_unit].loss_tier++;
-        }
-
-        if (unit_list[temp_unit].fatigue > 0x14) {
-            unit_list[temp_unit].fatigue -= 5;
-            if (unit_list[temp_unit].fatigue > 0x32) unit_list[temp_unit].fatigue = 0x32;
-            unit_list[temp_unit].morale_a--;
-            unit_list[temp_unit].fatigue_alert = 1;
-        }
-
-        if (unit_list[temp_unit].target_lock == 0) {
-            unit_list[temp_unit].regen_tick++;
-            if (unit_list[temp_unit].regen_tick > 0x19) {
-                unit_list[temp_unit].regen_tick = 0;
-                if (unit_list[temp_unit].morale_a < unit_list[temp_unit].morale_b) unit_list[temp_unit].morale_a++;
+        if (unit_list[temp_unit].exists != 0) {
+            if (unit_list[temp_unit].combat_order == 0xc) continue;
+            loss_percent = valueDIVtotal(
+                unit_list[temp_unit].start_men - unit_list[temp_unit].current_men,
+                unit_list[temp_unit].start_men);
+            loss_percent /= 5;
+            if (loss_percent > unit_list[temp_unit].loss_tier) {
+                morale_change = losses_to_morale[unit_list[temp_unit].loss_tier
+                                                 + ((unsigned char)unit_list[temp_unit].owner - 1) * 5 * 4];
+                unit_list[temp_unit].morale_a -= morale_change;
+                unit_list[temp_unit].morale_b -= morale_change / 3;
+                unit_list[temp_unit].loss_tier++;
             }
-        }
 
-        if (unit_list[temp_unit].morale_a <= 10) {
+            if (unit_list[temp_unit].fatigue > 0x14) {
+                unit_list[temp_unit].fatigue -= 5;
+                if (unit_list[temp_unit].fatigue > 0x32) unit_list[temp_unit].fatigue = 0x32;
+                unit_list[temp_unit].morale_a--;
+                unit_list[temp_unit].fatigue_alert = 1;
+            }
+
+            if (unit_list[temp_unit].target_lock == 0) {
+                unit_list[temp_unit].regen_tick++;
+                if (unit_list[temp_unit].regen_tick > 0x19) {
+                    unit_list[temp_unit].regen_tick = 0;
+                    if (unit_list[temp_unit].morale_a < unit_list[temp_unit].morale_b) unit_list[temp_unit].morale_a++;
+                }
+            }
+
+            if (unit_list[temp_unit].morale_a > 10) continue;
             set_unit_to_rout(temp_unit);
             drop_all_units_morale(unit_list[temp_unit].type, 16, 6);
             raise_all_units_morale(unit_list[temp_unit].type, 10, 8);
@@ -3165,97 +3162,93 @@ void get_units_status(void)
 
     /* ---- Pass 1: clear per-unit fields for alive units. ---- */
     for (temp_unit = 1; temp_unit < 0x33; temp_unit++) {
-        if (unit_list[temp_unit].exists == 0) continue;
-        unit_list[temp_unit].target_lock       = 0;
-        unit_list[temp_unit].has_selected_figs = 0;
-        unit_list[temp_unit].first_figure      = 0;
-        unit_list[temp_unit].fig_count         = 0;
-        unit_list[temp_unit].last_figure       = 0;
-        unit_list[temp_unit].current_men       = 0;
+        if (unit_list[temp_unit].exists != 0) {
+            unit_list[temp_unit].target_lock       = 0;
+            unit_list[temp_unit].has_selected_figs = 0;
+            unit_list[temp_unit].first_figure      = 0;
+            unit_list[temp_unit].fig_count         = 0;
+            unit_list[temp_unit].last_figure       = 0;
+            unit_list[temp_unit].current_men       = 0;
+        }
     }
 
     /* ---- Pass 2: per-figure accumulate. ---- */
     for (temp_figure = 1; temp_figure < 0xc9; temp_figure++) {
-        if (figure_list[temp_figure].exists == 0) continue;
+        if (figure_list[temp_figure].exists != 0) {
 
-        unit_idx = figure_list[temp_figure].unit_ref;
-        figure_list[temp_figure].unit_type = unit_list[unit_idx].fig_count;
+            unit_idx = figure_list[temp_figure].unit_ref;
+            figure_list[temp_figure].unit_type = unit_list[unit_idx].fig_count;
 
-        if (figure_list[temp_figure].state_idx == 4)
-            unit_list[unit_idx].target_lock++;
+            if (figure_list[temp_figure].state_idx == 4) unit_list[unit_idx].target_lock++;
 
-        if (figure_list[temp_figure].selected != 0)
-            unit_list[unit_idx].has_selected_figs = 1;
+            if (figure_list[temp_figure].selected != 0) unit_list[unit_idx].has_selected_figs = 1;
 
-        if (unit_list[unit_idx].first_figure == 0) {
-            unit_list[unit_idx].first_figure = temp_figure;
-            unit_list[unit_idx].x = figure_list[temp_figure].grid_x;
-            unit_list[unit_idx].y = figure_list[temp_figure].grid_y;
-        }
+            if (unit_list[unit_idx].first_figure == 0) {
+                unit_list[unit_idx].first_figure = temp_figure;
+                unit_list[unit_idx].x = figure_list[temp_figure].grid_x;
+                unit_list[unit_idx].y = figure_list[temp_figure].grid_y;
+            }
 
-        unit_list[unit_idx].fig_count++;
-        unit_list[unit_idx].last_figure = temp_figure;
-        unit_list[unit_idx].current_men += figure_list[temp_figure].stampede_flag;
+            unit_list[unit_idx].fig_count++;
+            unit_list[unit_idx].last_figure = temp_figure;
+            unit_list[unit_idx].current_men += figure_list[temp_figure].stampede_flag;
 
-        if (figure_list[temp_figure].owner != 0) {
-            if (figure_list[temp_figure].grid_x < roman_left_edge)  roman_left_edge  = figure_list[temp_figure].grid_x;
-            if (figure_list[temp_figure].grid_x > roman_right_edge) roman_right_edge = figure_list[temp_figure].grid_x;
-            if (figure_list[temp_figure].grid_y < roman_back_edge)  roman_back_edge  = figure_list[temp_figure].grid_y;
-            if (figure_list[temp_figure].grid_y > roman_front_edge) roman_front_edge = figure_list[temp_figure].grid_y;
+            if (figure_list[temp_figure].owner != 0) {
+                if (figure_list[temp_figure].grid_x < roman_left_edge)  roman_left_edge  = figure_list[temp_figure].grid_x;
+                if (figure_list[temp_figure].grid_x > roman_right_edge) roman_right_edge = figure_list[temp_figure].grid_x;
+                if (figure_list[temp_figure].grid_y < roman_back_edge)  roman_back_edge  = figure_list[temp_figure].grid_y;
+                if (figure_list[temp_figure].grid_y > roman_front_edge) roman_front_edge = figure_list[temp_figure].grid_y;
+            }
         }
     }
 
     /* ---- Pass 3: per-unit finalize + battle_stats. ---- */
     for (temp_unit = 1; temp_unit < 0x33; temp_unit++) {
-        if (unit_list[temp_unit].exists == 0) continue;
+        if (unit_list[temp_unit].exists != 0) {
 
-        if (unit_list[temp_unit].fig_count == 0) {
-            unit_list[temp_unit].exists = 0;
-            battle_tune_mood_from_type(temp_unit);
-        }
-
-        if (unit_list[temp_unit].has_selected_figs != 0 && unit_list[temp_unit].type != 0) {
-            battle_stats_control = 1;
-            battle_stats_nof_units += 1;
-            battle_stats_men       += unit_list[temp_unit].current_men;
-            battle_stats_start_men += unit_list[temp_unit].start_men;
-            battle_stats_morale    += unit_list[temp_unit].morale_a;
-            if (battle_stats_type == 0) {
-                battle_stats_type = unit_list[temp_unit].owner;
-                if (battle_stats_type > 4)
-                    battle_stats_type = 5;
-            } else if (unit_list[temp_unit].owner != battle_stats_type) {
-                battle_stats_type = 4;
+            if (unit_list[temp_unit].fig_count == 0) {
+                unit_list[temp_unit].exists = 0;
+                battle_tune_mood_from_type(temp_unit);
             }
-        }
-        if (unit_list[temp_unit].has_selected_figs != 0 && unit_list[temp_unit].type == 0) {
-            battle_stats_nof_units = 1;
-            battle_stats_men       = unit_list[temp_unit].current_men;
-            battle_stats_start_men = unit_list[temp_unit].start_men;
-            battle_stats_morale    = unit_list[temp_unit].morale_a;
-            battle_stats_type      = unit_list[temp_unit].owner;
-            battle_stats_control   = 0;
-        }
 
-        if (unit_list[temp_unit].type != 0) {
-            our_battle_men    += unit_list[temp_unit].current_men;
-            our_battle_morale += unit_list[temp_unit].morale_a;
-            our_battle_units++;
-        } else {
-            their_battle_men    += unit_list[temp_unit].current_men;
-            their_battle_morale += unit_list[temp_unit].morale_a;
-            their_battle_units++;
+            if (unit_list[temp_unit].has_selected_figs != 0 && unit_list[temp_unit].type != 0) {
+                battle_stats_control = 1;
+                battle_stats_nof_units += 1;
+                battle_stats_men       += unit_list[temp_unit].current_men;
+                battle_stats_start_men += unit_list[temp_unit].start_men;
+                battle_stats_morale    += unit_list[temp_unit].morale_a;
+                if (battle_stats_type == 0) {
+                    battle_stats_type = unit_list[temp_unit].owner;
+                    if (battle_stats_type > 4) battle_stats_type = 5;
+                } else if (unit_list[temp_unit].owner != battle_stats_type) { battle_stats_type = 4;
+                }
+            }
+            if (unit_list[temp_unit].has_selected_figs != 0 && unit_list[temp_unit].type == 0) {
+                battle_stats_nof_units = 1;
+                battle_stats_men       = unit_list[temp_unit].current_men;
+                battle_stats_start_men = unit_list[temp_unit].start_men;
+                battle_stats_morale    = unit_list[temp_unit].morale_a;
+                battle_stats_type      = unit_list[temp_unit].owner;
+                battle_stats_control   = 0;
+            }
+
+            if (unit_list[temp_unit].type != 0) {
+                our_battle_men    += unit_list[temp_unit].current_men;
+                our_battle_morale += unit_list[temp_unit].morale_a;
+                our_battle_units++;
+            } else {
+                their_battle_men    += unit_list[temp_unit].current_men;
+                their_battle_morale += unit_list[temp_unit].morale_a;
+                their_battle_units++;
+            }
         }
     }
 
     get_battle_odds();
 
-    if (our_battle_units != 0)
-        our_battle_morale /= our_battle_units;
-    if (their_battle_units != 0)
-        their_battle_morale /= their_battle_units;
-    if (battle_stats_nof_units != 0)
-        battle_stats_morale /= battle_stats_nof_units;
+    if (our_battle_units != 0) our_battle_morale /= our_battle_units;
+    if (their_battle_units != 0) their_battle_morale /= their_battle_units;
+    if (battle_stats_nof_units != 0) battle_stats_morale /= battle_stats_nof_units;
 
 }
 
@@ -3264,27 +3257,23 @@ void get_units_status(void)
 // mood range.
 // FUNCTION: C2 0x50f6d
 // FUNCTION: C2WIN 0x0047e676
-void battle_tune_mood_from_type(int unit_idx)
+void battle_tune_mood_from_type(int unit_no)
 {
-    int owner;
-
-    if (unit_list[unit_idx].type != 0) {
-        owner = unit_list[unit_idx].owner;
-        if (owner == 1) tune_mood = 6;
-        else if (owner == 2) tune_mood = 7;
-        else if (owner == 3) tune_mood = 8;
+    if (unit_list[unit_no].type != 0) {
+        if (unit_list[unit_no].owner == 1) tune_mood = 6;
+        else if (unit_list[unit_no].owner == 2) tune_mood = 7;
+        else if (unit_list[unit_no].owner == 3) tune_mood = 8;
         else tune_mood = 9;
     } else {
-        owner = unit_list[unit_idx].owner;
-        if (owner == 5) tune_mood = 0xd;
-        else if (owner == 7) tune_mood = 0xd;
-        else if (owner == 8) tune_mood = 0xd;
-        else if (owner == 6) tune_mood = 0xc;
-        else if (owner == 0xb) tune_mood = 0xe;
-        else if (owner == 0xc) tune_mood = 0xe;
-        else if (owner == 0xd) tune_mood = 0xe;
-        else if (owner == 0xe) tune_mood = 0xf;
-        else if (owner == 0xf) tune_mood = 0x10;
+        if (unit_list[unit_no].owner == 5) tune_mood = 0xd;
+        else if (unit_list[unit_no].owner == 7) tune_mood = 0xd;
+        else if (unit_list[unit_no].owner == 8) tune_mood = 0xd;
+        else if (unit_list[unit_no].owner == 6) tune_mood = 0xc;
+        else if (unit_list[unit_no].owner == 0xb) tune_mood = 0xe;
+        else if (unit_list[unit_no].owner == 0xc) tune_mood = 0xe;
+        else if (unit_list[unit_no].owner == 0xd) tune_mood = 0xe;
+        else if (unit_list[unit_no].owner == 0xe) tune_mood = 0xf;
+        else if (unit_list[unit_no].owner == 0xf) tune_mood = 0x10;
         else tune_mood = 0xb;
     }
     tune_mood_hold = 1;

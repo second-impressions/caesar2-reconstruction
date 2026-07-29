@@ -774,13 +774,13 @@ struct unit_rec {
                                                 30) and morale gating in
                                                 drop_all_units_morale. */
     unsigned char  exists;           /* +0x1B */
-    char           owner;            /* +0x1C */
+    unsigned char  owner;            /* +0x1C */
     signed char    morale_a;         /* +0x1D  signed-byte morale axis A,
                                                 bumped by raise/drop_all_units
                                                 _morale; capped to 100. */
     signed char    morale_b;         /* +0x1E  signed-byte morale axis B
                                                 (paired with morale_a). */
-    char           fatigue;          /* +0x1F  per-unit fatigue gauge; bumped
+    unsigned char  fatigue;          /* +0x1F  per-unit fatigue gauge; bumped
                                                 by each successful arrow hit
                                                 against one of the unit's
                                                 figures, then bled off by
@@ -798,7 +798,7 @@ struct unit_rec {
     char           fatigue_alert;     /* +0x25  set to 1 by update_units_morale
                                                 whenever fatigue is bled off
                                                 this tick (consumer TBD). */
-    char           has_selected_figs;/* +0x26  set by update_battle_stats when
+    unsigned char  has_selected_figs;/* +0x26  set by update_battle_stats when
                                                 any of this unit's figures has
                                                 .selected != 0; consumed by the
                                                 same pass to populate the
@@ -815,7 +815,7 @@ struct unit_rec {
                                                 entry belonging to this unit */
     unsigned char  last_figure;      /* +0x2D  byte index of last figure_list
                                                 entry (inclusive) */
-    char           fig_count;        /* +0x2E  per-unit running count of
+    unsigned char  fig_count;        /* +0x2E  per-unit running count of
                                                 alive figures, recomputed each
                                                 tick by update_battle_stats.
                                                 Each new figure assigned this
