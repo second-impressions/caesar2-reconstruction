@@ -318,6 +318,7 @@ void put_new_node(void)
     web[web_node].y    = web_y;
     web[web_node].dirs = web_directions;
     web[web_node].from_dir += web_from;
+    return;
 }
 
 // Selects the first web node with an unexplored outgoing branch.
