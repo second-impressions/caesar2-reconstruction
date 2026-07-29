@@ -1017,33 +1017,27 @@ void show_fx_box(int settings_page)
     else if (settings_page == 3) box_height = 7;
 
     show_a_mosaic_window(0x40, 0x70, 0x13, box_height + 2);
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
 
     if (settings_page == 0) {
         font_list(0x39, 0, 0x60, 0x98, font1, 0x10);
-        if (c2inf.tunes_on != 0)
-            font_list(0x39, 3, 0xf0, 0x98, font1, 0x10);
-        else
-            font_list(0x39, 2, 0xf0, 0x98, font1, 0x10);
+        if (c2inf.tunes_on != 0) font_list(0x39, 3, 0xf0, 0x98, font1, 0x10);
+        else font_list(0x39, 2, 0xf0, 0x98, font1, 0x10);
         font_list(0x39, 4, 0x60, 0xb8, font1, 0x10);
         font_no(c2inf.tunes_level, 0x20, "%",
                 0xf0, 0xb8, font1, 0x10);
     } else if (settings_page == 1) {
         font_list(0x39, 1, 0x60, 0x98, font1, 0x10);
-        if (c2inf.samples_on != 0)
-            font_list(0x39, 3, 0xf0, 0x98, font1, 0x10);
-        else
-            font_list(0x39, 2, 0xf0, 0x98, font1, 0x10);
+        if (c2inf.samples_on != 0) font_list(0x39, 3, 0xf0, 0x98, font1, 0x10);
+        else font_list(0x39, 2, 0xf0, 0x98, font1, 0x10);
         font_list(0x39, 7, 0x60, 0xb8, font1, 0x10);
-        if (c2inf.ambients_on != 0)
-            font_list(0x39, 3, 0xf0, 0xb8, font1, 0x10);
-        else
-            font_list(0x39, 2, 0xf0, 0xb8, font1, 0x10);
+        if (c2inf.ambients_on != 0) font_list(0x39, 3, 0xf0, 0xb8, font1, 0x10);
+        else font_list(0x39, 2, 0xf0, 0xb8, font1, 0x10);
         font_list(0x39, 8, 0x60, 0xd8, font1, 0x10);
-        if (c2inf.speech_on != 0)
-            font_list(0x39, 3, 0xf0, 0xd8, font1, 0x10);
-        else
-            font_list(0x39, 2, 0xf0, 0xd8, font1, 0x10);
+        if (c2inf.speech_on != 0) font_list(0x39, 3, 0xf0, 0xd8, font1, 0x10);
+        else font_list(0x39, 2, 0xf0, 0xd8, font1, 0x10);
         font_list(0x39, 4, 0x60, 0xf8, font1, 0x10);
         font_no(c2inf.samples_level, 0x20, "%",
                 0xf0, 0xf8, font1, 0x10);
@@ -1052,25 +1046,21 @@ void show_fx_box(int settings_page)
                 0xf0, 0x118, font1, 0x10);
     } else if (settings_page == 2) {
         font_list(0x39, 5, 0x60, 0x98, font1, 0x10);
-        if (c2inf.anims_on != 0)
-            font_list(0x39, 3, 0xf0, 0x98, font1, 0x10);
-        else
-            font_list(0x39, settings_page, 0xf0, 0x98, font1, 0x10);
+        if (c2inf.anims_on != 0) font_list(0x39, 3, 0xf0, 0x98, font1, 0x10);
+        else font_list(0x39, 2, 0xf0, 0x98, font1, 0x10);
     } else if (settings_page == 3) {
         font_list(0x39, 6, 0x60, 0x98, font1, 0x10);
-        if (c2inf.yearend_on != 0)
-            font_list(0x39, settings_page, 0xf0, 0x98, font1, 0x10);
-        else
-            font_list(0x39, 2, 0xf0, 0x98, font1, 0x10);
+        if (c2inf.yearend_on != 0) font_list(0x39, 3, 0xf0, 0x98, font1, 0x10);
+        else font_list(0x39, 2, 0xf0, 0x98, font1, 0x10);
         font_list(0x39, 9, 0x60, 0xb8, font1, 0x10);
-        if (c2inf.autosave_on != 0)
-            font_list(0x39, 3, 0xf0, 0xb8, font1, 0x10);
-        else
-            font_list(0x39, 2, 0xf0, 0xb8, font1, 0x10);
+        if (c2inf.autosave_on != 0) font_list(0x39, 3, 0xf0, 0xb8, font1, 0x10);
+        else font_list(0x39, 2, 0xf0, 0xb8, font1, 0x10);
     }
 
     font_list(9, 1, 0x90, box_height * 0x10 + 0x68, font1, 0x10);
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     hold_mouse_replace = 1;
 }
 
