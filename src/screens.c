@@ -3888,6 +3888,7 @@ void show_people_query_panel(void)
 // FUNCTION: C2WIN 0x0042cba3
 int mouse_in_area(int x, int y, int w, int h);
 int test_range_for_road(int x, int y, int range);
+int test_area_for_population(int extra, int x, int y, int radius);
 
 void get_queried_person(void)
 {
