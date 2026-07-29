@@ -17,12 +17,6 @@ int web_node;
 unsigned char web_from;
 unsigned char web_dirc;
 unsigned char web_directions;
-/* Forward declarations (functions defined later in this file). */
-void init_web(void);
-void put_new_node(void);
-void set_first_nodes_values(int pressure_mask);
-void push_nodes_values(char pressure, int source_nodes_only);
-void push_node_value(char pressure_value);
 
 
 // Starts a regional-road traversal and marks the source cell as visited.
@@ -329,17 +323,18 @@ int get_incomplete_node(int row_stride, int cell_stride)
     unsigned char pending_dirs;
 
     for (web_node = 0; web_node < web_node_count; web_node++) {
-        if (web[web_node].dirs == web[web_node].from_dir) continue;
-        web_x = web[web_node].x;
-        web_y = web[web_node].y;
-        web_ptr = (row_stride * web_y + web_x) * cell_stride;
-        pending_dirs = web[web_node].dirs ^ web[web_node].from_dir;
-        if      (pending_dirs & 1) { web_dirc = 1; web_from = 4; }
-        else if (pending_dirs & 2) { web_dirc = 2; web_from = 8; }
-        else if (pending_dirs & 4) { web_dirc = 4; web_from = 1; }
-        else if (pending_dirs & 8) { web_dirc = 8; web_from = 2; }
-        web[web_node].from_dir |= web_dirc;
-        return 1;
+        if (web[web_node].dirs != web[web_node].from_dir) {
+            web_x = web[web_node].x;
+            web_y = web[web_node].y;
+            web_ptr = (web_x + row_stride * web_y) * cell_stride;
+            pending_dirs = web[web_node].dirs ^ web[web_node].from_dir;
+            if      (pending_dirs & 1) { web_dirc = 1; web_from = 4; }
+            else if (pending_dirs & 2) { web_dirc = 2; web_from = 8; }
+            else if (pending_dirs & 4) { web_dirc = 4; web_from = 1; }
+            else if (pending_dirs & 8) { web_dirc = 8; web_from = 2; }
+            web[web_node].from_dir |= web_dirc;
+            return 1;
+        }
     }
     return 0;
 }
