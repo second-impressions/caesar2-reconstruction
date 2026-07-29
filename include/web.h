@@ -26,7 +26,7 @@ int test_next_to_river(void);
 void init_web(void);
 void put_new_node(void);
 int get_incomplete_node(int, int);
-void set_first_nodes_values(int);
+void set_first_nodes_values(char);
 void push_nodes_values(char, int);
 void push_node_value(char);
 

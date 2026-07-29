@@ -342,20 +342,18 @@ int get_incomplete_node(int row_stride, int cell_stride)
 // Marks river-adjacent network nodes as water sources and assigns their initial pressure.
 // FUNCTION: C2 0x2a51f
 // FUNCTION: C2WIN 0x00451bb9
-void set_first_nodes_values(int pressure_mask)
+void set_first_nodes_values(char pressure_mask)
 {
-    char pressure_mask_byte;
-    char source_kind;
+    enum { source_kind = 5 };
 
-    pressure_mask_byte = pressure_mask;
-    for (web_node = web_first_actual_node, source_kind = 5; web_node < web_node_count; web_node++) {
+    for (web_node = web_first_actual_node; web_node < web_node_count; web_node++) {
         web_x = web[web_node].x;
         web_y = web[web_node].y;
         web_ptr = (web_y * CITY_W + web_x) * CITY_CELL_BYTES;
         if (test_next_to_river()) {
-            CM_CELL(web_ptr).range_flag |= pressure_mask_byte;
-            web[web_node].kind = source_kind;
+            CM_CELL(web_ptr).range_flag |= pressure_mask;
             CM_CELL(web_ptr).extra_edge += 3;
+            web[web_node].kind = source_kind;
         }
     }
 }
