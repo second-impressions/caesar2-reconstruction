@@ -985,11 +985,16 @@ void sa11_army_sail_to_port(void)
     army_list[army_no].target_x      = reg_city_x;
     army_list[army_no].target_y      = reg_city_y;
     army_list[army_no].return_flag = 1;
-    if (sail_to_target(0) && (army_list[army_no].flags & 8)) {
-        army_list[army_no].wf_phase  = 0;
-        army_list[army_no].state_idx = 0xD;
-        army_list[army_no].dest_x    = reg_city_x;
-        army_list[army_no].dest_y    = reg_city_y;
+    if (sail_to_target(0) == 0) {
+    } else {
+        if (army_list[army_no].flags & 8) {
+            army_list[army_no].wf_phase  = 0;
+            army_list[army_no].state_idx = 0xD;
+            army_list[army_no].dest_x    = reg_city_x;
+            army_list[army_no].dest_y    = reg_city_y;
+        }
+        if (army_list[army_no].flags & 4) {
+        }
     }
 }
 
