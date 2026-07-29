@@ -2684,7 +2684,7 @@ int find_nearest_target(int distance);
 int get_fire_target(int fig_no);
 void set_missile_fire_range(int weapon_kind);
 void battle_tune_mood_from_type(int unit_idx);
-void set_unit_to_rout(int unit_idx);
+void set_unit_to_rout(int);
 
 // Mark a clipped rectangle of battle-map cells dirty for redraw.
 // FUNCTION: C2 0x4fea9
