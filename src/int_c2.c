@@ -469,47 +469,46 @@ void s07_army_patrol(void)
 // FUNCTION: C2WIN 0x00405711
 void s08_vigile_patrol(void)
 {
-    int enemy_idx;
-    int road_dir;
+    unsigned char road_dir;
 
-    if (citizen_go_to_target(0) == 0) return;
-    if ((citizen_list[citizen_no].flag_bits & 1) == 0) return;
-    flag_range(0, citizen_list[citizen_no].x,
-               citizen_list[citizen_no].y, 3, 0xa, 0x30);
-    if (test_fire_zones() != 0) {
-        citizen_list[citizen_no].state_idx = 9;
-        return;
-    }
-    if (no_of_rioters != 0 || no_of_barbarians != 0) {
-        enemy_idx = find_enemy(citizen_list[citizen_no].x,
-                              citizen_list[citizen_no].y, 10);
-        citizen_a = enemy_idx;
-        if ((short)enemy_idx != 0) {
-            citizen_list[citizen_no].target_kind  = citizen_a;
-            citizen_list[citizen_no].target_marker =
-                citizen_list[(short)enemy_idx].evolve_timer;
-            citizen_list[citizen_no].dest_x =
-                citizen_list[(short)enemy_idx].x;
-            citizen_list[citizen_no].dest_y =
-                citizen_list[(short)enemy_idx].y;
-            citizen_list[citizen_no].target_count = 0;
-            citizen_list[citizen_no].wf_active    = 0;
-            citizen_list[citizen_no].state_idx    = 6;
+    if (citizen_go_to_target(0) == 0) {
+    } else if (citizen_list[citizen_no].flag_bits & 1) {
+        flag_range(0, citizen_list[citizen_no].x,
+                   citizen_list[citizen_no].y, 3, 0xa, 0x30);
+        if (test_fire_zones() != 0) {
+            citizen_list[citizen_no].state_idx = 9;
             return;
         }
+        if (no_of_rioters != 0 || no_of_barbarians != 0) {
+            citizen_a = find_enemy(citizen_list[citizen_no].x,
+                                   citizen_list[citizen_no].y, 10);
+            if (citizen_a != 0) {
+                citizen_list[citizen_no].target_kind = citizen_a;
+                citizen_list[citizen_no].target_marker =
+                    citizen_list[citizen_a].evolve_timer;
+                citizen_list[citizen_no].dest_x =
+                    citizen_list[citizen_a].x;
+                citizen_list[citizen_no].dest_y =
+                    citizen_list[citizen_a].y;
+                citizen_list[citizen_no].target_count = 0;
+                citizen_list[citizen_no].wf_active = 0;
+                citizen_list[citizen_no].state_idx = 6;
+                return;
+            }
+        }
+        road_dir = (unsigned char)city_test_for_road(
+                    citizen_list[citizen_no].x,
+                    citizen_list[citizen_no].y,
+                    citizen_list[citizen_no].map_ref,
+                    citizen_list[citizen_no].world_dir);
+        if (road_dir >= 8) {
+            citizen_list[citizen_no].state_idx = 2;
+            citizen_list[citizen_no].wait_count = 0x28;
+            return;
+        }
+        target_from_dirc(road_dir);
+        citizen_list[citizen_no].action_kind = 1;
     }
-    road_dir = (unsigned char)city_test_for_road(
-                citizen_list[citizen_no].x,
-                citizen_list[citizen_no].y,
-                citizen_list[citizen_no].map_ref,
-                citizen_list[citizen_no].world_dir);
-    if (road_dir >= 8) {
-        citizen_list[citizen_no].state_idx  = 2;
-        citizen_list[citizen_no].wait_count = 0x28;
-        return;
-    }
-    target_from_dirc(road_dir);
-    citizen_list[citizen_no].action_kind = 1;
 }
 
 // Advance a firefighter toward its target, extinguish valid fires, or acquire a replacement target.
