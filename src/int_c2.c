@@ -195,7 +195,7 @@ void a01_cohort(void)
         if (army_list[army_no].target_flag) army_list[army_no].morale_timer -= 2;
         else                                army_list[army_no].morale_timer -= 1;
     }
-    if (army_list[army_no].target_timer) army_list[army_no].target_timer -= 1;
+    if (army_list[army_no].target_timer) army_list[army_no].target_timer--;
 }
 
 // Enemy-army intelligence tick: flag a threat mood, refresh the sprite frame, and dispatch the
