@@ -1010,8 +1010,8 @@ void get_battle_centuries_left(void)
         }
     }
 
-    army_list[our_battle_army].total_troops = army_list[our_battle_army].num_auxillaries + army_list[our_battle_army].num_irregulars + army_list[our_battle_army].num_regulars + army_list[our_battle_army].num_horse + army_list[our_battle_army].num_specials;
-    army_list[their_battle_army].total_troops = army_list[their_battle_army].num_auxillaries + army_list[their_battle_army].num_irregulars + army_list[their_battle_army].num_regulars + army_list[their_battle_army].num_horse + army_list[their_battle_army].num_specials;
+    army_list[our_battle_army].total_troops = (&army_list[our_battle_army].num_horse)[1] + (&army_list[our_battle_army].num_horse)[2] + (&army_list[our_battle_army].num_horse)[3] + (&army_list[our_battle_army].num_horse)[0] + (&army_list[our_battle_army].num_horse)[4];
+    army_list[their_battle_army].total_troops = (&army_list[their_battle_army].num_horse)[1] + (&army_list[their_battle_army].num_horse)[2] + (&army_list[their_battle_army].num_horse)[3] + (&army_list[their_battle_army].num_horse)[0] + (&army_list[their_battle_army].num_horse)[4];
 }
 
 // Compute the battle-odds rating into bat_odds (+5 = we vastly outnumber them, 0 = roughly equal,
