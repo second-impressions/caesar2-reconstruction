@@ -1426,39 +1426,39 @@ int find_enemy(int center_x, int center_y, int radius)
 // FUNCTION: C2WIN 0x0040910e
 int find_invading_army(int center_x, int center_y, int radius)
 {
-    int x_min;
-    int y_min;
-    int y_max;
-    int x_max;
-    int best_idx;
-    int best_dist;
-    int army_x;
-    int army_y;
+    int min_x;
+    int max_x;
+    int max_y;
+    int enemy_idx;
     int distance;
-    int army_type;
+    int best_dist;
+    int min_y;
 
-    x_min = center_x - radius;        if (x_min < 0)    x_min = 0;
-    x_max = center_x + radius;        if (x_max >= 0x3c) x_max = 0x3b;
-    y_min = center_y - radius;        if (y_min < 0)    y_min = 0;
-    y_max = center_y + radius;        if (y_max >= 0x3c) y_max = 0x3b;
+    min_x = center_x - radius;        if (min_x < 0)    min_x = 0;
+    max_x = center_x + radius;        if (max_x >= 0x3c) max_x = 0x3b;
+    min_y = center_y - radius;        if (min_y < 0)    min_y = 0;
+    max_y = center_y + radius;        if (max_y >= 0x3c) max_y = 0x3b;
     best_dist = radius + 1;
-    best_idx = 0;
+    enemy_idx = 0;
     for (enemy_army = 0; enemy_army < 0x1a; enemy_army++) {
-        if (army_list[enemy_army].exists == 0) continue;
-        army_type = army_list[enemy_army].type;
-        if (army_type < 2 || army_type > 5) continue;
-        if (army_list[enemy_army].state_idx >= 14) continue;
-        army_x = army_list[enemy_army].x;
-        if (army_x < x_min || army_x >= x_max) continue;
-        army_y = army_list[enemy_army].y;
-        if (army_y < y_min || army_y >= y_max) continue;
-        distance = get_longest_distance(center_x, center_y, army_x, army_y);
-        if (distance < best_dist) {
-            best_dist = distance;
-            best_idx = enemy_army;
+        if (army_list[enemy_army].exists != 0
+         && army_list[enemy_army].type >= 2
+         && army_list[enemy_army].type <= 5
+         && army_list[enemy_army].state_idx < 14
+         && army_list[enemy_army].x >= min_x
+         && army_list[enemy_army].x < max_x
+         && army_list[enemy_army].y >= min_y
+         && army_list[enemy_army].y < max_y) {
+            distance = get_longest_distance(center_x, center_y,
+                        army_list[enemy_army].x,
+                        army_list[enemy_army].y);
+            if (distance < best_dist) {
+                best_dist = distance;
+                enemy_idx = enemy_army;
+            }
         }
     }
-    return best_idx;
+    return enemy_idx;
 }
 
 // Advance the current citizen directly toward its destination, respecting its movement speed.
