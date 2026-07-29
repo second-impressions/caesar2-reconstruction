@@ -2690,50 +2690,57 @@ int try_this_seamap_square(int cell_offset, int unused_kind, int unused_arg)
 // FUNCTION: C2WIN 0x0040ddb0
 int dock_the_ship_in_good_port(int heading)
 {
-    unsigned char occupant_flags;
-    unsigned char corner_flags;
+    unsigned char occupant_byte;
+    unsigned char adjacency;
+    unsigned char plot_type;
     unsigned char was_sea_flag;
-    unsigned char edge_flag;
+    unsigned char edge;
     int cell_x;
     int cell_y;
-    int cell_offset;
-    int cell_idx;
-    int goods_kind;
+    int port_ref;
+    int cell_no;
+    int size;
 
-    if (heading == 0)      cell_offset = army_list[army_no].map_ref - 0x1e0;
-    else if (heading == 1) cell_offset = army_list[army_no].map_ref - 0x1d8;
-    else if (heading == 2) cell_offset = army_list[army_no].map_ref + 8;
-    else if (heading == 3) cell_offset = army_list[army_no].map_ref + 0x1e8;
-    else if (heading == 4) cell_offset = army_list[army_no].map_ref + 0x1e0;
-    else if (heading == 5) cell_offset = army_list[army_no].map_ref + 0x1d8;
-    else if (heading == 6) cell_offset = army_list[army_no].map_ref - 8;
-    else if (heading == 7) cell_offset = army_list[army_no].map_ref - 0x1e8;
+    if (heading == 0)      port_ref = army_list[army_no].map_ref - 0x1e0;
+    else if (heading == 1) port_ref = army_list[army_no].map_ref - 0x1d8;
+    else if (heading == 2) port_ref = army_list[army_no].map_ref + 8;
+    else if (heading == 3) port_ref = army_list[army_no].map_ref + 0x1e8;
+    else if (heading == 4) port_ref = army_list[army_no].map_ref + 0x1e0;
+    else if (heading == 5) port_ref = army_list[army_no].map_ref + 0x1d8;
+    else if (heading == 6) port_ref = army_list[army_no].map_ref - 8;
+    else if (heading == 7) port_ref = army_list[army_no].map_ref - 0x1e8;
 
-    occupant_flags = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant;
-    corner_flags = occupant_flags & 3;
-    if (corner_flags & 1) cell_offset -= 8;
-    if (corner_flags & 2) cell_offset -= 0x1e0;
+    occupant_byte = (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant;
+    adjacency = occupant_byte & 3;
+    if (adjacency & 1) port_ref -= 8;
+    if (adjacency & 2) port_ref -= 0x1e0;
 
-    cell_idx = cell_offset / 8;
-    cell_x = cell_idx % 60;
-    cell_y = cell_idx / 60;
+    cell_no = port_ref / 8;
+    cell_x = cell_no % 60;
+    cell_y = cell_no / 60;
 
-    occupant_flags = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant;
-    edge_flag = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).edge_bits & 0x20;
-    was_sea_flag = occupant_flags & 0x80;
+    occupant_byte = (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant;
+    edge = (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).edge_bits & 0x20;
+    plot_type = occupant_byte & 0x1c;
+    was_sea_flag = occupant_byte & 0x80;
 
-    (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant |= 0x1c;
-    (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant &= 0x9f;
+    plot_type >>= 2;
+    plot_type = 7;
+    plot_type <<= 2;
+    (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant &= 0xe3;
+    (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant |= plot_type;
+    (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant &= 0x9f;
 
-    if (army_list[army_no].compass_side != 0) {
-        if (army_list[army_no].compass_side == 2)      (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant |= 0x20;
-        else if (army_list[army_no].compass_side == 4) (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant |= 0x40;
-        else                                           (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant |= 0x60;
+    if (army_list[army_no].compass_side == 0) {
+    } else {
+        if (army_list[army_no].compass_side == 2)      (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant |= 0x20;
+        else if (army_list[army_no].compass_side == 4) (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant |= 0x40;
+        else                                           (*(struct region_cell *)((unsigned char *)region_map + (port_ref))).occupant |= 0x60;
     }
 
-    goods_kind = army_list[army_no].trader_brings;
-    if (edge_flag != 0) {
-        fill_warehouses_with(cell_x, cell_y, 0xf, goods_kind, 1);
+    size = army_list[army_no].trader_brings;
+    if (edge != 0) {
+        fill_warehouses_with(cell_x, cell_y, 0xf, size, 1);
     }
 
     return was_sea_flag != 0;
