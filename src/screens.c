@@ -3781,6 +3781,9 @@ void show_people_query_panel(void)
 // Select the person clicked in the query-panel resident list.
 // FUNCTION: C2 0x63ef3
 // FUNCTION: C2WIN 0x0042cba3
+int mouse_in_area(int x, int y, int w, int h);
+int test_range_for_road(int x, int y, int range);
+
 void get_queried_person(void)
 {
     int i;
