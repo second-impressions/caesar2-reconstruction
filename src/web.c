@@ -128,7 +128,7 @@ int get_web_regroad_dircs(void)
     int count = 0;
     web_directions = 0;
     if (web_y > 0) {
-        if (RM_CELL(web_ptr - REGION_ROW).terrain & 0x25) { web_directions = 1; count = 1; }
+        if (RM_CELL(web_ptr - REGION_ROW).terrain & 0x25) { web_directions += 1; count++; }
     }
     if (web_x < 0x3b) {
         if (RM_CELL(web_ptr + REGION_CELL_BYTES).terrain   & 0x25) { web_directions += 2; count++; }
