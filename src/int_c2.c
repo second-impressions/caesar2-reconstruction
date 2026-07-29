@@ -673,36 +673,36 @@ void sa02_death(void)
 // FUNCTION: C2WIN 0x00406264
 void sa03_army_move(void)
 {
-    if (region_go_to_target(0) == 0) return;
-    if ((army_list[army_no].flags & 1) == 0) return;
-    army_list[army_no].return_flag = 1;
-    if (test_for_army_attack() != 0) return;
+    int i;
 
-    if ((unsigned char)army_list[army_no].dest_x
-            < army_routes[army_list[army_no].cohort_id]
-                  .row_len[army_list[army_no].dest_y]) {
-        new_army_route_point();
-        return;
+    if (region_go_to_target(0) == 0) {
+    } else if (army_list[army_no].flags & 1) {
+        army_list[army_no].return_flag = 1;
+        if (test_for_army_attack() != 0) {
+        } else {
+            if ((unsigned char)army_list[army_no].dest_x
+                    < army_routes[army_list[army_no].cohort_id]
+                          .row_len[army_list[army_no].dest_y]) {
+                new_army_route_point();
+            } else if (army_list[army_no].dest_y
+                    < army_routes[army_list[army_no].cohort_id].row_count - 1) {
+                army_list[army_no].dest_y += 1;
+                army_list[army_no].dest_x = 0;
+                new_army_route_point();
+                new_army_route_point();
+            } else if (army_routes[army_list[army_no].cohort_id].row_count <= 1) {
+                army_list[army_no].state_idx = 1;
+                army_list[army_no].saved_state_idx = 1;
+                army_list[army_no].wait_count = 5;
+                army_routes[army_list[army_no].cohort_id].chase_row = 0;
+                army_routes[army_list[army_no].cohort_id].target_army = 0;
+            } else {
+                army_list[army_no].dest_y = 1;
+                army_list[army_no].dest_x = 0;
+                new_army_route_point();
+            }
+        }
     }
-    if (army_list[army_no].dest_y
-            < army_routes[army_list[army_no].cohort_id].row_count - 1) {
-        army_list[army_no].dest_y++;
-        army_list[army_no].dest_x = 0;
-        new_army_route_point();
-        new_army_route_point();
-        return;
-    }
-    if (army_routes[army_list[army_no].cohort_id].row_count <= 1) {
-        army_list[army_no].state_idx       = 1;
-        army_list[army_no].saved_state_idx = 1;
-        army_list[army_no].wait_count      = 5;
-        army_routes[army_list[army_no].cohort_id].chase_row = 0;
-        army_routes[army_list[army_no].cohort_id].target_army = 0;
-        return;
-    }
-    army_list[army_no].dest_y = 1;
-    army_list[army_no].dest_x = 0;
-    new_army_route_point();
 }
 
 // Pull the next patrol-route waypoint for the current army. First tries to engage a queued enemy

@@ -35,8 +35,8 @@
 extern struct figure_rec figure_list[];
 extern struct citizen_rec citizen_list[];
 extern struct unit_rec unit_list[];
-extern struct army_rec army_list[];
 extern struct army_route_rec army_routes[];
+extern struct army_rec army_list[];
 extern struct web_node web[];
 extern struct province_industry province_industries[];
 extern int pseudo_map[][81];
