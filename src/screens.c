@@ -813,19 +813,29 @@ void show_tribunes_report(int army_idx, int panel_x, int panel_y, int sprite_mod
 }
 
 
+#if PLATFORM_WINDOWS
+extern void *current_window;
+extern unsigned char initreg_buffer[];
+extern void blit_window_area(void *window, void *buffer,
+                             int dst_x, int dst_y, int width, int height,
+                             int src_x, int src_y);
+#endif
+
 // Show the initial-region selection screen.
 // FUNCTION: C2 0x5cb50
 // FUNCTION: C2WIN 0x00424275
 void show_initreg_box(void)
 {
-    char *unused_padding;
-
-    unused_padding = "";
     black_out();
     readfile("empire.256", temp_palette, 0x300, 0);
     readfile("e_parts2.pl8", ((void *)scratch_buffer), 0x249f0, 0);
     reshow_initreg_box();
+#if PLATFORM_WINDOWS
+    blit_window_area(current_window, initreg_buffer,
+                     0, 0, 0x26c, 0x17c, 0xb, 0x2d);
+#else
     refresh_svga_screen();
+#endif
     set_palette(temp_palette);
 }
 
