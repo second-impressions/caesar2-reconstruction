@@ -2341,27 +2341,23 @@ void show_this_tribune(void)
 // FUNCTION: C2WIN 0x004286d5
 void update_tribune_flag(int mode)
 {
-    short army;
-
-    request_message.tribune_flag_counter += 1;
-    if (request_message.tribune_flag_counter >= 0x40) {
-        request_message.tribune_flag_counter = 0;
-    }
-    army = get_actual_viewed_army();
-    temp_army = army;
-    if (army_list[army].state_idx == 0xa) {
-        request_message.tribune_flag_counter = 0;
-    }
+    if (++request_message.tribune_flag_counter >= 0x40) request_message.tribune_flag_counter = 0;
+    temp_army = (short)get_actual_viewed_army();
+    if (army_list[temp_army].state_idx == 0xa) request_message.tribune_flag_counter = 0;
     stone_random_count = 0xb;
     if (mode == 0) {
         show_a_mosaic_blank(0x190, 0x56, 2, 2);
         write_general_sprite((request_message.tribune_flag_counter >> 3) + 0x3a, 0x190, 0x56);
+#if !PLATFORM_WINDOWS
         setup_refresh_area(0x190, 0x56, 2, 2, 2);
+#endif
     } else {
         if (forum_viewed_army == 0xa) return;
         show_a_mosaic_blank(0x240, 0x32, 2, 2);
         write_general_sprite((request_message.tribune_flag_counter >> 3) + 0x19, 0x240, 0x32);
+#if !PLATFORM_WINDOWS
         setup_refresh_area(0x240, 0x32, 2, 2, 2);
+#endif
     }
 }
 
