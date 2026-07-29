@@ -1516,17 +1516,21 @@ int citizen_maraude_to_target(int movement_kind)
 {
     int movement_value;
 
-    if ((citizen_list[citizen_no].flag_bits & 1) == 0) {
+    if (citizen_list[citizen_no].flag_bits & 1) {
+        citizen_list[citizen_no].speed_count = 0; citizen_list[citizen_no].speed_phase = 0;
+    } else {
         if (citizen_list[citizen_no].is_barbarian) movement_value = citizen_speed_on_road[citizen_list[citizen_no].type];
         else movement_value = citizen_speed_off_road[citizen_list[citizen_no].type];
-        citizen_list[citizen_no].speed_phase = citizen_list[citizen_no].speed_phase + 1;
+        citizen_list[citizen_no].speed_phase++;
         if (citizen_list[citizen_no].speed_phase > movement_value) {
-            citizen_list[citizen_no].speed_phase = 0; citizen_list[citizen_no].speed_count++; if (citizen_list[citizen_no].speed_count > 0xf) citizen_list[citizen_no].flag_bits |= 1;
+            citizen_list[citizen_no].speed_phase = 0; citizen_list[citizen_no].speed_count++;
+            if (citizen_list[citizen_no].speed_count > 0xf) {
+                citizen_list[citizen_no].flag_bits |= 1;
+                return 1;
+            }
         }
         return 1;
     }
-
-    citizen_list[citizen_no].speed_count = 0; citizen_list[citizen_no].speed_phase = 0;
 
     if (citizen_list[citizen_no].action_kind == 0) return 1;
 
