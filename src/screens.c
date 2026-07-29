@@ -3201,38 +3201,33 @@ void show_query_panel(void)
 // FUNCTION: C2WIN 0x0042af17
 void show_query_panel_heading(int y)
 {
-    int qt;
     int bucket;
-    int y2;
 
-    y2 = y;
-    qt = q_type;
-    if      (qt < 8)    bucket = 7;
-    else if (qt < 0x1e) bucket = 8;
-    else if (qt < 0x4e) bucket = 6;
-    else if (qt < 0x78) bucket = 1;
-    else if (qt < 0x7c) bucket = 0;
-    else if (qt < 0x7d) bucket = 4;
-    else if (qt < 0x82) bucket = 5;
-    else if (qt == 0xfa) bucket = 2;
-    else                bucket = qt - 0x78;
+    if      (q_type < 8)    bucket = 7;
+    else if (q_type < 0x1e) bucket = 8;
+    else if (q_type < 0x4e) bucket = 6;
+    else if (q_type < 0x78) bucket = 1;
+    else if (q_type < 0x7c) bucket = 0;
+    else if (q_type < 0x7d) bucket = 4;
+    else if (q_type < 0x82) bucket = 5;
+    else if (q_type == 0xfa) bucket = 2;
+    else                    bucket = q_type - 0x78;
 
     if (q_type == 0xfa) {
-        font_list(0x3e, q_goods, 0x98, y2, font2, 0x10);
+        font_list(0x3e, q_goods, 0x98, y, font2, 0x10);
     } else {
-        font_list(0x3c, bucket, 0x98, y2, font2, 0x10);
+        font_list(0x3c, bucket, 0x98, y, font2, 0x10);
     }
 
     this_help_page = city_mm_enties[bucket];
-    y2 += 0x20;
 
     if (q_lv <= 0) {
-        font_list(0x3d, 0, 0x98, y2, font2, 0x10);
+        font_list(0x3d, 0, 0x98, y + 0x20, font2, 0x10);
         return;
     }
     x_is = 0;
-    font_list(0x3d, 1, 0x98, y2, font2, 0x10);
-    font_no(q_lv, 0x20, " ", x_is + 0x98, y2, font2, 0x10);
+    font_list(0x3d, 1, 0x98, y + 0x20, font2, 0x10);
+    font_no(q_lv, 0x20, " ", x_is + 0x98, y + 0x20, font2, 0x10);
 }
 
 // Show general, residential, or business details for the queried city tile.
