@@ -1845,16 +1845,17 @@ void fight_barbarian(int other_idx)
 // FUNCTION: C2WIN 0x0040ab44
 void move_citizen(void)
 {
-    int cell_offset;
-
-    cell_offset = citizen_list[citizen_no].map_ref;
-    if ((*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_a == citizen_no) {
-        (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_a = 0;
-    } else if ((*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_b == citizen_no) {
-        (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_b = 0;
+    if ((*(struct city_cell *)((unsigned char *)city_map +
+        citizen_list[citizen_no].map_ref)).citizen_a == citizen_no) {
+        (*(struct city_cell *)((unsigned char *)city_map +
+            citizen_list[citizen_no].map_ref)).citizen_a = 0;
+    } else if ((*(struct city_cell *)((unsigned char *)city_map +
+        citizen_list[citizen_no].map_ref)).citizen_b == citizen_no) {
+        (*(struct city_cell *)((unsigned char *)city_map +
+            citizen_list[citizen_no].map_ref)).citizen_b = 0;
     }
 
-    switch ((unsigned char)citizen_list[citizen_no].world_dir) {
+    switch (citizen_list[citizen_no].world_dir) {
     case 0:
         citizen_list[citizen_no].y--;
         citizen_list[citizen_no].map_ref -= 0x640;
@@ -1862,7 +1863,8 @@ void move_citizen(void)
     case 1:
         citizen_list[citizen_no].y--;
         citizen_list[citizen_no].x++;
-        citizen_list[citizen_no].map_ref -= 0x62c;
+        citizen_list[citizen_no].map_ref -= 0x640;
+        citizen_list[citizen_no].map_ref += 0x14;
         break;
     case 2:
         citizen_list[citizen_no].x++;
@@ -1871,7 +1873,8 @@ void move_citizen(void)
     case 3:
         citizen_list[citizen_no].y++;
         citizen_list[citizen_no].x++;
-        citizen_list[citizen_no].map_ref += 0x654;
+        citizen_list[citizen_no].map_ref += 0x640;
+        citizen_list[citizen_no].map_ref += 0x14;
         break;
     case 4:
         citizen_list[citizen_no].y++;
@@ -1880,7 +1883,8 @@ void move_citizen(void)
     case 5:
         citizen_list[citizen_no].y++;
         citizen_list[citizen_no].x--;
-        citizen_list[citizen_no].map_ref += 0x62c;
+        citizen_list[citizen_no].map_ref += 0x640;
+        citizen_list[citizen_no].map_ref -= 0x14;
         break;
     case 6:
         citizen_list[citizen_no].x--;
@@ -1889,23 +1893,26 @@ void move_citizen(void)
     case 7:
         citizen_list[citizen_no].y--;
         citizen_list[citizen_no].x--;
-        citizen_list[citizen_no].map_ref -= 0x654;
+        citizen_list[citizen_no].map_ref -= 0x640;
+        citizen_list[citizen_no].map_ref -= 0x14;
         break;
     default:
         return;
+        break;
     }
 
-    cell_offset = citizen_list[citizen_no].map_ref;
-    if ((*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_a == 0) {
-        (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_a = citizen_no;
-        return;
+    if ((*(struct city_cell *)((unsigned char *)city_map +
+        citizen_list[citizen_no].map_ref)).citizen_a == 0) {
+        (*(struct city_cell *)((unsigned char *)city_map +
+            citizen_list[citizen_no].map_ref)).citizen_a = citizen_no;
+    } else if ((*(struct city_cell *)((unsigned char *)city_map +
+        citizen_list[citizen_no].map_ref)).citizen_b == 0) {
+        (*(struct city_cell *)((unsigned char *)city_map +
+            citizen_list[citizen_no].map_ref)).citizen_b = citizen_no;
+    } else {
+        high_beep();
+        remove_citizen(citizen_no);
     }
-    if ((*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_b == 0) {
-        (*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_b = citizen_no;
-        return;
-    }
-    high_beep();
-    remove_citizen(citizen_no);
 }
 
 // Clamp the current citizen's wander target to a nearby valid city-map cell.
