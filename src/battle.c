@@ -2000,6 +2000,7 @@ void sf12_rout(void)
 
 // Hold position and automatically fire at nearby enemies.
 // FUNCTION: C2 0x4e6e4
+// FUNCTION: C2WIN 0x00479337
 void sf13_autofire_missile(void)
 {
     if ((figure_list[figure_no].is_visible & 1) == 0) {
@@ -2011,33 +2012,30 @@ void sf13_autofire_missile(void)
     get_fig_still_image();
     figure_list[figure_no].missile_max = 0x20;
     figure_list[figure_no].missile_timer++;
-    if (figure_list[figure_no].missile_timer
-        <= figure_list[figure_no].missile_max)
-        goto tail;
+    if (figure_list[figure_no].missile_timer > figure_list[figure_no].missile_max) {
+        figure_list[figure_no].missile_timer = 0;
+        if (find_nearest_target(5) != 0) {
+            figure_list[figure_no].missile_target = enemy_figure;
 
-    figure_list[figure_no].missile_timer = 0;
-    if (find_nearest_target(5) != 0) {
-        figure_list[figure_no].missile_target = enemy_figure;
+            figure_list[figure_no].direction = (char)get_heading(
+                figure_list[figure_no].grid_x,
+                figure_list[figure_no].grid_y,
+                figure_list[enemy_figure].grid_x,
+                figure_list[enemy_figure].grid_y,
+                figure_list[figure_no].direction);
+            create_arrow(figure_list[figure_no].arrow_data_ptr,
+                         figure_list[figure_no].owner,
+                         figure_list[figure_no].grid_x,
+                         figure_list[figure_no].grid_y,
+                         figure_list[enemy_figure].grid_x,
+                         figure_list[enemy_figure].grid_y);
+            arrow_list[created_arrow_no].weapon_kind = figure_list[figure_no].sprite_type;
+            get_arrow_base_image();
+            set_missile_fire_fx(arrow_list[created_arrow_no].weapon_kind);
+            set_missile_fire_range(arrow_list[created_arrow_no].weapon_kind);
+        } else { figure_list[figure_no].missile_target = 0; }
+    }
 
-        figure_list[figure_no].direction = (char)get_heading(
-            figure_list[figure_no].grid_x,
-            figure_list[figure_no].grid_y,
-            figure_list[enemy_figure].grid_x,
-            figure_list[enemy_figure].grid_y,
-            figure_list[figure_no].direction);
-        create_arrow(figure_list[figure_no].arrow_data_ptr,
-                     figure_list[figure_no].owner,
-                     figure_list[figure_no].grid_x,
-                     figure_list[figure_no].grid_y,
-                     figure_list[enemy_figure].grid_x,
-                     figure_list[enemy_figure].grid_y);
-        arrow_list[created_arrow_no].weapon_kind = figure_list[figure_no].sprite_type;
-        get_arrow_base_image();
-        set_missile_fire_fx(arrow_list[created_arrow_no].weapon_kind);
-        set_missile_fire_range(arrow_list[created_arrow_no].weapon_kind);
-    } else { figure_list[figure_no].missile_target = 0; }
-
-tail:
     if (figure_list[figure_no].missile_target != 0) get_fig_missile_image();
 }
 
