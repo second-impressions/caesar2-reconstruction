@@ -4260,7 +4260,7 @@ not_pert:
 int not_pertinant_statistic2(void)
 {
     if (q_type >= 0x7c && q_type <= 0xb9) return 0;
-    if (q_type >= 0xd7 && q_type <= 0xe2) return 0;
+    else if (q_type >= 0xd7 && q_type <= 0xe2) return 0;
     return 1;
 }
 
