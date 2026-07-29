@@ -852,7 +852,7 @@ void sa07_army_land_invade(void)
     army_list[army_no].target_x      = reg_city_x;
     army_list[army_no].target_y      = reg_city_y;
     army_list[army_no].return_flag = 1;
-    region_go_to_target(0);
+    if (region_go_to_target(0) == 0) return;
 }
 
 // Army state-8 "stuck" tick -- recovery handler when the straight path to target is blocked. On
