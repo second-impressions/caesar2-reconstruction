@@ -815,10 +815,16 @@ void show_tribunes_report(int army_idx, int panel_x, int panel_y, int sprite_mod
 
 #if PLATFORM_WINDOWS
 extern void *current_window;
-extern unsigned char initreg_buffer[];
+extern void *initreg_buffer[];
+extern char window_text_buffer[];
 extern void blit_window_area(void *window, void *buffer,
                              int dst_x, int dst_y, int width, int height,
                              int src_x, int src_y);
+extern void get_list_string(int idx, int word_count, char *buffer);
+extern void put_centre_font_string(char *str, int x, int y,
+                                   unsigned char *font, int color,
+                                   unsigned char *buffer, int centre,
+                                   int width);
 #endif
 
 // Show the initial-region selection screen.
@@ -847,10 +853,16 @@ void reshow_initreg_box(void)
     show_pl8file("empire.pl8", 0x1e0);
     show_regions_in_empire();
     show_regions_on_offer();
+#if PLATFORM_WINDOWS
+    get_list_string(0x30, 0, window_text_buffer);
+    put_centre_font_string(window_text_buffer, 0xd2, 0x19a,
+                           font1, 0x3f, initreg_buffer[4], 1, 0xdc);
+#else
     show_empire_top_slab();
     show_empire_bottom_slab();
     setup_whole_screen_refresh();
     font_list(0x30, 0, 0xd2, 0x19e, font1, 0x3f);
+#endif
     hold_mouse_replace = 1;
 }
 
