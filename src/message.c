@@ -98,20 +98,25 @@ void put_message(int message_idx, int message_param, int music_mood) {
 // FUNCTION: C2 0x59229
 // FUNCTION: C2WIN 0x00459dc8
 void show_messages(void) {
+    int is_emperor;
     int message_idx;
     int message_param;
-    if (pointer_mode < 5) {
-        put_a_message = 0;
-        message_idx   = message_list[show_message_ptr].msg;
-        message_param = message_list[show_message_ptr].param;
-        message_list[show_message_ptr].msg   = 0;
-        message_list[show_message_ptr].param = 0;
-        show_message_ptr++;
-        if (show_message_ptr >= 16)
-            show_message_ptr = 0;
-        if (message_idx != 0)
-            message(message_idx, message_idx >= 0x78, message_param);
-    }
+
+    if (pointer_mode >= 5) return;
+    put_a_message = 0;
+    message_idx   = message_list[show_message_ptr].msg;
+    message_param = message_list[show_message_ptr].param;
+    message_list[show_message_ptr].msg   = 0;
+    message_list[show_message_ptr].param = 0;
+    show_message_ptr++;
+    if (show_message_ptr >= 16)
+        show_message_ptr = 0;
+    if (message_idx == 0) return;
+    if (message_idx < 0x78)
+        is_emperor = 0;
+    else
+        is_emperor = 1;
+    message(message_idx, is_emperor, message_param);
 }
 
 // Runs a modal message panel, then restores the map and handles any requested map jump.
