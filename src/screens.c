@@ -3076,13 +3076,13 @@ void show_census_panel(void)
 // FUNCTION: C2WIN 0x0042abb8
 void show_turbo_panel(void)
 {
-    if (request_message.cached_population == population) {
-        if (turbo_mode > 2) return;
-    }
+    if (request_message.cached_population != population) goto redraw_turbo_panel;
+    if (turbo_mode > 2) return;
 
+redraw_turbo_panel:
     stone_random_count = 0x1c;
     show_a_mosaic_window(0x50, 0x60, 0x14, 0xb);
-#if C2_FEAT_TILE_REFRESH
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
 #endif
     show_an_exit_button(0x160, 0xe0);
