@@ -13,6 +13,35 @@ extern unsigned char *message_screen;
 extern unsigned char *game_screen;
 extern void start_windows_smacking(char *filename, int x, int y, int mode,
                                    unsigned char *screen);
+extern unsigned char *screen_buffer;
+extern unsigned char *saved_screen_buffer;
+extern unsigned char message_background[];
+extern unsigned char message_window_closed;
+extern unsigned char map_window_was_visible;
+extern void *message_window;
+extern void *map_window;
+extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
+                                    int x, int y, int width, int height,
+                                    unsigned int flags);
+extern int (__stdcall *ShowWindow)(void *window, int command);
+extern void set_mouse_mode(int mode);
+extern int map_window_is_visible(void);
+extern void toggle_map_window(void);
+extern void grey_all_windows(void);
+extern int get_window_input(void *window);
+extern int enter_pressed(void);
+extern void wait_for(int delay);
+extern void draw_window_buffer(void *window, void *buffer, int source_x,
+                               int source_y, int width, int height,
+                               int dest_x, int dest_y);
+extern void mloop_end(void);
+extern void act_request_down(void);
+extern void act_request_up(void);
+extern void load_screen_parts(unsigned char mode);
+extern void size_map_window(int mode);
+extern void refresh_map_window(void *window);
+extern void redraw_city_window(void);
+extern void redraw_region_window(void);
 #endif
 
 // Globals owned by this translation unit
@@ -123,6 +152,196 @@ void show_messages(void) {
 // FUNCTION: C2 0x59292
 // FUNCTION: C2WIN 0x00459e8d
 void message(int message_idx, int is_emperor, int message_param) {
+#if PLATFORM_WINDOWS
+    int ret;
+    int old_pointer_mode;
+    int x_start;
+    int y_start;
+    int click;
+    unsigned char *oldscreen;
+    unsigned char over;
+    int map_no;
+
+    over = 0;
+    decision = 0;
+    if (tutorial_mode != 0)
+        return;
+    if ((message_idx == 0x56 || message_idx == 0x59) && stolen_denarii <= 0)
+        return;
+    set_mouse_mode(-2);
+    clear_keys();
+    warned_of_not_build = 0;
+    stop_db();
+    map_window_was_visible = 0;
+    if (map_window_is_visible() != 0) {
+        map_window_was_visible = 1;
+        toggle_map_window();
+    }
+    hold_hot_keys = 1;
+    old_pointer_mode = pointer_mode;
+    pointer_mode = 0;
+    turbo_mode = 0;
+    local_time = time_is;
+    message_goto_ptr = message_param;
+    request_message.active = 0;
+    imperial_send_amount = 0;
+    cover_mouse_droppings();
+    grey_all_windows();
+    memcpy(saved_screen_buffer, screen_buffer, 0x4b000);
+    x_start = (screen_width - 0x160) / 2;
+    y_start = (screen_height - 0x170) / 2;
+    if (is_emperor == 0)
+        show_basic_message(message_idx, message_param);
+    else
+        show_emperor_message(message_idx, is_emperor);
+    if (is_emperor == 0) {
+        SetWindowPos(message_window, 0, x_start, y_start,
+                     0x160, 0x170, 0x80);
+    } else {
+        SetWindowPos(message_window, 0, x_start, y_start,
+                     0x160, 0x190, 0x80);
+    }
+    ShowWindow(message_window, 5);
+    if (is_emperor == 0)
+        draw_window_buffer(message_window, message_background, 0, 0,
+                           0x160, 0x170, 0x50, 0x40);
+    else
+        draw_window_buffer(message_window, message_background, 0, 0,
+                           0x160, 0x190, 0x50, 0x40);
+    out1 = 0;
+    set_mouse_mode(-1);
+    while (out1 != 1) {
+        click = get_window_input(message_window);
+        if (request_message.active == 0 && click != 0)
+            out1 = 1;
+        continue_smacking(0x60, 0x50, 1);
+        draw_window_buffer(message_window, message_background, 0, 0,
+                           0x160, 0xb4, 0x50, 0x40);
+        if (enter_pressed() == 0 && request_message.active == 0) {
+            if (over != 0) {
+            } else if (message_window_closed != 0) {
+                out1 = 1;
+            } else {
+                wait_for(4000);
+                out1 = 1;
+            }
+        }
+        if (request_message.active != 0) {
+            if (click == 1) {
+                if (mse_x >= 0x130 && mse_x <= 0x148 &&
+                    mse_y >= 0x160 && mse_x <= 0x178) {
+                    out1 = 1;
+                } else if (mse_x >= 0xc0 && mse_x <= 0xd8 &&
+                           mse_y >= 0x14e && mse_x <= 0x166) {
+                    act_request_up();
+                    if (gen_refresh1 != 0) {
+                        gen_refresh1 = 0;
+                        oldscreen = internal_screen;
+                        internal_screen = message_screen;
+                        show_request_amount();
+                        show_buttons(0x110, 0x18e, request_buttons, 2);
+                        internal_screen = oldscreen;
+                    }
+                    if (is_emperor == 0)
+                        draw_window_buffer(message_window, message_background,
+                                           0, 0, 0x160, 0x170, 0x50, 0x40);
+                    else
+                        draw_window_buffer(message_window, message_background,
+                                           0, 0, 0x160, 0x190, 0x50, 0x40);
+                } else if (mse_x >= 0xe0 && mse_x <= 0xf8 &&
+                           mse_y >= 0x14e && mse_x <= 0x166) {
+                    act_request_down();
+                    if (gen_refresh1 != 0) {
+                        gen_refresh1 = 0;
+                        oldscreen = internal_screen;
+                        internal_screen = message_screen;
+                        show_request_amount();
+                        show_buttons(0x110, 0x18e, request_buttons, 2);
+                        internal_screen = oldscreen;
+                    }
+                    if (is_emperor == 0)
+                        draw_window_buffer(message_window, message_background,
+                                           0, 0, 0x160, 0x170, 0x50, 0x40);
+                    else
+                        draw_window_buffer(message_window, message_background,
+                                           0, 0, 0x160, 0x190, 0x50, 0x40);
+                }
+            } else if (click == 3) {
+                out1 = 1;
+            }
+        }
+        if (flag_mode != 0)
+            flag_mode = 0;
+        mloop_end();
+        if (message_param != 0 && click == 1) {
+            x = 0xe0;
+            y = 0x130;
+            if (mse_x >= x && x + 0x18 >= mse_x &&
+                mse_y >= y && y + 0x18 >= mse_x) {
+            } else {
+                message_goto_ptr = 0;
+            }
+        }
+        if (click == 2 || click == 3)
+            message_goto_ptr = 0;
+    }
+    if (request_message.active != 0) {
+        request_outcome();
+    } else {
+        if (message_idx >= 0x7d && message_idx <= 0x84 && final_bribe == 2)
+            game_state = 1;
+    }
+    stop_smacking();
+    ShowWindow(message_window, 0);
+    memcpy(screen_buffer, saved_screen_buffer, 0x4b000);
+    refresh_svga_screen();
+    pointer_mode = old_pointer_mode;
+    load_screen_parts(screen_mode);
+    size_map_window(screen_mode);
+    refresh_map_window(map_window);
+    if (map_window_was_visible == 1)
+        toggle_map_window();
+    ret = 0;
+    if (message_goto_ptr != 0) {
+        turbo_mode = 0;
+        map_no = mess_goto_map[message_idx - 80];
+        if (map_no == 1) {
+            ret = jump_to_regionmap_ptr(message_goto_ptr);
+            if (ret == 1)
+                redraw_region_window();
+        } else {
+            ret = jump_to_citymap_ptr(message_goto_ptr);
+            if (ret == 1)
+                redraw_city_window();
+        }
+    }
+    if (screen_mode == 0)
+        set_palette(&city_palette);
+    else if (screen_mode == 1)
+        set_palette(&region_palette);
+    else
+        set_palette(&temp_palette);
+    if (ret != 1) {
+        if (screen_mode == 0)
+            city_map_screen(0);
+        else if (screen_mode == 1)
+            region_map_screen(0);
+        else
+            battle_screen(0);
+    }
+    if (message_param != 0) {
+        map_no = mess_goto_map[message_idx - 80];
+        if (map_no == 1)
+            danger_flag_map_mode = 1;
+        else
+            danger_flag_map_mode = 0;
+        put_danger_flag(message_param);
+    }
+    if (turbo_mode != 0)
+        act_init_turbo_mode();
+    gen_refresh1 = 1;
+    flush_sb_buffer();
+#else
     int jump_result;
     int old_pointer_mode;
     decision = 0;
@@ -223,6 +442,7 @@ void message(int message_idx, int is_emperor, int message_param) {
         gen_refresh1 = 1;
         flush_sb_buffer();
     }
+#endif
 }
 
 // Draws a standard message panel with its text, animation, exit control, and optional map link.
