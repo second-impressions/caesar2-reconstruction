@@ -80,6 +80,7 @@ void show_query_business_advice(void);
 void show_people_query_panel(void);
 void show_detailed_query_panel(void);
 void show_region_query_panel(int y);
+int not_pertinant_statistic1(int statistic_idx);
 
 
 // Redraw the complete city screen, including map, controls, overlays, status bar, and palette.
