@@ -1723,12 +1723,12 @@ void show_gift_box(void)
 void show_gift_amount(int gift_index)
 {
     stone_random_count = 0x14;
-    show_a_mosaic_blank(0x1a0, gift_index * 16 - 4, 5, 1);
-    if (imperial_gift_level < 0) {
-        imperial_gift_level = 0;
-    }
+    show_a_mosaic_blank(0x1a0, (gift_index - 1) * 16 + 0xc, 5, 1);
+    if (imperial_gift_level < 0) imperial_gift_level = 0;
     font_no(imperial_gift_level, ' ', " Dn", 0x1a8, gift_index * 16, font1, 0x10);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x140, gift_index * 16 - 0x10, 0xf, 2, 2);
+#endif
 }
 
 // Enter the selected forum advisor department.
