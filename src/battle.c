@@ -3762,21 +3762,19 @@ void target_from_figure_dirc(int direction)
 // FUNCTION: C2WIN 0x004805cd
 int get_wf_dirc(int search_mode)
 {
-  int attempt;
+  int tries;
   int reverse_direction;
   int move_result;
-  int initial_direction;
-  int desired_direction;
+  int heading;
   int search_direction;
-  attempt = 0;
-  initial_direction = figure_list[figure_no].direction;
-  reverse_direction = (initial_direction + 4) % 8;
-  desired_direction = get_heading(figure_list[figure_no].grid_x, figure_list[figure_no].grid_y, figure_list[figure_no].prev_grid_x, figure_list[figure_no].prev_grid_y, initial_direction);
-  move_result = try_a_battlemap_square(desired_direction);
+  tries = 0;
+  reverse_direction = (figure_list[figure_no].direction + 4) % 8;
+  heading = get_heading(figure_list[figure_no].grid_x, figure_list[figure_no].grid_y, figure_list[figure_no].prev_grid_x, figure_list[figure_no].prev_grid_y, figure_list[figure_no].direction);
+  move_result = try_a_battlemap_square(heading);
   if (move_result == 1)
   {
-    w_dirc = desired_direction;
-    figure_list[figure_no].wf_dirc = desired_direction;
+    w_dirc = heading;
+    figure_list[figure_no].wf_dirc = w_dirc;
     figure_list[figure_no].wf_searching = 0;
     return 1;
   }
@@ -3796,16 +3794,16 @@ int get_wf_dirc(int search_mode)
   }
   search_direction = w_dirc;
   figure_list[figure_no].wf_dirc = search_direction;
-  while (attempt < 8)
+  while (tries < 8)
   {
     if (search_mode == 1)
     {
-      figure_list[figure_no].wf_dirc = wf_battle_dircs[attempt] + search_direction;
+      figure_list[figure_no].wf_dirc = wf_battle_dircs[tries] + search_direction;
     }
     else
       if (search_mode == 2)
     {
-      figure_list[figure_no].wf_dirc = wf_battle_dircs[attempt] + desired_direction;
+      figure_list[figure_no].wf_dirc = wf_battle_dircs[tries] + heading;
     }
     else
     {
@@ -3837,9 +3835,9 @@ int get_wf_dirc(int search_mode)
           return 1;
       }
     }
-    attempt++;
-    if ((attempt >= 2) && (figure_list[figure_no].state_idx == 0xa))
-      break;
+    tries++;
+    if ((tries >= 2) && (figure_list[figure_no].state_idx == 0xa))
+      return 0;
   }
 
   return 0;
