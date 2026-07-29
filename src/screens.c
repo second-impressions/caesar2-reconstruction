@@ -286,37 +286,37 @@ void battle_screen(int do_black_out)
 // FUNCTION: C2WIN 0x004227f5
 void battle_stats_panel(void)
 {
-    int bar_count;
-    int bar_idx;
-    int panel_mode;
+    int a;
+    int b;
+    int c;
 
-    panel_mode = 0;
+    c = 0;
 
-    if (redraw_icons != 0) panel_mode = 1;
-    if (request_message.bs_nof_units != battle_stats_nof_units) panel_mode = 1;
-    if (request_message.bs_men != battle_stats_men) panel_mode = 1;
-    if (request_message.bs_morale != battle_stats_morale) panel_mode = 1;
-    if (request_message.bs_type != battle_stats_type) panel_mode = 1;
+    if (redraw_icons != 0) c = 1;
+    if (request_message.bs_nof_units != battle_stats_nof_units) c = 1;
+    if (request_message.bs_men != battle_stats_men) c = 1;
+    if (request_message.bs_morale != battle_stats_morale) c = 1;
+    if (request_message.bs_type != battle_stats_type) c = 1;
 
     if (request_message.prev_mode == 1) {
-        if (pointer_mode == 1) panel_mode = 3;
-        else if (pointer_mode == 2) panel_mode = 4;
-        else if (last_icon_over != 0) panel_mode = 2;
+        if (pointer_mode == 1) c = 3;
+        else if (pointer_mode == 2) c = 4;
+        else if (last_icon_over != 0) c = 2;
     } else if (request_message.prev_mode == 2) {
-        if (pointer_mode == 1) panel_mode = 3;
-        else if (pointer_mode == 2) panel_mode = 4;
-        else if (last_icon_over == 0) panel_mode = 1;
-        if (last_icon_over != 0 && last_icon_over != request_message.icon_over) panel_mode = 2;
+        if (pointer_mode == 1) c = 3;
+        else if (pointer_mode == 2) c = 4;
+        else if (last_icon_over == 0) c = 1;
+        if (last_icon_over != 0 && last_icon_over != request_message.icon_over) c = 2;
     } else if (request_message.prev_mode == 3 && pointer_mode != 1) {
-        if (pointer_mode == 2) panel_mode = 4;
-        else if (last_icon_over != 0) panel_mode = 2;
-        else panel_mode = 1;
+        if (pointer_mode == 2) c = 4;
+        else if (last_icon_over != 0) c = 2;
+        else c = 1;
     } else if (request_message.prev_mode == 4 && pointer_mode != 2) {
-        if (pointer_mode == 1) panel_mode = 3;
-        else if (last_icon_over != 0) panel_mode = 2;
-        else panel_mode = 1;
+        if (pointer_mode == 1) c = 3;
+        else if (last_icon_over != 0) c = 2;
+        else c = 1;
     }
-    if (panel_mode == 0) return;
+    if (c == 0) return;
 
     request_message.bs_nof_units = battle_stats_nof_units;
     request_message.bs_men       = battle_stats_men;
@@ -326,15 +326,15 @@ void battle_stats_panel(void)
     sprite_width = 0xa; sprite_height = 0x68;
     show_fast_rect(0x1db, 0x170, 0x1a);
 
-    if (panel_mode == 3) {
+    if (c == 3) {
         request_message.prev_mode = 3;
         font_format_split(0x76, 0x11,
                           0x1e2, 0x180, 0x90, 0x64, 0, 0, font1, 0x10);
-    } else if (panel_mode == 4) {
+    } else if (c == 4) {
         request_message.prev_mode = 4;
         font_format_split(0x76, 0x12,
                           0x1e2, 0x180, 0x90, 0x64, 0, 0, font1, 0x10);
-    } else if (panel_mode == 2) {
+    } else if (c == 2) {
         request_message.icon_over = last_icon_over;
         request_message.prev_mode = 2;
         font_format_split(0x76, last_icon_over - 4,
@@ -367,29 +367,31 @@ void battle_stats_panel(void)
             font_no(battle_stats_men, 0x20, " ",
                     x_is + 0x1ee, 0x198, font1, 0x10);
 
-            bar_count = valueDIVtotal(battle_stats_men, battle_stats_start_men);
-            if (bar_count % 10 != 0)
-                bar_count = bar_count / 10 + 1;
+            a = valueDIVtotal(battle_stats_men, battle_stats_start_men);
+            if (a % 10 != 0)
+                a = a / 10 + 1;
             else
-                bar_count = bar_count / 10;
-            for (bar_idx = 0; bar_idx < bar_count; bar_idx++)
+                a = a / 10;
+            for (b = 0; b < a; b++)
                 write_image(game_panels, 0x39,
-                            bar_idx * 9 + 0x1ee, 0x1a5);
+                            b * 9 + 0x1ee, 0x1a5);
 
             x_is = 0;
             font_list(0x2f, 9, 0x1ee, 0x1b8, font1, 0x10);
             font_no(battle_stats_morale, 0x20, " ",
                     x_is + 0x1ee, 0x1b8, font1, 0x10);
 
-            bar_count = battle_stats_morale / 10;
-            if (battle_stats_morale % 10 != 0) bar_count++;
-            for (bar_idx = 0; bar_idx < bar_count; bar_idx++)
+            a = battle_stats_morale / 10;
+            if (battle_stats_morale % 10 != 0) a++;
+            for (b = 0; b < a; b++)
                 write_image(game_panels, 0x38,
-                            bar_idx * 9 + 0x1ee, 0x1c8);
+                            b * 9 + 0x1ee, 0x1c8);
         }
     }
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x1e6, 0x170, 0xa, 7, 1);
+#endif
 }
 
 // Update the opposing armies' troop totals and morale bars when their values change.
