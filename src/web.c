@@ -14,8 +14,8 @@ int web_ptr;
 int web_start_y;
 int web_start_x;
 int web_node;
-unsigned char web_from;
 unsigned char web_dirc;
+unsigned char web_from;
 unsigned char web_directions;
 
 

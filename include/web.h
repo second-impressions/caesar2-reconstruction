@@ -46,7 +46,7 @@ extern int web_first_actual_node;
 extern int web_total_length;
 extern int web_out_of_the_walls;
 extern int web_ptr;
-extern unsigned char web_from;
 extern unsigned char web_dirc;
+extern unsigned char web_from;
 
 #endif /* WEB_H */
