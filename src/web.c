@@ -410,33 +410,29 @@ void push_node_value(unsigned char pressure_value)
 {
     int steps;
     unsigned char current_pressure;
-    int is_reservoir;
 
     steps = 0;
-    while (1) {
-        steps++;
-        if (steps >= 0x3e8) return;
+    while (++steps < 0x3e8) {
         if      (web_dirc == 1) { web_y--; web_ptr -= 0x640; }
         else if (web_dirc == 2) { web_x++; web_ptr += 0x14;  }
         else if (web_dirc == 4) { web_y++; web_ptr += 0x640; }
         else if (web_dirc == 8) { web_x--; web_ptr -= 0x14;  }
         web_nof_dircs = get_web_aqua_dircs();
         current_pressure = CM_CELL(web_ptr).range_flag & 3;
-        is_reservoir = CM_CELL(web_ptr).terrain & 0x80;
 
-        if (is_reservoir) {
-            if ((char)current_pressure >= pressure_value) return;
+        if (CM_CELL(web_ptr).terrain & 0x80) {
+            if (current_pressure >= pressure_value) return;
             CM_CELL(web_ptr).range_flag |= pressure_value;
             if (pressure_value == 3) CM_CELL(web_ptr).extra_edge += 3;
             if (pressure_value == 2) CM_CELL(web_ptr).extra_edge += 2;
             if (pressure_value == 1) CM_CELL(web_ptr).extra_edge += 1;
             return;
         }
-        if ((char)current_pressure >= pressure_value) return;
+        if (current_pressure >= pressure_value) return;
         CM_CELL(web_ptr).range_flag |= pressure_value;
         if ((CM_CELL(web_ptr).terrain & 2) == 0) {
             if (pressure_value == 3) CM_CELL(web_ptr).extra_edge += 2;
-            else if (pressure_value >= 1) CM_CELL(web_ptr).extra_edge++;
+            else if (pressure_value >= 1) CM_CELL(web_ptr).extra_edge += 1;
         }
         web_directions ^= web_from;
         if      (web_directions & 1) { web_dirc = 1; web_from = 4; }
