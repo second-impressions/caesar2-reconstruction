@@ -70,8 +70,7 @@ void clear_messages(void) {
     show_message_ptr   = 0;
     put_a_message      = 0;
     for (i = 0; i < 16; i++) {
-        message_list[i].param = 0;
-        message_list[i].msg   = 0;
+        message_list[i].msg = message_list[i].param = 0;
     }
 }
 
