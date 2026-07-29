@@ -12,23 +12,21 @@ struct web_node {
     unsigned char y;
 };
 
-typedef struct web_node web_node_rec;
-
-int get_regroad_start_node(int, int);
-int get_regroad_web(int, int);
+int get_regroad_start_node(int x, int y);
+int get_regroad_web(int x, int y);
 int run_to_new_regroad_node(void);
 int get_web_regroad_dircs(void);
-int get_aqua_start_node(int, int);
-int get_aqua_web(int, int);
+int get_aqua_start_node(int x, int y);
+int get_aqua_web(int x, int y);
 int run_to_new_aqua_node(void);
 int get_web_aqua_dircs(void);
 int test_next_to_river(void);
 void init_web(void);
 void put_new_node(void);
-int get_incomplete_node(int, int);
-void set_first_nodes_values(char);
-void push_nodes_values(unsigned char, int);
-void push_node_value(unsigned char);
+int get_incomplete_node(int row_stride, int cell_stride);
+void set_first_nodes_values(char pressure_mask);
+void push_nodes_values(unsigned char pressure, int source_nodes_only);
+void push_node_value(unsigned char pressure_value);
 
 /* Page 0: high-hash tail values emitted after page 1 within each size class. */
 extern struct web_node web[120];
