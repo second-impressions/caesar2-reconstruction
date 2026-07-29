@@ -908,11 +908,21 @@ void show_first_region_box(void)
 // Show information and available actions for the selected province.
 // FUNCTION: C2 0x5cd03
 // FUNCTION: C2WIN 0x004244a7
+#if PLATFORM_WINDOWS
+#define THIS_REGION_INDEX region_over
+#define THIS_REGION_HOME (region_over - 1)
+#else
+#define THIS_REGION_INDEX region_idx
+#define THIS_REGION_HOME (region_idx - show_media)
+#endif
+
 void this_region_box(int confirmation_mode)
 {
     int show_media;
     int box_height;
+#if !PLATFORM_WINDOWS
     int region_idx;
+#endif
 
     if ((confirmation_mode) == 0)
         box_height = 0x10;
@@ -928,8 +938,11 @@ void this_region_box(int confirmation_mode)
 
     font_list(6, region_over, 0x90, 0x9c, font2, 0x10);
 
-    region_idx = region_over; if (empire_won[region_idx - 1] == 0) {
-        if (region_idx - show_media == province_is) {
+#if !PLATFORM_WINDOWS
+    region_idx = region_over;
+#endif
+    if (empire_won[THIS_REGION_INDEX - 1] == 0) {
+        if (THIS_REGION_HOME == province_is) {
             font_list(0x4d, 6, 0x90, 0xc0, font1, 0x10);
             show_media = 0;
         } else {
@@ -937,6 +950,7 @@ void this_region_box(int confirmation_mode)
         }
     } else if (empire_won[region_over - 1] == 0x1869e) {
         font_list(0x30, 5, 0x90, 0xc0, font1, 0x10);
+        show_media = 1;
     } else if (empire_won[region_over - 1] == 0x1869f) {
         font_list(0x30, 6, 0x90, 0xc0, font1, 0x10);
         show_media = 0;
@@ -952,10 +966,19 @@ void this_region_box(int confirmation_mode)
     this_help_page = region_over + 0x47c;
     load_media_entry();
     text_pointer = format_buffer;
+#if PLATFORM_WINDOWS
+    if (region_over == 1) {
+        show_media = 0;
+    } else if (show_media != 0) {
+        media_text_place(0x90, 0xe0, 0x160, 0x64, 0, 0, font1);
+        play_speech(region_over + 0x3a);
+    }
+#else
     if (region_over != 1 && show_media != 0) {
         media_text_place(0x90, 0xe0, 0x160, 0x64, 0, 0, font1);
         play_speech(region_over + 0x3a);
     }
+#endif
 
     if ((confirmation_mode) == 0) {
         font_list(0x30, 3, 0xe0, 0x14c, font1, 0x10);
@@ -967,6 +990,8 @@ void this_region_box(int confirmation_mode)
     setup_whole_screen_refresh();
 #endif
 }
+#undef THIS_REGION_INDEX
+#undef THIS_REGION_HOME
 
 // Show the introductory skill-selection information.
 // FUNCTION: C2 0x5cf71
