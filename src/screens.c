@@ -540,6 +540,7 @@ void clip_map_bottom(void)
 {
     int x;
 
+#if !PLATFORM_WINDOWS
     for (x = 0; x < 0x1dc; x += 4) show_internal_4point(x, 0x1da, 0);
     show_internal_2point(x, 0x1da, 0);
     for (x = 0; x < 0x1dc; x += 4) show_internal_4point(x, 0x1db, 0);
@@ -552,6 +553,7 @@ void clip_map_bottom(void)
     show_internal_2point(x, 0x1de, 0);
     for (x = 0; x < 0x1dc; x += 4) show_internal_4point(x, 0x1df, 0);
     show_internal_2point(x, 0x1df, 0);
+#endif
 }
 
 // Process a pending icon-strip redraw for the current map and tutorial state.
