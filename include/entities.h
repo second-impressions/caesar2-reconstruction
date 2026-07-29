@@ -417,7 +417,7 @@ struct army_rec {
     char           quick_respawn;      /* +0x9E  set by sa13 ground-out; sa15 uses
                                             it to shorten the trader respawn delay
                                             (2 ticks instead of 15) */
-    char           order_progress;     /* +0x9F  cleared when state restarts after return */
+    unsigned char  order_progress;     /* +0x9F  cleared when state restarts after return */
     unsigned char  cohort_size_class;  /* +0xA0 */
     short          target_timer;       /* +0xA1  ticks to reaching/holding target */
     int            home_ref;           /* +0xA3 */

@@ -767,11 +767,10 @@ int goto_army_attack(void)
 int test_for_army_attack(void)
 {
     int distance;
-    int enemy_idx;
 
-    if (army_list[army_no].type != 1) goto fail;
-    if (army_list[army_no].order_progress != 0) goto fail;
-    if (army_list[army_no].total_troops <= 0) goto fail;
+    if (army_list[army_no].type != 1) return 0;
+    if (army_list[army_no].order_progress != 0) return 0;
+    if (army_list[army_no].total_troops <= 0) return 0;
 
     if (army_routes[army_list[army_no].cohort_id].target_army != 0) {
         enemy_army = (short)army_routes[army_list[army_no].cohort_id].target_army;
@@ -779,23 +778,22 @@ int test_for_army_attack(void)
                                  army_list[army_no].y,
                                  army_list[enemy_army].x,
                                  army_list[enemy_army].y);
-        if (distance > 6) goto fail;
+        if (distance > 6) return 0;
         army_list[army_no].army_id = enemy_army;
         army_list[army_no].target_marker  = army_list[enemy_army].evolve_timer;
         army_list[army_no].saved_state_idx = army_list[army_no].state_idx;
         army_list[army_no].state_idx       = 4;
         return 1;
     }
-    if (army_list[army_no].readiness_level == 0) goto fail;
-    enemy_idx = find_invading_army(army_list[army_no].x, army_list[army_no].y, 8);
-    enemy_army = enemy_idx;
-    if ((short)enemy_idx == 0) goto fail;
-    army_list[army_no].army_id = enemy_army;
-    army_list[army_no].target_marker  = army_list[enemy_army].evolve_timer;
-    army_list[army_no].saved_state_idx = army_list[army_no].state_idx;
-    army_list[army_no].state_idx       = 4;
-    return 1;
-fail:
+    if (army_list[army_no].readiness_level == 0) return 0;
+    enemy_army = find_invading_army(army_list[army_no].x, army_list[army_no].y, 8);
+    if (enemy_army != 0) {
+        army_list[army_no].army_id = enemy_army;
+        army_list[army_no].target_marker  = army_list[enemy_army].evolve_timer;
+        army_list[army_no].saved_state_idx = army_list[army_no].state_idx;
+        army_list[army_no].state_idx       = 4;
+        return 1;
+    }
     return 0;
 }
 
