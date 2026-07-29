@@ -1920,7 +1920,7 @@ void move_citizen(void)
 // FUNCTION: C2WIN 0x0040af92
 void change_citizen_targs(int target_delta)
 {
-    int unclamped_axes = 2;            /* hits 0 only when both axes are within delta */
+    int count = 2;                     /* hits 0 only when both axes are within delta */
     int cell_idx;
 
     /* ---- X axis ---- */
@@ -1933,7 +1933,7 @@ void change_citizen_targs(int target_delta)
         citizen_list[citizen_no].dest_x =
             citizen_list[citizen_no].x - target_delta;
     } else {
-        unclamped_axes = 1;
+        count--;
     }
 
     /* ---- Y axis ---- */
@@ -1946,14 +1946,14 @@ void change_citizen_targs(int target_delta)
         citizen_list[citizen_no].dest_y =
             citizen_list[citizen_no].y - target_delta;
     } else {
-        unclamped_axes--;
+        count--;
     }
 
     /* ---- Cell occupancy nudge / random retarget ---- */
-    if (unclamped_axes == 0) {
-        cell_idx = citizen_list[citizen_no].dest_x
-                 + citizen_list[citizen_no].dest_y * 80;
-        if (((*(struct city_cell *)((unsigned char *)city_map + ((cell_idx * CITY_CELL_BYTES)))).terrain & 0xDF) != 0) {
+    if (count == 0) {
+        cell_idx = (citizen_list[citizen_no].dest_x
+                 + citizen_list[citizen_no].dest_y * 80) * CITY_CELL_BYTES;
+        if (((*(struct city_cell *)((unsigned char *)city_map + (cell_idx))).terrain & 0xDF) != 0) {
             /* Cell is non-empty — step target back one tile
              * toward home on whichever axis still differs. */
             if (citizen_list[citizen_no].dest_x >
