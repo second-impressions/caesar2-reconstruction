@@ -615,7 +615,8 @@ void s11_riot(void)
 void s12_goto_riot(void)
 {
     citizen_list[citizen_no].action_kind = 1;
-    if (citizen_maraude_to_target(1) && (citizen_list[citizen_no].flag_bits & 1)) {
+    if (citizen_maraude_to_target(1) == 0) {
+    } else if (citizen_list[citizen_no].flag_bits & 1) {
         citizen_list[citizen_no].dest_x     = top_lv_x;
         citizen_list[citizen_no].dest_y     = top_lv_y;
         citizen_list[citizen_no].state_idx  = 11;
