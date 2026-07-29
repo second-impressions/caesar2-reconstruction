@@ -2289,6 +2289,10 @@ void reform(int unit_ref, int mode, int force)
 
 }
 
+int test_for_same_fig_to(int direction);
+int try_a_battlemap_square(int direction);
+int try_this_battlemap_square(int cell_offset);
+void target_from_figure_dirc(int direction);
 
 // Immediately place a unit's figures into the requested formation.
 // FUNCTION: C2 0x4f44d
@@ -2302,15 +2306,12 @@ void instant_reform(int unit_no, int formation)
   if (formation == 3)
     return;
   position = 0;
-  base_x = unit_list[unit_no].x;
-  base_y = unit_list[unit_no].y;
+  base_x = unit_list[unit_no].x; base_y = unit_list[unit_no].y;
   for (temp_figure = unit_list[unit_no].first_figure; temp_figure <= unit_list[unit_no].last_figure; temp_figure++)
   {
     if (figure_list[temp_figure].exists != 0)
     {
-      ((unsigned char *) battle_map)[figure_list[temp_figure].map_ref + 1] = 0;
-    }
-  }
+      ((unsigned char *) battle_map)[figure_list[temp_figure].map_ref + 1] = 0; } }
 
   for (temp_figure = unit_list[unit_no].first_figure; temp_figure <= unit_list[unit_no].last_figure; temp_figure++)
   {
@@ -2327,9 +2328,7 @@ void instant_reform(int unit_no, int formation)
       figure_list[temp_figure].shield_class = formation;
       figure_list[temp_figure].is_defending = 1;
       figure_list[temp_figure].state_idx = 6;
-      figure_list[temp_figure].wf_step_y = 0;
-      figure_list[temp_figure].wf_step_x = 0;
-      figure_list[temp_figure].is_routing = 0;
+      figure_list[temp_figure].wf_step_y = 0; figure_list[temp_figure].wf_step_x = 0; figure_list[temp_figure].is_routing = 0;
       figure_list[temp_figure].is_visible &= 0xfd;
       figure_list[temp_figure].is_visible |= 1;
       position++;
@@ -2338,6 +2337,12 @@ void instant_reform(int unit_no, int formation)
 
 }
 
+int get_wf_dirc(int search_mode);
+int arrow_off_map(void);
+int find_adjacent_target(void);
+void set_ai_unit_move(int offset_x, int offset_y);
+void set_ai_unit_withdraw(int offset_x, int offset_y);
+void set_missile_fire_range(int weapon_kind);
 
 // Test whether a unit can use the requested `formation` at its current position.
 // FUNCTION: C2 0x4f5e0
@@ -2375,6 +2380,14 @@ int test_reform_pattern(int unit_ref, int dir)
     return 1;
 }
 
+void set_ai_flank_move(int flank_mode);
+void drop_all_units_morale(int match_type, int morale_a_delta, int morale_b_delta);
+void raise_all_units_morale(int skip_type, int morale_a_delta, int morale_b_delta);
+void set_unit_to_rout(int unit_idx);
+void battle_tune_mood_from_type(int unit_idx);
+void backtrack_figure(int figure_idx);
+void bd(int dominant_axis);
+void set_attack_count(int figure_idx);
 
 // Compute the (x_bit, y_bit) offsets for `figure_idx` in the requested `formation`.
 // FUNCTION: C2 0x4f6c1
@@ -2549,8 +2562,6 @@ void get_fig_still_image(void)
     figure_list[figure_no].sprite_anim = dir_base;
 }
 
-int test_for_same_fig_to(int direction);
-
 // Pick the facing for a tortoise figure (the locked-shield Roman formation): prefer to face the
 // same-army figure that's one step E (4), N (2), S (6), or W (0); fall back to E (4) when no
 // neighbour matches.
@@ -2675,13 +2686,6 @@ void get_fig_missile_image(void)
     figure_list[figure_no].sprite_anim = dir_base;
 }
 
-int try_a_battlemap_square(int direction);
-int try_this_battlemap_square(int cell_offset);
-void target_from_figure_dirc(int direction);
-int get_wf_dirc(int search_mode);
-int arrow_off_map(void);
-int find_adjacent_target(void);
-
 // Mark a clipped rectangle of battle-map cells dirty for redraw.
 // FUNCTION: C2 0x4fea9
 // FUNCTION: C2WIN 0x0047c1a2
@@ -2713,6 +2717,7 @@ void set_figure_map_refresh(int grid_x, int grid_y, int offset_x, int offset_y,
 }
 
 void clear_arrow(struct arrow_rec *record_ptr);
+void update_units_morale(void);
 
 // Set the new projectile's firing range and speed from its `weapon_kind`.
 // FUNCTION: C2 0x4ff22
