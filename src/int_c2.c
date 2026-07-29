@@ -6,6 +6,7 @@
 int age_count;
 
 extern int get_heading();
+int entering_new_square(void);
 
 
 int city_test_for_road(int cell_x, int cell_y, int cell_offset, signed char heading);
@@ -877,7 +878,6 @@ void sa08_army_stuck(void)
     int left_dir;
     int right_dir;
     int i;
-    signed char stuck_count;
 
     if (entering_new_square() != 0) {
         left_dir  = get_heading(
@@ -913,8 +913,8 @@ void sa08_army_stuck(void)
             }
         }
 post_loop:
-        stuck_count = ++army_list[army_no].stuck_timer;
-        if (stuck_count > 4) {
+        ++army_list[army_no].stuck_timer;
+        if (army_list[army_no].stuck_timer > 4) {
             army_list[army_no].state_idx     = 1;
             army_list[army_no].wait_count    = 0xa;
             army_list[army_no].order_progress = 0;
@@ -922,9 +922,10 @@ post_loop:
             return;
         }
     }
-    if (region_go_to_target(0) == 0) return;
-    if ((army_list[army_no].flags & 1) == 0) return;
-    army_list[army_no].state_idx = army_list[army_no].saved_state_idx;
+    if (region_go_to_target(0) == 0) {
+    } else if ((army_list[army_no].flags & 1) != 0) {
+        army_list[army_no].state_idx = army_list[army_no].saved_state_idx;
+    }
 }
 
 // Run a siege countdown based on troop strength, then clear the stronghold area and resume
