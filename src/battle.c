@@ -3008,24 +3008,17 @@ void set_ai_unit_auto_fire(void)
 {
     temp_figure = unit_list[temp_unit].first_figure;
     for ( ; temp_figure <= unit_list[temp_unit].last_figure; temp_figure++) {
-    if (figure_list[temp_figure].exists != 0) {
+        if (figure_list[temp_figure].exists != 0) {
             figure_list[temp_figure].is_defending = 0;
-            if (figure_list[temp_figure].state_idx != 2) {
-                if (figure_list[temp_figure].state_idx != 4) {
-                    if (figure_list[temp_figure].state_idx != 8) {
-                        if (figure_list[temp_figure].state_idx != 3) {
-                            if (figure_list[temp_figure].state_idx != 0xc) {
-                                if (figure_list[temp_figure].state_idx != 0xe) {
-                                    figure_list[temp_figure].state_idx = 0xe;
-                                    figure_list[temp_figure].prev_grid_y = figure_list[temp_figure].grid_y - 1;
-                                    figure_list[temp_figure].prev_grid_x = figure_list[temp_figure].grid_x;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-    }
+            if (figure_list[temp_figure].state_idx == 2) continue;
+            if (figure_list[temp_figure].state_idx == 4) continue;
+            if (figure_list[temp_figure].state_idx == 8) continue;
+            if (figure_list[temp_figure].state_idx == 3) continue;
+            if (figure_list[temp_figure].state_idx == 0xc) continue;
+            if (figure_list[temp_figure].state_idx == 0xe) continue;
+            figure_list[temp_figure].state_idx = 0xe;
+            figure_list[temp_figure].prev_grid_y = figure_list[temp_figure].grid_y - 1; figure_list[temp_figure].prev_grid_x = figure_list[temp_figure].grid_x;
+        }
     }
 }
 
