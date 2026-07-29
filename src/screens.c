@@ -4218,85 +4218,89 @@ int reg_port_quote(int base)
 // Collect building, service, business, and resident data for the queried city tile.
 // FUNCTION: C2 0x648e6
 // FUNCTION: C2WIN 0x0042dbbf
+int get_reg_buildings_in_radius(int x, int, int, int, int);
+
 void get_query_info(void)
 {
-    unsigned char b;
-    int xc, yc;
-    int stride;
+    unsigned char occupant_b;
+    int no_x;
+    int no_y;
+    int line_stride;
     int ptr;
-    int pop;
-    int dx;
-    int dy;
-    unsigned char a;
-    int ax, ay;
-    unsigned char footprint;
+    int pop_value;
+    int subx;
+    int suby;
+    unsigned char occupant_a;
+    int local_x;
+    int local_y;
+    unsigned char size;
 
     q_type = ((unsigned char *)city_map)[pm_over_cm_ptr];
     if (q_type < 0x82)
-        footprint = 1;
+        size = 1;
     else
-        footprint = reg_aquaduct_gfxdat[q_type + 8];
+        size = reg_aquaduct_gfxdat[q_type + 8];
 
-    dx = dy = 0;
-    if (footprint > 1) {
-        dx = dy = ((unsigned char *)city_map)[pm_over_cm_ptr + 5] & 0xf;
-        dx = dx % footprint;
-        dy = dy / footprint;
-        ptr = pm_over_cm_ptr - dx * 20;
-        ptr -= dy * 20 * 80;
+    subx = suby = 0;
+    if (size > 1) {
+        subx = suby = ((unsigned char *)city_map)[pm_over_cm_ptr + 5] & 0xf;
+        subx = subx % size;
+        suby = suby / size;
+        ptr = pm_over_cm_ptr - subx * 20;
+        ptr -= suby * 20 * 80;
     } else {
         ptr = pm_over_cm_ptr;
     }
 
     q_type = ((unsigned char *)city_map)[ptr];
     q_flag = ((unsigned char *)city_map)[ptr + 1];
-    q_lv = (char)get_best_lv((unsigned char *)city_map + ptr, footprint);
+    q_lv = (char)get_best_lv((unsigned char *)city_map + ptr, size);
     q_cover1 = ((unsigned char *)city_map)[ptr + 0xd];
     q_cover2 = ((unsigned char *)city_map)[ptr + 0xe];
     q_range1 = ((unsigned char *)city_map)[ptr + 0xa];
     q_range3 = ((unsigned char *)city_map)[ptr + 0xc];
-    q_supply       = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 4);
-    q_sub_aqua     = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 2);
-    q_aqua         = (char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 1);
-    q_baths        = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 8);
-    q_grammaticus  = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 0x10);
-    q_rhetor       = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 0x20);
-    q_admin        = (char)get_range1((unsigned char *)city_map + ptr, footprint, 0xc);
+    q_supply       = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, size, 4);
+    q_sub_aqua     = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, size, 2);
+    q_aqua         = (char)affected_by_cover1((unsigned char *)city_map + ptr, size, 1);
+    q_baths        = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, size, 8);
+    q_grammaticus  = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, size, 0x10);
+    q_rhetor       = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, size, 0x20);
+    q_admin        = (char)get_range1((unsigned char *)city_map + ptr, size, 0xc);
     q_shell        = ((unsigned char *)city_map)[ptr + 0x11];
-    q_patrol       = (unsigned char)get_range1((unsigned char *)city_map + ptr, footprint, 0x30);
-    if ((signed char)q_shell >= 0x10)
-        q_security = 1;
-    else
+    q_patrol       = (unsigned char)get_range1((unsigned char *)city_map + ptr, size, 0x30);
+    if ((signed char)q_shell < 0x10)
         q_security = 0;
+    else
+        q_security = 1;
     if (q_patrol)
         q_security = q_security + 1;
-    q_theatre      = get_range3((unsigned char *)city_map + ptr, footprint, 3);
-    q_colosseum    = get_range3((unsigned char *)city_map + ptr, footprint, 0xc);
+    q_theatre      = get_range3((unsigned char *)city_map + ptr, size, 3);
+    q_colosseum    = get_range3((unsigned char *)city_map + ptr, size, 0xc);
     q_colosseum    = q_colosseum >> 2;
-    q_circus       = get_range3((unsigned char *)city_map + ptr, footprint, 0x30);
+    q_circus       = get_range3((unsigned char *)city_map + ptr, size, 0x30);
     q_circus       = q_circus >> 4;
     q_entertainment = q_theatre + q_colosseum + q_circus;
-    q_market       = (unsigned char)get_range1((unsigned char *)city_map + ptr, footprint, 0xc0);
-    q_business     = (char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 0x80);
-    q_business_low = (char)affected_by_cover2((unsigned char *)city_map + ptr, footprint, 0x10);
-    q_business_vlow = (char)affected_by_cover2((unsigned char *)city_map + ptr, footprint, 0x20);
-    q_barracks     = (char)affected_by_cover2((unsigned char *)city_map + ptr, footprint, 1);
-    q_wall         = (char)affected_by_cover2((unsigned char *)city_map + ptr, footprint, 8);
-    q_gate         = (unsigned char)affected_by_cover2((unsigned char *)city_map + ptr, footprint, 4);
-    q_prefecture   = (unsigned char)affected_by_cover2((unsigned char *)city_map + ptr, footprint, 2);
-    q_near_market  = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, footprint, 0x40);
+    q_market       = (unsigned char)get_range1((unsigned char *)city_map + ptr, size, 0xc0);
+    q_business     = (char)affected_by_cover1((unsigned char *)city_map + ptr, size, 0x80);
+    q_business_low = (char)affected_by_cover2((unsigned char *)city_map + ptr, size, 0x10);
+    q_business_vlow = (char)affected_by_cover2((unsigned char *)city_map + ptr, size, 0x20);
+    q_barracks     = (char)affected_by_cover2((unsigned char *)city_map + ptr, size, 1);
+    q_wall         = (char)affected_by_cover2((unsigned char *)city_map + ptr, size, 8);
+    q_gate         = (unsigned char)affected_by_cover2((unsigned char *)city_map + ptr, size, 4);
+    q_prefecture   = (unsigned char)affected_by_cover2((unsigned char *)city_map + ptr, size, 2);
+    q_near_market  = (unsigned char)affected_by_cover1((unsigned char *)city_map + ptr, size, 0x40);
 
     q_goods = ((unsigned char *)city_map)[ptr + 0x13] & 0xf;
     q_ind_output = ((unsigned char *)city_map)[ptr + 0x9] & 0xf0;
     q_ind_output >>= 4;
     q_ind_pop    = ((unsigned char *)city_map)[ptr + 0x9] & 3;
-    pop = test_area_for_population(2,
-                                   act_start_x - dx,
-                                   act_start_y - dy, 2);
-    if      (pop > 0x82) q_ind_pop = q_ind_pop + 4;
-    else if (pop > 0x5a) q_ind_pop = q_ind_pop + 3;
-    else if (pop > 0x32) q_ind_pop = q_ind_pop + 2;
-    else if (pop > 0xa)  q_ind_pop = q_ind_pop + 1;
+    pop_value = test_area_for_population(2,
+                                         act_start_x - subx,
+                                         act_start_y - suby, 2);
+    if      (pop_value > 0x82) q_ind_pop = q_ind_pop + 4;
+    else if (pop_value > 0x5a) q_ind_pop = q_ind_pop + 3;
+    else if (pop_value > 0x32) q_ind_pop = q_ind_pop + 2;
+    else if (pop_value > 0xa)  q_ind_pop = q_ind_pop + 1;
     q_ind_market = ((unsigned char *)city_map)[ptr + 0x9] & 0xc;
 
     q_supplies = industry[q_goods].city_supply;
@@ -4305,57 +4309,57 @@ void get_query_info(void)
     cm_sptr = ptr;
     if (q_type == 0xfb || q_type == 0xf5) {
         if (test_perimeter_for_road_and_forum(
-                act_start_x - dx, act_start_y - dy, 3, 0) != 0)
+                act_start_x - subx, act_start_y - suby, 3, 0) != 0)
             q_hospital_access = 1;
     }
     q_road_access = (unsigned char)test_perimeter_for_road_and_forum(
-            act_start_x - dx, act_start_y - dy, footprint, 1);
+            act_start_x - subx, act_start_y - suby, size, 1);
     if (q_type >= 0x82 && q_type <= 0xa1 && q_road_access == 0)
         q_road_access = (unsigned char)test_range_for_road(
-            act_start_x - dx, act_start_y - dy, 3);
+            act_start_x - subx, act_start_y - suby, 3);
 
     queried_person = 0;
     q_no_of_people = 0;
-    a = ((unsigned char *)city_map)[ptr + 7];
-    b = ((unsigned char *)city_map)[ptr + 8];
-    if (a) {
-        q_people_list[q_no_of_people] = a;
+    occupant_a = ((unsigned char *)city_map)[ptr + 7];
+    occupant_b = ((unsigned char *)city_map)[ptr + 8];
+    if (occupant_a) {
+        q_people_list[q_no_of_people] = occupant_a;
         q_no_of_people++;
     }
-    if (b) {
-        q_people_list[q_no_of_people] = b;
+    if (occupant_b) {
+        q_people_list[q_no_of_people] = occupant_b;
         q_no_of_people++;
     }
 
-    ax = act_start_x - 1;
-    ay = act_start_y - 1;
-    xc = yc = 3;
-    if (ax < 0) {
-        xc = 2;
-        ax = 0;
-    } else if (xc + ax > 0x50) {
-        xc = 2;
+    local_x = act_start_x - 1;
+    local_y = act_start_y - 1;
+    no_x = no_y = 3;
+    if (local_x < 0) {
+        no_x = 2;
+        local_x = 0;
+    } else if (no_x + local_x > 0x50) {
+        no_x = 2;
     }
-    if (ay < 0) {
-        yc = 2;
-        ay = 0;
-    } else if (yc + ay > 0x3c) {
-        yc = 2;
+    if (local_y < 0) {
+        no_y = 2;
+        local_y = 0;
+    } else if (no_y + local_y > 0x3c) {
+        no_y = 2;
     }
-    ptr = (ay * 80 + ax) * 20;
-    stride = (0x50 - xc) * 20;
-    for (gmn_y = ay; gmn_y < ay + yc; gmn_y++, ptr += stride) {
-        for (gmn_x = ax; gmn_x < ax + xc; gmn_x++, ptr += 20) {
+    ptr = (local_y * 80 + local_x) * 20;
+    line_stride = (0x50 - no_x) * 20;
+    for (gmn_y = local_y; gmn_y < local_y + no_y; gmn_y++, ptr += line_stride) {
+        for (gmn_x = local_x; gmn_x < local_x + no_x; gmn_x++, ptr += 20) {
             if (q_no_of_people >= 6) break;
             if (gmn_x == act_start_x && gmn_y == act_start_y) continue;
-            a = ((unsigned char *)city_map)[ptr + 7];
-            b = ((unsigned char *)city_map)[ptr + 8];
-            if (a) {
-                q_people_list[q_no_of_people] = a;
+            occupant_a = ((unsigned char *)city_map)[ptr + 7];
+            occupant_b = ((unsigned char *)city_map)[ptr + 8];
+            if (occupant_a) {
+                q_people_list[q_no_of_people] = occupant_a;
                 q_no_of_people++;
             }
-            if (b) {
-                q_people_list[q_no_of_people] = b;
+            if (occupant_b) {
+                q_people_list[q_no_of_people] = occupant_b;
                 q_no_of_people++;
             }
         }
@@ -4366,7 +4370,6 @@ void get_query_info(void)
 // FUNCTION: C2 0x64e92
 // FUNCTION: C2WIN 0x0042e3ed
 int get_pop_level(void);
-int get_reg_buildings_in_radius(int x, int, int, int, int);
 
 void get_region_query_info(void)
 {
