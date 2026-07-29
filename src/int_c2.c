@@ -559,36 +559,37 @@ void s09_fire_fight(void)
 void s10_get_business(void)
 {
     int cell_offset;
-    int road_dir;
+    unsigned char road_dir;
 
-    if (citizen_go_to_target(0) == 0) return;
-    if ((citizen_list[citizen_no].flag_bits & 1) == 0) return;
-    get_population_and_industry_count(1, 0);
-    cell_offset = citizen_list[citizen_no].target_ref;
-    if (((unsigned char *)city_map)[cell_offset] == 0xfa) {
-        if (citizen_list[citizen_no].market_demand_a > 0) {
-            ((unsigned char *)city_map)[cell_offset + 9] &= 0xfc;
-            if (citizen_list[citizen_no].market_demand_a < 8)
-                ((unsigned char *)city_map)[cell_offset + 9] |= 2;
-            else
-                ((unsigned char *)city_map)[cell_offset + 9] |= 3;
+    if (citizen_go_to_target(0) == 0) {
+    } else if (citizen_list[citizen_no].flag_bits & 1) {
+        get_population_and_industry_count(1, 0);
+        cell_offset = citizen_list[citizen_no].target_ref;
+        if (((unsigned char *)city_map)[cell_offset] == 0xfa) {
+            if (citizen_list[citizen_no].market_demand_a > 0) {
+                ((unsigned char *)city_map)[cell_offset + 9] &= 0xfc;
+                if (citizen_list[citizen_no].market_demand_a < 8)
+                    ((unsigned char *)city_map)[cell_offset + 9] |= 2;
+                else
+                    ((unsigned char *)city_map)[cell_offset + 9] |= 3;
+            }
+            if (citizen_list[citizen_no].market_demand_b > 0) {
+                ((unsigned char *)city_map)[cell_offset + 9] &= 0xf3;
+                if (citizen_list[citizen_no].market_demand_b < 8)
+                    ((unsigned char *)city_map)[cell_offset + 9] |= 8;
+                else
+                    ((unsigned char *)city_map)[cell_offset + 9] |= 0xc;
+            }
         }
-        if (citizen_list[citizen_no].market_demand_b > 0) {
-            ((unsigned char *)city_map)[cell_offset + 9] &= 0xf3;
-            if (citizen_list[citizen_no].market_demand_b < 8)
-                ((unsigned char *)city_map)[cell_offset + 9] |= 8;
-            else
-                ((unsigned char *)city_map)[cell_offset + 9] |= 0xc;
+        road_dir = (unsigned char)city_test_for_road(citizen_list[citizen_no].x, citizen_list[citizen_no].y, citizen_list[citizen_no].map_ref, citizen_list[citizen_no].world_dir);
+        if (road_dir >= 8) {
+            citizen_list[citizen_no].state_idx = 2;
+            citizen_list[citizen_no].wait_count = 0x28;
+            return;
         }
+        target_from_dirc(road_dir);
+        citizen_list[citizen_no].action_kind = 1;
     }
-    road_dir = (unsigned char)city_test_for_road(citizen_list[citizen_no].x, citizen_list[citizen_no].y, citizen_list[citizen_no].map_ref, citizen_list[citizen_no].world_dir);
-    if (road_dir >= 8) {
-        citizen_list[citizen_no].state_idx  = 2;
-        citizen_list[citizen_no].wait_count = 0x28;
-        return;
-    }
-    target_from_dirc(road_dir);
-    citizen_list[citizen_no].action_kind = 1;
 }
 
 // Citizen state-11 (rioting in place): tick down wait_count; on expiry transition to state 12
