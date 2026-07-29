@@ -2865,8 +2865,7 @@ void show_top_line(void)
 }
 
 #if PLATFORM_WINDOWS
-static int last_text;
-#define ICON_STRIP_LAST_TEXT last_text
+#define ICON_STRIP_LAST_TEXT text_idx
 #else
 #define ICON_STRIP_LAST_TEXT request_message.cached_text_id
 #endif
@@ -2875,6 +2874,9 @@ static int last_text;
 // FUNCTION: C2WIN 0x00429f9c
 void show_icon_strip(void)
 {
+#if PLATFORM_WINDOWS
+    static int text_idx;
+#endif
     int force_redraw;
     int selected_flag;
     int cost_exists;
@@ -4377,6 +4379,8 @@ void get_query_info(void)
 // FUNCTION: C2 0x64e92
 // FUNCTION: C2WIN 0x0042e3ed
 int get_pop_level(void);
+int get_reg_buildings_in_radius(int x, int y, int span, int radius,
+                                unsigned char building_kind);
 
 void get_region_query_info(void)
 {
