@@ -4220,38 +4220,34 @@ void get_region_query_info(void)
 int not_pertinant_statistic1(int statistic_idx)
 {
     if (q_type >= 0x82 && q_type < 0xa2) {
-        if (statistic_idx != 0xa) goto not_pert;
-        return 1;
+        if (statistic_idx == 0xa) return 1;
+        goto not_pert;
     }
     if (q_type >= 0xae && q_type <= 0xb9) {
-        if (statistic_idx == 0xa) goto not_pert;
-        return 1;
+        if (statistic_idx != 0xa) return 1;
+        goto not_pert;
     }
     if (q_type >= 0xdb && q_type <= 0xe2) {
-        if (statistic_idx == 0)   goto not_pert;
-        return 1;
+        if (statistic_idx != 0) return 1;
+        goto not_pert;
     }
     if (q_type >= 0xe3 && q_type <= 0xe4) {
-        if (statistic_idx == 0xa) goto not_pert;
-        return 1;
+        if (statistic_idx != 0xa) return 1;
+        goto not_pert;
     }
     if (q_type == 0xfb || q_type == 0xf5) {
         if (statistic_idx == 0xa) return 0;
         if (statistic_idx == 1) return 0;
         return 1;
-    }
-    if (q_type == 0xfa) {
-        if (statistic_idx == 0xa) goto not_pert;
-        return 1;
-    }
-    if (q_type >= 0xfc) {
-        if (q_type <= 0xff) {
-            if (statistic_idx == 0xa) goto not_pert;
-            return 1;
+    } else {
+        if (q_type == 0xfa) {
+            if (statistic_idx != 0xa) return 1;
+        } else {
+            if (q_type >= 0xfc && q_type <= 0xff) {
+                if (statistic_idx != 0xa) return 1;
+            } else return 1;
         }
-        return 1;
     }
-    return 1;
 not_pert:
     return 0;
 }
