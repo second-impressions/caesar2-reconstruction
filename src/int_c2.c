@@ -1605,16 +1605,17 @@ void get_dirc_from_citizen_wf_run(void)
 // FUNCTION: C2WIN 0x00409fb6
 void copy_ferret_run_to_citizen(void)
 {
-    int i, j;
-    char step;
+    int i;
+    int j;
+    unsigned char value;
 
     citizen_list[citizen_no].wf_active = 1; citizen_list[citizen_no].wf_step = 0; citizen_list[citizen_no].wf_length = ferret_run_length;
     w_dirc = ferret_run[0];
     i = 0; j = 0;
     for (; i < ferret_run_length; i++) {
-        step = ferret_run[i];
-        if ((i & 1) == 0) citizen_list[citizen_no].wf_steps[j] = step;
-        else { step <<= 4; citizen_list[citizen_no].wf_steps[j] += step; j++; }
+        value = ferret_run[i];
+        if ((i & 1) == 0) citizen_list[citizen_no].wf_steps[j] = value;
+        else { value <<= 4; citizen_list[citizen_no].wf_steps[j] += value; j++; }
     }
 }
 
