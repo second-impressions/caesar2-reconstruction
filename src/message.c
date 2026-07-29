@@ -282,10 +282,14 @@ void show_basic_message(int message_idx, int message_param) {
 void show_emperor_message(int message_idx, int is_emperor) {
     int favour_text_idx;
     (void)is_emperor;
+#if PLATFORM_WINDOWS
+    internal_screen = message_screen;
+#else
     cover_mouse_droppings();
     grey_a_screen();
     setup_whole_screen_refresh();
     refresh_svga_screen();
+#endif
     show_a_mosaic_frame(0x50, 0x40, 22, 25);
     show_a_mosaic_blank(0x60, 0x50, 20, 23);
     mosaic_frame_divider(0x50, 0xe8, 22, 23);
@@ -304,7 +308,7 @@ void show_emperor_message(int message_idx, int is_emperor) {
         font_list(0x26, 0x0f, x_is + 0x88, 0x154, font2, 16);
         font_list(0x10, imperial_req_goods + 1, x_is + 0x8c, 0x154, font2, 16);
         x_is = 0;
-        font_list(0x26, 0x10, 0x68, 0x178, font1, 16);
+        font_list(0x26, 0x10, x_is + 0x68, 0x178, font1, 16);
         font_no(industry[imperial_req_goods].supply,
                 0x20, " ", x_is + 0x68, 0x178, font1, 16);
         font_list(0x26, 0x11, x_is + 0x68, 0x178, font1, 16);
@@ -345,8 +349,13 @@ void show_emperor_message(int message_idx, int is_emperor) {
         if (players_denarii < 0)
             players_denarii = 0;
     }
+#if PLATFORM_WINDOWS
+    internal_screen = game_screen;
+    start_windows_smacking("message.smk", 0x60, 0x50, 1, message_screen);
+#else
     setup_whole_screen_refresh();
     start_smacking("message.smk", 0x60, 0x50, 1);
+#endif
     hold_mouse_replace = 1;
 }
 
