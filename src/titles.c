@@ -133,15 +133,15 @@ void lead_in_logos(void)
 {
     black_out();
     mouse_was_pressed = 0;
-    if (display_pl8file("logo1.pl8", "logo1.256") != 0
-        && mouse_was_pressed == 0) {
-        fade_to_black_out();
-        if (mouse_was_pressed == 0
-            && display_pl8file("logo2.pl8", "logo2.256") != 0
-            && mouse_was_pressed == 0) {
-            fade_to_black_out();
-        }
-    }
+    if (display_pl8file("logo1.pl8", "logo1.256") == 0) goto logos_done;
+    if (mouse_was_pressed != 0) goto logos_done;
+    fade_to_black_out();
+    if (mouse_was_pressed != 0) goto logos_done;
+    if (display_pl8file("logo2.pl8", "logo2.256") == 0) goto logos_done;
+    if (mouse_was_pressed != 0) goto logos_done;
+    fade_to_black_out();
+
+logos_done:
     black_out();
     clear_all_screens();
     clear_a_screen();
