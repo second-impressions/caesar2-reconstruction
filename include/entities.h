@@ -372,7 +372,7 @@ struct army_rec {
     unsigned char  dest_x;             /* +0x2A  destination tile X for sail-to-port */
     char           _unk2B[1];          /* Mac PPC: also never accessed -- vestigial */
     int            fort_ref;           /* +0x2C */
-    char           army_id;              /* +0x30 */
+    unsigned char  army_id;              /* +0x30 */
     char           _unk31;              /* Mac PPC: also never accessed -- vestigial */
     short          evolve_timer;       /* +0x32 */
     short          target_marker;      /* +0x34  cached enemy.evolve_timer

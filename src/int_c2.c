@@ -806,7 +806,7 @@ void sa04_army_attack(void)
 {
     if (army_list[army_no].wf_step >= 2) army_list[army_no].wf_active = 0;
     enemy_army = army_list[army_no].army_id;
-    if (army_list[army_list[army_no].army_id].exists == 0
+    if (army_list[enemy_army].exists == 0
      || army_list[enemy_army].evolve_timer
             != army_list[army_no].target_marker) {
         army_list[army_no].state_idx = 1;
@@ -815,9 +815,10 @@ void sa04_army_attack(void)
     }
     army_list[army_no].target_x = army_list[enemy_army].x;
     army_list[army_no].target_y = army_list[enemy_army].y;
-    if (region_go_to_target(0) != 0
-     && (army_list[army_no].flags & 1) != 0)
+    if (region_go_to_target(0) == 0) {
+    } else if ((army_list[army_no].flags & 1) != 0) {
         army_list[army_no].return_flag = 1;
+    }
 }
 
 // Return an army to its waypoint, then enter the wait state and clear its pending order.
