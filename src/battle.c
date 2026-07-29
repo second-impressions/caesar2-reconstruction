@@ -2855,60 +2855,53 @@ void do_heavy_ai(void)
 // FUNCTION: C2WIN 0x0047ca6a
 void set_ai_flank_move(int flank_mode)
 {
-    int target_col;
-    int formation;
-    int figure_position;
+    int col;
+    int column;
+    int i;
 
-    if (flank_mode == 1) {
-        target_col = roman_left_edge - 6;
-    } else if (flank_mode == 2) {
-        target_col = roman_right_edge + 8;
-    } else if (flank_mode >= 3) {
-        target_col = 0x2c;
+    if (flank_mode == 1) { col = roman_left_edge - 6;
+    } else if (flank_mode == 2) { col = roman_right_edge + 8;
+    } else if (flank_mode >= 3) { col = 0x2c;
     }
-    if (target_col < 0) {
-        target_col = 0;
+    if (col < 0) { col = 0;
     }
-    if (target_col >= 0x34) {
-        target_col = 0x33;
+    if (col >= 0x34) { col = 0x33;
     }
-    figure_position = 0;
-    formation = tribe_ai_data[bat_tribe].prefer_column;
-    if (flank_mode >= 3) {
-        formation = 0;
+    i = 0;
+    column = tribe_ai_data[bat_tribe].prefer_column;
+    if (flank_mode >= 3) { column = 0;
     }
-    if (formation == 1) {
-        unit_list[temp_unit].combat_order = 7;
+    if (column == 1) { unit_list[temp_unit].combat_order = 7;
     } else {
         unit_list[temp_unit].combat_order = 3;
-        if (flank_mode == 2) {
-            target_col -= unit_list[temp_unit].fig_count / 2;
+        if (flank_mode == 2) { col -= (unsigned char)unit_list[temp_unit].fig_count / 2;
         }
     }
     unit_list[temp_unit].manoeuvre_done = 1;
     for (temp_figure = unit_list[temp_unit].first_figure;
          temp_figure <= unit_list[temp_unit].last_figure;
          temp_figure++) {
-        if (figure_list[temp_figure].exists == 0) continue;
-        if (figure_list[temp_figure].state_idx == 2) continue;
-        if (figure_list[temp_figure].state_idx == 0xc) continue;
-        if (figure_list[temp_figure].state_idx == 0xa) continue;
-        if (formation == 1) {
-            figure_list[temp_figure].state_idx = 7;
-            figure_list[temp_figure].shield_class = 1;
-            figure_list[temp_figure].prev_grid_x = target_col + col_flank_data[figure_position].dx;
-            figure_list[temp_figure].prev_grid_y = col_flank_data[figure_position].dy + (unit_list[temp_unit].y - 0x14);
-        } else if (flank_mode >= 3) {
-            figure_list[temp_figure].state_idx = 7;
-            figure_list[temp_figure].prev_grid_x = target_col + line_flank_data[figure_position].dx;
-            figure_list[temp_figure].prev_grid_y = line_flank_data[figure_position].dy + (unit_list[temp_unit].y - flank_mode * 2);
-            target_col -= 2;
-        } else {
-            figure_list[temp_figure].state_idx = 7;
-            figure_list[temp_figure].prev_grid_x = target_col + line_flank_data[figure_position].dx;
-            figure_list[temp_figure].prev_grid_y = line_flank_data[figure_position].dy + (unit_list[temp_unit].y - 0x10);
+        if (figure_list[temp_figure].exists != 0) {
+            if (figure_list[temp_figure].state_idx == 2) continue;
+            if (figure_list[temp_figure].state_idx == 0xc) continue;
+            if (figure_list[temp_figure].state_idx == 0xa) continue;
+            if (column == 1) {
+                figure_list[temp_figure].state_idx = 7;
+                figure_list[temp_figure].shield_class = 1;
+                figure_list[temp_figure].prev_grid_x = col + col_flank_data[i].dx;
+                figure_list[temp_figure].prev_grid_y = col_flank_data[i].dy + (unit_list[temp_unit].y - 0x14);
+            } else if (flank_mode >= 3) {
+                figure_list[temp_figure].state_idx = 7;
+                figure_list[temp_figure].prev_grid_x = col + line_flank_data[i].dx;
+                figure_list[temp_figure].prev_grid_y = line_flank_data[i].dy + (unit_list[temp_unit].y - flank_mode * 2);
+                col -= 2;
+            } else {
+                figure_list[temp_figure].state_idx = 7;
+                figure_list[temp_figure].prev_grid_x = col + line_flank_data[i].dx;
+                figure_list[temp_figure].prev_grid_y = line_flank_data[i].dy + (unit_list[temp_unit].y - 0x10);
+            }
+            i++;
         }
-        figure_position++;
     }
 }
 
