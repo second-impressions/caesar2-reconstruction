@@ -385,42 +385,40 @@ void s05_maraude_to_top_spot(void)
 // FUNCTION: C2WIN 0x00405143
 void s06_quell_trouble(void)
 {
-    int enemy_idx;
-
     citizen_list[citizen_no].action_kind = 1;
-    if (citizen_maraude_to_target(2) == 0) return;
-    if ((citizen_list[citizen_no].flag_bits & 1) == 0) return;
-    citizen_a = (unsigned char)citizen_list[citizen_no].target_kind;
-    if (citizen_list[(unsigned char)citizen_list[citizen_no].target_kind].exists != 0
-        && citizen_list[citizen_no].target_marker
-            == citizen_list[citizen_a].evolve_timer) {
-        citizen_list[citizen_no].dest_x =
-            citizen_list[citizen_a].x;
-        citizen_list[citizen_no].dest_y =
-            citizen_list[citizen_a].y;
-        citizen_list[citizen_no].target_count++;
-        if (citizen_list[citizen_no].target_count > 4) {
-            citizen_list[citizen_no].target_count = 0;
-            citizen_list[citizen_no].wf_active    = 0;
+    if (citizen_maraude_to_target(2) == 0) {
+    } else if (citizen_list[citizen_no].flag_bits & 1) {
+        citizen_a = citizen_list[citizen_no].target_kind;
+        if (citizen_list[citizen_a].exists != 0 &&
+            citizen_list[citizen_no].target_marker ==
+                citizen_list[citizen_a].evolve_timer) {
+            citizen_list[citizen_no].dest_x =
+                citizen_list[citizen_a].x;
+            citizen_list[citizen_no].dest_y =
+                citizen_list[citizen_a].y;
+            citizen_list[citizen_no].target_count++;
+            if (citizen_list[citizen_no].target_count > 4) {
+                citizen_list[citizen_no].target_count = 0;
+                citizen_list[citizen_no].wf_active = 0;
+            }
+        } else {
+            citizen_a = find_enemy(citizen_list[citizen_no].x,
+                                   citizen_list[citizen_no].y, 10);
+            if (citizen_a == 0) {
+                citizen_list[citizen_no].state_idx = 2;
+            } else {
+                citizen_list[citizen_no].target_kind = citizen_a;
+                citizen_list[citizen_no].target_marker =
+                    citizen_list[citizen_a].evolve_timer;
+                citizen_list[citizen_no].dest_x =
+                    citizen_list[citizen_a].x;
+                citizen_list[citizen_no].dest_y =
+                    citizen_list[citizen_a].y;
+                citizen_list[citizen_no].target_count = 0;
+                citizen_list[citizen_no].wf_active = 0;
+            }
         }
-        return;
     }
-    enemy_idx = find_enemy(citizen_list[citizen_no].x,
-                          citizen_list[citizen_no].y, 10);
-    citizen_a = enemy_idx;
-    if ((short)enemy_idx == 0) {
-        citizen_list[citizen_no].state_idx = 2;
-        return;
-    }
-    citizen_list[citizen_no].target_kind  = citizen_a;
-    citizen_list[citizen_no].target_marker =
-        citizen_list[(short)enemy_idx].evolve_timer;
-    citizen_list[citizen_no].dest_x =
-        citizen_list[(short)enemy_idx].x;
-    citizen_list[citizen_no].dest_y =
-        citizen_list[(short)enemy_idx].y;
-    citizen_list[citizen_no].target_count = 0;
-    citizen_list[citizen_no].wf_active    = 0;
 }
 
 // Advance a vigile patrol, mark its coverage area, and acquire nearby rioters or barbarians.

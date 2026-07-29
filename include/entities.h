@@ -721,7 +721,7 @@ struct citizen_rec {
                                          (fire / patrol / quell / etc.) */
     unsigned char  target_kind;      /* +0x2C  non-zero ⇒ target_ref valid
                                          (fire-fight, vigile-patrol, …) */
-    char           target_count;     /* +0x2D  per-target tick (inc'd by
+    unsigned char  target_count;     /* +0x2D  per-target tick (inc'd by
                                          s06_quell_trouble) */
     short          evolve_timer;     /* +0x2E */
     short          target_marker;    /* +0x30  saved target.evolve_timer
