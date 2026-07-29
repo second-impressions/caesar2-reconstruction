@@ -3991,8 +3991,11 @@ int reg_industry_quote(int x)
 // FUNCTION: C2WIN 0x0042db4b
 int reg_tpost_quote(int base)
 {
-    if (!q_road) return 0x19;
-    return base + 0x15;
+    int quote;
+
+    if (!q_road) quote = 0x19;
+    else quote = base + 0x15;
+    return quote;
 }
 
 // Select port advice based on road access.
