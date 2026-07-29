@@ -4,6 +4,15 @@
 
 extern void font_list(int idx, int word_count, int x, int y, unsigned char *font, int color);
 extern void font_format_split(int idx, int word_skip, int x, int y_start, int max_width, int line_limit, int x_overflow, int max_width_overflow, unsigned char *font, int color);
+#if PLATFORM_WINDOWS
+extern unsigned char background_tile;
+extern void *main_window;
+extern void save_window_status(void);
+extern void show_map_window(int mode);
+extern void tile_main_window(unsigned char tile);
+extern void play_windows_smacked_anim(char *filename);
+extern int show_native_promotion(void *window, int rank);
+#endif
 /* Forward declarations (functions defined later in this file). */
 void lose_game_screen(void);
 
@@ -50,6 +59,25 @@ void lose_game_screen(void)
 // Ranks of 10 or higher select the victory variant.
 // FUNCTION: C2 0x5a067
 // FUNCTION: C2WIN 0x004aea34
+#if PLATFORM_WINDOWS
+int show_want_promotion_box(int rank)
+{
+    int result;
+
+    stop_tune();
+    save_window_status();
+    show_map_window(0);
+    show_map_window(1);
+    show_map_window(2);
+    tile_main_window(background_tile);
+    if (rank >= 10)
+        play_windows_smacked_anim("wingame.smk");
+    else
+        play_windows_smacked_anim("promote.smk");
+    result = show_native_promotion(main_window, rank);
+    return result;
+}
+#else
 void show_want_promotion_box(int rank)
 {
     stop_tune();
@@ -82,6 +110,7 @@ void show_want_promotion_box(int rank)
     hold_mouse_replace = 1;
     refresh_svga_screen();
 }
+#endif
 
 // Does nothing; reserved for the demo lead-in slideshow.
 // FUNCTION: C2 0x5a1e7 FOLDED
