@@ -3981,50 +3981,51 @@ void show_detailed_query_panel(void)
 // FUNCTION: C2WIN 0x0042d278
 void show_region_query_panel(int y)
 {
-    int paragraph;
-    int quote_kind;
+    int paragraph_index;
+    int quote_code;
     int extra_kind = 0;
     int quote;
+    int army_name;
 
-    if (q_type < 0x10) { paragraph = 0; quote_kind = 0; }
-    else if (q_type < 0x18) { paragraph = 1; quote_kind = 0; }
-    else if (q_type < 0x1c) { paragraph = 2; quote_kind = 0; }
-    else if (q_type < 0x20) { paragraph = 3; quote_kind = 0; }
-    else if (q_type < 0x7d) { paragraph = 4; quote_kind = 0; }
-    else if (q_type < 0x85) { paragraph = 5; quote_kind = 0; }
-    else if (q_type < 0x8d) { paragraph = 6; quote_kind = 0; }
-    else if (q_type < 0x91) { paragraph = 7; quote_kind = 0; }
-    else if (q_type < 0x92) { paragraph = 8; quote_kind = 0; }
-    else if (q_type < 0x93) { paragraph = 9; quote_kind = 1; extra_kind = 1; }
-    else if (q_type < 0x94) { paragraph = 0xa; quote_kind = 2; }
-    else if (q_type < 0x95) { paragraph = 0xb; quote_kind = 3; }
-    else if (q_type < 0x96) { paragraph = 0xc; quote_kind = 4; }
-    else if (q_type < 0x97) { paragraph = 0xd; quote_kind = 5; }
-    else if (q_type < 0x98) { paragraph = 0xe; quote_kind = 6; }
-    else if (q_type < 0x9c) { paragraph = 0xf; quote_kind = 7; }
-    else if (q_type < 0xa0) { paragraph = 0x10; quote_kind = 0; }
-    else if (q_type < 0xb5) { paragraph = 0x11; quote_kind = 0; }
-    else if (q_type < 0xb6) { paragraph = 0x12; quote_kind = 0; }
-    else if (q_type < 0xd2) { paragraph = 0x13; quote_kind = 0; }
-    else if (q_type < 0xd3) { paragraph = 0x14; quote_kind = 0; extra_kind = 2; }
-    else if (q_type < 0xd4) { paragraph = 0x15; quote_kind = 8; }
-    else if (q_type < 0xd5) { paragraph = 0x16; quote_kind = 9; extra_kind = 4; }
-    else if (q_type < 0xdc) { paragraph = 0x17; quote_kind = 0; }
-    else if (q_type < 0xe0) { paragraph = 0x18; quote_kind = 0xa; extra_kind = 3; }
-    else if (q_type < 0xe4) { paragraph = 0x19; quote_kind = 0xb; extra_kind = 3; }
-    else if (q_type < 0xe8) { paragraph = 0x1a; quote_kind = 0xc; extra_kind = 3; }
-    else if (q_type < 0xec) { paragraph = 0x1b; quote_kind = 0xd; }
-    else { paragraph = 0x1c; quote_kind = 0xe; }
+    if (q_type < 0x10) { paragraph_index = 0; quote_code = 0; }
+    else if (q_type < 0x18) { paragraph_index = 1; quote_code = 0; }
+    else if (q_type < 0x1c) { paragraph_index = 2; quote_code = 0; }
+    else if (q_type < 0x20) { paragraph_index = 3; quote_code = 0; }
+    else if (q_type < 0x7d) { paragraph_index = 4; quote_code = 0; }
+    else if (q_type < 0x85) { paragraph_index = 5; quote_code = 0; }
+    else if (q_type < 0x8d) { paragraph_index = 6; quote_code = 0; }
+    else if (q_type < 0x91) { paragraph_index = 7; quote_code = 0; }
+    else if (q_type < 0x92) { paragraph_index = 8; quote_code = 0; }
+    else if (q_type < 0x93) { paragraph_index = 9; quote_code = 1; extra_kind = 1; }
+    else if (q_type < 0x94) { paragraph_index = 0xa; quote_code = 2; }
+    else if (q_type < 0x95) { paragraph_index = 0xb; quote_code = 3; }
+    else if (q_type < 0x96) { paragraph_index = 0xc; quote_code = 4; }
+    else if (q_type < 0x97) { paragraph_index = 0xd; quote_code = 5; }
+    else if (q_type < 0x98) { paragraph_index = 0xe; quote_code = 6; }
+    else if (q_type < 0x9c) { paragraph_index = 0xf; quote_code = 7; }
+    else if (q_type < 0xa0) { paragraph_index = 0x10; quote_code = 0; }
+    else if (q_type < 0xb5) { paragraph_index = 0x11; quote_code = 0; }
+    else if (q_type < 0xb6) { paragraph_index = 0x12; quote_code = 0; }
+    else if (q_type < 0xd2) { paragraph_index = 0x13; quote_code = 0; }
+    else if (q_type < 0xd3) { paragraph_index = 0x14; quote_code = 0; extra_kind = 2; }
+    else if (q_type < 0xd4) { paragraph_index = 0x15; quote_code = 8; }
+    else if (q_type < 0xd5) { paragraph_index = 0x16; quote_code = 9; extra_kind = 4; }
+    else if (q_type < 0xdc) { paragraph_index = 0x17; quote_code = 0; }
+    else if (q_type < 0xe0) { paragraph_index = 0x18; quote_code = 0xa; extra_kind = 3; }
+    else if (q_type < 0xe4) { paragraph_index = 0x19; quote_code = 0xb; extra_kind = 3; }
+    else if (q_type < 0xe8) { paragraph_index = 0x1a; quote_code = 0xc; extra_kind = 3; }
+    else if (q_type < 0xec) { paragraph_index = 0x1b; quote_code = 0xd; }
+    else { paragraph_index = 0x1c; quote_code = 0xe; }
 
     x_is = 0;
     if (extra_kind != 4) {
-        font_list(0x44, paragraph, 0x98, y, font2, 0x10);
+        font_list(0x44, paragraph_index, 0x98, y, font2, 0x10);
     }
     if (extra_kind == 1) {
         font_list(0x32, 0xa, 0x98, y + 0x34, font1, 0x10);
     }
     if (extra_kind == 2) {
-        int army_name = get_army_name_from_fort_ref(q_ptr);
+        army_name = get_army_name_from_fort_ref(q_ptr);
         font_list(5, army_name, x_is + 0x98, y, font2, 0x10);
     }
     if (extra_kind == 3) {
@@ -4033,49 +4034,49 @@ void show_region_query_panel(int y)
     if (extra_kind == 4) {
         if (q_had_goods != 0) {
             font_list(0x10, q_goods + 1, 0x68, y, font2, 0x10);
-            font_list(0x44, paragraph, x_is + 0x68, y, font2, 0x10);
+            font_list(0x44, paragraph_index, x_is + 0x68, y, font2, 0x10);
         } else {
-            font_list(0x44, paragraph, x_is + 0x98, y, font2, 0x10);
+            font_list(0x44, paragraph_index, x_is + 0x98, y, font2, 0x10);
         }
     }
 
-    this_help_page = ((short *)region_mm_enties)[paragraph];
+    this_help_page = ((short *)region_mm_enties)[paragraph_index];
 
-    if (quote_kind == 0) {
+    if (quote_code == 0) {
         quote = 0;
-    } else if (quote_kind == 1) {
+    } else if (quote_code == 1) {
         quote = q_gfx / 4 + 1;
-    } else if (quote_kind == 2) {
+    } else if (quote_code == 2) {
         quote = 2;
-    } else if (quote_kind == 3) {
+    } else if (quote_code == 3) {
         quote = 4;
-    } else if (quote_kind == 4) {
+    } else if (quote_code == 4) {
         quote = 6;
-    } else if (quote_kind == 5) {
+    } else if (quote_code == 5) {
         quote = 8;
-    } else if (quote_kind == 6) {
+    } else if (quote_code == 6) {
         if (!q_road) quote = 0x1c;
         else quote = q_gfx - 0x31;
-    } else if (quote_kind == 7) {
+    } else if (quote_code == 7) {
         if (!q_road) quote = 0x1c;
         else quote = q_gfx - 0x4f;
-    } else if (quote_kind == 8) {
+    } else if (quote_code == 8) {
         quote = q_gfx - 0x33;
-    } else if (quote_kind == 9) {
+    } else if (quote_code == 9) {
         if (q_wh_level <= 0) quote = 0x1e;
         else if (q_wh_level < 4) quote = 0xd;
         else if (q_wh_level < 8) quote = 0xe;
         else if (q_wh_level < 0xf) quote = 0xf;
         else quote = 0x10;
-    } else if (quote_kind == 0xa) {
+    } else if (quote_code == 0xa) {
         quote = reg_industry_quote(q_type - 0xdc);
-    } else if (quote_kind == 0xb) {
+    } else if (quote_code == 0xb) {
         quote = reg_industry_quote(q_type - 0xe0);
-    } else if (quote_kind == 0xc) {
+    } else if (quote_code == 0xc) {
         quote = reg_industry_quote(q_type - 0xe4);
-    } else if (quote_kind == 0xd) {
+    } else if (quote_code == 0xd) {
         quote = reg_tpost_quote(q_type - 0xe8);
-    } else if (quote_kind == 0xe) {
+    } else if (quote_code == 0xe) {
         quote = reg_port_quote(q_type - 0xec);
     } else {
         quote = 0;
