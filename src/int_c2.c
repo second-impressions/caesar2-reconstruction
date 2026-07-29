@@ -1362,8 +1362,9 @@ int get_army_walk_dirc(int screen_dir, int anim_phase)
     else if (screen_dir < 4)  frame_offset = 9;
     else               frame_offset = 3;
     anim_phase &= 3;
-    if (anim_phase != 0) {
-        if (anim_phase == 2) frame_offset += anim_phase;
+    if (anim_phase == 0) {
+    } else {
+        if (anim_phase == 2) frame_offset += 2;
         else          frame_offset++;
     }
     return frame_offset;
