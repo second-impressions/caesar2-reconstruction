@@ -2864,6 +2864,12 @@ void show_top_line(void)
 #endif
 }
 
+#if PLATFORM_WINDOWS
+static int last_text;
+#define ICON_STRIP_LAST_TEXT last_text
+#else
+#define ICON_STRIP_LAST_TEXT request_message.cached_text_id
+#endif
 // Update the bottom strip with construction costs, icon help, or current map information.
 // FUNCTION: C2 0x62177
 // FUNCTION: C2WIN 0x00429f9c
@@ -2916,7 +2922,7 @@ void show_icon_strip(void)
         if (cost_exists != 0
             && cost == request_message.cached_cost)
             return;
-        else if (text_id == request_message.cached_text_id)
+        else if (text_id == ICON_STRIP_LAST_TEXT)
             return;
     }
 
@@ -2925,7 +2931,7 @@ void show_icon_strip(void)
     show_fast_rect(0x1e8, 0x10b, 0x1a);
 
     if (cost_exists != 0) {
-        request_message.cached_text_id = -1;
+        ICON_STRIP_LAST_TEXT = -1;
         x_is = 0;
         font_list(0x34, 0, 0x1ea, 0x10c, font1, 0x10);
         font_no(cost, 0x20, " Dn",
@@ -2945,13 +2951,14 @@ void show_icon_strip(void)
         } else {
             font_list(0x33, text_id, 0x1ea, 0x10c, font1, 0x10);
         }
-        request_message.cached_text_id = text_id;
+        ICON_STRIP_LAST_TEXT = text_id;
     }
 
 #if !PLATFORM_WINDOWS
     setup_refresh_area(0x1e0, 0x10b, 0xa, 2, 1);
 #endif
 }
+#undef ICON_STRIP_LAST_TEXT
 
 // Update the city overview-mode selector when its state changes.
 // FUNCTION: C2 0x62366
