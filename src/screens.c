@@ -3133,13 +3133,15 @@ void init_queery_panel(void)
 // FUNCTION: C2WIN 0x0042acce
 void show_querymode_panel(void)
 {
-    if (pointer_mode == 4) {
-        show_a_system_window(0x1df, 0x170, 0xa, 7);
-        font_list(0x4a, 0, 0x1e8, 0x17c, font2, 0x10);
-        font_list(0x4a, 1, 0x21a, 0x19a, font2, 0x10);
-        font_format_split(0x4a, 2, 0x1e8, 0x1b8, 0x98, 0x64, 0, 0, font1, 0x10);
-        setup_refresh_area(0x1de, 0x16e, 0xb, 8, 1);
-    }
+    if (pointer_mode != 4) return;
+
+    show_a_system_window(0x1df, 0x170, 0xa, 7);
+    font_list(0x4a, 0, 0x1e8, 0x17c, font2, 0x10);
+    font_list(0x4a, 1, 0x21a, 0x19a, font2, 0x10);
+    font_format_split(0x4a, 2, 0x1e8, 0x1b8, 0x98, 0x64, 0, 0, font1, 0x10);
+#if !PLATFORM_WINDOWS
+    setup_refresh_area(0x1de, 0x16e, 0xb, 8, 1);
+#endif
 }
 
 // Draw the query panel and dispatch to its active city, resident, detail, or region view.
