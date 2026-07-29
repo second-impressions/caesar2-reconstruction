@@ -26,10 +26,12 @@ extern void redraw_window_icons(void);
 #define SCREEN_MAP_MODE screen_mode
 #define SCREEN_PEOPLE_DATA(mode) (((unsigned char **)&people_data)[mode])
 #define COHORT_AUTO_FIGHT army_list[tracking_army].state_idx
+#define NON_COHORT_TYPE army_list[tracking_army].type
 #else
 #define SCREEN_MAP_MODE map_mode
 #define SCREEN_PEOPLE_DATA(mode) people_data
 #define COHORT_AUTO_FIGHT auto_fight
+#define NON_COHORT_TYPE army_type
 #endif
 
 /* Forward declarations (functions defined later in this file). */
@@ -698,17 +700,21 @@ void show_cohort_box(void)
 // FUNCTION: C2WIN 0x00423934
 void show_non_cohort_box(void)
 {
+#if !PLATFORM_WINDOWS
     int army_type;
+#endif
 
     stone_random_count = 0xf;
     show_a_mosaic_window(0x50, 0xf0, 0x16, 8);
     show_an_exit_button(0x184, 0x144);
 
+#if !PLATFORM_WINDOWS
     army_type = army_list[tracking_army].type;
-    if      (army_type <= 2) font_list(0x2d, 0x19, 0x78, 0x10e, font2, 0x10);
-    else if (army_type <= 5) font_list(0x2d, 0x1a, 0x78, 0x10e, font2, 0x10);
-    else if (army_type <= 6) font_list(0x2d, 0x1b, 0x78, 0x10e, font2, 0x10);
-    else if (army_type <= 7) font_list(0x2d, 0x1c, 0x78, 0x10e, font2, 0x10);
+#endif
+    if      (NON_COHORT_TYPE <= 2) font_list(0x2d, 0x19, 0x78, 0x10e, font2, 0x10);
+    else if (NON_COHORT_TYPE <= 5) font_list(0x2d, 0x1a, 0x78, 0x10e, font2, 0x10);
+    else if (NON_COHORT_TYPE <= 6) font_list(0x2d, 0x1b, 0x78, 0x10e, font2, 0x10);
+    else if (NON_COHORT_TYPE <= 7) font_list(0x2d, 0x1c, 0x78, 0x10e, font2, 0x10);
     else                font_list(0x2d, 0x1d, 0x78, 0x10e, font2, 0x10);
 
     if (army_list[tracking_army].type == 6) {
