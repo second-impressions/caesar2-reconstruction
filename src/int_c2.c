@@ -264,7 +264,8 @@ void s00_null(void)
 // FUNCTION: C2WIN 0x00404acc
 void s01_wait(void)
 {
-    if (--citizen_list[citizen_no].wait_count <= 0) {
+    if (--citizen_list[citizen_no].wait_count > 0) {
+    } else {
         citizen_list[citizen_no].speed_phase = 0;
         citizen_list[citizen_no].speed_count = 0;
         citizen_list[citizen_no].action_kind = 0;
