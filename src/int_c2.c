@@ -1706,9 +1706,9 @@ int try_this_citymap_square(int cell_offset, int movement_kind, int unused_arg)
 {
     unsigned char terrain;
     unsigned char industry;
-    int cell_x;
-    int cell_y;
-    int cell_idx;
+    int x1;
+    int row;
+    int cell_ref;
 
     (void)unused_arg;
     citizen_a = (short)(unsigned char)(*(struct city_cell *)((unsigned char *)city_map + (cell_offset))).citizen_a;
@@ -1746,10 +1746,10 @@ int try_this_citymap_square(int cell_offset, int movement_kind, int unused_arg)
             unflag_all_cm(3, 0xdf);
         }
 
-        cell_idx = cell_offset / 20;
-        cell_x = cell_idx % 80;
-        cell_y = cell_idx / 80;
-        clear_an_area(cell_x, cell_y, cell_x, cell_y);
+        cell_ref = cell_offset / 20;
+        x1 = cell_ref % 80;
+        row = cell_ref / 80;
+        clear_an_area(x1, row, x1, row);
 #if C2_FEAT_TILE_REFRESH
         setup_map_screen_refresh();
 #endif
