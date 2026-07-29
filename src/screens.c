@@ -21,6 +21,13 @@ extern void update_population_display(int force);
 extern void update_status_display(int force);
 extern void redraw_window_icons(void);
 #endif
+
+#if PLATFORM_WINDOWS
+#define SCREEN_MAP_MODE screen_mode
+#else
+#define SCREEN_MAP_MODE map_mode
+#endif
+
 /* Forward declarations (functions defined later in this file). */
 void clip_zoom_level1(void);
 void clip_battle_zoom_level2(void);
@@ -564,15 +571,15 @@ void redraw_icon_bits(void)
     if (redraw_icons == 0) return;
     redraw_icons--;
 
-    if (map_mode == 0) {
+    if (SCREEN_MAP_MODE == 0) {
         draw_city_map_part(2);
         draw_city_map_part(3);
         draw_city_map_part(0xa);
-    } else if (map_mode == 1) {
+    } else if (SCREEN_MAP_MODE == 1) {
         draw_region_map_part(2);
         draw_region_map_part(3);
         draw_city_map_part(0xc);
-    } else if (map_mode == 2) {
+    } else if (SCREEN_MAP_MODE == 2) {
         draw_battle_part(3);
         if (zoom_level == 1) draw_battle_part(6);
         else                                draw_battle_part(7);
@@ -582,25 +589,29 @@ void redraw_icon_bits(void)
     }
 
     if (tutorial_mode != 0) {
-        if (map_mode == 0)      grey_city_map_parts();
-        else if (map_mode == 1) grey_region_map_parts();
+        if (SCREEN_MAP_MODE == 0)      grey_city_map_parts();
+        else if (SCREEN_MAP_MODE == 1) grey_region_map_parts();
         show_a_system_window(0x1df, 0x170, 0xa, 7);
         font_list(0x31, 7, 0x1ea, 0x17c, font2, 0x10);
         font_list(0x31, 8, 0x208, 0x19a, font2, 0x10);
         show_an_exit_button(0x258, 0x1b8);
+#if PLATFORM_WINDOWS
+        show_tutorial_timer(0);
+#else
         show_tutorial_timer();
+#endif
     }
 
     if (update_icon != 0) {
-        if (map_mode == 0) {
+        if (SCREEN_MAP_MODE == 0) {
             if (update_icon >= 0xe && update_icon != 0x12) draw_city_map_part(update_icon);
-        } else if (map_mode == 1) {
+        } else if (SCREEN_MAP_MODE == 1) {
             if (update_icon >= 0xe && update_icon != 0x12) draw_region_map_part(update_icon);
-        } else if (map_mode == 2) {
+        } else if (SCREEN_MAP_MODE == 2) {
             if (update_icon > 0xb) draw_battle_part(update_icon);
         }
     }
-#if C2_FEAT_TILE_REFRESH
+#if !PLATFORM_WINDOWS
 
     setup_whole_screen_refresh();
 #endif
