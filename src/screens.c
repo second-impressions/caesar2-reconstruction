@@ -2021,6 +2021,9 @@ void history_graphs(void)
 // FUNCTION: C2WIN 0x004275a1
 void draw_a_rect(int x, int y, int w, int h, int colour);
 void check_viewed_cohort(void);
+void place_3_legend_blocks(int caption_idx, int top_gfx_idx, int middle_gfx_idx, int bottom_gfx_idx);
+void place_9_legend_blocks(void);
+void show_ov_legend_panel(void);
 
 int show_history_graph(int graph_x, int graph_y, int statistic_idx)
 {
@@ -2975,9 +2978,6 @@ void show_ov_bar(void)
 // Draw the legend for the active city analysis overlay.
 // FUNCTION: C2 0x62462
 // FUNCTION: C2WIN 0x0042a52e
-void place_3_legend_blocks(int caption_idx, int top_gfx_idx, int middle_gfx_idx, int bottom_gfx_idx);
-void place_9_legend_blocks(void);
-
 void show_ov_legend_panel(void)
 {
     cover_mouse_droppings();
