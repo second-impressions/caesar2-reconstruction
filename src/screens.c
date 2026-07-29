@@ -3137,8 +3137,6 @@ void show_querymode_panel(void)
 // FUNCTION: C2WIN 0x0042ad66
 void show_query_panel(void)
 {
-    int heading_y;
-
     cover_mouse_droppings();
     stone_random_count = 0x1c;
 
@@ -3160,7 +3158,9 @@ void show_query_panel(void)
 
     show_a_mosaic_frame(8, 0x20 + query_panel_reduction * 16,
                         0x1c, 0x1b - query_panel_reduction);
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     show_a_mosaic_blank(0x18, 0x30 + query_panel_reduction * 16,
                         0x1a, 0x19 - query_panel_reduction);
     show_an_exit_button(0x198, 0x1a0);
@@ -3168,9 +3168,8 @@ void show_query_panel(void)
     draw_a_dias(0x20, 0xa0 + query_panel_reduction * 16, 0x190,
                 (0xf - query_panel_reduction) * 16);
 
-    heading_y = query_panel_reduction * 16 + 0x48;
     if (map_mode == 0) {
-        show_query_panel_heading(heading_y);
+        show_query_panel_heading(query_panel_reduction * 16 + 0x48);
         if (query_mode == 2) {
             show_detailed_query_panel();
         }
@@ -3182,7 +3181,7 @@ void show_query_panel(void)
         }
     }
     else {
-        show_region_query_panel(heading_y);
+        show_region_query_panel(query_panel_reduction * 16 + 0x48);
     }
 
     refresh_svga_screen();
