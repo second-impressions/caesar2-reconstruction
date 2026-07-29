@@ -1494,7 +1494,9 @@ void show_estimate(void)
             x_is + 0x154, 0xa2, font1, 0x10);
     font_list(0x1e, 0x10, 0x1ba, 0xa2, font1, 0x10);
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x140, 0x4c, 0x14, 9, 1);
+#endif
 }
 
 // Show the player's name, rank, promotion progress, and career guidance.
