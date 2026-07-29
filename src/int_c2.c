@@ -2009,74 +2009,84 @@ void random_target(void)
 // FUNCTION: C2WIN 0x0040b607
 int city_test_for_road(int cell_x, int cell_y, int cell_offset, signed char heading)
 {
-    unsigned char road_slots[8][3];
+    char road_list[8][3];
     signed char reverse_dir;
-    signed char candidate_dir;
+    signed char road_dir;
     int i;
     int road_count;
-    int empty_road_count;
+    int empty;
 
-    for (i = 0; i < 8; i += 2) road_slots[i][0] = road_slots[i][1] = road_slots[i][2] = 0;
+    for (i = 0; i < 8; i += 2) road_list[i][0] = road_list[i][1] = road_list[i][2] = 0;
     reverse_dir = ((char)heading + 4) & 7;
 
     if (cell_y > 0) {
         if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 1600)))).terrain & 0x20) {
-            road_slots[0][0] = 1;
-            road_slots[0][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 1600)))).citizen_a;
-            road_slots[0][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 1600)))).citizen_b;
+            road_list[0][0] = 1;
+            road_list[0][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 1600)))).citizen_a;
+            road_list[0][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 1600)))).citizen_b;
         }
     }
     if (cell_x < 0x4f) {
         if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 20)))).terrain & 0x20) {
-            road_slots[2][0] = 1;
-            road_slots[2][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 20)))).citizen_a;
-            road_slots[2][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 20)))).citizen_b;
+            road_list[2][0] = 1;
+            road_list[2][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 20)))).citizen_a;
+            road_list[2][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 20)))).citizen_b;
         }
     }
     if (cell_y < 0x4f) {
         if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 1600)))).terrain & 0x20) {
-            road_slots[4][0] = 1;
-            road_slots[4][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 1600)))).citizen_a;
-            road_slots[4][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 1600)))).citizen_a;
+            road_list[4][0] = 1;
+            road_list[4][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 1600)))).citizen_a;
+            road_list[4][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset + 1600)))).citizen_a;
         }
     }
     if (cell_x > 0) {
         if ((*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 20)))).terrain & 0x20) {
-            road_slots[6][0] = 1;
-            road_slots[6][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 20)))).citizen_a;
-            road_slots[6][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 20)))).citizen_b;
+            road_list[6][0] = 1;
+            road_list[6][1] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 20)))).citizen_a;
+            road_list[6][2] = (*(struct city_cell *)((unsigned char *)city_map + ((cell_offset - 20)))).citizen_b;
         }
     }
 
-    road_count = 0; empty_road_count = 0;
+    empty = road_count = 0;
     for (i = 0; i < 8; i += 2) {
-        if (road_slots[i][0] == 0) continue;
-        road_count++; if (road_slots[i][1] != 0) continue; if (road_slots[i][2] != 0) continue; empty_road_count++;
+        if (road_list[i][0] != 0) {
+            road_count++;
+            if (road_list[i][1] == 0 && road_list[i][2] == 0)
+                empty++;
+        }
     }
 
-    candidate_dir = (unsigned char)rand8 & 6;
-    if (road_count != 0) {
-        if (road_count == 1) {
-            for (i = 0; i < 8; i += 2) if (road_slots[i][0] != 0) return i;
+    road_dir = rand8 & 6;
+    if (road_count == 0) return 8;
+    if (road_count == 1) {
+        for (i = 0; i < 8; i += 2) {
+            if (road_list[i][0] != 0) {
+                return i;
+            }
         }
-        if (empty_road_count != 0) {
-            for (i = 0; i < 4; i++) {
-                if (road_slots[candidate_dir][0] != 0) {
-                    if (road_slots[candidate_dir][1] == 0 && road_slots[candidate_dir][2] == 0) {
-                        if (candidate_dir != reverse_dir) return candidate_dir;
+    }
+    if (empty != 0) {
+        for (i = 0; i < 4; i++) {
+            if (road_list[road_dir][0] != 0) {
+                if (road_list[road_dir][1] == 0 && road_list[road_dir][2] == 0) {
+                    if (reverse_dir != road_dir) {
+                        return road_dir;
                     }
                 }
-                candidate_dir += 2;
-                if (candidate_dir > 6) candidate_dir = 0;
+            }
+            road_dir += 2;
+            if (road_dir > 6) road_dir = 0;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (road_list[road_dir][0] != 0) {
+            if (reverse_dir != road_dir) {
+                return road_dir;
             }
         }
-        for (i = 0; i < 4; i++) {
-            if (road_slots[candidate_dir][0] != 0) {
-                if (candidate_dir != reverse_dir) return candidate_dir;
-            }
-            candidate_dir += 2;
-            if (candidate_dir > 6) candidate_dir = 0;
-        }
+        road_dir += 2;
+        if (road_dir > 6) road_dir = 0;
     }
     return 8;
 }
