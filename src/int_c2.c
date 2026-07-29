@@ -5,7 +5,8 @@
 /* File-local state. */
 int age_count;
 
-extern int get_heading();
+extern int get_heading(int x, int y, int target_x, int target_y,
+                       int current_dir);
 int entering_new_square(void);
 
 
