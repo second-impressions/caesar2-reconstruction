@@ -4553,8 +4553,14 @@ void show_battle_intro_screen(void)
 // FUNCTION: C2WIN 0x0042eeac
 void show_battle_outtro_screen(void)
 {
+#if PLATFORM_WINDOWS
+    int tribe_idx;
+#endif
+
     cover_mouse_droppings();
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     stone_random_count = 0x32;
     show_a_mosaic_window(8, 0xb0, 0x27, 0x13);
 
@@ -4610,6 +4616,9 @@ void show_battle_outtro_screen(void)
     font_list(0x47, 0xa, x_is + 0x150, 0x170, font1, 0x10);
 
     if (their_battle_specials != 0) {
+#if PLATFORM_WINDOWS
+        tribe_idx = 0xf;
+#endif
         x_is = 0;
         font_no(army_list[their_battle_army].num_specials, 0x20, " ", 0x150, 0x182, font1, 0x10);
         font_list(0x47, 0xb, x_is + 0x150, 0x182, font1, 0x10);
@@ -4618,6 +4627,9 @@ void show_battle_outtro_screen(void)
         font_list(0x48, 6, x_is + 0x150, 0x182, font1, 0x10);
     } else {
         x_is = 0;
+#if PLATFORM_WINDOWS
+        tribe_idx = tribe_battle_setup[army_list[their_battle_army].tribe_id].u.raw[0];
+#endif
         font_no(army_list[their_battle_army].num_horse, 0x20, " ", 0x150, 0x182, font1, 0x10);
         font_list(0x47, 0xb, x_is + 0x150, 0x182, font1, 0x10);
         font_no(their_battle_horse - army_list[their_battle_army].num_horse,
@@ -4626,6 +4638,9 @@ void show_battle_outtro_screen(void)
     }
 
     x_is = 0;
+#if PLATFORM_WINDOWS
+    tribe_idx = tribe_battle_setup[army_list[their_battle_army].tribe_id].u.raw[1];
+#endif
     font_no(army_list[their_battle_army].num_regulars, 0x20, " ", 0x150, 0x194, font1, 0x10);
     font_list(0x47, 0xc, x_is + 0x150, 0x194, font1, 0x10);
     font_no(their_battle_regs - army_list[their_battle_army].num_regulars,
@@ -4633,6 +4648,9 @@ void show_battle_outtro_screen(void)
     font_list(0x48, 6, x_is + 0x150, 0x194, font1, 0x10);
 
     x_is = 0;
+#if PLATFORM_WINDOWS
+    tribe_idx = tribe_battle_setup[army_list[their_battle_army].tribe_id].u.raw[2];
+#endif
     font_no(army_list[their_battle_army].num_irregulars, 0x20, " ", 0x150, 0x1a6, font1, 0x10);
     font_list(0x47, 0xd, x_is + 0x150, 0x1a6, font1, 0x10);
     font_no(their_battle_irregs - army_list[their_battle_army].num_irregulars,
@@ -4640,6 +4658,9 @@ void show_battle_outtro_screen(void)
     font_list(0x48, 6, x_is + 0x150, 0x1a6, font1, 0x10);
 
     x_is = 0;
+#if PLATFORM_WINDOWS
+    tribe_idx = tribe_battle_setup[army_list[their_battle_army].tribe_id].u.raw[3];
+#endif
     font_no(army_list[their_battle_army].num_auxillaries, 0x20, " ", 0x150, 0x1b8, font1, 0x10);
     font_list(0x47, 0xe, x_is + 0x150, 0x1b8, font1, 0x10);
     font_no(their_battle_auxs - army_list[their_battle_army].num_auxillaries,
