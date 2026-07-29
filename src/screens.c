@@ -1557,17 +1557,16 @@ void show_personal_cash_stats(void)
     show_a_mosaic_blank(0x10, 0x5c, 0xc, 4);
     x_is = 0;
     font_list(0x1f, 1, 0x12c, 0x5e, font1, 0x10);
-    if (players_denarii < 0) {
-        font_no(-players_denarii, '-', " Dn", x_is + 0x12c, 0x5e, font1, 0xb);
-    } else {
-        font_no(players_denarii, ' ', " Dn", x_is + 0x12c, 0x5e, font1, 0x10);
-    }
+    if (players_denarii < 0) font_no(-players_denarii, '-', " Dn", x_is + 0x12c, 0x5e, font1, 0xb);
+    else font_no(players_denarii, ' ', " Dn", x_is + 0x12c, 0x5e, font1, 0x10);
     x_is = 0;
     font_list(0x1f, 2, 0x14, 0x5e, font1, 0x10);
     font_no(players_salary, ' ', " Dn", x_is + 0x14, 0x5e, font1, 0x10);
     x_is = 0;
     font_list(0x1f, 3, 0x14, 0x7a, font1, 0x10);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x10, 0x40, 0x11, 6, 1);
+#endif
 }
 
 // Show the controls for donating personal money to the city.
