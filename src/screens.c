@@ -481,14 +481,16 @@ void show_battle_setup_box(void)
 // FUNCTION: C2WIN 0x00423280
 void show_paused(void)
 {
+#if !PLATFORM_WINDOWS
     if (c2inf.paused != request_message.paused)
         setup_whole_screen_refresh();
+#endif
     request_message.paused = c2inf.paused;
-    if (c2inf.paused != 0) {
-        stone_random_count = 0xf;
-        show_a_mosaic_window(0x80, 0x20, 0xe, 4);
-        font_list(9, 2, 0xa0, 0x34, font2, 0x10);
-    }
+    if (c2inf.paused == 0) return;
+
+    stone_random_count = 0xf;
+    show_a_mosaic_window(0x80, 0x20, 0xe, 4);
+    font_list(9, 2, 0xa0, 0x34, font2, 0x10);
 }
 
 // Mask the exposed edges of the zoomed city and region maps.
