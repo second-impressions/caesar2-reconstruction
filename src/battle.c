@@ -2240,6 +2240,11 @@ void general_reform(int formation)
     }
 }
 
+int test_for_same_fig_to(int direction);
+int try_a_battlemap_square(int direction);
+int try_this_battlemap_square(int cell_offset);
+void target_from_figure_dirc(int direction);
+
 // Assign a formation and destination slots to every figure in a unit.
 // FUNCTION: C2 0x4f33d
 // FUNCTION: C2WIN 0x0047a94b
@@ -2277,11 +2282,6 @@ void reform(int unit_ref, int mode, int force)
   }
 
 }
-
-int test_for_same_fig_to(int direction);
-int try_a_battlemap_square(int direction);
-int try_this_battlemap_square(int cell_offset);
-void target_from_figure_dirc(int direction);
 
 // Immediately place a unit's figures into the requested formation.
 // FUNCTION: C2 0x4f44d
