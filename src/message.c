@@ -431,21 +431,24 @@ void bribe_emperor(void) {
 
     if (imperial_gift_level < tribute) {
         rating--;
-    } else if (imperial_gift_level != tribute) {
-        if (imperial_gift_level >= tribute * 10)
-            rating += 6;
-        else if (imperial_gift_level >= tribute * 7)
-            rating += 5;
-        else if (imperial_gift_level >= tribute * 5)
-            rating += 4;
-        else if (imperial_gift_level >= tribute * 3)
-            rating += 3;
-        else if (imperial_gift_level >= tribute * 2)
-            rating += 2;
-        else
-            rating++;
+        goto rating_done;
     }
+    if (imperial_gift_level == tribute)
+        goto rating_done;
+    if (imperial_gift_level >= tribute * 10)
+        rating += 6;
+    else if (imperial_gift_level >= tribute * 7)
+        rating += 5;
+    else if (imperial_gift_level >= tribute * 5)
+        rating += 4;
+    else if (imperial_gift_level >= tribute * 3)
+        rating += 3;
+    else if (imperial_gift_level >= tribute * 2)
+        rating += 2;
+    else
+        rating++;
 
+rating_done:
     players_denarii -= imperial_gift_level;
     imperial_favour += rating * 10;
     if (imperial_favour < 0)
@@ -459,7 +462,7 @@ void bribe_emperor(void) {
     warned_of_emperor_reply_month = month + 2;
     if (warned_of_emperor_reply_month >= 12)
         warned_of_emperor_reply_month -= 12;
-    warned_of_emperor_reply_month++;
+    warned_of_emperor_reply_month = warned_of_emperor_reply_month + 1;
     warned_of_emperor_reply_level = rating + 1;
 
     total_amount_of_bribes += imperial_gift_level;
