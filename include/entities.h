@@ -414,7 +414,7 @@ struct army_rec {
                                                   raider_trouble / horde_trouble) */
     unsigned char  landed_flag;        /* +0x9C  set when ship has reached shore */
     unsigned char  tribe_id;           /* +0x9D  index into tribe_to_standard[] */
-    char           quick_respawn;      /* +0x9E  set by sa13 ground-out; sa15 uses
+    unsigned char  quick_respawn;      /* +0x9E  set by sa13 ground-out; sa15 uses
                                             it to shorten the trader respawn delay
                                             (2 ticks instead of 15) */
     unsigned char  order_progress;     /* +0x9F  cleared when state restarts after return */
