@@ -380,38 +380,39 @@ void request_outcome(void) {
     take_from_warehouses(imperial_send_amount, imperial_req_goods);
     delivery_percent = valueDIVtotal(imperial_send_amount, imperial_req_amount);
     imperial_req_amount -= imperial_send_amount;
-    if (imperial_request < -1 || delivery_percent >= 75) {
-        /* Adjust imperial favour based on delivery percentage */
-        if (delivery_percent <= 0)
-            imperial_favour -= 20;
-        else if (delivery_percent < 25)
-            imperial_favour -= 15;
-        else if (delivery_percent < 50)
-            imperial_favour -= 10;
-        else if (delivery_percent < 75)
-            imperial_favour -= 5;
-        else if (delivery_percent < 100)
-            imperial_favour += (rand128 & 3) - 1;
-        else
-            imperial_favour += 20;
-        if (imperial_favour < 0)
-            imperial_favour = 0;
-        if (imperial_favour > 200)
-            imperial_favour = 200;
-        if (imperial_req_amount <= 0) {
-            imperial_request = skill_to_imperial_request[c2inf.skill_level];
-            imperial_req_amount = 0;
+    if (imperial_request >= -1) {
+        if (delivery_percent < 75) return;
+    }
+    /* Adjust imperial favour based on delivery percentage */
+    if (delivery_percent <= 0)
+        imperial_favour -= 20;
+    else if (delivery_percent < 25)
+        imperial_favour -= 15;
+    else if (delivery_percent < 50)
+        imperial_favour -= 10;
+    else if (delivery_percent < 75)
+        imperial_favour -= 5;
+    else if (delivery_percent < 100)
+        imperial_favour += (rand128 & 3) - 1;
+    else
+        imperial_favour += 20;
+    if (imperial_favour < 0)
+        imperial_favour = 0;
+    if (imperial_favour > 200)
+        imperial_favour = 200;
+    if (imperial_req_amount <= 0) {
+        imperial_request = skill_to_imperial_request[c2inf.skill_level];
+        imperial_req_amount = 0;
+        return;
+    }
+    if (imperial_request <= -2) {
+        if (imperial_favour > 10) {
+            imperial_request = -1;
+            final_bribe = 0;
             return;
         }
-        if (imperial_request <= -2) {
-            if (imperial_favour > 10) {
-                imperial_request = -1;
-                final_bribe = 0;
-                return;
-            }
-            if (imperial_request <= -3)
-                act_final_bribe();
-        }
+        if (imperial_request <= -3)
+            act_final_bribe();
     }
 }
 
