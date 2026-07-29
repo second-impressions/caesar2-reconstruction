@@ -3282,37 +3282,32 @@ void battle_tune_mood_from_type(int unit_no)
 // Prepare every eligible figure in a unit to seek or enter combat.
 // FUNCTION: C2 0x5105b
 // FUNCTION: C2WIN 0x0047e8ea
-void set_unit_to_fight(int figure_idx)
+void set_unit_to_fight(int start_fig)
 {
-    int   figure_state;
-
-    temp_unit = figure_list[figure_idx].unit_ref;
+    temp_unit = figure_list[start_fig].unit_ref;
 
     for (temp_figure = unit_list[temp_unit].first_figure;
          temp_figure <= unit_list[temp_unit].last_figure;
          temp_figure++) {
         if (figure_list[temp_figure].exists != 0) {
-            if (figure_list[temp_figure].owner == 0) {
-                figure_list[figure_no].is_defending = 0;
-            }
+            if (figure_list[temp_figure].owner == 0) figure_list[figure_no].is_defending = 0;
             if (figure_list[temp_figure].is_defending != 0
-                && unit_list[temp_unit].target_lock == 0
-                && figure_list[temp_figure].backtrack_flag != 0)
+                && unit_list[temp_unit].target_lock == 0)
             {
-                figure_list[temp_figure].is_visible |= 1;
-                backtrack_figure(temp_figure);
-                figure_list[temp_figure].direction =
-                    figure_list[figure_no].backtrack_dirc;
-                figure_list[temp_figure].wf_step_x = 0;
-                figure_list[temp_figure].backtrack_flag = 0;
-            }
-            figure_state = figure_list[temp_figure].state_idx;
-            if (figure_state != 4 && figure_state != 2 && figure_state != 0xc) {
-                if (figure_list[temp_figure].is_defending != 0) {
-                    figure_list[temp_figure].state_idx = 9;
-                } else {
-                    figure_list[temp_figure].state_idx = 0xa;
+                if (figure_list[temp_figure].backtrack_flag != 0) {
+                    figure_list[temp_figure].is_visible |= 1;
+                    backtrack_figure(temp_figure);
+                    figure_list[temp_figure].direction =
+                        figure_list[figure_no].backtrack_dirc;
+                    figure_list[temp_figure].wf_step_x = 0; figure_list[temp_figure].backtrack_flag = 0;
                 }
+            }
+            if (figure_list[temp_figure].state_idx == 4) continue;
+            if (figure_list[temp_figure].state_idx == 2) continue;
+            if (figure_list[temp_figure].state_idx == 0xc) continue;
+            if (figure_list[temp_figure].is_defending != 0) { figure_list[temp_figure].state_idx = 9;
+            } else {
+                figure_list[temp_figure].state_idx = 0xa;
             }
         }
     }

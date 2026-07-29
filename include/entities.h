@@ -618,7 +618,7 @@ struct figure_rec {
                                                 extra +2 to .defense (heavy
                                                 shield bonus). */
     char           anim_state;       /* +0x3E */
-    char           backtrack_flag;   /* +0x3F  set by figure_go_to_target
+    unsigned char  backtrack_flag;   /* +0x3F  set by figure_go_to_target
                                                 after a backtrack; checked
                                                 by set_unit_to_fight. */
     unsigned char  missile_timer;    /* +0x40  per-tick missile-firing timer
