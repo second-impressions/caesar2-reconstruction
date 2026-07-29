@@ -1390,27 +1390,35 @@ int get_army_walk_dirc(int screen_dir, int anim_phase)
 // FUNCTION: C2WIN 0x00408f06
 int find_enemy(int center_x, int center_y, int radius)
 {
-    int x_min;
-    int x_max;
-    int y_max;
-    int best_idx;
-    int best_dist;
-    int y_min;
+    int min_x;
+    int max_x;
+    int max_y;
+    int enemy_idx;
     int distance;
+    int best_dist;
+    int min_y;
 
-    x_min = center_x - radius;        if (x_min < 0)    x_min = 0;
-    x_max = center_x + radius;        if (x_max >= 0x50) x_max = 0x4f;
-    y_min = center_y - radius;        if (y_min < 0)    y_min = 0;
-    y_max = center_y + radius;        if (y_max >= 0x50) y_max = 0x4f;
+    min_x = center_x - radius;        if (min_x < 0)    min_x = 0;
+    max_x = center_x + radius;        if (max_x >= 0x50) max_x = 0x4f;
+    min_y = center_y - radius;        if (min_y < 0)    min_y = 0;
+    max_y = center_y + radius;        if (max_y >= 0x50) max_y = 0x4f;
     best_dist = radius + 1;
-    best_idx = 0;
+    enemy_idx = 0;
     for (enemy_citizen = 0; enemy_citizen < 0xc9; enemy_citizen++) {
-        if (citizen_list[enemy_citizen].exists == 0) continue; if (citizen_list[enemy_citizen].type != 3 && citizen_list[enemy_citizen].type != 7) continue;
-        if (citizen_list[enemy_citizen].x < x_min || citizen_list[enemy_citizen].x >= x_max) continue; if (citizen_list[enemy_citizen].y < y_min || citizen_list[enemy_citizen].y >= y_max) continue;
-        distance = get_longest_distance(center_x, center_y, citizen_list[enemy_citizen].x, citizen_list[enemy_citizen].y);
-        if (distance < best_dist) { best_dist = distance; best_idx = enemy_citizen; }
+        if (citizen_list[enemy_citizen].exists != 0
+         && (citizen_list[enemy_citizen].type == 3
+          || citizen_list[enemy_citizen].type == 7)
+         && citizen_list[enemy_citizen].x >= min_x
+         && citizen_list[enemy_citizen].x < max_x
+         && citizen_list[enemy_citizen].y >= min_y
+         && citizen_list[enemy_citizen].y < max_y) {
+            distance = get_longest_distance(center_x, center_y,
+                        citizen_list[enemy_citizen].x,
+                        citizen_list[enemy_citizen].y);
+            if (distance < best_dist) { best_dist = distance; enemy_idx = enemy_citizen; }
+        }
     }
-    return best_idx;
+    return enemy_idx;
 }
 
 // Find the nearest active invading army of type 2 through 5 within the requested radius.
