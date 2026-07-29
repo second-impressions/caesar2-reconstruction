@@ -2740,18 +2740,15 @@ void set_missile_fire_range(int weapon_kind)
 // FUNCTION: C2WIN 0x0047c3b9
 void update_units_ai(void)
 {
-    if (cnt32 == 0)
-        battle_ai_count++;
+    if (cnt32 == 0) battle_ai_count++;
     for (temp_unit = 1; temp_unit < 0x33; temp_unit++) {
-        if (unit_list[temp_unit].exists == 0) continue;
-        if (unit_list[temp_unit].type != 0) continue;
-        if (unit_list[temp_unit].combat_order == 0xc) continue;
-        if (unit_list[temp_unit].unit_sub_kind != 0) {
-            do_light_ai();
-        } else if (unit_list[temp_unit].owner == 0xf) {
-            elephant_ai();
-        } else {
-            do_heavy_ai();
+        if (unit_list[temp_unit].exists != 0
+            && unit_list[temp_unit].type == 0) {
+            if (unit_list[temp_unit].combat_order == 0xc)
+                continue;
+            if (unit_list[temp_unit].unit_sub_kind != 0) do_light_ai();
+            else if ((unsigned char)unit_list[temp_unit].owner == 0xf) elephant_ai();
+            else do_heavy_ai();
         }
     }
 }
