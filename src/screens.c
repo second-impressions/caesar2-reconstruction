@@ -137,9 +137,14 @@ void city_map_screen(int do_black_out)
 void region_map_screen(int do_black_out)
 {
     if (do_black_out == 1) {
+#if PLATFORM_WINDOWS
+        memset(screen_buffer, 0, 0x4b000);
+#else
         black_out();
+#endif
     }
     hold_mouse_replace = 1;
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
     if (readfile("int_prov.pl8", ((void *)scratch_buffer), 0x1d4c0, 0) == 0) {
         test_beeps();
@@ -150,17 +155,32 @@ void region_map_screen(int do_black_out)
     restore_picture_part(scratch_buffer, 1);
     restore_picture_part(scratch_buffer, 2);
     restore_picture_part(scratch_buffer, 3);
+#endif
     clip_zoom_level1();
     clip_map_bottom();
     flush_sb_buffer();
+#if !PLATFORM_WINDOWS
     show_menus(main_menu, 4, 0);
+#endif
     show_regionmap();
+#if PLATFORM_WINDOWS
+    write_image(misc, map_direction / 2, 2, 2);
+#else
     write_image(misc, map_direction / 2, 0x1c4, 0x1a);
+#endif
     show_landfill(com_x, com_y);
     redraw_topline = 1;
     redraw_icons = 2;
+#if PLATFORM_WINDOWS
+    update_date_display();
+    update_denarii_display(1);
+    update_population_display(1);
+    update_status_display(1);
+    redraw_window_icons();
+#else
     show_top_line();
     redraw_icon_bits();
+#endif
     refresh_svga_screen();
     set_palette(region_palette);
     hold_mouse_replace = 1;
