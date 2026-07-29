@@ -27,8 +27,8 @@ void init_web(void);
 void put_new_node(void);
 int get_incomplete_node(int, int);
 void set_first_nodes_values(char);
-void push_nodes_values(char, int);
-void push_node_value(char);
+void push_nodes_values(unsigned char, int);
+void push_node_value(unsigned char);
 
 /* Page 0: high-hash tail values emitted after page 1 within each size class. */
 extern struct web_node web[120];

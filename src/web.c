@@ -354,48 +354,51 @@ void set_first_nodes_values(char pressure_mask)
     }
 }
 
+void push_node_value(unsigned char pressure_value);
+
 // Propagates a pressure value outward along every eligible branch of the water network.
 // FUNCTION: C2 0x2a5b0
 // FUNCTION: C2WIN 0x00451c83
-void push_nodes_values(char pressure, int source_nodes_only)
+void push_nodes_values(unsigned char pressure, int source_nodes_only)
 {
-    unsigned char directions;
+    unsigned char water_pressure;
+    unsigned char node_directions;
     int  node_x;
     int  node_y;
     int  cell_offset;
 
     for (web_node = web_first_actual_node; web_node < web_node_count; web_node++) {
-        if (source_nodes_only != 0) {
-            if ((unsigned char)web[web_node].kind != 5) continue;
-        }
-        directions = web[web_node].dirs;
+        if (source_nodes_only != 0 && (unsigned char)web[web_node].kind != 5) continue;
+        node_directions = web[web_node].dirs;
         node_x = web[web_node].x;
         node_y = web[web_node].y;
         cell_offset = (node_x + node_y * CITY_W) * CITY_CELL_BYTES;
-        if ((char)(CM_CELL(cell_offset).range_flag & 3) != pressure) continue;
-        if (directions & 1) {
-            web_dirc = 1; web_from = 4;
-            web_x = node_x; web_y = node_y; web_ptr = cell_offset;
-            if (source_nodes_only == 0) push_node_value((char)(pressure - 1));
-            else           push_node_value(pressure);
-        }
-        if (directions & 2) {
-            web_dirc = 2; web_from = 8;
-            web_x = node_x; web_y = node_y; web_ptr = cell_offset;
-            if (source_nodes_only == 0) push_node_value((char)(pressure - 1));
-            else           push_node_value(pressure);
-        }
-        if (directions & 4) {
-            web_dirc = 4; web_from = 1;
-            web_x = node_x; web_y = node_y; web_ptr = cell_offset;
-            if (source_nodes_only == 0) push_node_value((char)(pressure - 1));
-            else           push_node_value(pressure);
-        }
-        if (directions & 8) {
-            web_dirc = 8; web_from = 2;
-            web_x = node_x; web_y = node_y; web_ptr = cell_offset;
-            if (source_nodes_only == 0) push_node_value((char)(pressure - 1));
-            else           push_node_value(pressure);
+        water_pressure = CM_CELL(cell_offset).range_flag & 3;
+        if (water_pressure == pressure) {
+            if (node_directions & 1) {
+                web_dirc = 1; web_from = 4;
+                web_x = node_x; web_y = node_y; web_ptr = cell_offset;
+                if (source_nodes_only == 0) push_node_value(pressure - 1);
+                else push_node_value(pressure);
+            }
+            if (node_directions & 2) {
+                web_dirc = 2; web_from = 8;
+                web_x = node_x; web_y = node_y; web_ptr = cell_offset;
+                if (source_nodes_only == 0) push_node_value(pressure - 1);
+                else push_node_value(pressure);
+            }
+            if (node_directions & 4) {
+                web_dirc = 4; web_from = 1;
+                web_x = node_x; web_y = node_y; web_ptr = cell_offset;
+                if (source_nodes_only == 0) push_node_value(pressure - 1);
+                else push_node_value(pressure);
+            }
+            if (node_directions & 8) {
+                web_dirc = 8; web_from = 2;
+                web_x = node_x; web_y = node_y; web_ptr = cell_offset;
+                if (source_nodes_only == 0) push_node_value(pressure - 1);
+                else push_node_value(pressure);
+            }
         }
     }
 }
@@ -403,7 +406,7 @@ void push_nodes_values(char pressure, int source_nodes_only)
 // Propagates pressure along one water-network branch until it reaches a reservoir or stronger flow.
 // FUNCTION: C2 0x2a74d
 // FUNCTION: C2WIN 0x00451ebf
-void push_node_value(char pressure_value)
+void push_node_value(unsigned char pressure_value)
 {
     int steps;
     unsigned char current_pressure;
