@@ -3318,83 +3318,67 @@ void set_unit_to_fight(int start_fig)
 // FUNCTION: C2WIN 0x0047eb78
 int figure_go_to_target(void)
 {
-    int move_result;
-    int swap_result;
+    int result;
+    int swap_ret;
 
     fig_at_edge = 0;
 
-    if (figure_list[figure_no].is_visible & 1) {
-        figure_list[figure_no].wf_step_x = 0;
-        figure_list[figure_no].wf_step_y = 0;
+    if (figure_list[figure_no].is_visible & 1) { figure_list[figure_no].wf_step_x = 0; figure_list[figure_no].wf_step_y = 0;
     } else {
         figure_list[figure_no].backtrack_flag = 0;
-        move_result = (unsigned char)figure_list[figure_no].stampede_kind;
+        result = figure_list[figure_no].stampede_kind;
         set_battle_march_fx(figure_list[figure_no].sprite_type);
 
-        figure_list[figure_no].wf_step_y++;
-        if (figure_list[figure_no].wf_step_y <= move_result)
-            goto movement_wait;
-        figure_list[figure_no].wf_step_y = 0;
-        figure_list[figure_no].wf_step_x++;
-        if (figure_list[figure_no].wf_step_x <= 7)
-            goto movement_wait;
-        figure_list[figure_no].is_visible |= 1;
-        figure_list[figure_no].wf_step_x = 0;
-        goto movement_ready;
-movement_wait:
-        return 0;
-movement_ready:
-        ;
+        if (++figure_list[figure_no].wf_step_y > result) {
+            figure_list[figure_no].wf_step_y = 0;
+            figure_list[figure_no].wf_step_x++;
+            if (figure_list[figure_no].wf_step_x <= 7) {
+                return 0;
+            }
+            figure_list[figure_no].is_visible |= 1;
+            figure_list[figure_no].wf_step_x = 0;
+        } else {
+            return 0;
+        }
     }
 
     /* Choose a heading toward the destination. */
     if (figure_list[figure_no].is_routing == 0)
         return 1;
 
-    if (figure_list[figure_no].wf_searching != 0
-        && --figure_list[figure_no].wf_ttl <= 0)
-        figure_list[figure_no].wf_searching = 0;
-    if (figure_list[figure_no].wf_searching == 0) {
-        w_dirc = get_heading(figure_list[figure_no].grid_x, figure_list[figure_no].grid_y,
+    if (figure_list[figure_no].wf_searching != 0 && --figure_list[figure_no].wf_ttl <= 0) figure_list[figure_no].wf_searching = 0;
+    if (figure_list[figure_no].wf_searching == 0) { w_dirc = get_heading(figure_list[figure_no].grid_x, figure_list[figure_no].grid_y,
                              figure_list[figure_no].prev_grid_x, figure_list[figure_no].prev_grid_y,
                              figure_list[figure_no].direction);
-    } else {
-        w_dirc = figure_list[figure_no].wf_dirc;
+    } else { w_dirc = figure_list[figure_no].wf_dirc;
     }
 
-    if (w_dirc >= 8) {
-        figure_list[figure_no].is_routing = 0;
-        figure_list[figure_no].is_visible |= 2;
+    if (w_dirc >= 8) { figure_list[figure_no].is_routing = 0; figure_list[figure_no].is_visible |= 2;
         return 1;
     }
 
     /* Test the next step and resolve any obstruction. */
-    move_result = try_a_battlemap_square(w_dirc);
-    if (move_result == 0) {
-        if (figure_list[enemy_figure].state_idx == 2) {
-            move_result = get_wf_dirc(1);
+    result = try_a_battlemap_square(w_dirc);
+    if (result == 0) {
+        if (figure_list[enemy_figure].state_idx == 2) { result = get_wf_dirc(1);
         } else if (figure_list[figure_no].is_defending != 0) {
             /* Same unit: do not fight self. */
             if ((figure_list[enemy_figure].unit_ref) != (figure_list[figure_no].unit_ref)) {
                 if (figure_list[enemy_figure].state_idx != 0xf && figure_list[enemy_figure].next_state_idx != 0xf) {
-                    move_result = get_wf_dirc(2);
+                    result = get_wf_dirc(2);
                 } else {
-                    figure_list[figure_no].next_state_idx = figure_list[figure_no].state_idx;
-                    figure_list[figure_no].state_idx = 1;
-                    figure_list[figure_no].wait_counter = 1;
+                    figure_list[figure_no].next_state_idx = figure_list[figure_no].state_idx; figure_list[figure_no].state_idx = 1; figure_list[figure_no].wait_counter = 1;
                     get_fig_still_image();
                     return 0;
                 }
             } else {
-                figure_list[figure_no].next_state_idx = figure_list[figure_no].state_idx;
-                figure_list[figure_no].state_idx = 1;
-                figure_list[figure_no].wait_counter = 1;
+                figure_list[figure_no].next_state_idx = figure_list[figure_no].state_idx; figure_list[figure_no].state_idx = 1; figure_list[figure_no].wait_counter = 1;
                 get_fig_still_image();
                 return 0;
             }
         } else if (figure_list[figure_no].state_idx == 7) {
-            swap_result = swap_2_figures();
-            if (swap_result == 2) {
+            swap_ret = swap_2_figures();
+            if (swap_ret == 2) {
                 figure_list[enemy_figure].state_idx = 1;
                 figure_list[enemy_figure].next_state_idx = 7;
                 figure_list[enemy_figure].wait_counter = 2;
@@ -3402,34 +3386,31 @@ movement_ready:
                 figure_list[enemy_figure].prev_grid_x = figure_list[figure_no].grid_x;
                 figure_list[enemy_figure].prev_grid_y = figure_list[figure_no].grid_y;
                 return 0;
-            }
-            if (swap_result != 0)
-                goto cap_wander;
-            figure_list[figure_no].state_idx = 1;
-            figure_list[figure_no].next_state_idx = 7;
-            figure_list[figure_no].wait_counter = 1;
-            get_fig_still_image();
-            return 0;
-cap_wander:
-            move_result = get_wf_dirc(2);
-        } else {
-            move_result = get_wf_dirc(1);
-            if (move_result == 0) {
+            } else if (swap_ret == 0) {
+                figure_list[figure_no].state_idx = 1;
+                figure_list[figure_no].next_state_idx = 7;
+                figure_list[figure_no].wait_counter = 1;
                 get_fig_still_image();
+                return 0;
+            }
+            result = get_wf_dirc(2);
+        } else {
+            result = get_wf_dirc(1);
+            if (result == 0) { get_fig_still_image();
             }
         }
     }
 
-    if (move_result == 0x3e7) {
+    if (result == 0x3e7) {
         /* Engage the blocking enemy. */
         if (figure_list[figure_no].state_idx == 2)
             return 0;
         if (figure_list[figure_no].state_idx == 7) {
-            move_result = get_wf_dirc(0);
+            result = get_wf_dirc(0);
         } else if (figure_list[figure_no].state_idx == 8) {
-            move_result = get_wf_dirc(0);
+            result = get_wf_dirc(0);
         } else if (figure_list[enemy_figure].state_idx == 2) {
-            move_result = get_wf_dirc(0);
+            result = get_wf_dirc(0);
         } else {
             set_unit_to_fight(figure_no);
             figure_list[figure_no].state_idx = 4;
@@ -3449,15 +3430,13 @@ cap_wander:
         }
     }
 
-    if (move_result == 0) {
+    if (result == 0) {
         if (figure_list[figure_no].state_idx == 2)
             return 0;
-        figure_list[figure_no].next_state_idx = figure_list[figure_no].state_idx;
-        figure_list[figure_no].state_idx = 1;
-        figure_list[figure_no].wait_counter = 5;
+        figure_list[figure_no].next_state_idx = figure_list[figure_no].state_idx; figure_list[figure_no].state_idx = 1; figure_list[figure_no].wait_counter = 5;
         return 0;
     }
-    if (move_result == 0x3e7)
+    if (result == 0x3e7)
         return 0;
 
     /* Commit the movement step. */

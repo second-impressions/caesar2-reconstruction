@@ -628,7 +628,7 @@ struct figure_rec {
     char           backtrack_dirc;   /* +0x41  heading copied to backtracking
                                                 figures by set_unit_to_fight. */
     char           _unk42[2];  /* Mac PPC: also never accessed -- vestigial */
-    char           stampede_kind;    /* +0x44  set to 1 by sf02_death for
+    unsigned char  stampede_kind;    /* +0x44  set to 1 by sf02_death for
                                                 stampeding elephants. */
     char           anim_kind;        /* +0x45  per-figure-type animation
                                                 slot set by f01_regular,
