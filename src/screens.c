@@ -2417,9 +2417,6 @@ void update_tribune_flag(int mode)
 // FUNCTION: C2WIN 0x004287b8
 void show_recruitment(void)
 {
-    int idx;
-    int auto_fight;
-
     stone_random_count = 0x15;
     show_a_mosaic_blank(0x1e0, 0xb6, 9, 1);
     show_a_mosaic_blank(0x1e0, 0xc0, 9, 1);
@@ -2471,21 +2468,25 @@ void show_recruitment(void)
         font_list(0x23, 0xb, x_is + 0x100, 0xba, font1, 0x10);
     }
 
+#if PLATFORM_WINDOWS
+    if (forum_viewed_army == 0xa) return;
+#else
     if (forum_viewed_army != 0xa) {
-        idx        = temp_army;
-        auto_fight = army_list[idx].state_idx;
-        if (auto_fight == 0xa) {
+#endif
+        if (army_list[temp_army].state_idx == 0xa) {
             font_list(0x23, 0x1d, 0x1e8, 0xbc, font1, 0x10);
         } else {
-            if      (army_list[idx].cohort_size_class == 0) font_list(0x23, 0x1e, 0x1e8, 0xbc, font1, 0x10);
-            else if (army_list[idx].cohort_size_class == 1) font_list(0x23, 0x25, 0x1e8, 0xbc, font1, 0x10);
-            else if (army_list[idx].cohort_size_class == 2) font_list(0x23, 0x26, 0x1e8, 0xbc, font1, 0x10);
+            if      (army_list[temp_army].cohort_size_class == 0) font_list(0x23, 0x1e, 0x1e8, 0xbc, font1, 0x10);
+            else if (army_list[temp_army].cohort_size_class == 1) font_list(0x23, 0x25, 0x1e8, 0xbc, font1, 0x10);
+            else if (army_list[temp_army].cohort_size_class == 2) font_list(0x23, 0x26, 0x1e8, 0xbc, font1, 0x10);
         }
-    }
 
+#if !PLATFORM_WINDOWS
+    }
     setup_refresh_area(-8, 0x10, 0x10, 6, 1);
     setup_refresh_area(0x18, 0x6a, 0xe, 3, 1);
     setup_refresh_area(0x1e0, 0xb6, 9, 3, 1);
+#endif
 }
 
 // Show the province's industries, staffing, supplies, output, and trade status.
