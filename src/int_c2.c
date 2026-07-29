@@ -1820,9 +1820,12 @@ void fight_centurian(int other_idx)
 // FUNCTION: C2WIN 0x0040aac6
 void fight_barbarian(int other_idx)
 {
-    if (citizen_list[other_idx].xp + 2 < rand8) citizen_list[citizen_no].state_idx = 2;
+    int strength;
+
+    strength = citizen_list[other_idx].xp + 2;
+    if (strength < rand8) citizen_list[citizen_no].state_idx = 2;
     else                                  citizen_list[other_idx].state_idx        = 2;
-    citizen_list[other_idx].xp += 1;
+    citizen_list[other_idx].xp++;
 }
 
 // Move citizen one cell in citizen.world_dir (0..7).
