@@ -935,8 +935,6 @@ post_loop:
 void sa09_army_siege(void)
 {
     int siege_period;
-    unsigned char stuck_count;
-    unsigned char siege_count;
 
     army_list[army_no].sprite_anim = 0x66;
 
@@ -948,11 +946,9 @@ void sa09_army_siege(void)
     else if (army_list[army_no].total_troops <= 800) siege_period = 12;
     else                                             siege_period = 8;
 
-    stuck_count = ++army_list[army_no].stuck_timer;
-    if ((signed char)stuck_count < 50) return;
+    if (++army_list[army_no].stuck_timer < 50) return;
     army_list[army_no].stuck_timer = 0;
-    siege_count = ++army_list[army_no].wf_phase;
-    if ((signed char)siege_count < siege_period) return;
+    if (++army_list[army_no].wf_phase < siege_period) return;
 
     clear_a_reg_area(army_list[army_no].x - 1,
                      army_list[army_no].y - 1,

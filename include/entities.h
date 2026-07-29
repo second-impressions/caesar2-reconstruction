@@ -348,7 +348,7 @@ struct army_rec {
                                                   bumped by sa08_army_stuck;
                                                   > 4 → reset state to 1
                                                   (movsx-read) */
-    char           wf_phase;           /* +0x14  walk-phase (0..wf_length) */
+    signed char    wf_phase;           /* +0x14  walk-phase (0..wf_length) */
     char           wf_active;          /* +0x15  1 = walking ferret-run */
     signed char    wf_step;            /* +0x16  current step within wf_steps[] */
     signed char    wf_length;          /* +0x17  total steps in wf_steps[] */
