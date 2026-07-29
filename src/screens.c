@@ -13,6 +13,14 @@ extern void font_list(int idx, int word_count, int x, int y, unsigned char *font
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
 extern void font_format_split(int idx, int word_skip, int x, int y_start, int max_width, int line_limit, int x_overflow, int max_width_overflow, unsigned char *font, int color);
 extern void show_cursor(unsigned char *font);
+#if PLATFORM_WINDOWS
+extern unsigned char *screen_buffer;
+extern void update_date_display(void);
+extern void update_denarii_display(int force);
+extern void update_population_display(int force);
+extern void update_status_display(int force);
+extern void redraw_window_icons(void);
+#endif
 /* Forward declarations (functions defined later in this file). */
 void clip_zoom_level1(void);
 void clip_battle_zoom_level2(void);
@@ -68,8 +76,15 @@ void city_map_screen(int do_black_out)
 {
     int dir;
 
-    if (do_black_out == 1) black_out();
+    if (do_black_out == 1) {
+#if PLATFORM_WINDOWS
+        memset(screen_buffer, 0, 0x4b000);
+#else
+        black_out();
+#endif
+    }
     hold_mouse_replace = 1;
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
     if (readfile("int_city.pl8", ((void *)scratch_buffer),
                  0x1d4c0, 0) == 0) {
@@ -82,20 +97,35 @@ void city_map_screen(int do_black_out)
     restore_picture_part(scratch_buffer, 1);
     restore_picture_part(scratch_buffer, 2);
     restore_picture_part(scratch_buffer, 3);
+#endif
     clip_zoom_level1();
     clip_map_bottom();
     flush_sb_buffer();
+#if !PLATFORM_WINDOWS
     show_menus(main_menu, 4, 0);
+#endif
     update_map = 1;
     show_citymap();
+#if PLATFORM_WINDOWS
+    write_image(misc, map_direction / 2, 2, 2);
+#else
     write_image(misc, map_direction / 2, 0x1c4, 0x1a);
+#endif
     show_landfill(com_x, com_y);
     redraw_topline = 1;
     update_ov_bar = 1;
     update_map = 1;
     redraw_icons = 2;
+#if PLATFORM_WINDOWS
+    update_date_display();
+    update_denarii_display(1);
+    update_population_display(1);
+    update_status_display(1);
+    redraw_window_icons();
+#else
     show_top_line();
     redraw_icon_bits();
+#endif
     refresh_svga_screen();
     set_palette(city_palette);
     hold_mouse_replace = 1;
