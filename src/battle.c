@@ -3837,6 +3837,8 @@ int get_wf_dirc(int search_mode)
 
 
 // Advance the current projectile and resolve expiry or impact.
+void set_missile_fight_fx(int event);
+
 // FUNCTION: C2 0x51e5a
 // FUNCTION: C2WIN 0x004809d7
 void fly_to_target(void)
@@ -4261,6 +4263,8 @@ int find_nearest_enemy(void)
     figure_list[temp_figure].engaged_count++;
     return 1;
 }
+
+int get_distance(int x1, int y1, int x2, int y2);
 
 // Find the closest active enemy figure to figure_no within `max_distance`. Skips same-owner figures,
 // death/rout states (2/12), and figures whose unit_ref matches target_unit_debar.
