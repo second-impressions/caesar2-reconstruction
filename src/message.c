@@ -334,7 +334,9 @@ void show_request_amount(void) {
     show_a_mosaic_blank(0x60, 0x188, 18, 2);
     font_list(0x26, 0x13, 0x68, 0x194, font1, 0);
     font_no(imperial_send_amount, 0x20, " ", 0x160, 0x194, font1, 0);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x60, 0x188, 20, 2, 1);
+#endif
 }
 
 // Ships the selected goods and updates the request balance, favour, and final-bribe state.
