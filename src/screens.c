@@ -3011,16 +3011,17 @@ void place_9_legend_blocks(void)
 // FUNCTION: C2WIN 0x0042a7d8
 void place_legend_block(int sprite_idx, int x, int y)
 {
-    int xo;
-    int yo;
-    sprite_start = landfill[sprite_idx * 16 + 0xC]
-                 + (landfill[sprite_idx * 16 + 0xD] << 8);
-    for (yo = 0; yo < 16; yo += 2) {
-        for (xo = 0; xo < 16; xo += 2) {
+    int i;
+    int j;
+    int offset;
+
+    offset = sprite_idx * 16;
+    sprite_start = landfill[offset + 0xC]
+                 + (landfill[offset + 0xD] << 8);
+    for (i = 0; i < 16; i += 2)
+        for (j = 0; j < 16; j += 2)
             place_2x2_block(landfill + sprite_start,
-                            (x + xo) + (y + yo) * screen_width);
-        }
-    }
+                            (x + j) + (y + i) * screen_width);
     draw_a_box(x - 1, y - 1, 0x12, 0x12, 0x10);
 }
 
