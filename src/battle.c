@@ -2909,35 +2909,27 @@ void set_ai_flank_move(int flank_mode)
 // Order temp_unit to move by (offset_x, offset_y), set combat order 3, and arm its AI flag.
 // FUNCTION: C2 0x504df
 // FUNCTION: C2WIN 0x0047ce22
-void set_ai_unit_move(int offset_x, int offset_y)
+void set_ai_unit_move(int dx, int dy)
 {
-    int y_offset;
-    signed char new_y;
-
-    y_offset = offset_y;
-
     unit_list[temp_unit].combat_order = 3;
     unit_list[temp_unit].manoeuvre_done = 1;
     for (temp_figure = unit_list[temp_unit].first_figure;
          temp_figure <= unit_list[temp_unit].last_figure;
          temp_figure++) {
-        if (figure_list[temp_figure].exists == 0) continue;
-        figure_list[temp_figure].is_defending = 0;
-        if (figure_list[temp_figure].state_idx == 2
-            || figure_list[temp_figure].state_idx == 0xc
-            || figure_list[temp_figure].state_idx == 0xa)
-            continue;
-        if (figure_list[temp_figure].grid_y < 6) {
-            figure_list[temp_figure].state_idx = 0xa;
-            return;
-        }
-        figure_list[temp_figure].state_idx = 3;
-        figure_list[temp_figure].prev_grid_x = figure_list[temp_figure].grid_x + offset_x;
-        new_y = (signed char)(figure_list[temp_figure].grid_y + y_offset);
-        figure_list[temp_figure].prev_grid_y = new_y;
-        if (new_y <= 2) {
-            figure_list[temp_figure].state_idx = 0xa;
-            return;
+        if (figure_list[temp_figure].exists != 0) {
+            figure_list[temp_figure].is_defending = 0;
+            if (figure_list[temp_figure].state_idx == 2) continue;
+            if (figure_list[temp_figure].state_idx == 0xc) continue;
+            if (figure_list[temp_figure].state_idx == 0xa) continue;
+            if (figure_list[temp_figure].grid_y < 6) { figure_list[temp_figure].state_idx = 0xa; return;
+            }
+            figure_list[temp_figure].state_idx = 3;
+            figure_list[temp_figure].prev_grid_x = figure_list[temp_figure].grid_x + dx;
+            figure_list[temp_figure].prev_grid_y = figure_list[temp_figure].grid_y + dy;
+            if (figure_list[temp_figure].prev_grid_y <= 2) {
+                figure_list[temp_figure].state_idx = 0xa;
+                return;
+            }
         }
     }
 }
@@ -2990,21 +2982,19 @@ void set_ai_unit_beserk(void)
 // FUNCTION: C2WIN 0x0047d2f0
 void set_ai_unit_delayed_beserk(void)
 {
-    int figure_state;
-
     unit_list[temp_unit].combat_order = 10;
     for (temp_figure = unit_list[temp_unit].first_figure;
          unit_list[temp_unit].last_figure >= temp_figure;
          ++temp_figure) {
         if (figure_list[temp_figure].exists != 0) {
             figure_list[temp_figure].is_defending = 0;
-            figure_state = figure_list[temp_figure].state_idx;
-            if (figure_state != 2 && figure_state != 0xc && figure_state != 4) {
-                figure_list[temp_figure].state_idx = 1;
-                figure_list[temp_figure].wait_counter =
-                    ((temp_figure & 3) + 2);
-                figure_list[temp_figure].next_state_idx = 10;
-            }
+            if (figure_list[temp_figure].state_idx == 2) continue;
+            if (figure_list[temp_figure].state_idx == 0xc) continue;
+            if (figure_list[temp_figure].state_idx == 4) continue;
+            figure_list[temp_figure].state_idx = 1;
+            figure_list[temp_figure].wait_counter =
+                ((temp_figure & 3) + 2);
+            figure_list[temp_figure].next_state_idx = 10;
         }
     }
 }
@@ -4333,7 +4323,7 @@ int find_nearest_enemy(void)
 // death/rout states (2/12), and figures whose unit_ref matches target_unit_debar.
 // FUNCTION: C2 0x52be9
 // FUNCTION: C2WIN 0x00482654
-int find_nearest_target(int max_distance)
+int find_nearest_target(int max_dist)
 {
     int distance;
     int best_distance = 0x68;
@@ -4349,7 +4339,7 @@ int find_nearest_target(int max_distance)
                                     figure_list[figure_no].grid_y,
                                     figure_list[temp_figure].grid_x,
                                     figure_list[temp_figure].grid_y);
-            if (distance > max_distance) continue;
+            if (distance > max_dist) continue;
             if (distance < best_distance) { best_distance = distance; best_figure_idx = temp_figure; }
         }
     }
