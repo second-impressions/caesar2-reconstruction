@@ -4158,56 +4158,60 @@ void get_query_info(void)
 // Collect building, access, labor, and goods data for the queried region tile.
 // FUNCTION: C2 0x64e92
 // FUNCTION: C2WIN 0x0042e3ed
+int get_pop_level(void);
+int get_reg_buildings_in_radius(int x, int, int, int, int);
+
 void get_region_query_info(void)
 {
-    int slave_per_camp;
-    int ptr;
-    int map_pos;
-    int map_x;
-    int map_y;
-    int workhouse;
+    int slave_factor;
+    int oldrow;
+    int old_base;
+    int temp_y;
+    int old_top;
+    int cell_ptr;
+    int map_position;
+    int xpos;
+    int ypos;
+    int dx;
+    int dy;
 
-    slave_per_camp = slave_requirements[5].current;
-    if (no_of_workcamps != 0)
-        slave_per_camp = slave_per_camp / no_of_workcamps;
-    else
-        slave_per_camp = 0;
-    slave_per_camp = slave_per_camp / 10;
-    if (slave_per_camp > 3) slave_per_camp = 3;
-    if (slave_per_camp < 0) slave_per_camp = 0;
+    slave_factor = slave_requirements[5].current;
+    if (no_of_workcamps != 0) slave_factor = slave_factor / no_of_workcamps;
+    else slave_factor = 0;
+    slave_factor = slave_factor / 10;
+    if (slave_factor > 3) slave_factor = 3;
+    if (slave_factor < 0) slave_factor = 0;
 
-    ptr = pm_over_cm_ptr;
-    q_type = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).base_kind;
+    cell_ptr = pm_over_cm_ptr;
+    q_type = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).base_kind;
 
     if (q_type >= 0xd5) {
-        int corner = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).occupant & 3;
-        int dx     = corner % 2;
-        int dy     = corner / 2;
-        ptr -= dx * 8;
-        ptr -= dy * 0x1e0;
+        dx = dy = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).occupant & 3;
+        dx = dx % 2; dy = dy / 2;
+        cell_ptr -= dx * 8;
+        cell_ptr -= dy * 0x1e0;
     }
-    q_ptr = ptr;
 
-    map_pos = ptr / map_actual_atom;
-    map_y = map_pos % 0x3c;
-    map_x = map_pos / 0x3c;
+    map_position = cell_ptr;
+    q_ptr = cell_ptr;
+    map_position = map_position / map_actual_atom;
+    ypos = map_position % 0x3c;
+    xpos = map_position / 0x3c;
 
-    q_occa     = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).occupant;
-    q_gfx      = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).gfx;
-    q_wh_level = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).occupant & 0xf;
+    q_occa     = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).occupant;
+    q_gfx      = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).gfx;
+    q_wh_level = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).occupant & 0xf;
     q_pop_level = get_pop_level();
-    q_road     = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).edge_bits & 0x20;
-    q_outside  = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).outside & 0x40;
+    q_road     = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).edge_bits & 0x20;
+    q_outside  = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).outside & 0x40;
 
-    workhouse = get_reg_buildings_in_radius(map_y, map_x,
-                                            2, 1, 0xd3);
-    q_workhouse = workhouse;
-    if (workhouse != 0)
-        q_workhouse = workhouse * slave_per_camp + 1;
+    q_workhouse = get_reg_buildings_in_radius(ypos, xpos,
+                                              2, 1, 0xd3);
+    if (q_workhouse != 0) q_workhouse = q_workhouse * slave_factor + 1;
 
-    q_goods = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).occupant & 0xf0;
+    q_goods = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).occupant & 0xf0;
     q_goods >>= 4;
-    q_had_goods = (*(struct region_cell *)((unsigned char *)region_map + (ptr))).edge_bits & 0x40;
+    q_had_goods = (*(struct region_cell *)((unsigned char *)region_map + (cell_ptr))).edge_bits & 0x40;
 }
 
 // Report whether a detailed statistic applies to the current query type.
