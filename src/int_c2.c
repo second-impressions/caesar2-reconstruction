@@ -817,8 +817,11 @@ void sa04_army_attack(void)
 // FUNCTION: C2WIN 0x00406db1
 void sa05_army_return(void)
 {
+    int i;
+
     army_list[army_no].return_flag = 1;
-    if (region_go_to_target(0) && (army_list[army_no].flags & 2)) {
+    if (region_go_to_target(0) == 0) {
+    } else if (army_list[army_no].flags & 2) {
         army_list[army_no].state_idx      = 1;
         army_list[army_no].order_progress = 0;
     }
