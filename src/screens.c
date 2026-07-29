@@ -3027,29 +3027,14 @@ void show_date(int year, int x, int y, int mode)
 {
     x_is = 0;
     if (mode == 0) {
-        if (year < 0) {
-            font_no(-year, 0x20, " ", x, y, font1, 0x10);
-            font_list(0x1a, 0, x + x_is, y, font1, 0x10);
-        } else {
-            font_no(year, 0x20, " ", x, y, font1, 0x10);
-            font_list(0x1a, 1, x + x_is, y, font1, 0x10);
-        }
+        if (year < 0) { font_no(-year, 0x20, " ", x, y, font1, 0x10); font_list(0x1a, 0, x + x_is, y, font1, 0x10); }
+        else { font_no(year, 0x20, " ", x, y, font1, 0x10); font_list(0x1a, 1, x + x_is, y, font1, 0x10); }
     } else if (mode == 1) {
-        if (year < 0) {
-            font_no(-year, 0x20, " ", x, y, font1, 0x10);
-            font_list(0x1a, 0, x + x_is, y, font1, 0x10);
-        } else {
-            font_no(year, 0x20, " ", x, y, font1, 0x10);
-            font_list(0x1a, 1, x + x_is, y, font1, 0x10);
-        }
+        if (year < 0) { font_no(-year, 0x20, " ", x, y, font1, 0x10); font_list(0x1a, 0, x + x_is, y, font1, 0x10); }
+        else { font_no(year, 0x20, " ", x, y, font1, 0x10); font_list(0x1a, 1, x + x_is, y, font1, 0x10); }
     } else if (mode == 2) {
-        if (year < 0) {
-            font_no(-year, 0x20, " ", x, y, font1, 0x3f);
-            font_list(0x1a, 0, x + x_is, y, font1, 0x3f);
-        } else {
-            font_no(year, 0x20, " ", x, y, font1, 0x3f);
-            font_list(0x1a, 1, x + x_is, y, font1, 0x3f);
-        }
+        if (year < 0) { font_no(-year, 0x20, " ", x, y, font1, 0x3f); font_list(0x1a, 0, x + x_is, y, font1, 0x3f); }
+        else { font_no(year, 0x20, " ", x, y, font1, 0x3f); font_list(0x1a, 1, x + x_is, y, font1, 0x3f); }
     }
 }
 
