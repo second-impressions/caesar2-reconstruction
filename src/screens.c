@@ -4003,8 +4003,11 @@ int reg_tpost_quote(int base)
 // FUNCTION: C2WIN 0x0042db85
 int reg_port_quote(int base)
 {
-    if (!q_road) return 0x19;
-    return base + 0x15;
+    int quote;
+
+    if (!q_road) quote = 0x19;
+    else quote = base + 0x15;
+    return quote;
 }
 
 // Collect building, service, business, and resident data for the queried city tile.
