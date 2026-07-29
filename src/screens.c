@@ -3018,6 +3018,8 @@ void place_9_legend_blocks(void)
 // Draw and frame one legend color tile.
 // FUNCTION: C2 0x627b6
 // FUNCTION: C2WIN 0x0042a7d8
+extern void place_2x2_block(unsigned char *src, int screen_off);
+
 void place_legend_block(int sprite_idx, int x, int y)
 {
     int i;
