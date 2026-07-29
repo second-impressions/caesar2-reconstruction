@@ -3494,82 +3494,74 @@ int try_a_battlemap_square(int direction)
     case 0:  /* N */
         if (figure_list[figure_no].grid_y <= 0) {
             fig_at_edge = 1;
-            result = 0;
-        } else {
-            result = try_this_battlemap_square(figure_list[figure_no].map_ref - 0xd0);
+            return 0;
         }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref - 0xd0);
         break;
     case 1:  /* NE */
-        if (figure_list[figure_no].grid_x < 0x33) {
-            if (figure_list[figure_no].grid_y <= 0) {
-                fig_at_edge = 1;
-                result = 0;
-            } else {
-                result = try_this_battlemap_square(figure_list[figure_no].map_ref - 0xcc);
-            }
-        } else {
+        if (figure_list[figure_no].grid_x >= 0x33) {
             fig_at_edge = 1;
-            result = 0;
+            return 0;
         }
+        if (figure_list[figure_no].grid_y <= 0) {
+            fig_at_edge = 1;
+            return 0;
+        }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref - 0xcc);
         break;
     case 2:  /* E */
-        if (figure_list[figure_no].grid_x < 0x33) {
-            result = try_this_battlemap_square(figure_list[figure_no].map_ref + 4);
-        } else {
+        if (figure_list[figure_no].grid_x >= 0x33) {
             fig_at_edge = 1;
-            result = 0;
+            return 0;
         }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref + 4);
         break;
     case 3:  /* SE */
-        if (figure_list[figure_no].grid_x < 0x33) {
-            if (figure_list[figure_no].grid_y < 0x33) {
-                result = try_this_battlemap_square(figure_list[figure_no].map_ref + 0xd4);
-            } else {
-                fig_at_edge = 1;
-                result = 0;
-            }
-        } else {
+        if (figure_list[figure_no].grid_x >= 0x33) {
             fig_at_edge = 1;
-            result = 0;
+            return 0;
         }
+        if (figure_list[figure_no].grid_y >= 0x33) {
+            fig_at_edge = 1;
+            return 0;
+        }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref + 0xd4);
         break;
     case 4:  /* S */
-        if (figure_list[figure_no].grid_y < 0x33) {
-            result = try_this_battlemap_square(figure_list[figure_no].map_ref + 0xd0);
-        } else {
+        if (figure_list[figure_no].grid_y >= 0x33) {
             fig_at_edge = 1;
-            result = 0;
+            return 0;
         }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref + 0xd0);
         break;
     case 5:  /* SW */
         if (figure_list[figure_no].grid_x <= 0) {
             fig_at_edge = 1;
-            result = 0;
-        } else if (figure_list[figure_no].grid_y < 0x33) {
-            result = try_this_battlemap_square(figure_list[figure_no].map_ref + 0xcc);
-        } else {
-            fig_at_edge = 1;
-            result = 0;
+            return 0;
         }
+        if (figure_list[figure_no].grid_y >= 0x33) {
+            fig_at_edge = 1;
+            return 0;
+        }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref + 0xcc);
         break;
     case 6:  /* W */
         if (figure_list[figure_no].grid_x <= 0) {
             fig_at_edge = 1;
-            result = 0;
-        } else {
-            result = try_this_battlemap_square(figure_list[figure_no].map_ref - 4);
+            return 0;
         }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref - 4);
         break;
     case 7:  /* NW */
         if (figure_list[figure_no].grid_x <= 0) {
             fig_at_edge = 1;
-            result = 0;
-        } else if (figure_list[figure_no].grid_y <= 0) {
-            fig_at_edge = 1;
-            result = 0;
-        } else {
-            result = try_this_battlemap_square(figure_list[figure_no].map_ref - 0xd4);
+            return 0;
         }
+        if (figure_list[figure_no].grid_y <= 0) {
+            fig_at_edge = 1;
+            return 0;
+        }
+        result = try_this_battlemap_square(figure_list[figure_no].map_ref - 0xd4);
         break;
     }
     return result;
