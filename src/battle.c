@@ -4043,25 +4043,25 @@ void move_arrow_horiz(void)
 void loose_arrow_move(void)
 {
     if (arrow_list[arrow_no].heading == 0) {
-        arrow_list[arrow_no].start_y--;
+        arrow_list[arrow_no].start_y -= 1;
     } else if (arrow_list[arrow_no].heading == 1) {
-        arrow_list[arrow_no].start_x++;
-        arrow_list[arrow_no].start_y--;
+        arrow_list[arrow_no].start_x += 1;
+        arrow_list[arrow_no].start_y -= 1;
     } else if (arrow_list[arrow_no].heading == 2) {
-        arrow_list[arrow_no].start_x++;
+        arrow_list[arrow_no].start_x += 1;
     } else if (arrow_list[arrow_no].heading == 3) {
-        arrow_list[arrow_no].start_x++;
-        arrow_list[arrow_no].start_y++;
+        arrow_list[arrow_no].start_x += 1;
+        arrow_list[arrow_no].start_y += 1;
     } else if (arrow_list[arrow_no].heading == 4) {
-        arrow_list[arrow_no].start_y++;
+        arrow_list[arrow_no].start_y += 1;
     } else if (arrow_list[arrow_no].heading == 5) {
-        arrow_list[arrow_no].start_x--;
-        arrow_list[arrow_no].start_y++;
+        arrow_list[arrow_no].start_x -= 1;
+        arrow_list[arrow_no].start_y += 1;
     } else if (arrow_list[arrow_no].heading == 6) {
-        arrow_list[arrow_no].start_x--;
+        arrow_list[arrow_no].start_x -= 1;
     } else if (arrow_list[arrow_no].heading == 7) {
-        arrow_list[arrow_no].start_x--;
-        arrow_list[arrow_no].start_y--;
+        arrow_list[arrow_no].start_x -= 1;
+        arrow_list[arrow_no].start_y -= 1;
     }
 }
 
