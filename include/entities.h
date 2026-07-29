@@ -368,7 +368,7 @@ struct army_rec {
     char           return_flag;        /* +0x26  set to 1 when target asked to return */
     char           target_flag;        /* +0x27  set when army has a chosen target */
     signed char    cohort_id;          /* +0x28  cohort/route slot id; PS emits movsx on read */
-    char           dest_y;             /* +0x29  destination tile Y for sail-to-port */
+    unsigned char  dest_y;             /* +0x29  destination tile Y for sail-to-port */
     char           dest_x;             /* +0x2A  destination tile X for sail-to-port */
     char           _unk2B[1];          /* Mac PPC: also never accessed -- vestigial */
     int            fort_ref;           /* +0x2C */
