@@ -4480,7 +4480,9 @@ void show_battle_intro_screen(void)
     int tribe_idx;
 
     cover_mouse_droppings();
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     stone_random_count = 0x32;
     show_a_mosaic_window(8, 0xb0, 0x27, 0x13);
 
@@ -4510,10 +4512,11 @@ void show_battle_intro_screen(void)
     font_list(0x47, 0xa, x_is + 0x100, 0x170, font1, 0x10);
 
     if (army_list[their_battle_army].num_specials != 0) {
+        tribe_idx = 0xf;
         x_is = 0;
         font_no(army_list[their_battle_army].num_specials, 0x20, " ", 0x120, 0x182, font1, 0x10);
         font_list(0x47, 0xb, x_is + 0x120, 0x182, font1, 0x10);
-        font_list(0x47, 0x19, x_is + 0x120, 0x182, font1, 0x10);
+        font_list(0x47, tribe_idx + 0xa, x_is + 0x120, 0x182, font1, 0x10);
     } else {
         x_is = 0;
         tribe_idx = tribe_battle_setup[army_list[their_battle_army].tribe_id].u.raw[0];
