@@ -1732,7 +1732,7 @@ void sf04_fight(void)
         return;
     }
     do_the_fight();
-    if ((!(unsigned int)figure_list[figure_no].is_visible) & 1) {
+    if ((!figure_list[figure_no].is_visible) & 1) {
         figure_go_to_target();
         return;
     }
