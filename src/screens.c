@@ -500,6 +500,7 @@ void clip_zoom_level1(void)
 {
     int i;
 
+#if !PLATFORM_WINDOWS
     if (zoom_level == 1) {
         for (i = 0x18; i < 0x1e0; i++) {
             show_internal_4point(0, i, 0);
@@ -513,6 +514,7 @@ void clip_zoom_level1(void)
         }
         show_internal_2point(i, 0x1d9, 0);
     }
+#endif
 }
 
 // Mask the left edge of the zoomed battle map beside the side panel.
