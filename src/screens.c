@@ -1882,17 +1882,14 @@ void show_temple_tip(void)
 // FUNCTION: C2WIN 0x004271af
 void forum_clerks_screen(void)
 {
-    int department_idx;
-
     cover_mouse_droppings();
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
 
     get_history_in_buffer(((int *)((scratch_buffer) + 0x1fbd0)));
 
-    department_idx = last_forum_dept;
-    if (forum_repapering[department_idx] != 0) {
-        show_pl8file("forum.pl8", forum_repapering[department_idx]);
-    }
+    if (forum_repapering[last_forum_dept] != 0) show_pl8file("forum.pl8", forum_repapering[last_forum_dept]);
 
     explain_forum();
     show_a_mosaic_frame(0, 0, 0x28, 0xf);
