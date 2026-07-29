@@ -1882,6 +1882,8 @@ void show_temple_tip(void)
 // Show the clerks forum with historical graphs and range controls.
 // FUNCTION: C2 0x5f7e2
 // FUNCTION: C2WIN 0x004271af
+void get_history_in_buffer(int *history_buf);
+
 void forum_clerks_screen(void)
 {
     cover_mouse_droppings();
@@ -1945,6 +1947,9 @@ void history_selection(void)
 // Draw the population, treasury, employment, and reputation history graphs.
 // FUNCTION: C2 0x5f9f0
 // FUNCTION: C2WIN 0x004273b1
+int get_history_from_buffer(int *history_buf, int, int);
+int show_history_graph(int graph_x, int graph_y, int statistic_idx);
+
 void history_graphs(void)
 {
     int top;
@@ -1980,83 +1985,87 @@ void history_graphs(void)
 // FUNCTION: C2WIN 0x004275a1
 int show_history_graph(int graph_x, int graph_y, int statistic_idx)
 {
-    int years   = history_graph_years[history_graph_length];
-    int x_step   = 0xc8 / years;
-    int sample_idx;
-    int max_value = 0;
-    int top_value;
-    int multiplier;
-    int graph_height;
+    int no_years = history_graph_years[history_graph_length];
+    int x_interval = 0xc8 / no_years;
+    int ptr;
+    int high;
+    int top;
     int divisor;
-    int i;
-    int value;
+    int ysize;
+    int counter;
+    int bar_value;
+    int color_no;
+    int y;
 
-    sample_idx = history_end_ptr - years;
-    if (sample_idx < 0) sample_idx += 0xc8;
-    for (i = 0; i < years; i++) {
-        value = get_history_from_buffer(((int *)((scratch_buffer) + 0x1fbd0)),
-                                    sample_idx, statistic_idx);
-        if (value > max_value) max_value = value;
-        if (++sample_idx >= 0xc8) sample_idx = 0;
+    high = top = 0;
+    ptr = history_end_ptr - no_years;
+    if (ptr < 0) ptr += 0xc8;
+    for (counter = 0; counter < no_years; counter++) {
+        bar_value = get_history_from_buffer(((int *)((scratch_buffer) + 0x1fbd0)),
+                                    ptr, statistic_idx);
+        if (bar_value > high) high = bar_value;
+        if (++ptr >= 0xc8) ptr = 0;
     }
 
-    multiplier = divisor = 1;
-    if (1 >= statistic_idx) {
-        if      (max_value <= 0x32)    { top_value = 0x32;    multiplier = 2; }
-        else if (max_value <= 0x64)    { top_value = 0x64;    }
-        else if (max_value <= 0xc8)    { top_value = 0xc8;    divisor = 2; }
-        else if (max_value <= 0x1f4)   { top_value = 0x1f4;   divisor = 5; }
-        else if (max_value <= 0x3e8)   { top_value = 0x3e8;   divisor = 0xa; }
-        else if (max_value <= 0x9c4)   { top_value = 0x9c4;   divisor = 0x19; }
-        else if (max_value <= 0x1388)  { top_value = 0x1388;  divisor = 0x32; }
-        else if (max_value <= 0x2710)  { top_value = 0x2710;  divisor = 0x64; }
-        else if (max_value <= 0x61a8)  { top_value = 0x61a8;  divisor = 0xfa; }
-        else if (max_value <= 0xc350)  { top_value = 0xc350;  divisor = 0x1f4; }
-        else if (max_value <= 0x186a0) { top_value = 0x186a0; divisor = 0x3e8; }
-        else                         { top_value = 0xf4240; divisor = 0x2710; }
-        graph_height = 0x64;
-    } else {
-        if      (max_value <= 0xa)     { top_value = 0xa;     multiplier = 5; }
-        else if (max_value <= 0x19)    { top_value = 0x19;    multiplier = 2; }
-        else if (max_value <= 0x32)    { top_value = 0x32;    }
-        else if (max_value <= 0x64)    { top_value = 0x64;    divisor = 2; }
-        else if (max_value <= 0xc8)    { top_value = 0xc8;    divisor = 4; }
-        else if (max_value <= 0x1f4)   { top_value = 0x1f4;   divisor = 0xa; }
-        else if (max_value <= 0x3e8)   { top_value = 0x3e8;   divisor = 0x14; }
-        else if (max_value <= 0x7d0)   { top_value = 0x7d0;   divisor = 0x28; }
-        else if (max_value <= 0xfa0)   { top_value = 0xfa0;   divisor = 0x50; }
-        else if (max_value <= 0x1f40)  { top_value = 0x1f40;  divisor = 0xa0; }
-        else if (max_value <= 0x2710)  { top_value = 0x2710;  divisor = 0xc8; }
-        else if (max_value <= 0x4e20)  { top_value = 0x4e20;  divisor = 0x190; }
-        else                         { top_value = 0xc350;  divisor = 0x3e8; }
-        graph_height = 0x32;
+    {
+        int timesby;
+
+        divisor = 1; timesby = 1;
+        if (1 >= statistic_idx) {
+            if      (high <= 0x32)    { top = 0x32;    timesby = 2; }
+            else if (high <= 0x64)    { top = 0x64;    }
+            else if (high <= 0xc8)    { top = 0xc8;    divisor = 2; }
+            else if (high <= 0x1f4)   { top = 0x1f4;   divisor = 5; }
+            else if (high <= 0x3e8)   { top = 0x3e8;   divisor = 0xa; }
+            else if (high <= 0x9c4)   { top = 0x9c4;   divisor = 0x19; }
+            else if (high <= 0x1388)  { top = 0x1388;  divisor = 0x32; }
+            else if (high <= 0x2710)  { top = 0x2710;  divisor = 0x64; }
+            else if (high <= 0x61a8)  { top = 0x61a8;  divisor = 0xfa; }
+            else if (high <= 0xc350)  { top = 0xc350;  divisor = 0x1f4; }
+            else if (high <= 0x186a0) { top = 0x186a0; divisor = 0x3e8; }
+            else                      { top = 0xf4240;  divisor = 0x2710; }
+            ysize = 0x64;
+        } else {
+            if      (high <= 0xa)     { top = 0xa;     timesby = 5; }
+            else if (high <= 0x19)    { top = 0x19;    timesby = 2; }
+            else if (high <= 0x32)    { top = 0x32;    }
+            else if (high <= 0x64)    { top = 0x64;    divisor = 2; }
+            else if (high <= 0xc8)    { top = 0xc8;    divisor = 4; }
+            else if (high <= 0x1f4)   { top = 0x1f4;   divisor = 0xa; }
+            else if (high <= 0x3e8)   { top = 0x3e8;   divisor = 0x14; }
+            else if (high <= 0x7d0)   { top = 0x7d0;   divisor = 0x28; }
+            else if (high <= 0xfa0)   { top = 0xfa0;   divisor = 0x50; }
+            else if (high <= 0x1f40)  { top = 0x1f40;  divisor = 0xa0; }
+            else if (high <= 0x2710)  { top = 0x2710;  divisor = 0xc8; }
+            else if (high <= 0x4e20)  { top = 0x4e20;  divisor = 0x190; }
+            else                      { top = 0xc350;   divisor = 0x3e8; }
+            ysize = 0x32;
+        }
+
+        ptr = history_end_ptr - no_years;
+        if (ptr < 0) ptr += 0xc8;
+        draw_a_dias(graph_x, graph_y, 0xca, ysize + 2);
+        draw_a_rect(graph_x + 1, graph_y + 1, 0xc8, ysize, 0x20);
+
+        for (counter = 0; counter < no_years; counter++) {
+            bar_value = get_history_from_buffer(((int *)((scratch_buffer) + 0x1fbd0)),
+                                        ptr, statistic_idx);
+            if (++ptr >= 0xc8) ptr = 0;
+            if (bar_value <= 0) continue;
+            if (bar_value > top) continue;
+            bar_value = bar_value / divisor;
+            bar_value = timesby * bar_value;
+            if (bar_value < 0) continue;
+            if (bar_value > 0xc8) continue;
+            color_no = (counter & 1) ? 0xa : 0xd;
+            y = ysize + (graph_y + 1) - bar_value;
+            if (y < graph_y) continue;
+            if (y + bar_value > graph_y + 0xc9) continue;
+            draw_a_rect(graph_x + 1 + counter * x_interval, y, x_interval, bar_value, color_no);
+        }
+
+        return top;
     }
-
-    sample_idx = history_end_ptr - years;
-    if (sample_idx < 0) sample_idx += 0xc8;
-    draw_a_dias(graph_x, graph_y, 0xca, graph_height + 2);
-    draw_a_rect(graph_x + 1, graph_y + 1, 0xc8, graph_height, 0x20);
-
-    for (i = 0; i < years; i++) {
-        int colour;
-        int bar_y;
-        value = get_history_from_buffer(((int *)((scratch_buffer) + 0x1fbd0)),
-                                    sample_idx, statistic_idx);
-        if (++sample_idx >= 0xc8) sample_idx = 0;
-        if (value <= 0) continue;
-        if (value > top_value) continue;
-        value = value / divisor;
-        value = value * multiplier;
-        if (value < 0) continue;
-        if (value > 0xc8) continue;
-        colour = (i & 1) ? 0xa : 0xd;
-        bar_y = graph_y + 1 + graph_height - value;
-        if (bar_y < graph_y) continue;
-        if (bar_y + value > graph_y + 0xc9) continue;
-        draw_a_rect(graph_x + 1 + i * x_step, bar_y, x_step, value, colour);
-    }
-
-    return top_value;
 }
 
 // Show the empire overview, or the city-only forum during peaceful play.
