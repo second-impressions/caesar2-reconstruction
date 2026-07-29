@@ -70,9 +70,7 @@ void show_recruitment(void);
 void show_slave_welfare_bill(void);
 void show_slave_allocation(void);
 void show_top_line(void);
-void place_3_legend_blocks(int caption_idx, int top_gfx_idx, int middle_gfx_idx, int bottom_gfx_idx);
 void place_3x_legend_blocks(int caption_idx, int top_gfx_idx, int middle_gfx_idx, int bottom_gfx_idx);
-void place_9_legend_blocks(void);
 void place_legend_block(int sprite_idx, int x, int y);
 void show_date(int year, int x, int y, int mode);
 void show_query_panel_heading(int y);
@@ -1790,96 +1788,103 @@ void forum_temple_screen(void)
 void basic_temple_screen(void)
 {
     int next_threshold;
-    int next_av_threshold;
+    int next_av_goal;
     int i;
+#if PLATFORM_WINDOWS
+    int w1;
+    int image;
+    int old_bar_width;
+#endif
 
     cover_mouse_droppings();
     show_pl8file("rat_fron.pl8", 0x1e0);
     show_a_mosaic_blank(0, 0x160, 0x28, 8);
     font_list(0x22, 3, 0xcc, 0x1d0, font1, 0x20);
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     x_is = 0;
 
     next_threshold    = promotion_levels[c2inf.skill_level][completed_provinces];
-    next_av_threshold = promotion_av_levels[c2inf.skill_level][completed_provinces];
+    next_av_goal = promotion_av_levels[c2inf.skill_level][completed_provinces];
 
     for (i = 0; i < 4; i++) {
-        int bar_w;
-        int rank_image;
-        int bar_w_raw;
-        if (i == 0)      bar_w = 0x12c - empire_rating * 3;
-        else if (i == 1) bar_w = 0x12c - peace_rating * 3;
-        else if (i == 2) bar_w = 0x12c - prosperity_rating * 3;
-        else if (i == 3) bar_w = 0x12c - culture_rating * 3;
-        if (i == 0)      { if (empire_rating     >= next_threshold) rank_image = 2; else rank_image = 1; }
-        else if (i == 1) { if (peace_rating      >= next_threshold) rank_image = 2; else rank_image = 1; }
-        else if (i == 2) { if (prosperity_rating >= next_threshold) rank_image = 2; else rank_image = 1; }
-        else if (i == 3) { if (culture_rating    >= next_threshold) rank_image = 2; else rank_image = 1; }
-        bar_w_raw = bar_w;
-        if (bar_w > 0x126) bar_w = 0x126;
-        if (bar_w < 0)     bar_w = 0;
-        write_general_sprite_with_front_ofset(0, i * 0xa0 + 0x20, 0xc, bar_w + 0xc);
-        write_general_sprite(rank_image, i * 0xa0 + 0x20, bar_w_raw);
+#if !PLATFORM_WINDOWS
+        int w1;
+        int image;
+        int old_bar_width;
+#endif
+        if (i == 0)      w1 = 0x12c - empire_rating * 3;
+        else if (i == 1) w1 = 0x12c - peace_rating * 3;
+        else if (i == 2) w1 = 0x12c - prosperity_rating * 3;
+        else if (i == 3) w1 = 0x12c - culture_rating * 3;
+        if (i == 0)      { if (empire_rating     >= next_threshold) image = 2; else image = 1; }
+        else if (i == 1) { if (peace_rating      >= next_threshold) image = 2; else image = 1; }
+        else if (i == 2) { if (prosperity_rating >= next_threshold) image = 2; else image = 1; }
+        else if (i == 3) { if (culture_rating    >= next_threshold) image = 2; else image = 1; }
+        old_bar_width = w1;
+        if (w1 > 0x126) w1 = 0x126;
+        if (w1 < 0)     w1 = 0;
+        write_general_sprite_with_front_ofset(0, i * 0xa0 + 0x20, 0xc, w1 + 0xc);
+        write_general_sprite(image, i * 0xa0 + 0x20, old_bar_width);
     }
 
     for (i = 0; i < 4; i++) {
-        int icon_x = i * 0xa0;
-        draw_a_dias(icon_x + 0xa, 0x164, 0x8c, 0x21);
+        draw_a_dias(i * 0xa0 + 0xa, 0x164, 0x8c, 0x21);
     }
 
     if (c2inf.peace_mode == 0) {
         play_speech(0x1e);
         x_is = 0;
-        font_list(0x20, 1, 0x1c, 0x167, font1, 0x10);
+        font_list(0x20, 1, x_is + 0x1c, 0x167, font1, 0x10);
         font_no(empire_rating, 0x20, " %", x_is + 0x1c, 0x167, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 6, 0x20, 0x177, font1, 0x10);
+        font_list(0x20, 6, x_is + 0x20, 0x177, font1, 0x10);
         font_no(next_threshold, 0x20, " %)", x_is + 0x20, 0x177, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 2, 0xbc, 0x167, font1, 0x10);
+        font_list(0x20, 2, x_is + 0xbc, 0x167, font1, 0x10);
         font_no(peace_rating, 0x20, " %", x_is + 0xbc, 0x167, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 6, 0xbc, 0x177, font1, 0x10);
+        font_list(0x20, 6, x_is + 0xbc, 0x177, font1, 0x10);
         font_no(next_threshold, 0x20, " %)", x_is + 0xbc, 0x177, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 3, 0x160, 0x167, font1, 0x10);
+        font_list(0x20, 3, x_is + 0x160, 0x167, font1, 0x10);
         font_no(prosperity_rating, 0x20, " %", x_is + 0x160, 0x167, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 6, 0x15c, 0x177, font1, 0x10);
+        font_list(0x20, 6, x_is + 0x15c, 0x177, font1, 0x10);
         font_no(next_threshold, 0x20, " %)", x_is + 0x15c, 0x177, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 4, 0x1fc, 0x167, font1, 0x10);
+        font_list(0x20, 4, x_is + 0x1fc, 0x167, font1, 0x10);
         font_no(culture_rating, 0x20, " %", x_is + 0x205, 0x167, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 6, 0x1fc, 0x177, font1, 0x10);
+        font_list(0x20, 6, x_is + 0x1fc, 0x177, font1, 0x10);
         font_no(next_threshold, 0x20, " %)", x_is + 0x1fc, 0x177, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 5, 0xa0, 0x18a, font1, 0xe);
+        font_list(0x20, 5, x_is + 0xa0, 0x18a, font1, 0xe);
         font_no(average_rating, 0x20, " %",
                 x_is + 0xa0, 0x18a, font1, 0xe);
         font_list(0x20, 6, x_is + 0xa2, 0x18a, font1, 0xe);
-        font_no(next_av_threshold, 0x20, " %)",
+        font_no(next_av_goal, 0x20, " %)",
                 x_is + 0xa2, 0x18a, font1, 0xe);
-        show_temple_tip();
     } else {
         play_speech(0x2d);
         x_is = 0;
-        font_list(0x20, 1, 0x1c, 0x167, font1, 0x10);
+        font_list(0x20, 1, x_is + 0x1c, 0x167, font1, 0x10);
         font_no(0, 0x20, " %", x_is + 0x1c, 0x167, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 2, 0xbc, 0x167, font1, 0x10);
+        font_list(0x20, 2, x_is + 0xbc, 0x167, font1, 0x10);
         font_no(0, 0x20, " %", x_is + 0xbc, 0x167, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 3, 0x160, 0x167, font1, 0x10);
+        font_list(0x20, 3, x_is + 0x160, 0x167, font1, 0x10);
         font_no(prosperity_rating, 0x20, " %",
                 x_is + 0x160, 0x167, font1, 0x10);
         x_is = 0;
-        font_list(0x20, 4, 0x1fc, 0x167, font1, 0x10);
+        font_list(0x20, 4, x_is + 0x1fc, 0x167, font1, 0x10);
         font_no(culture_rating, 0x20, " %",
                 x_is + 0x205, 0x167, font1, 0x10);
-        show_temple_tip();
     }
 
+    show_temple_tip();
     hold_mouse_replace = 1;
     refresh_svga_screen();
     set_palette(temp_palette);
@@ -2963,6 +2968,9 @@ void show_ov_bar(void)
 // Draw the legend for the active city analysis overlay.
 // FUNCTION: C2 0x62462
 // FUNCTION: C2WIN 0x0042a52e
+void place_3_legend_blocks(int caption_idx, int top_gfx_idx, int middle_gfx_idx, int bottom_gfx_idx);
+void place_9_legend_blocks(void);
+
 void show_ov_legend_panel(void)
 {
     cover_mouse_droppings();
