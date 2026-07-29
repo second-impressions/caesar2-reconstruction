@@ -3140,31 +3140,29 @@ void get_population_and_industry_count(int radius, int demand_mode)
 // FUNCTION: C2WIN 0x0040f3c1
 int get_nearest_reg_building(void)
 {
+    unsigned char building_type;
+    unsigned char terrain_flags;
+    unsigned char occupants;
+    int closest_dist;
     int min_dist;
     int best_x;
     int best_y;
-    int building_kind;
-    int distance;
-    unsigned char base_kind;
-    unsigned char terrain_flags;
-    unsigned char occupant_flags;
 
     min_dist = 0x3e8; best_x = best_y = 0;
-    gmn_sptr = gmn_y = 0;
+    gmn_sptr = 0; gmn_y = 0;
     for ( ; gmn_y < 0x3c; gmn_y++) {
     for (gmn_x = 0; gmn_x < 0x3c; gmn_x++, gmn_sptr += 8) {
-    base_kind = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
+    building_type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
     terrain_flags  = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).terrain;
-    occupant_flags  = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 3;
-    if ((terrain_flags & 1) != 0) {
-        if (occupant_flags == 0) {
-            if ((building_kind = base_kind) >= 0x97) {
-                if (building_kind < 0x98 || building_kind > 0xd2) {
-                    distance = get_longest_distance(army_list[army_no].x, army_list[army_no].y, gmn_x, gmn_y);
-                    if (distance < min_dist) { min_dist = distance; best_x = gmn_x; best_y = gmn_y; }
-                }
-            }
-        }
+    occupants  = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 3;
+    if ((terrain_flags & 1) == 0) continue;
+    if (occupants != 0) continue;
+    if (building_type < 0x97) continue;
+    if (building_type >= 0x98 && building_type <= 0xd2) continue;
+    closest_dist = get_longest_distance(army_list[army_no].x,
+            army_list[army_no].y, gmn_x, gmn_y);
+    if (closest_dist < min_dist) {
+        min_dist = closest_dist; best_x = gmn_x; best_y = gmn_y;
     }
     }
     }
