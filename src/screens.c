@@ -13,6 +13,9 @@ extern void font_list(int idx, int word_count, int x, int y, unsigned char *font
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
 extern void font_format_split(int idx, int word_skip, int x, int y_start, int max_width, int line_limit, int x_overflow, int max_width_overflow, unsigned char *font, int color);
 extern void show_cursor(unsigned char *font);
+extern void show_fast_rect(int x, int y, int color);
+extern void show_a_system_blank(int x, int y, int w, int h);
+extern void show_a_system_window(int x, int y, int cols, int rows);
 #if PLATFORM_WINDOWS
 extern unsigned char *screen_buffer;
 extern void update_date_display(void);
@@ -1176,14 +1179,12 @@ void show_loadsave_box(int title_id)
 // FUNCTION: C2WIN 0x004250c4
 void show_directory(int scroll_top)
 {
-    int text_x;
-    int text_y;
-    int entry_idx;
-    int row_idx;
+    int x;
+    int y;
+    int ptr;
+    int no;
 
-    got_cursx     = 0;
-    cursor_x      = 0;
-    fb_count      = 0;
+    fb_count = cursor_x = got_cursx = 0;
     cursor_y      = 0x98;
     allow_padding = 1;
     x_is          = 0;
@@ -1198,35 +1199,28 @@ void show_directory(int scroll_top)
     cursor_x += 0x40;
     show_cursor(font1);
 
-    text_x = 0x40;
-    text_y = 0xbc;
-    show_a_system_blank(0x3e, 0xba, 0x13, 0xa);
+    x = 0x40;
+    y = 0xbc;
+    show_a_system_blank(x - 2, y - 2, 0x13, 0xa);
 
-    entry_idx = first_entry;
-    row_idx = 0;
-    goto check_entries;
-    for (;;) {
-        char *name;
-        name = directory[entry_idx];
-        if (entry_idx == scroll_top) {
+    for (ptr = first_entry, no = 0;
+         ptr < no_of_entries;
+         ptr++, no++) {
+        if (ptr == scroll_top) {
             sprite_width  = 9;
             sprite_height = 0xf;
-            show_fast_rect(text_x - 2, text_y - 2, 0x10);
-            put_a_font_string(name, text_x, text_y, font1, 0x20);
+            show_fast_rect(x - 2, y - 2, 0x10);
+            put_a_font_string(directory[ptr], x, y, font1, 0x20);
         } else {
-            put_a_font_string(name, text_x, text_y, font1, 0x10);
+            put_a_font_string(directory[ptr], x, y, font1, 0x10);
         }
-        if (row_idx == 9) {
-            text_x = 0xe0;
-            text_y = 0xbc;
+        if (no == 9) {
+            x = 0xe0;
+            y = 0xbc;
         } else {
-            text_y += 0x10;
+            y += 0x10;
         }
-        if (row_idx >= 0x13) break;
-        entry_idx++;
-        row_idx++;
-check_entries:
-        if (entry_idx >= no_of_entries) break;
+        if (no >= 0x13) break;
     }
 }
 
