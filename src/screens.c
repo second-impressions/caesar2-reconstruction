@@ -24,8 +24,12 @@ extern void redraw_window_icons(void);
 
 #if PLATFORM_WINDOWS
 #define SCREEN_MAP_MODE screen_mode
+#define SCREEN_PEOPLE_DATA(mode) (((unsigned char **)&people_data)[mode])
+#define COHORT_AUTO_FIGHT army_list[tracking_army].state_idx
 #else
 #define SCREEN_MAP_MODE map_mode
+#define SCREEN_PEOPLE_DATA(mode) people_data
+#define COHORT_AUTO_FIGHT auto_fight
 #endif
 
 /* Forward declarations (functions defined later in this file). */
@@ -623,7 +627,16 @@ void redraw_icon_bits(void)
 // FUNCTION: C2WIN 0x00423580
 void show_cohort_box(void)
 {
+#if PLATFORM_WINDOWS
+    int mode;
+#else
     int auto_fight;
+#endif
+
+#if PLATFORM_WINDOWS
+    mode = screen_mode;
+    if (mode > 1) mode = 0;
+#endif
 
     fill_cohort_centuries();
     readfile("forumbit.pl8", ((void *)scratch_buffer), 0xea60, 0);
@@ -635,7 +648,7 @@ void show_cohort_box(void)
 
     write_general_sprite(army_list[tracking_army].cohort_id + 0x21,
                          0x190, 0x44);
-    write_image(people_data, 0x12, 0x190, 0x56);
+    write_image(SCREEN_PEOPLE_DATA(mode), 0x12, 0x190, 0x56);
 
     x_is = 0;
     font_list(5,
@@ -664,8 +677,10 @@ void show_cohort_box(void)
     show_tribunes_report(tracking_army, 0x30, 0x86, 0);
     update_tribune_flag(0);
 
+#if !PLATFORM_WINDOWS
     auto_fight = army_list[tracking_army].state_idx;
-    if (auto_fight == 0xa) {
+#endif
+    if (COHORT_AUTO_FIGHT == 0xa) {
         font_list(0x23, 0x1d, 0x120, 0x8a, font1, 0x10);
     } else {
         if      (army_list[tracking_army].cohort_size_class == 0) font_list(0x23, 0x1e, 0x120, 0x8a, font1, 0x10);
@@ -673,7 +688,9 @@ void show_cohort_box(void)
         else if (army_list[tracking_army].cohort_size_class == 2) font_list(0x23, 0x26, 0x120, 0x8a, font1, 0x10);
     }
 
+#if !PLATFORM_WINDOWS
     setup_map_screen_refresh();
+#endif
 }
 
 // Show summary information for a non-cohort army.
