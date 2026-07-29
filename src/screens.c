@@ -2760,7 +2760,7 @@ void show_year_end_screen(void)
 // FUNCTION: C2WIN 0x00429d9f
 void show_top_line(void)
 {
-    char dirty = 0;
+    unsigned char dirty = 0;
 
     if (--request_message.alarm_blink_timer <= 0) {
         request_message.alarm_blink_state ^= 1;
@@ -2805,7 +2805,9 @@ void show_top_line(void)
                     0x230, 6, font1, 0x10);
     }
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0xeb, 0, 0x1a, 2, 1);
+#endif
 }
 
 // Update the bottom strip with construction costs, icon help, or current map information.
