@@ -1643,63 +1643,51 @@ int try_a_citymap_square(int direction, int movement_kind, int unused_arg)
     switch ((unsigned int)direction) {
     case 0:
         if (citizen_list[citizen_no].y <= 0)
-            result = 0;
-        else
-            result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x640, movement_kind, unused_arg);
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x640, movement_kind, unused_arg);
         break;
     case 1:
-        if (citizen_list[citizen_no].x < 0x4f) {
-            if (citizen_list[citizen_no].y <= 0)
-                result = 0;
-            else
-                result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x62c, movement_kind, unused_arg);
-        } else {
-            result = 0;
-        }
+        if (citizen_list[citizen_no].x >= 0x4f)
+            return 0;
+        if (citizen_list[citizen_no].y <= 0)
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x62c, movement_kind, unused_arg);
         break;
     case 2:
-        if (citizen_list[citizen_no].x < 0x4f)
-            result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x14, movement_kind, unused_arg);
-        else
-            result = 0;
+        if (citizen_list[citizen_no].x >= 0x4f)
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x14, movement_kind, unused_arg);
         break;
     case 3:
-        if (citizen_list[citizen_no].x < 0x4f) {
-            if (citizen_list[citizen_no].y < 0x4f)
-                result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x654, movement_kind, unused_arg);
-            else
-                result = 0;
-        } else {
-            result = 0;
-        }
+        if (citizen_list[citizen_no].x >= 0x4f)
+            return 0;
+        if (citizen_list[citizen_no].y >= 0x4f)
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x654, movement_kind, unused_arg);
         break;
     case 4:
-        if (citizen_list[citizen_no].y < 0x4f)
-            result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x640, movement_kind, unused_arg);
-        else
-            result = 0;
+        if (citizen_list[citizen_no].y >= 0x4f)
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x640, movement_kind, unused_arg);
         break;
     case 5:
         if (citizen_list[citizen_no].x <= 0)
-            result = 0;
-        else if (citizen_list[citizen_no].y < 0x4f)
-            result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x62c, movement_kind, unused_arg);
-        else
-            result = 0;
+            return 0;
+        if (citizen_list[citizen_no].y >= 0x4f)
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref + 0x62c, movement_kind, unused_arg);
         break;
     case 6:
         if (citizen_list[citizen_no].x <= 0)
-            result = 0;
-        else
-            result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x14, movement_kind, unused_arg);
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x14, movement_kind, unused_arg);
         break;
     case 7:
         if (citizen_list[citizen_no].x <= 0)
-            result = 0;
-        else if (citizen_list[citizen_no].y <= 0)
-            result = 0;
-        else
-            result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x654, movement_kind, unused_arg);
+            return 0;
+        if (citizen_list[citizen_no].y <= 0)
+            return 0;
+        result = try_this_citymap_square(citizen_list[citizen_no].map_ref - 0x654, movement_kind, unused_arg);
         break;
     }
     return result;
