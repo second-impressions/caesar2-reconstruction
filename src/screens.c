@@ -202,6 +202,12 @@ extern void show_window_battle_landfill(int start_row, int row_count,
                                         int screen_x, int screen_y,
                                         unsigned char *buffer);
 extern void refresh_map_window(void *window);
+extern void draw_window_buffer(unsigned char *dest, int dest_x, int dest_y,
+                               int width, int height, unsigned char *source,
+                               int source_x, int source_y);
+extern void window_font_list(int idx, int word_count, int x, int y,
+                             unsigned char *font, int color,
+                             unsigned char *buffer);
 #endif
 
 // Set up the in-battle UI screen.
@@ -2952,15 +2958,28 @@ void show_icon_strip(void)
 // FUNCTION: C2WIN 0x0042a299
 void show_ov_bar(void)
 {
+#if PLATFORM_WINDOWS
+    if (screen_mode != 0) return;
+#else
     int h;
     int w;
 
     if (map_mode != 0) return;
     if (redraw_topline == 0 && update_ov_bar == 0) return;
+#endif
 
+#if PLATFORM_WINDOWS
+    if (redraw_topline != 0 || update_ov_bar != 0) {
+#endif
     if (update_ov_bar != 0) {
         update_ov_bar--;
     }
+#if PLATFORM_WINDOWS
+    draw_window_buffer(window_buffer, 0, 0, 0xa2, 0x18,
+                       window_buffer, 0x1de, 0);
+    window_font_list(0x35, ov_map_mode, 8, 4, font1, 0x10,
+                     window_buffer);
+#else
     sprite_width = 6;
     h = 0xf;
     sprite_height = h;
@@ -2973,6 +2992,10 @@ void show_ov_bar(void)
     draw_a_line(0x1de, 0x30, 0x1de, 0xd0, 0x1f);
     draw_a_line(0x1df, 0x30, 0x1df, 0xd0, 0x12);
     setup_refresh_area(0x1e0, 0x1c, 0xa, 2, w);
+#endif
+#if PLATFORM_WINDOWS
+    }
+#endif
 }
 
 // Draw the legend for the active city analysis overlay.
