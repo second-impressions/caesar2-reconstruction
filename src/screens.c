@@ -2652,7 +2652,9 @@ void show_slave_allocation(void)
     font_no(slave_requirements[i].current, 0x20, " ",
             0x1ea, i * 0x18 + 0x16, font1, 0x10);
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0x18e, 6, 0x17, 0xe, 1);
+#endif
 }
 
 // Show the annual report, including the governor's appraisal and financial results.
