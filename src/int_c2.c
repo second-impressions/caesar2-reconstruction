@@ -846,7 +846,7 @@ void sa06_army_land_raid(void)
         }
     }
     army_list[army_no].return_flag = 1;
-    region_go_to_target(0);
+    if (region_go_to_target(0) == 0) return;
 }
 
 // Region-map army state-7: barbarian/raider land-invasion handler. Always targets the player's
