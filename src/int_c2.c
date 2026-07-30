@@ -2551,57 +2551,58 @@ ret999:
         }
     }
 
-    if (army_list[army_no].type < 2 || army_list[army_no].type > 5) return 0;
-
-    if ((terrain & 0x10) != 0) return 0;
-    if ((terrain & 2) != 0) {
-        army_list[army_no].flags |= 8;
-        return 0;
-    }
-    if ((terrain & 1) != 0) {
-        kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
-        if (kind >= 0x93 && kind <= 0x96) return 0;
-        else if (kind == 0x92) {
-            barbarian_invades_city(army_no);
-            army_list[army_no].state_idx = 2;
+    if (army_list[army_no].type >= 2 && army_list[army_no].type <= 5) {
+        if ((terrain & 0x10) != 0) return 0;
+        if ((terrain & 2) != 0) {
+            army_list[army_no].flags |= 8;
             return 0;
         }
-        else if (kind == 0x97) {
-            (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind = 0x93;
-            (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).gfx = 0x2e;
-            army_list[army_no].state_idx = 2;
-            put_message(0x71, target_offset, 0x13);
-            pax_romanum -= 0xc;
-            if (pax_romanum < 0) pax_romanum = 0;
-            return 0;
+        if ((terrain & 1) != 0) {
+            kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
+            if (kind >= 0x93 && kind <= 0x96) return 0;
+            else if (kind == 0x92) {
+                barbarian_invades_city(army_no);
+                army_list[army_no].state_idx = 2;
+                return 0;
+            }
+            else if (kind == 0x97) {
+                (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind = 0x93;
+                (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).gfx = 0x2e;
+                army_list[army_no].state_idx = 2;
+                put_message(0x71, target_offset, 0x13);
+                pax_romanum -= 0xc;
+                if (pax_romanum < 0) pax_romanum = 0;
+                return 0;
+            }
+            else {
+                destroy_reg_atom(target_offset);
+                army_list[army_no].target_x = army_list[army_no].x;
+                army_list[army_no].target_y = army_list[army_no].y;
+                pax_romanum -= 6;
+                if (pax_romanum < 0) pax_romanum = 0;
+                put_message(0x72, target_offset, 0x13);
+                return 0;
+            }
         }
-        else {
+        if ((terrain & 4) != 0) return 0;
+        if (army_a == 0) {
             destroy_reg_atom(target_offset);
-            army_list[army_no].target_x = army_list[army_no].x;
-            army_list[army_no].target_y = army_list[army_no].y;
-            pax_romanum -= 6;
-            if (pax_romanum < 0) pax_romanum = 0;
-            put_message(0x72, target_offset, 0x13);
-            return 0;
+            if ((terrain & 0x20) != 0) return 1;
+            return 2;
         }
-    }
-    if ((terrain & 4) != 0) return 0;
-    if (army_a == 0) {
-        destroy_reg_atom(target_offset);
-        if ((terrain & 0x20) != 0) return 1;
-        return 2;
-    }
-    if (army_list[army_a].type == 1) {
-        if (army_list[army_a].state_idx == 2) return 0;
-        get_contenders();
-        game_state  = 4;
-        battle_type = 1;
-    }
+        if (army_list[army_a].type == 1) {
+            if (army_list[army_a].state_idx == 2) return 0;
+            get_contenders();
+            game_state  = 4;
+            battle_type = 1;
+        }
 #if PLATFORM_DOS
-    goto ret999;
+        goto ret999;
 #else
-    return 0x3e7;
+        return 0x3e7;
 #endif
+    }
+    return 0;
 }
 
 // Test the neighbouring sea-map cell in compass direction `dir` for the current ship.
