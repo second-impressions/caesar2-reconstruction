@@ -2694,7 +2694,7 @@ int try_a_seamap_square(int direction, int movement_kind, int unused_arg)
 // FUNCTION: C2WIN 0x0040dc89
 int try_this_seamap_square(int cell_offset, int unused_kind, int unused_arg)
 {
-    char tile_flags;
+    unsigned char tile_flags;
     (void)unused_kind; (void)unused_arg;
 
     army_a = (*(struct region_cell *)((unsigned char *)region_map + (cell_offset))).occupant;
