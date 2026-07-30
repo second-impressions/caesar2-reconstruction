@@ -221,15 +221,18 @@ void get_selection_goods_list(int mode)
     }
     if (mode == 1) {
         for (i = 0; i < 3; i++) {
-            selection_goods_list[i] = region_sources[province_is].choices[i];
+            selection_goods_list[i] =
+                ((unsigned char *)region_sources)[province_is * 10 + 1 + i];
         }
     } else if (mode == 2) {
         for (i = 0; i < 3; i++) {
-            selection_goods_list[i] = region_sources[province_is].choices[3 + i];
+            selection_goods_list[i] =
+                ((unsigned char *)region_sources)[province_is * 10 + 4 + i];
         }
     } else if (mode == 3) {
         for (i = 0; i < 3; i++) {
-            selection_goods_list[i] = region_sources[province_is].choices[6 + i];
+            selection_goods_list[i] =
+                ((unsigned char *)region_sources)[province_is * 10 + 7 + i];
         }
     }
 }
