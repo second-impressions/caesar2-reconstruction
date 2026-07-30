@@ -262,8 +262,9 @@ int check_highlight_list(short goods_kind)
     return 0;
 }
 
-void click_warning(int, int, int);
-void confirm(int, int, int);
+void click_warning(int message_idx, int x, int y);
+void confirm(int message_idx, int x, int y);
+int exit_screen(void);
 void extended_confirm(int, int, int);
 
 // Draw the visible selection choices, including costs and selection or highlight colours.
@@ -680,6 +681,9 @@ void de_toggle_all_icons(struct icon_rec *icon_list, int icon_count)
 // Update button repeat and visual states, then handle toggle, momentary, and repeating clicks.
 // FUNCTION: C2 0x2e4f3
 // FUNCTION: C2WIN 0x004217c7
+void adjust(int message_idx, int *value_ptr, int step_value, int max_value, int min_value, int x, int y, int display_kind);
+int exit_screen_at(int, int);
+
 int control_buttons(int x, int y, struct button_rec *button_list, int button_count)
 {
     int i;
@@ -844,9 +848,10 @@ int over_item(struct menu_item_rec *item_list, int item_count, int x, int y)
     return 0;
 }
 
-void adjust(int message_idx, int *value_ptr, int step_value, int max_value, int min_value, int x, int y, int display_kind);
-int exit_screen(void);
-int exit_screen_at(int, int);
+#if PLATFORM_WINDOWS
+void get_text_string(int text_group, int text_word, char *destination);
+void show_native_message(void *window, char *message);
+#endif
 
 // Run a selection dialog and invoke the callback for the chosen visible entry.
 // FUNCTION: C2 0x2e8bb
@@ -934,8 +939,6 @@ extern char warning_text_1[];
 extern char warning_text_2[];
 extern char warning_message[];
 extern void *main_window;
-void get_text_string(int text_group, int text_word, char *destination);
-void show_native_message(void *window, char *message);
 extern unsigned char native_dialog_extended;
 extern char *confirm_yes_text;
 extern char *confirm_no_text;
