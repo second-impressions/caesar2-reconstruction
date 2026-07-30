@@ -2899,13 +2899,13 @@ int test_fire_zones(void)
     }
 
     if (zone_x > 0) {
-        if (fire_zones[zone_y * 10 + (zone_x - 1)] != 0) {
+        if ((fire_zones + zone_y * 10)[zone_x - 1] != 0) {
             zone_x = zone_x - 1;
             return 1;
         }
     }
     if (zone_x < 9) {
-        if (fire_zones[zone_y * 10 + (zone_x + 1)] != 0) {
+        if ((fire_zones + zone_y * 10)[zone_x + 1] != 0) {
             zone_x = zone_x + 1;
             return 1;
         }
