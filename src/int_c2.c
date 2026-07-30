@@ -2286,7 +2286,8 @@ int sail_to_target(int unused_kind)
     int cell_result;
     (void)unused_kind;
 
-    army_list[army_no].flags &= 0xf3;
+    army_list[army_no].flags &= 0xf7;
+    army_list[army_no].flags &= 0xfb;
 
     if ((army_list[army_no].flags & 1) != 0) {
         army_list[army_no].target_kind = 0;
