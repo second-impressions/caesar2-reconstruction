@@ -2599,63 +2599,51 @@ int try_a_seamap_square(int direction, int movement_kind, int unused_arg)
     switch (direction) {
     case 0:                                /* N */
         if (army_list[army_no].y <= 0)
-            result = 2;
-        else
-            result = try_this_seamap_square(army_list[army_no].map_ref - 0x1e0, movement_kind, unused_arg);
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref - 0x1e0, movement_kind, unused_arg);
         break;
     case 1:                                /* NE */
-        if (army_list[army_no].x < 0x3b) {
-            if (army_list[army_no].y <= 0)
-                result = 2;
-            else
-                result = try_this_seamap_square(army_list[army_no].map_ref - 0x1d8, movement_kind, unused_arg);
-        } else {
-            result = 2;
-        }
+        if (army_list[army_no].x >= 0x3b)
+            return 2;
+        if (army_list[army_no].y <= 0)
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref - 0x1d8, movement_kind, unused_arg);
         break;
     case 2:                                /* E */
-        if (army_list[army_no].x < 0x3b)
-            result = try_this_seamap_square(army_list[army_no].map_ref + 8, movement_kind, unused_arg);
-        else
-            result = 2;
+        if (army_list[army_no].x >= 0x3b)
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref + 8, movement_kind, unused_arg);
         break;
     case 3:                                /* SE */
-        if (army_list[army_no].x < 0x3b) {
-            if (army_list[army_no].y < 0x3b)
-                result = try_this_seamap_square(army_list[army_no].map_ref + 0x1e8, movement_kind, unused_arg);
-            else
-                result = 2;
-        } else {
-            result = 2;
-        }
+        if (army_list[army_no].x >= 0x3b)
+            return 2;
+        if (army_list[army_no].y >= 0x3b)
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref + 0x1e8, movement_kind, unused_arg);
         break;
     case 4:                                /* S */
-        if (army_list[army_no].y < 0x3b)
-            result = try_this_seamap_square(army_list[army_no].map_ref + 0x1e0, movement_kind, unused_arg);
-        else
-            result = 2;
+        if (army_list[army_no].y >= 0x3b)
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref + 0x1e0, movement_kind, unused_arg);
         break;
     case 5:                                /* SW */
         if (army_list[army_no].x <= 0)
-            result = 2;
-        else if (army_list[army_no].y < 0x3b)
-            result = try_this_seamap_square(army_list[army_no].map_ref + 0x1d8, movement_kind, unused_arg);
-        else
-            result = 2;
+            return 2;
+        if (army_list[army_no].y >= 0x3b)
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref + 0x1d8, movement_kind, unused_arg);
         break;
     case 6:                                /* W */
         if (army_list[army_no].x <= 0)
-            result = 2;
-        else
-            result = try_this_seamap_square(army_list[army_no].map_ref - 8, movement_kind, unused_arg);
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref - 8, movement_kind, unused_arg);
         break;
     case 7:                                /* NW */
         if (army_list[army_no].x <= 0)
-            result = 2;
-        else if (army_list[army_no].y <= 0)
-            result = 2;
-        else
-            result = try_this_seamap_square(army_list[army_no].map_ref - 0x1e8, movement_kind, unused_arg);
+            return 2;
+        if (army_list[army_no].y <= 0)
+            return 2;
+        result = try_this_seamap_square(army_list[army_no].map_ref - 0x1e8, movement_kind, unused_arg);
         break;
     }
     return result;
