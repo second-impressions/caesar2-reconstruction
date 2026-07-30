@@ -34,6 +34,7 @@ void gloop_start(void)
 // Finishes a UI frame by drawing the cursor, refreshing the screen, servicing audio, and updating
 // the elapsed input time.
 // FUNCTION: C2 0x3d9df FOLDED
+// FUNCTION: C2WIN 0x0040f810
 void gloop_end(void)
 {
     get_mouse_droppings();
@@ -47,6 +48,7 @@ void gloop_end(void)
 // Finishes a modal UI frame by drawing the cursor, refreshing the screen, servicing audio, and
 // updating the elapsed input time.
 // FUNCTION: C2 0x3d9df FOLDED
+// FUNCTION: C2WIN 0x0040f844
 void mloop_end(void)
 {
     get_mouse_droppings();
@@ -59,7 +61,7 @@ void mloop_end(void)
 
 // Finishes a forum frame, using the forum-hover cursor when a department is under the pointer.
 // FUNCTION: C2 0x3d3ae
-// FUNCTION: C2WIN 0x0040f844
+// FUNCTION: C2WIN 0x0040f878
 void floop_end(void)
 {
     get_mouse_droppings();
