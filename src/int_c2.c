@@ -2481,25 +2481,25 @@ int try_this_regionmap_square(int target_offset, int unused_kind, int unused_arg
 
     if (army_list[army_no].type == 1) {
         if ((terrain & 0x10) != 0) {
-            if (army_a == 0) {
+            if (army_a != 0) {
+                if (army_list[army_a].state_idx == 2) {
 #if PLATFORM_DOS
-                goto ret0;
+                    goto ret0;
 #else
-                return 0;
+                    return 0;
+#endif
+                }
+                if (army_list[army_a].type != 1) { get_contenders(); game_state = 4; battle_type = 1; }
+#if PLATFORM_DOS
+                goto ret999;
+#else
+                return 0x3e7;
 #endif
             }
-            if (army_list[army_a].state_idx == 2) {
 #if PLATFORM_DOS
-                goto ret0;
+            goto ret0;
 #else
-                return 0;
-#endif
-            }
-            if (army_list[army_a].type != 1) { get_contenders(); game_state = 4; battle_type = 1; }
-#if PLATFORM_DOS
-            goto ret999;
-#else
-            return 0x3e7;
+            return 0;
 #endif
         }
         if ((terrain & 1) != 0) {
