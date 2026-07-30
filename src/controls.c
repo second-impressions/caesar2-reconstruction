@@ -510,28 +510,31 @@ int slider_control(struct slider_rec *slider_list, int slider_count)
 // FUNCTION: C2WIN 0x004211f2
 void mid_slider_var(struct slider_rec *slider_ptr, int track_position)
 {
-    int slider_range, max_value, min_value;
-    int step_pixels, new_value;
+    int slider_range;
+    int maximum;
+    int min_value;
+    int step_value;
+    int new_value;
     int old_value;
 
     old_value = (signed char)*slider_ptr->value;
-    max_value = slider_ptr->max;
+    maximum = slider_ptr->max;
     min_value = slider_ptr->min;
-    step_pixels = slider_ptr->step_pixels;
+    step_value = slider_ptr->step_pixels;
     slider_range = slider_ptr->slider_range;
     slider_ptr->refresh_flag = 2;
     new_value = slider_range * track_position;
-    new_value /= step_pixels;
+    new_value /= step_value;
     *slider_ptr->value = new_value;
-    if ((signed char)*slider_ptr->value >= max_value) *slider_ptr->value = max_value;
+    if ((signed char)*slider_ptr->value >= maximum) *slider_ptr->value = maximum;
     if ((signed char)*slider_ptr->value < min_value) *slider_ptr->value = min_value;
-    if (new_value < old_value) *slider_ptr->complement += (char)(old_value - new_value);
+    if (new_value < old_value) *slider_ptr->complement += old_value - new_value;
     else if (new_value > old_value) {
         if ((signed char)*slider_ptr->complement < new_value - old_value) {
             *slider_ptr->value = (char)(old_value + (signed char)*slider_ptr->complement);
             *slider_ptr->complement = 0;
         }
-        else *slider_ptr->complement -= (char)(new_value - old_value);
+        else *slider_ptr->complement -= new_value - old_value;
     }
 }
 
