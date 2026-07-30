@@ -2166,11 +2166,10 @@ int region_go_to_target(int unused_kind)
         if (army_list[army_no].target_count > cell_result) {
             army_list[army_no].target_count = 0;
             army_list[army_no].target_kind++;
-            if (army_list[army_no].target_kind > 0xf) {
-                army_list[army_no].flags |= 1;
-                army_list[army_no].target_kind = 0;
-                goto branch_b;
-            }
+            if (army_list[army_no].target_kind <= 0xf) return 0;
+            army_list[army_no].flags |= 1;
+            army_list[army_no].target_kind = 0;
+            goto branch_b;
         }
         return 0;
     branch_b: ;
