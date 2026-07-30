@@ -2471,8 +2471,8 @@ int try_a_regionmap_square(int direction, int movement_kind, int unused_arg)
 int try_this_regionmap_square(int target_offset, int unused_kind, int unused_arg)
 {
     unsigned char terrain;
-    unsigned char base_kind;
-    int i;
+    unsigned char kind;
+    int count;
 
     (void)unused_kind; (void)unused_arg;
 
@@ -2481,19 +2481,35 @@ int try_this_regionmap_square(int target_offset, int unused_kind, int unused_arg
 
     if (army_list[army_no].type == 1) {
         if ((terrain & 0x10) != 0) {
-            if (army_a == 0) goto ret0;
-            if (army_list[army_a].state_idx == 2) goto ret0;
+            if (army_a == 0) {
+#if PLATFORM_DOS
+                goto ret0;
+#else
+                return 0;
+#endif
+            }
+            if (army_list[army_a].state_idx == 2) {
+#if PLATFORM_DOS
+                goto ret0;
+#else
+                return 0;
+#endif
+            }
             if (army_list[army_a].type != 1) { get_contenders(); game_state = 4; battle_type = 1; }
+#if PLATFORM_DOS
             goto ret999;
+#else
+            return 0x3e7;
+#endif
         }
         if ((terrain & 1) != 0) {
-            base_kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
-            if (base_kind >= 0x93 && base_kind <= 0x96) {
+            kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
+            if (kind >= 0x93 && kind <= 0x96) {
                 confirm(9, 0xa0, 0xa0);
                 if (decision == 1) {
                     battle_type   = 2;
                     battle2_ptr   = target_offset;
-                    get_villagers(base_kind - 0x92);
+                    get_villagers(kind - 0x92);
                     game_state    = 4;
                     army_list[army_no].target_x = army_list[army_no].x;
                     army_list[army_no].target_y = army_list[army_no].y;
@@ -2501,8 +2517,8 @@ int try_this_regionmap_square(int target_offset, int unused_kind, int unused_arg
                 else {
                     army_list[army_no].dest_y = 0;
                     army_list[army_no].dest_x = 0;
-                    for (i = 0; i < 10; i++) {
-                        army_routes[army_list[army_no].cohort_id].row_len[i] = 0;
+                    for (count = 0; count < 10; count++) {
+                        army_routes[army_list[army_no].cohort_id].row_len[count] = 0;
                     }
                     army_routes[army_list[army_no].cohort_id].row_count = 0;
                     army_routes[army_list[army_no].cohort_id].chase_row = 0;
@@ -2512,7 +2528,9 @@ int try_this_regionmap_square(int target_offset, int unused_kind, int unused_arg
                     army_list[army_no].order_progress = 0;
                 }
             }
+#if PLATFORM_DOS
 ret0:
+#endif
             return 0;
         }
         if ((terrain & 4) != 0) return 2;
@@ -2525,7 +2543,9 @@ ret0:
             if (army_list[army_a].state_idx == 2) return 0;
             get_contenders(); game_state = 4; battle_type = 1;
         }
+#if PLATFORM_DOS
 ret999:
+#endif
         return 0x3e7;
     }
 
@@ -2537,14 +2557,14 @@ ret999:
         return 0;
     }
     if ((terrain & 1) != 0) {
-        base_kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
-        if (base_kind >= 0x93 && base_kind <= 0x96) return 0;
-        if (base_kind == 0x92) {
+        kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
+        if (kind >= 0x93 && kind <= 0x96) return 0;
+        if (kind == 0x92) {
             barbarian_invades_city(army_no);
             army_list[army_no].state_idx = 2;
             return 0;
         }
-        if (base_kind == 0x97) {
+        if (kind == 0x97) {
             (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind = 0x93;
             (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).gfx = 0x2e;
             army_list[army_no].state_idx = 2;
@@ -2573,7 +2593,11 @@ ret999:
         game_state  = 4;
         battle_type = 1;
     }
+#if PLATFORM_DOS
     goto ret999;
+#else
+    return 0x3e7;
+#endif
 }
 
 // Test the neighbouring sea-map cell in compass direction `dir` for the current ship.
