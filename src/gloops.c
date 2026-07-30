@@ -39,7 +39,9 @@ void gloop_end(void)
 {
     get_mouse_droppings();
     show_mouse(pointer_mode);
+#if !PLATFORM_WINDOWS
     set_mouse_refresh();
+#endif
     refresh_svga_screen();
     continue_db();
     button_time_flag = running_delay1();
