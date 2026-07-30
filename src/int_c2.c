@@ -2776,7 +2776,8 @@ void move_army(void)
     case 1:
         army_list[army_no].y--;
         army_list[army_no].x++;
-        army_list[army_no].map_ref -= 0x1d8;
+        army_list[army_no].map_ref -= 0x1e0;
+        army_list[army_no].map_ref += 8;
         break;
     case 2:
         army_list[army_no].x++;
@@ -2785,7 +2786,8 @@ void move_army(void)
     case 3:
         army_list[army_no].y++;
         army_list[army_no].x++;
-        army_list[army_no].map_ref += 0x1e8;
+        army_list[army_no].map_ref += 0x1e0;
+        army_list[army_no].map_ref += 8;
         break;
     case 4:
         army_list[army_no].y++;
@@ -2794,7 +2796,8 @@ void move_army(void)
     case 5:
         army_list[army_no].y++;
         army_list[army_no].x--;
-        army_list[army_no].map_ref += 0x1d8;
+        army_list[army_no].map_ref += 0x1e0;
+        army_list[army_no].map_ref -= 8;
         break;
     case 6:
         army_list[army_no].x--;
@@ -2803,7 +2806,8 @@ void move_army(void)
     case 7:
         army_list[army_no].y--;
         army_list[army_no].x--;
-        army_list[army_no].map_ref -= 0x1e8;
+        army_list[army_no].map_ref -= 0x1e0;
+        army_list[army_no].map_ref -= 8;
         break;
     }
     if ((*(struct region_cell *)((unsigned char *)region_map + (army_list[army_no].map_ref))).occupant == 0)
