@@ -190,6 +190,7 @@ int control_buttons(int, int, struct button_rec *, int);
 int control_selection(struct selection_rec *selection_list,
                       int selection_count, int x, int y, int text_group);
 int over_selection(int, int, int);
+int over_item(struct menu_item_rec *item_list, int item_count, int x, int y);
 
 // Clear all goods highlights.
 // FUNCTION: C2 0x2d942
@@ -683,25 +684,24 @@ int control_buttons(int x, int y, struct button_rec *button_list, int button_cou
 {
     int i;
     int button_size;
-    int button_type;
-    struct button_rec *button_ptr;
+    struct button_rec *ptr;
+    int j;
 
-    button_ptr = button_list;
+    ptr = button_list;
     for (i = 0; i < button_count; i++) {
-        if (button_ptr->down != 0) {
-            if (button_ptr->repeat == 0) button_ptr->repeat = 1;
-            else if (button_time_flag != 0) button_ptr->repeat++;
+        if (ptr->down != 0) {
+            if (ptr->repeat == 0) ptr->repeat = 1;
+            else if (button_time_flag != 0) ptr->repeat++;
         } else {
-            button_ptr->repeat = 0;
+            ptr->repeat = 0;
         }
-        button_ptr->down = 0;
-        button_type = button_ptr->type;
-        if (button_type == 4) {
-            if (button_ptr->repeat == 0) button_ptr->state = 0;
-            if (button_ptr->state != 0) { para1 = button_ptr->para1; para2 = button_ptr->para2; button_ptr->callback(); }
+        ptr->down = 0;
+        if (ptr->type == 4) {
+            if (ptr->repeat == 0) ptr->state = 0;
+            if (ptr->state != 0) { para1 = ptr->para1; para2 = ptr->para2; ptr->callback(); }
         }
-        if (button_ptr->type == 3) button_ptr->state = 0;
-        button_ptr++;
+        if (ptr->type == 3) ptr->state = 0;
+        ptr++;
     }
 
     if (mouse_left_button == 0) return 0;
@@ -709,20 +709,19 @@ int control_buttons(int x, int y, struct button_rec *button_list, int button_cou
         button_size = button_list->size;
         if (button_list->x + x <= mouse_x && button_list->x + button_size + x > mouse_x)
         if (button_list->y + y <= mouse_y && button_list->y + button_size + y > mouse_y) {
-            int button_type = button_list->type;
-            if (button_type == 4) {
+            if (button_list->type == 4) {
                 button_list->down = 1;
                 if (button_list->repeat == 0) button_list->state = 1;
                 else if (button_time_flag != 0) {
-                    int repeat_count = button_list->repeat;
-                    if (repeat_count >= 0x30) { button_list->state = 1; button_list->repeat = 0x30; }
-                    else if (repeat_count < 8) button_list->state = 0;
-                    else if (button_speed_profile[repeat_count - 8] != 0) button_list->state = 1;
+                    if (button_list->repeat >= 0x30) { button_list->state = 1; button_list->repeat = 0x30; }
+                    else if (button_list->repeat < 8) button_list->state = 0;
+                    else if (*((unsigned char *)&steves_security_real
+                               + button_list->repeat + 0x14) != 0) button_list->state = 1;
                     else button_list->state = 0;
                 } else button_list->state = 0;
                 return i + 1;
             }
-            if (button_type == 2) {
+            else if (button_list->type == 2) {
                 button_list->down = 1;
                 if (button_list->repeat == 0) {
                     button_list->state ^= 1;
@@ -732,7 +731,7 @@ int control_buttons(int x, int y, struct button_rec *button_list, int button_cou
                 }
                 return i + 1;
             }
-            if (button_type == 3) {
+            else if (button_list->type == 3) {
                 button_list->down = 1;
                 button_list->state = 1;
                 if (button_list->repeat == 0) {
