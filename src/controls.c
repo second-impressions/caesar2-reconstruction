@@ -656,16 +656,18 @@ int control_icons(struct icon_rec *icon_list, int icon_count)
 void de_toggle_all_icons(struct icon_rec *icon_list, int icon_count)
 {
     int i;
-    int refresh_x;
-    int refresh_y;
+    int col_no;
+    int ry;
     for (i = 0; i < icon_count; i++) {
         icon_list->down = 0;
         ref_x = icon_list->x >> 4;
         ref_y = icon_list->y >> 4;
-        for (refresh_y = ref_y; refresh_y < ref_y + 3; refresh_y++)
-            for (refresh_x = ref_x; refresh_x < ref_x + 3; refresh_x++)
-                if (refresh_x + refresh_y * 40 <= 0x4b0)
-                    svga_refresh_table[refresh_x + refresh_y * 40] = 1;
+        for (ry = ref_y; ry < ref_y + 3; ry++) {
+            for (col_no = ref_x; col_no < ref_x + 3; col_no++) {
+                if (col_no + ry * 40 > 0x4b0) continue;
+                svga_refresh_table[col_no + ry * 40] = 1;
+            }
+        }
         icon_list++;
     }
 }
