@@ -2536,17 +2536,19 @@ ret0:
         if ((terrain & 4) != 0) return 2;
         if (army_a == 0) {
             if ((terrain & 0x20) != 0) return 1;
-            if ((terrain & 2) != 0) return 0;
-            return 2;
+            else if ((terrain & 2) != 0) return 0;
+            else return 2;
         }
-        if (army_list[army_a].type != 1) {
-            if (army_list[army_a].state_idx == 2) return 0;
-            get_contenders(); game_state = 4; battle_type = 1;
-        }
+        else {
+            if (army_list[army_a].type != 1) {
+                if (army_list[army_a].state_idx == 2) return 0;
+                get_contenders(); game_state = 4; battle_type = 1;
+            }
 #if PLATFORM_DOS
 ret999:
 #endif
-        return 0x3e7;
+            return 0x3e7;
+        }
     }
 
     if (army_list[army_no].type < 2 || army_list[army_no].type > 5) return 0;
