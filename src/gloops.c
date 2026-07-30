@@ -692,11 +692,11 @@ void forum_explanations(int department_idx, int highlight_flag)
     label_y = forum_menu[department_idx].y + 5;
     stone_random_count = 0xb;
     show_a_mosaic_blank(label_x, label_y, 9, 1);
-    if (highlight_flag == 0)
-        font_list(0x1d, department_idx, label_x + 4, label_y + 2, font1, 0x10);
-    else
-        font_list(0x1d, department_idx, label_x + 4, label_y + 2, font1, 0xb);
+    if (highlight_flag == 0) font_list(0x1d, department_idx, label_x + 4, label_y + 2, font1, 0x10);
+    else font_list(0x1d, department_idx, label_x + 4, label_y + 2, font1, 0xb);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(label_x, label_y, 0xa, 2, 1);
+#endif
 }
 
 // Polls input and refreshes one otherwise idle year-end frame.
