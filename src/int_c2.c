@@ -2154,13 +2154,13 @@ int region_go_to_target(int unused_kind)
         army_list[army_no].target_kind = 0;
         army_list[army_no].target_count = 0;
     } else {
-        if (army_list[army_no].target_flag == 0) {
+        if (army_list[army_no].target_flag != 0) {
+            cell_result = 0;
+        } else {
             if (army_list[army_no].type == 1)
                 cell_result = 2;
             else
                 cell_result = 3;
-        } else {
-            cell_result = 0;
         }
         army_list[army_no].target_count++;
         if (army_list[army_no].target_count > cell_result) {
