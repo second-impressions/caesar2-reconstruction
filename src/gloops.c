@@ -809,6 +809,11 @@ void skill2_game_loop(void)
 // difficulty.
 // FUNCTION: C2 0x3e502
 // FUNCTION: C2WIN 0x0041113a
+#if PLATFORM_WINDOWS
+#define INITREG_REGION_READY (region_over != 0 && empire[region_over - 1] == 2)
+#else
+#define INITREG_REGION_READY (region_over != 0 && (empire[region_over - 1] & 0xff) == 2)
+#endif
 void initreg_game_loop(void)
 {
 
@@ -819,11 +824,8 @@ void initreg_game_loop(void)
         show_empire_top_slab();
         if (region_over != 0) {
             x_is = 0;
-            if (known_world(region_over - 1)) {
-                font_centre(6, region_over, 0xd2, 0x1e, 0xdc, font1, 0x3f);
-            } else {
-                font_centre(0x30, 4, 0xd2, 0x1e, 0xdc, font1, 0x3f);
-            }
+            if (known_world(region_over - 1)) font_centre(6, region_over, 0xd2, 0x1e, 0xdc, font1, 0x3f);
+            else font_centre(0x30, 4, 0xd2, 0x1e, 0xdc, font1, 0x3f);
         } else {
             x_is = 0;
             font_list(0x22, 2, 0xd8, 0x1e, font1, 0x3f);
@@ -835,27 +837,23 @@ void initreg_game_loop(void)
     }
     gloop_end();
 
-    if (out2 > 1) {
-        out2 = out2 - 1;
-        goto end;
+    if (out2 > 1) { out2 = out2 - 1;
+        goto end; } if (mouse_left_click) {
+        if (INITREG_REGION_READY) {
+            this_region();
+            if (decision == 1) {
+                out2 = 0x64;
+                province_is = region_over - 1;
+                province_difficulty = empire_region_order[region_over + 10];
+                empire[region_over - 1] = 6;
+            }
+            reshow_initreg_box();
+        }
     }
-    if (!mouse_left_click)
-        goto end;
-    if (region_over == 0)
-        goto end;
-    if ((empire[region_over - 1] & 0xff) != 2)
-        goto end;
-
-    this_region();
-    if (decision == 1) {
-        out2 = 0x64;
-        province_is = region_over - 1;
-        province_difficulty = empire_region_order[region_over + 10];
-        empire[region_over - 1] = 6;
-    }
-    reshow_initreg_box();
 end:;
 }
+
+#undef INITREG_REGION_READY
 
 // Edits and redraws the province name, closing the entry field on Escape, Enter, or a right-click.
 // FUNCTION: C2 0x3e673
