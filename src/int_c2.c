@@ -2470,34 +2470,23 @@ int try_a_regionmap_square(int direction, int movement_kind, int unused_arg)
 // FUNCTION: C2WIN 0x0040d132
 int try_this_regionmap_square(int target_offset, int unused_kind, int unused_arg)
 {
-    unsigned char terr_bit_1;
     unsigned char terrain;
-    unsigned char terr_bit_4;
-    unsigned char terr_bit_2;
     unsigned char base_kind;
-    int army_type;
-    unsigned char terr_bit_20;
     int i;
 
     (void)unused_kind; (void)unused_arg;
 
     army_a      = (short)(*(struct region_cell *)((unsigned char *)region_map + (target_offset))).occupant;
     terrain     = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).terrain;
-    army_type        = army_list[army_no].type;
 
-    terr_bit_2  = terrain & 2;
-    terr_bit_20 = terrain & 0x20;
-    terr_bit_4  = terrain & 4;
-    terr_bit_1  = terrain & 1;
-
-    if (army_type == 1) {
+    if (army_list[army_no].type == 1) {
         if ((terrain & 0x10) != 0) {
             if (army_a == 0) goto ret0;
             if (army_list[army_a].state_idx == 2) goto ret0;
-            if (army_list[army_a].type != army_type) { get_contenders(); game_state = 4; battle_type = army_type; }
+            if (army_list[army_a].type != 1) { get_contenders(); game_state = 4; battle_type = 1; }
             goto ret999;
         }
-        if ((int)terr_bit_1) {
+        if ((terrain & 1) != 0) {
             base_kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
             if (base_kind >= 0x93 && base_kind <= 0x96) {
                 confirm(9, 0xa0, 0xa0);
@@ -2526,10 +2515,10 @@ int try_this_regionmap_square(int target_offset, int unused_kind, int unused_arg
 ret0:
             return 0;
         }
-        if ((int)terr_bit_4) return 2;
+        if ((terrain & 4) != 0) return 2;
         if (army_a == 0) {
-            if ((int)terr_bit_20) return 1;
-            if ((int)terr_bit_2) return 0;
+            if ((terrain & 0x20) != 0) return 1;
+            if ((terrain & 2) != 0) return 0;
             return 2;
         }
         if (army_list[army_a].type != 1) {
@@ -2540,14 +2529,14 @@ ret999:
         return 0x3e7;
     }
 
-    if (army_type < 2 || army_type > 5) return 0;
+    if (army_list[army_no].type < 2 || army_list[army_no].type > 5) return 0;
 
     if ((terrain & 0x10) != 0) return 0;
-    if ((int)terr_bit_2) {
+    if ((terrain & 2) != 0) {
         army_list[army_no].flags |= 8;
         return 0;
     }
-    if ((int)terr_bit_1) {
+    if ((terrain & 1) != 0) {
         base_kind = (*(struct region_cell *)((unsigned char *)region_map + (target_offset))).base_kind;
         if (base_kind >= 0x93 && base_kind <= 0x96) return 0;
         if (base_kind == 0x92) {
@@ -2572,10 +2561,10 @@ ret999:
         put_message(0x72, target_offset, 0x13);
         return 0;
     }
-    if ((int)terr_bit_4) return 0;
+    if ((terrain & 4) != 0) return 0;
     if (army_a == 0) {
         destroy_reg_atom(target_offset);
-        if ((int)terr_bit_20) return 1;
+        if ((terrain & 0x20) != 0) return 1;
         return 2;
     }
     if (army_list[army_a].type == 1) {
