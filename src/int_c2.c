@@ -2234,34 +2234,33 @@ int region_go_to_target(int unused_kind)
                 army_list[army_no].state_idx = 8;
                 army_list[army_no].stuck_timer = 0;
                 return 0;
+            } else {
+                if (army_list[army_no].flags & 8) {
+                    army_list[army_no].state_idx = 9;
+                    army_list[army_no].stuck_timer = 0;
+                    army_list[army_no].wf_phase = 0;
+                    put_message(0x5f, army_list[army_no].map_ref, 0x12);
+                    return 0;
+                }
+                clear_region_ferret_map(1, 0x3c,
+                                        (unsigned char *)region_map,
+                                        0x3c, 0x3c, 8,
+                                        army_list[army_no].x,
+                                        army_list[army_no].y,
+                                        army_list[army_no].target_x,
+                                        army_list[army_no].target_y);
+                if (run_2_map_ferrets(0x3c,
+                                      (unsigned char *)region_map,
+                                      0x3c, 0x3c, 8,
+                                      army_list[army_no].x,
+                                      army_list[army_no].y,
+                                      army_list[army_no].target_x,
+                                      army_list[army_no].target_y)
+                    == 0) {
+                    army_list[army_no].state_idx = 2;
+                    return 0;
+                }
             }
-            if (army_list[army_no].flags & 8) {
-                army_list[army_no].state_idx = 9;
-                army_list[army_no].stuck_timer = 0;
-                army_list[army_no].wf_phase = 0;
-                put_message(0x5f, army_list[army_no].map_ref, 0x12);
-                return 0;
-            }
-            clear_region_ferret_map(1, 0x3c,
-                                    (unsigned char *)region_map,
-                                    0x3c, 0x3c, 8,
-                                    army_list[army_no].x,
-                                    army_list[army_no].y,
-                                    army_list[army_no].target_x,
-                                    army_list[army_no].target_y);
-            if (run_2_map_ferrets(0x3c,
-                                  (unsigned char *)region_map,
-                                  0x3c, 0x3c, 8,
-                                  army_list[army_no].x,
-                                  army_list[army_no].y,
-                                  army_list[army_no].target_x,
-                                  army_list[army_no].target_y)
-                == 0) {
-                army_list[army_no].state_idx = 2;
-                return 0;
-            }
-            copy_ferret_run_to_army();
-            return 0;
         }
         copy_ferret_run_to_army();
         return 0;
