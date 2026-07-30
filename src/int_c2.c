@@ -2750,7 +2750,12 @@ int dock_the_ship_in_good_port(int heading)
         fill_warehouses_with(cell_x, cell_y, 0xf, size, 1);
     }
 
+#if PLATFORM_WINDOWS
+    if (was_sea_flag != 0) return 1;
+    return 0;
+#else
     return was_sea_flag != 0;
+#endif
 }
 
 // Step the current army one tile in its `world_dir` heading on the region map.
