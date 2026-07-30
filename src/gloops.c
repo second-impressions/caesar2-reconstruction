@@ -16,6 +16,28 @@ extern void draw_window_buffer(void *window, void *buffer, int source_x,
 extern void show_window_battle_landfill(int start_row, int row_count,
                                         int screen_x, int screen_y,
                                         unsigned char *buffer);
+extern unsigned char window_status[];
+extern unsigned char game_paused;
+extern void *main_window;
+extern unsigned char main_window_bitmap[];
+extern void update_window_date(void);
+extern void update_window_denarii(unsigned char force);
+extern void update_window_population(unsigned char force);
+extern void update_window_icon_text(unsigned char force);
+extern void cycle_map_colours(void);
+extern void cycle_window_colours(int start_idx, int end_idx, unsigned char *bitmap);
+extern void act_cohort_box(void *window);
+extern void act_non_cohort_box(void *window);
+extern void show_window_landfill(int screen_x, int screen_y);
+extern void city_mode_show_provmap(void);
+extern void prov_mode_show_citymap(void);
+extern void show_tutorial_timer(int refresh);
+extern void act_correct_map(void);
+extern void redraw_icon_bits(void);
+extern void show_ov_bar(void);
+extern void show_paused(void);
+extern void show_citymap(void);
+extern void show_regionmap(void);
 
 int game_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 int scroll_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
@@ -26,8 +48,13 @@ int scroll_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 #define SCROLL_SPEED_DELAY(delay) ((delay) * 50 + 20)
 #endif
 
+#if PLATFORM_WINDOWS
+extern unsigned char colour_cycle_delay1(int delay_ms);
+extern unsigned char colour_cycle_delay2(int delay_ms);
+#else
 extern int colour_cycle_delay1();
 extern int colour_cycle_delay2();
+#endif
 
 
 extern void put_a_font_string(char *text, int text_x, int text_y, unsigned char *font_ptr, int color);
@@ -109,41 +136,65 @@ void floop_end(void)
 // FUNCTION: C2WIN 0x0040fb4a
 void main_game_loop(void)
 {
-    int simulation_step_count;
-    int simulation_step_idx;
+    int i;
+    int loops;
 
     cycle_count++;
     button_time_flag = running_delay1();
 
     if (game_speed() != 0) {
         if (turbo_mode != 0)
-            simulation_step_count = 4;
+            loops = 4;
         else
-            simulation_step_count = 1;
-        for (simulation_step_idx = 0; simulation_step_idx < simulation_step_count; simulation_step_idx++) {
+            loops = 1;
+        for (i = 0; i < loops; i++) {
             do_32_count();
             random();
             citymap_evolution();
-            if (game_state == 3) return;
-            if (game_state == 2) return;
-            if (game_state == 1) return;
+            if (game_state == 3 || game_state == 2 || game_state == 1) return;
             citizen_intelligence();
             army_intelligence();
         }
     }
     cover_mouse_droppings();
+#if PLATFORM_WINDOWS
+    input_poll_active = 1;
+#endif
     get_mouse();
+#if PLATFORM_WINDOWS
+    input_poll_active = 0;
 
+    if (screen_switch_pending != 0) {
+        act_correct_map();
+        screen_switch_pending = 0;
+    } else {
+        if (exit_flag != 0) return;
+#endif
     if (turbo_mode > 1) {
         show_turbo_panel();
-    } else if (map_mode == 0) {
+    }
+#if PLATFORM_WINDOWS
+    else if (screen_mode == 0) {
+        if (window_status[0] == 1 && application_active == 1)
+            show_citymap();
+    } else if (screen_mode == 1 && pointer_mode != 5) {
+        if (window_status[1] == 1 && application_active == 1)
+            show_regionmap();
+    }
+#else
+    else if (map_mode == 0) {
         show_citymap();
     } else if (map_mode == 1 && pointer_mode != 5) {
         show_regionmap();
     }
+#endif
 
     if (turbo_mode < 2) {
+#if PLATFORM_WINDOWS
+        write_image(misc, map_direction / 2, 2, 2);
+#else
         write_image(misc, map_direction / 2, 0x1c4, 0x1a);
+#endif
         old_pm_over = pm_over;
         pm_over = get_pm_over_diamond(0);
         if (pm_over != 0 && pointer_mode == 0 && particles_built == 0) {
@@ -157,42 +208,89 @@ void main_game_loop(void)
         get_over_army();
     }
 
+#if PLATFORM_WINDOWS
+    if (application_active == 1) {
+        update_window_date();
+        update_window_denarii(0);
+        update_window_population(0);
+        update_window_icon_text(0);
+    }
+    show_ov_bar();
+    show_paused();
+#else
     show_top_line();
     show_icon_strip();
     show_tutorial_timer();
     show_ov_bar();
     show_paused();
     show_querymode_panel();
+#endif
 
     if (pointer_mode == 5) {
         if (gen_refresh1) {
+#if PLATFORM_WINDOWS
+            if (army_list[tracking_army].type == 1) {
+                reg_placing_type = 0;
+                reg_placing_flags = 0;
+                placing_type = 0;
+                placing_flags = 0;
+                pm_build_shape = 0;
+                selected_icon_text = 0;
+                last_icon_used = 0;
+                last_icon_over = 0;
+                total_build_cost = 0;
+                placing_cost = 0;
+                update_window_icon_text(1);
+                act_cohort_box(main_window);
+            } else {
+                act_non_cohort_box(main_window);
+            }
+#else
             if (army_list[tracking_army].type == 1) {
                 show_cohort_box();
             } else {
                 show_non_cohort_box();
             }
+#endif
             gen_refresh1 = 0;
         }
+#if !PLATFORM_WINDOWS
         if (army_list[tracking_army].type == 1)
             update_tribune_flag(0);
         if (army_list[tracking_army].type == 1)
             show_buttons(0x190, 0x82, cohort_buttons, 1);
+#endif
     }
 
+#if !PLATFORM_WINDOWS
     if (scrolling)
         setup_map_screen_refresh();
+#endif
 
     if (update_landfill) {
+#if PLATFORM_WINDOWS
+        show_window_landfill(com_x, com_y);
+#else
         show_landfill(com_x, com_y);
         setup_refresh_area(0x1e0, 0x30, 0xa, 0xb, 1);
+#endif
         update_landfill--;
     }
 
     redraw_icon_bits();
     get_mouse_droppings();
 
+#if PLATFORM_WINDOWS
+    show_tutorial_timer(1);
+    if (application_active == 1) {
+        if (!scrolling && colour_cycle_delay1(0x12c) != 0 && game_paused == 0)
+            cycle_map_colours();
+        if (!scrolling && colour_cycle_delay2(0x96) != 0 && game_paused == 0)
+            cycle_window_colours(0x50, 0x55, main_window_bitmap);
+#else
     if (pm_over != 0)
         refresh_a_square(pm_over_x >> 4, pm_over_y >> 4, 2);
+#endif
 
     /* Select the cursor for the active tool and hovered map object. */
     if (flag_mode) {
@@ -208,7 +306,16 @@ void main_game_loop(void)
     } else {
         show_mouse(mouse_styles[pointer_mode]);
     }
+#if !PLATFORM_WINDOWS
     set_mouse_refresh();
+#endif
+#if PLATFORM_WINDOWS
+    if (screen_mode == 0 && window_status[0] == 1)
+        refresh_svga_screen();
+    else if (screen_mode == 1 && window_status[1] == 1)
+        refresh_svga_screen();
+    }
+#else
     refresh_svga_screen();
 
     if (!scrolling && colour_cycle_delay1(0x3c) != 0 && c2inf.paused == 0) {
@@ -222,11 +329,14 @@ void main_game_loop(void)
     if (!scrolling && colour_cycle_delay2(0x96) != 0 && c2inf.paused == 0 && map_mode == 0) {
         cycle_colours(0x50, 0x55);
     }
+#endif
 
     if (stopped_scrolling) {
         update_landfill = 1;
         clear_edge_info();
+#if !PLATFORM_WINDOWS
         setup_whole_screen_refresh();
+#endif
         update_map = 1;
     }
 
@@ -237,6 +347,15 @@ void main_game_loop(void)
         flag_mode_action();
     else
         action();
+
+#if PLATFORM_WINDOWS
+    if (application_active == 1 && screen_mode == 0 &&
+        tutorial_mode == 0 && turbo_mode == 0)
+        city_mode_show_provmap();
+    else if (application_active == 1 && screen_mode == 1 &&
+             tutorial_mode == 0 && turbo_mode == 0)
+        prov_mode_show_citymap();
+#endif
 
     if (hot_exit_flag) {
         act_exit_game();
@@ -249,14 +368,27 @@ void main_game_loop(void)
         flag_mode_decay_count = flag_mode_decay_count - 1;
         if (flag_mode_decay_count <= 0) {
             flag_mode = 0;
+#if !PLATFORM_WINDOWS
             setup_map_screen_refresh();
+#endif
         }
     }
-    if (!mouse_left_button)
+    if (!mouse_left_button
+#if PLATFORM_WINDOWS
+        && application_active == 1
+#endif
+    )
         show_messages();
     pm_limits();
+#if PLATFORM_WINDOWS
+    if (application_active == 1) {
+#endif
     play_ambient_fx();
     continue_db();
+#if PLATFORM_WINDOWS
+    }
+    }
+#endif
 }
 
 // Advances battle units when due, renders the battle map and panels, handles battle input, and
