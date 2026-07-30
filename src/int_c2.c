@@ -3073,55 +3073,65 @@ int is_fire_covered(int cell_offset)
 // FUNCTION: C2WIN 0x0040efad
 void get_population_and_industry_count(int radius, int demand_mode)
 {
-    int y_start;
-    int x_start;
-    int width;
+    int ypos;
+    int xpos;
+    int w;
     int height;
-    int row_inc;
-    unsigned char count_pop;
-    unsigned char count_industry;
+    int rowinc;
+    unsigned char pop_count;
+    unsigned char industrial_count;
     unsigned char count_other;
-    unsigned char base_kind;
-    unsigned char education_flags;
+    unsigned char type;
+    unsigned char edu_flags;
 
-    x_start = citizen_list[citizen_no].x - radius;
-    y_start = citizen_list[citizen_no].y - radius;
-    width = height = 2 * radius + 1;
+    xpos = citizen_list[citizen_no].x - radius;
+    ypos = citizen_list[citizen_no].y - radius;
+    w = height = 2 * radius + 1;
 
-    if (x_start < 0) {
-        width += x_start;
-        x_start = 0;
-    } else if (x_start + width > 0x50) {
-        width -= (x_start + width) - 0x50;
+    if (xpos < 0) {
+        w += xpos;
+        xpos = 0;
+    } else if (xpos + w > 0x50) {
+        w -= (xpos + w) - 0x50;
     }
-    if (y_start < 0) {
-        height += y_start;
-        y_start = 0;
-    } else if (y_start + height > 0x50) {
-        height -= (y_start + height) - 0x50;
+    if (ypos < 0) {
+        height += ypos;
+        ypos = 0;
+    } else if (ypos + height > 0x50) {
+        height -= (ypos + height) - 0x50;
     }
 
-    gmn_sptr = 20 * (x_start + y_start * 0x50);
-    row_inc = 20 * (0x50 - width);
+    gmn_sptr = 20 * (xpos + ypos * 0x50);
+    rowinc = 20 * (0x50 - w);
 
-    count_industry = count_pop = count_other = 0;
+    industrial_count = pop_count = count_other = 0;
 
-    for (gmn_y = y_start; gmn_y < y_start + height; gmn_y++, gmn_sptr += row_inc) {
-        for (gmn_x = x_start; gmn_x < x_start + width; gmn_x++, gmn_sptr += 20) {
-            base_kind = ((struct city_cell *)((unsigned char *)city_map + gmn_sptr))->base_kind;
-            education_flags  = ((struct city_cell *)((unsigned char *)city_map + gmn_sptr))->education;
-            if (base_kind >= 0x82 && base_kind <= 0xa1) count_industry++;
-            if (education_flags & 0x80) count_pop   += 2;
-            if (education_flags & 0x40) count_other += 3;
+    for (gmn_y = ypos; gmn_y < ypos + height; gmn_y++, gmn_sptr += rowinc) {
+        for (gmn_x = xpos; gmn_x < xpos + w; gmn_x++, gmn_sptr += 20) {
+            type = ((struct city_cell *)((unsigned char *)city_map + gmn_sptr))->base_kind;
+            edu_flags = ((struct city_cell *)((unsigned char *)city_map + gmn_sptr))->education;
+            if (type >= 0x82 && type <= 0xa1) {
+#if PLATFORM_WINDOWS
+                industrial_count = industrial_count + 1;
+#else
+                industrial_count++;
+#endif
+            }
+            if (edu_flags & 0x80) pop_count += 2;
+            if (edu_flags & 0x40) count_other += 3;
         }
     }
 
     /* Saturating bump for market_demand_a. */
-    citizen_list[citizen_no].market_demand_a += count_industry;
+    citizen_list[citizen_no].market_demand_a += industrial_count;
     if (citizen_list[citizen_no].market_demand_a > 4) {
         citizen_list[citizen_no].market_demand_a -= 2;
     } else if (citizen_list[citizen_no].market_demand_a > 0) {
+#if PLATFORM_WINDOWS
+        citizen_list[citizen_no].market_demand_a = citizen_list[citizen_no].market_demand_a - 1;
+#else
         citizen_list[citizen_no].market_demand_a--;
+#endif
     }
     if (citizen_list[citizen_no].market_demand_a > 0x64) {
         citizen_list[citizen_no].market_demand_a = 0x64;
@@ -3129,12 +3139,16 @@ void get_population_and_industry_count(int radius, int demand_mode)
 
     /* Bump for market_demand_b. */
     if (demand_mode != 0) {
-        citizen_list[citizen_no].market_demand_b += count_pop;
+        citizen_list[citizen_no].market_demand_b += pop_count;
     } else {
         citizen_list[citizen_no].market_demand_b += count_other;
     }
     if (citizen_list[citizen_no].market_demand_b > 0) {
+#if PLATFORM_WINDOWS
+        citizen_list[citizen_no].market_demand_b = citizen_list[citizen_no].market_demand_b - 1;
+#else
         citizen_list[citizen_no].market_demand_b--;
+#endif
     }
     if (citizen_list[citizen_no].market_demand_b > 0x64) {
         citizen_list[citizen_no].market_demand_b = 0x64;
