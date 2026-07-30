@@ -3169,7 +3169,11 @@ int get_nearest_reg_building(void)
     int best_y;
 
     min_dist = 0x3e8; best_x = best_y = 0;
+#if PLATFORM_WINDOWS
     gmn_sptr = 0; gmn_y = 0;
+#else
+    gmn_y = 0; gmn_sptr = 0;
+#endif
     for ( ; gmn_y < 0x3c; gmn_y++) {
     for (gmn_x = 0; gmn_x < 0x3c; gmn_x++, gmn_sptr += 8) {
     building_type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
