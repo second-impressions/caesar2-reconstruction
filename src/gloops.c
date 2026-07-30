@@ -4,6 +4,19 @@
 int mouse_styles[10] = { 0, 1, 2, 3, 9, 0, 2, 3, 4, 4 };
 
 #if PLATFORM_WINDOWS
+int screen_switch_pending;
+extern int application_active;
+extern unsigned char input_poll_active;
+extern void *map_window;
+extern unsigned char *window_buffer;
+extern unsigned char map_window_bitmap[];
+extern void draw_window_buffer(void *window, void *buffer, int source_x,
+                               int source_y, int width, int height,
+                               int dest_x, int dest_y);
+extern void show_window_battle_landfill(int start_row, int row_count,
+                                        int screen_x, int screen_y,
+                                        unsigned char *buffer);
+
 int game_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 int scroll_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 #define GAME_SPEED_DELAY(delay) game_speed_delays[delay]
@@ -250,12 +263,25 @@ void main_game_loop(void)
 // services screen and audio updates for one frame.
 // FUNCTION: C2 0x3d816
 // FUNCTION: C2WIN 0x004101e4
+#if PLATFORM_WINDOWS
+#define BATTLE_SCREEN_REFRESH()
+#define WHOLE_SCREEN_REFRESH()
+#else
+#define BATTLE_SCREEN_REFRESH() setup_battle_screen_refresh()
+#define WHOLE_SCREEN_REFRESH() setup_whole_screen_refresh()
+#endif
 void battle_game_loop(void)
 {
     cycle_count++;
     button_time_flag = running_delay1();
+#if PLATFORM_WINDOWS
+    if (application_active == 1) {
+#endif
     figure_update();
     get_units_status();
+#if PLATFORM_WINDOWS
+    }
+#endif
     random();
 
     if (game_speed() != 0 || battle_turbo != 0) {
@@ -269,68 +295,106 @@ void battle_game_loop(void)
         }
     }
     cover_mouse_droppings();
+#if PLATFORM_WINDOWS
+    input_poll_active = 1;
+#endif
     get_mouse();
+#if PLATFORM_WINDOWS
+    input_poll_active = 0;
 
+    if (screen_switch_pending != 0) {
+        screen_switch_pending = 0;
+    } else {
+#endif
     if (battle_setup_count != 0) {
         battle_setup_count--;
-        if (battle_setup_count <= 1) {
-            setup_battle_screen_refresh();
-            update_map = 1;
-        }
+        if (battle_setup_count <= 1) { BATTLE_SCREEN_REFRESH(); update_map = 1; }
     }
 
-    if (battle_turbo == 0 || scrolling != 0) {
-        show_battlemap();
-    } else {
-        battle_turbo_count++;
-        if (battle_turbo_count > 0x14) {
+#if PLATFORM_WINDOWS
+    if (application_active == 1) {
+#endif
+    if (battle_turbo == 0 || scrolling != 0) { show_battlemap();
+    } else { battle_turbo_count++; if (battle_turbo_count > 0x14) {
             battle_turbo_count = 0;
             show_battlemap();
-            setup_battle_screen_refresh();
+            BATTLE_SCREEN_REFRESH();
         }
     }
 
+#if PLATFORM_WINDOWS
+    write_image(misc, map_direction / 2, 2, 2);
+#else
     write_image(misc, map_direction / 2, 0x264, 0x1a);
+#endif
     old_pm_over = pm_over;
     pm_over = get_pm_over_diamond(0);
     show_top_line();
     battle_totals_panel();
     battle_stats_panel();
 
-    if (scrolling)
-        setup_battle_screen_refresh();
+#if !PLATFORM_WINDOWS
+    if (scrolling) setup_battle_screen_refresh();
+#endif
 
+#if PLATFORM_WINDOWS
     if (update_landfill) {
-        show_battle_landfill(0, 0x34, 0xb1, 0x170);
+        show_window_battle_landfill(0, 0x34, 6, 9, window_buffer);
+        draw_window_buffer(map_window, map_window_bitmap, 0, 0, 0x6e, 0x72, 0, 0);
         update_landfill--;
     } else {
         update_battle_landfill();
+        draw_window_buffer(map_window, map_window_bitmap, 0, 0, 0x6e, 0x72, 0, 0);
     }
+#else
+    if (update_landfill) {
+        show_battle_landfill(0, 0x34, 0xb1, 0x170);
+        update_landfill--;
+    } else { update_battle_landfill(); }
+#endif
+#if PLATFORM_WINDOWS
+    }
+#endif
 
     redraw_icon_bits();
     get_mouse_droppings();
+#if PLATFORM_WINDOWS
+    if (application_active == 1) {
+        show_mouse(mouse_styles[0]);
+        refresh_svga_screen();
+    }
+#else
     show_mouse(mouse_styles[0]);
     set_mouse_refresh();
     refresh_svga_screen();
+#endif
 
-    if (stopped_scrolling) {
-        update_landfill = 1;
-        clear_edge_info();
-        setup_whole_screen_refresh();
-    }
+    if (stopped_scrolling) { update_landfill = 1; clear_edge_info(); WHOLE_SCREEN_REFRESH(); }
     battle_action();
-
-    if (hot_exit_flag) {
-        act_exit_game();
-        hot_exit_flag = 0;
+#if PLATFORM_WINDOWS
     }
+#endif
+
+    if (hot_exit_flag) { act_exit_game(); hot_exit_flag = 0; }
+#if PLATFORM_WINDOWS
+    if (restart_flag != 0) return;
+    pm_limits();
+    if (application_active == 1) {
+#else
     if (restart_flag == 0) {
         pm_limits();
-        if (battle_turbo == 0)
-            play_ambient_fx();
+#endif
+        if (battle_turbo == 0) play_ambient_fx();
         continue_db();
+#if PLATFORM_WINDOWS
     }
+#else
+    }
+#endif
 }
+
+#undef BATTLE_SCREEN_REFRESH
+#undef WHOLE_SCREEN_REFRESH
 
 // Provides an empty hook for drawing content above the mouse cursor.
 // FUNCTION: C2 0x3d9d9

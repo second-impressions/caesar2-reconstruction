@@ -229,7 +229,7 @@ unsigned char pre_loaded_status;
 unsigned char continue_tutorial_status;
 unsigned char file_loaded_status;
 char map_gfx_loaded;
-char hot_exit_flag;
+unsigned char hot_exit_flag;
 unsigned char decision;
 char confirming;
 unsigned char exit_flag;

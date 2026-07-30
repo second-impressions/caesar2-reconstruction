@@ -792,7 +792,7 @@ unsigned char redraw_icons;
 unsigned char gen_refresh1;
 unsigned char gen_refresh3;
 unsigned char gen_refresh2;
-char stopped_scrolling;
+unsigned char stopped_scrolling;
 char gen_refresh4;
 char old_map_mode;
 unsigned char redraw_topline;

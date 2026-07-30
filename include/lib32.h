@@ -269,7 +269,7 @@ extern unsigned char font1[];
 extern int rand32000;
 extern int rand8;
 extern unsigned char format_buffer[];
-extern char hot_exit_flag;
+extern unsigned char hot_exit_flag;
 extern unsigned char decision;
 extern char confirming;
 extern unsigned char exit_flag;

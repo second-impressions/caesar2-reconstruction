@@ -65,7 +65,7 @@ extern unsigned char gen_refresh1;
 extern unsigned char gen_refresh3;
 extern unsigned char gen_refresh2;
 extern char gen_refresh4;
-extern char stopped_scrolling;
+extern unsigned char stopped_scrolling;
 extern char old_map_mode;
 extern unsigned char redraw_topline;
 
