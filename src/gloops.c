@@ -858,38 +858,42 @@ end:;
 // Edits and redraws the province name, closing the entry field on Escape, Enter, or a right-click.
 // FUNCTION: C2 0x3e673
 // FUNCTION: C2WIN 0x004112b7
+#if PLATFORM_WINDOWS
+#define NAME_FIELD_Y 0xe0
+#define SET_NAME_FIELD_Y()
+#else
+#define NAME_FIELD_Y field_y
+#define SET_NAME_FIELD_Y() field_y = 0xe0
+#endif
 void new_name_game_loop(void)
 {
+#if !PLATFORM_WINDOWS
     int field_y;
+#endif
 
     hold_hot_keys = 1;
     gloop_start();
-    if (edit_format_buffer())
-        out2 = 1;
+    if (edit_format_buffer()) out2 = 1;
     get_fb_length();
     out_format_buffer(c2inf.player_name);
-    got_cursx = 0;
-    cursor_x = 0;
-    fb_count = 0;
-    field_y = 0xe0;
-    cursor_y = field_y;
-    allow_padding = 1;
-    x_is = 0;
-    show_a_system_blank(field_y, 0xd8, 0xc, 2);
-    put_a_font_string(c2inf.player_name, 0xe2, field_y, font1, 0x10);
+    fb_count = cursor_x = got_cursx = 0; SET_NAME_FIELD_Y(); cursor_y = NAME_FIELD_Y; allow_padding = 1; x_is = 0;
+    show_a_system_blank(NAME_FIELD_Y, 0xd8, 0xc, 2);
+    put_a_font_string(c2inf.player_name, 0xe2, NAME_FIELD_Y, font1, 0x10);
     fb_max_width_reached = (get_fb_width(font1) > fb_line_length);
-    if (got_cursx == 0) {
-        cursor_x = x_is;
-        got_cursx = 1;
-    }
+    if (got_cursx == 0) { cursor_x = x_is; got_cursx = 1; }
     cursor_x += 0xe2;
     show_cursor(font1);
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0xe0, 0xd0, 0xc, 3, 1);
+#endif
     if (key_ascii == 0x1b) out2 = 1;
     if (key_ascii == 0xd)  out2 = 1;
     if (mouse_right_click) out2 = 1;
     gloop_end();
 }
+
+#undef NAME_FIELD_Y
+#undef SET_NAME_FIELD_Y
 
 // Displays and handles the help-screen controls for one frame.
 // FUNCTION: C2 0x3e7b1
