@@ -60,11 +60,6 @@
  * against CAESAR2.EXE machine code, 2026-07-17). */
 #define C2_FEAT_TILE_REFRESH      PLATFORM_DOS
 
-/* The DOS build draws the top-bar menus into the software framebuffer.
- * The Windows port retains that renderer but returns before entering it
- * (verified at C2WIN 0x41ff90 vs C2 0x2d4a5). */
-#define C2_FEAT_SOFTWARE_MENUS    PLATFORM_DOS
-
 /* The Windows build-A rotate handlers clamp the pseudo-map viewport
  * with a pm_limits() tail call that the DOS build does not make
  * (verified at C2WIN 0x4b6f46 / 0x4b6f99). */

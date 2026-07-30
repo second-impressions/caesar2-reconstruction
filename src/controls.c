@@ -38,7 +38,7 @@ void show_menus(struct menu_rec *menu_list, int menu_count, int active_menu_idx)
     int refresh_width;
     int tile_rows;
 
-#if !C2_FEAT_SOFTWARE_MENUS
+#if PLATFORM_WINDOWS
     return;
 #endif
     cover_mouse_droppings();
