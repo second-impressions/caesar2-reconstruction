@@ -3,6 +3,13 @@
 
 int mouse_styles[10] = { 0, 1, 2, 3, 9, 0, 2, 3, 4, 4 };
 
+#if PLATFORM_WINDOWS
+int scroll_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
+#define SCROLL_SPEED_DELAY(delay) scroll_speed_delays[delay]
+#else
+#define SCROLL_SPEED_DELAY(delay) ((delay) * 50 + 20)
+#endif
+
 extern int colour_cycle_delay1();
 extern int colour_cycle_delay2();
 
@@ -969,11 +976,23 @@ int scroll_speed(void)
 
     cmu_count[2] += button_time_flag;
     scroll_delay = (100 - c2inf.scroll_speed) / 10;
+#if PLATFORM_WINDOWS
+    if (scroll_delay >= 10)
+        return 0;
+    if (SCROLL_SPEED_DELAY(scroll_delay) <= cmu_count[2]) {
+        cmu_count[2] = 0;
+        return 1;
+    }
+    return 0;
+#else
     if (scroll_delay < 10) {
-        if (scroll_delay * 50 + 20 <= cmu_count[2]) {
+        if (SCROLL_SPEED_DELAY(scroll_delay) <= cmu_count[2]) {
             cmu_count[2] = 0;
             return 1;
         }
     }
     return 0;
+#endif
 }
+
+#undef SCROLL_SPEED_DELAY
