@@ -2768,7 +2768,6 @@ void move_army(void)
     army_list[army_no].home_ref = army_list[army_no].map_ref;
 
     switch (army_list[army_no].world_dir) {
-    default: return;
     case 0:
         army_list[army_no].y--;
         army_list[army_no].map_ref -= 0x1e0;
@@ -2808,6 +2807,9 @@ void move_army(void)
         army_list[army_no].x--;
         army_list[army_no].map_ref -= 0x1e0;
         army_list[army_no].map_ref -= 8;
+        break;
+    default:
+        return;
         break;
     }
     if ((*(struct region_cell *)((unsigned char *)region_map + (army_list[army_no].map_ref))).occupant == 0)
