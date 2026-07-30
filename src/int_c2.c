@@ -2293,8 +2293,9 @@ int sail_to_target(int unused_kind)
         army_list[army_no].target_kind = 0;
         army_list[army_no].target_count = 0;
     } else {
+        cell_result = 2;
         army_list[army_no].target_count++;
-        if (army_list[army_no].target_count > 2) {
+        if (army_list[army_no].target_count > cell_result) {
             army_list[army_no].target_count = 0;
             army_list[army_no].target_kind++;
             if (army_list[army_no].target_kind <= 0xf) {
