@@ -2,6 +2,28 @@
 #include "c2_data.h"
 #include "c2_types.h"
 
+#if PLATFORM_WINDOWS
+/* Window state exported by the native user-interface layer. */
+extern int selection_menu;
+extern void *main_window;
+extern void *active_window;
+extern unsigned char shifted_mouse_click;
+extern unsigned long tutorial_start_time;
+extern void *game_window;
+extern void *status_window;
+extern void *map_window;
+extern int game_window_x;
+extern int game_window_y;
+extern int game_window_width;
+extern int game_window_height;
+extern int status_window_x;
+extern int status_window_y;
+extern char city_window_title[];
+extern char main_window_title[];
+extern char *tutorial_window_title;
+extern unsigned char battle_window_mode;
+#endif
+
 /* File-local state. */
 int age_count;
 
@@ -31,7 +53,6 @@ void move_citizen(void);
 void change_citizen_targs(int target_delta);
 void random_target(void);
 void target_from_dirc(int direction);
-void get_dirc_from_army_wf_run(void);
 void copy_ferret_run_to_army(void);
 void move_army(void);
 void get_population_and_industry_count(int radius, int demand_mode);
@@ -2007,6 +2028,8 @@ void random_target(void)
 // Choose a neighbouring road, preferring an unoccupied direction that does not reverse course.
 // FUNCTION: C2 0x49184
 // FUNCTION: C2WIN 0x0040b607
+void get_dirc_from_army_wf_run(void);
+
 int city_test_for_road(int cell_x, int cell_y, int cell_offset, signed char heading)
 {
     char road_list[8][3];
