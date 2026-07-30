@@ -1534,17 +1534,18 @@ int citizen_go_to_target(int movement_kind)
 // Advance the current citizen toward its destination, using a calculated route when blocked.
 // FUNCTION: C2 0x48569
 // FUNCTION: C2WIN 0x00409815
-int citizen_maraude_to_target(int movement_kind)
+int citizen_maraude_to_target(int kind)
 {
-    int movement_value;
+    int result;
 
+#if PLATFORM_WINDOWS
     if (citizen_list[citizen_no].flag_bits & 1) {
         citizen_list[citizen_no].speed_count = 0; citizen_list[citizen_no].speed_phase = 0;
     } else {
-        if (citizen_list[citizen_no].is_barbarian) movement_value = citizen_speed_on_road[citizen_list[citizen_no].type];
-        else movement_value = citizen_speed_off_road[citizen_list[citizen_no].type];
+        if (citizen_list[citizen_no].is_barbarian) result = citizen_speed_on_road[citizen_list[citizen_no].type];
+        else result = citizen_speed_off_road[citizen_list[citizen_no].type];
         citizen_list[citizen_no].speed_phase++;
-        if (citizen_list[citizen_no].speed_phase > movement_value) {
+        if (citizen_list[citizen_no].speed_phase > result) {
             citizen_list[citizen_no].speed_phase = 0; citizen_list[citizen_no].speed_count++;
             if (citizen_list[citizen_no].speed_count > 0xf) {
                 citizen_list[citizen_no].flag_bits |= 1;
@@ -1553,6 +1554,22 @@ int citizen_maraude_to_target(int movement_kind)
         }
         return 1;
     }
+#else
+    if ((citizen_list[citizen_no].flag_bits & 1) == 0) {
+        if (citizen_list[citizen_no].is_barbarian) result = citizen_speed_on_road[citizen_list[citizen_no].type];
+        else result = citizen_speed_off_road[citizen_list[citizen_no].type];
+        citizen_list[citizen_no].speed_phase = citizen_list[citizen_no].speed_phase + 1;
+        if (citizen_list[citizen_no].speed_phase > result) {
+            citizen_list[citizen_no].speed_phase = 0; citizen_list[citizen_no].speed_count++;
+            if (citizen_list[citizen_no].speed_count > 0xf) {
+                citizen_list[citizen_no].flag_bits |= 1;
+            }
+        }
+        return 1;
+    }
+
+    citizen_list[citizen_no].speed_count = 0; citizen_list[citizen_no].speed_phase = 0;
+#endif
 
     if (citizen_list[citizen_no].action_kind == 0) return 1;
 
@@ -1567,16 +1584,16 @@ int citizen_maraude_to_target(int movement_kind)
 
     if (citizen_list[citizen_no].wf_active) get_dirc_from_citizen_wf_run();
 
-    movement_value = try_a_citymap_square(w_dirc, movement_kind, 0);
+    result = try_a_citymap_square(w_dirc, kind, 0);
 
-    if (movement_value == 0x3e7 || (movement_value == 0 && citizen_list[citizen_no].wf_active)) {
+    if (result == 0x3e7 || (result == 0 && citizen_list[citizen_no].wf_active)) {
         citizen_list[citizen_no].world_dir = (char)((citizen_list[citizen_no].world_dir + 1) & 7);
         if (citizen_list[citizen_no].wf_active) citizen_list[citizen_no].wf_active = 0;
         else { citizen_list[citizen_no].state_idx = 1; citizen_list[citizen_no].wait_count = 0x10; }
         return 1;
     }
 
-    if (movement_value == 0) {
+    if (result == 0) {
         citizen_list[citizen_no].wf_active = 0; citizen_list[citizen_no].speed = 0x14;
         clear_ferret_map(citizen_list[citizen_no].speed,
                          (unsigned char *)city_map,
@@ -1603,7 +1620,7 @@ int citizen_maraude_to_target(int movement_kind)
         return 1;
     }
 
-    if (movement_value == 1) citizen_list[citizen_no].is_barbarian = 1;
+    if (result == 1) citizen_list[citizen_no].is_barbarian = 1;
     else citizen_list[citizen_no].is_barbarian = 0;
     citizen_list[citizen_no].flag_bits &= 0xfe;
     citizen_list[citizen_no].world_dir = w_dirc;
