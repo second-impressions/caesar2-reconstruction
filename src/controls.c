@@ -587,42 +587,43 @@ void down_slider_var(struct slider_rec *slider_ptr)
 // FUNCTION: C2WIN 0x00421495
 void up_slider_var(struct slider_rec *slider_ptr)
 {
+    int high_value;
+    int low_value;
     int step_value;
-    int old_value;
-    int max_value;
-    int min_value;
-    int current_value;
-    int previous_percent;
-    int current_percent;
-    int attempts_remaining;
+    int new_value;
+    int current_pct;
+    int old;
+    int old_percent;
+    int attempt_count;
 
-    if (mouse_left_preclick == 0) return;
-    old_value = (signed char)*slider_ptr->value;
-    max_value = slider_ptr->max;
-    min_value = slider_ptr->min;
-    step_value = slider_ptr->step;
-    if ((signed char)*slider_ptr->complement < min_value + step_value) return;
-    slider_ptr->refresh_flag = 2;
-    slider_ptr->up_anim = 4;
-    if (slidper_on == 0) {
-        *slider_ptr->value += (char)step_value;
-    } else {
-        attempts_remaining = 100;
-        current_percent = totalXpercent(slider_total, old_value);
-        previous_percent = current_percent;
-        while (previous_percent == current_percent && attempts_remaining != 0) {
-            attempts_remaining--;
-            *slider_ptr->value += (char)step_value;
-            current_percent = totalXpercent(slider_total, (signed char)*slider_ptr->value);
+    if (mouse_left_preclick != 0) {
+        old = (signed char)*slider_ptr->value;
+        high_value = slider_ptr->max;
+        low_value = slider_ptr->min;
+        step_value = slider_ptr->step;
+        if ((signed char)*slider_ptr->complement < low_value + step_value) return;
+        slider_ptr->refresh_flag = 2;
+        slider_ptr->up_anim = 4;
+        if (slidper_on == 0) {
+            *slider_ptr->value += step_value;
+        } else {
+            attempt_count = 100;
+            current_pct = totalXpercent(slider_total, old);
+            old_percent = current_pct;
+            while (old_percent == current_pct && attempt_count != 0) {
+                attempt_count--;
+                *slider_ptr->value += step_value;
+                current_pct = totalXpercent(slider_total, (signed char)*slider_ptr->value);
+            }
         }
+        if ((signed char)*slider_ptr->value > high_value)
+            *slider_ptr->value = high_value;
+        new_value = (signed char)*slider_ptr->value;
+        if (new_value < old)
+            *slider_ptr->complement += old - new_value;
+        else if (new_value > old)
+            *slider_ptr->complement -= new_value - old;
     }
-    if ((signed char)*slider_ptr->value > max_value)
-        *slider_ptr->value = max_value;
-    current_value = (signed char)*slider_ptr->value;
-    if (current_value < old_value)
-        *slider_ptr->complement += (char)(old_value - current_value);
-    else if (current_value > old_value)
-        *slider_ptr->complement -= (char)(current_value - old_value);
 }
 
 // Activate the clicked icon, release the others, and invoke its callback parameters.
