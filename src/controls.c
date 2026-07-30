@@ -546,40 +546,42 @@ void mid_slider_var(struct slider_rec *slider_ptr, int track_position)
 // FUNCTION: C2WIN 0x0042131c
 void down_slider_var(struct slider_rec *slider_ptr)
 {
-    int old_value;
-    int min_value;
+    int new_value;
+    int old;
+    int current_pct;
     int step_value;
-    int current_value;
-    int previous_percent;
-    int attempts_remaining;
-    int current_percent;
+    int low_value;
+    int attempt_count;
+    int old_percent;
 
-    if (mouse_left_preclick == 0) return;
-    old_value = (signed char)*slider_ptr->value;
-    min_value = slider_ptr->min;
-    step_value = slider_ptr->step;
-    slider_ptr->refresh_flag = 2;
-    slider_ptr->down_anim = 4;
-    if (slidper_on == 0) {
-        *slider_ptr->value -= (char)step_value;
-    } else {
-        attempts_remaining = 100;
-        current_percent = totalXpercent(slider_total, old_value);
-        previous_percent = current_percent;
-        while (previous_percent == current_percent && attempts_remaining != 0 && current_percent >= min_value) {
-            attempts_remaining--;
-            *slider_ptr->value -= (char)step_value;
-            current_percent = totalXpercent(slider_total, (signed char)*slider_ptr->value);
+    if (mouse_left_preclick != 0) {
+        old = (signed char)*slider_ptr->value;
+        low_value = slider_ptr->min;
+        step_value = slider_ptr->step;
+        slider_ptr->refresh_flag = 2;
+        slider_ptr->down_anim = 4;
+        if (slidper_on == 0) {
+            *slider_ptr->value -= step_value;
+        } else {
+            attempt_count = 100;
+            current_pct = totalXpercent(slider_total, old);
+            old_percent = current_pct;
+            while (old_percent == current_pct && attempt_count != 0 &&
+                   low_value <= current_pct) {
+                attempt_count--;
+                *slider_ptr->value -= step_value;
+                current_pct = totalXpercent(slider_total, (signed char)*slider_ptr->value);
+            }
+            if (current_pct == 0) *slider_ptr->value = low_value;
         }
-        if (current_percent == 0) *slider_ptr->value = min_value;
+        if ((signed char)*slider_ptr->value < low_value)
+            *slider_ptr->value = low_value;
+        new_value = (signed char)*slider_ptr->value;
+        if (new_value < old)
+            *slider_ptr->complement += old - new_value;
+        else if (new_value > old)
+            *slider_ptr->complement -= new_value - old;
     }
-    if ((signed char)*slider_ptr->value < min_value)
-        *slider_ptr->value = min_value;
-    current_value = (signed char)*slider_ptr->value;
-    if (current_value < old_value)
-        *slider_ptr->complement += (char)(old_value - current_value);
-    else if (current_value > old_value)
-        *slider_ptr->complement -= (char)(current_value - old_value);
 }
 
 // Increase a slider by one effective step when its complement permits it.
