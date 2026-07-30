@@ -187,7 +187,8 @@ void get_allowed_selections(struct selection_rec *list, int count, int what)
 }
 
 int control_buttons(int, int, struct button_rec *, int);
-int control_selection(struct selection_rec *, int, int, int, int);
+int control_selection(struct selection_rec *selection_list,
+                      int selection_count, int x, int y, int text_group);
 int over_selection(int, int, int);
 
 // Clear all goods highlights.
@@ -858,19 +859,19 @@ int control_selection(struct selection_rec *selection_list, int selection_count,
 
     selection_is = 0;
     get_allowed_selections(selection_list, selection_count, text_group);
-#if C2_FEAT_SELECTION_WIDTH_OFFSET
+#if PLATFORM_WINDOWS
     x -= select_width;
 #else
     x -= select_cost_flag;
 #endif
     if (x < 0) x = 0;
     if (y < 0x18) y = 0x18;
-#if C2_FEAT_SELECTION_WIDTH_OFFSET
+#if PLATFORM_WINDOWS
     if (x + select_cost_flag >= 0x26c) x = 0x26c - select_cost_flag;
 #else
     if (select_width + x >= 0x26c) x = 0x26c - select_width;
 #endif
-    if (select_height + y >= 0x1cc) y = 0x1cc - select_height;
+    if (y + select_height >= 0x1cc) y = 0x1cc - select_height;
     show_selection_box(selection_count, x, y, text_group);
     setup_whole_screen_refresh();
     mouse_left_preclick = 0;
