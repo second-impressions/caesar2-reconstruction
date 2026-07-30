@@ -510,46 +510,39 @@ void forum_advisor_game_loop(void)
 // FUNCTION: C2WIN 0x004108b4
 void forum_empire_game_loop(void)
 {
-    if (c2inf.peace_mode) {
-        forum_advisor_game_loop();
-        return;
-    }
+    if (c2inf.peace_mode) { forum_advisor_game_loop(); return; }
     gloop_start();
     get_region_over();
     show_empire_top_slab();
 
     if (region_over != 0) {
-        if (known_world(region_over - 1)) {
-            font_centre(6, region_over, 0xd8, 0x1e, 0xdc, font1, 0x3f);
-        } else {
-            font_centre(0x30, 4, 0xd8, 0x1e, 0xdc, font1, 0x3f);
-        }
+        if (known_world(region_over - 1)) font_centre(6, region_over, 0xd8, 0x1e, 0xdc, font1, 0x3f);
+        else font_centre(0x30, 4, 0xd8, 0x1e, 0xdc, font1, 0x3f);
     } else {
         x_is = 0;
         font_list(0x22, 2, 0xd8, 0x1e, font1, 0x3f);
         show_date(year, x_is + 0xd8, 0x1e, 2);
     }
+#if !PLATFORM_WINDOWS
     setup_refresh_area(0xd2, 0x1a, 0x12, 2, 1);
+#endif
     gloop_end();
 
-    if (mouse_left_preclick && region_over != 0 && known_world(region_over - 1)) {
-        this_region_box(1);
-        out1 = 0;
-        while (out1 == 0) {
-            just_idle_game_loop();
-            if (mouse_right_click)
-                out1 = 1;
+    if (mouse_left_preclick) {
+        if (region_over != 0 && known_world(region_over - 1)) {
+            this_region_box(1); out1 = 0;
+            while (out1 == 0) {
+                just_idle_game_loop();
+                if (mouse_right_click) out1 = 1;
+            }
+            stop_db();
+            clear_mouse(); out1 = 0;
+            basic_empire_screen();
         }
-        stop_db();
-        clear_mouse();
-        out1 = 0;
-        basic_empire_screen();
     }
 
     if (mouse_right_click) {
-        last_forum_dept = FORUM_DEPT_EMPIRE;
-        forum_dept = FORUM_DEPT_OVERVIEW;
-        out1 = 2;
+        last_forum_dept = FORUM_DEPT_EMPIRE; forum_dept = FORUM_DEPT_OVERVIEW; out1 = 2;
         readfile("forumbit.pl8", ((void *)scratch_buffer), 0xea60, 0);
         readfile("forum_x.gd8", ((void *)((scratch_buffer) + (0x1d4c0))), 0xfa0, 0);
     }
