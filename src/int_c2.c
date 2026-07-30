@@ -3075,7 +3075,6 @@ void get_population_and_industry_count(int radius, int demand_mode)
 {
     int y_start;
     int x_start;
-    int diameter;
     int width;
     int height;
     int row_inc;
@@ -3087,9 +3086,7 @@ void get_population_and_industry_count(int radius, int demand_mode)
 
     x_start = citizen_list[citizen_no].x - radius;
     y_start = citizen_list[citizen_no].y - radius;
-    diameter = 2 * radius;
-    height = diameter + 1;
-    width  = diameter + 1;
+    width = height = 2 * radius + 1;
 
     if (x_start < 0) {
         width += x_start;
@@ -3105,11 +3102,9 @@ void get_population_and_industry_count(int radius, int demand_mode)
     }
 
     gmn_sptr = 20 * (x_start + y_start * 0x50);
-    row_inc  = 20 * (0x50 - width);
+    row_inc = 20 * (0x50 - width);
 
-    count_other    = 0;
-    count_pop      = 0;
-    count_industry = 0;
+    count_industry = count_pop = count_other = 0;
 
     for (gmn_y = y_start; gmn_y < y_start + height; gmn_y++, gmn_sptr += row_inc) {
         for (gmn_x = x_start; gmn_x < x_start + width; gmn_x++, gmn_sptr += 20) {
