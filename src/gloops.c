@@ -4,9 +4,12 @@
 int mouse_styles[10] = { 0, 1, 2, 3, 9, 0, 2, 3, 4, 4 };
 
 #if PLATFORM_WINDOWS
+int game_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 int scroll_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
+#define GAME_SPEED_DELAY(delay) game_speed_delays[delay]
 #define SCROLL_SPEED_DELAY(delay) scroll_speed_delays[delay]
 #else
+#define GAME_SPEED_DELAY(delay) ((delay) * 50 + 50)
 #define SCROLL_SPEED_DELAY(delay) ((delay) * 50 + 20)
 #endif
 
@@ -944,17 +947,35 @@ int game_speed(void)
     int speed_delay;
 
     cmu_count[1] += button_time_flag;
-    if (turbo_mode > 1)
-        return 1;
+    if (turbo_mode > 1) return 1;
 
     speed_delay = (100 - c2inf.game_speed) / 10;
+#if PLATFORM_WINDOWS
+    if (speed_delay >= 10)
+        return 0;
+    if (c2inf.paused)
+        return 0;
+    if (scrolling)
+        return 0;
+    if (flag_mode != 0)
+        return 0;
+    if (pointer_mode >= 5)
+        return 0;
+    if (mouse_left_button)
+        return 0;
+    if (GAME_SPEED_DELAY(speed_delay) <= cmu_count[1]) {
+        cmu_count[1] = 0;
+        return 1;
+    }
+    return 0;
+#else
     if (speed_delay < 10) {
         if (!c2inf.paused) {
             if (!scrolling) {
                 if (flag_mode == 0) {
                     if (pointer_mode < 5) {
                         if (!mouse_left_button) {
-                            if (speed_delay * 50 + 50 <= cmu_count[1]) {
+                            if (GAME_SPEED_DELAY(speed_delay) <= cmu_count[1]) {
                                 cmu_count[1] = flag_mode;
                                 return 1;
                             }
@@ -965,6 +986,7 @@ int game_speed(void)
         }
     }
     return 0;
+#endif
 }
 
 // Returns whether enough input time has elapsed for another automatic map-scroll step.
@@ -996,3 +1018,4 @@ int scroll_speed(void)
 }
 
 #undef SCROLL_SPEED_DELAY
+#undef GAME_SPEED_DELAY
