@@ -2415,63 +2415,51 @@ int try_a_regionmap_square(int direction, int movement_kind, int unused_arg)
     switch ((unsigned int)direction) {
     case 0:                                /* N */
         if (army_list[army_no].y <= 0)
-            result = 0;
-        else
-            result = try_this_regionmap_square(army_list[army_no].map_ref - 0x1e0, movement_kind, unused_arg);
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref - 0x1e0, movement_kind, unused_arg);
         break;
     case 1:                                /* NE */
-        if (army_list[army_no].x < 0x3b) {
-            if (army_list[army_no].y <= 0)
-                result = 0;
-            else
-                result = try_this_regionmap_square(army_list[army_no].map_ref - 0x1d8, movement_kind, unused_arg);
-        } else {
-            result = 0;
-        }
+        if (army_list[army_no].x >= 0x3b)
+            return 0;
+        if (army_list[army_no].y <= 0)
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref - 0x1d8, movement_kind, unused_arg);
         break;
     case 2:                                /* E */
-        if (army_list[army_no].x < 0x3b)
-            result = try_this_regionmap_square(army_list[army_no].map_ref + 8, movement_kind, unused_arg);
-        else
-            result = 0;
+        if (army_list[army_no].x >= 0x3b)
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref + 8, movement_kind, unused_arg);
         break;
     case 3:                                /* SE */
-        if (army_list[army_no].x < 0x3b) {
-            if (army_list[army_no].y < 0x3b)
-                result = try_this_regionmap_square(army_list[army_no].map_ref + 0x1e8, movement_kind, unused_arg);
-            else
-                result = 0;
-        } else {
-            result = 0;
-        }
+        if (army_list[army_no].x >= 0x3b)
+            return 0;
+        if (army_list[army_no].y >= 0x3b)
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref + 0x1e8, movement_kind, unused_arg);
         break;
     case 4:                                /* S */
-        if (army_list[army_no].y < 0x3b)
-            result = try_this_regionmap_square(army_list[army_no].map_ref + 0x1e0, movement_kind, unused_arg);
-        else
-            result = 0;
+        if (army_list[army_no].y >= 0x3b)
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref + 0x1e0, movement_kind, unused_arg);
         break;
     case 5:                                /* SW */
         if (army_list[army_no].x <= 0)
-            result = 0;
-        else if (army_list[army_no].y < 0x3b)
-            result = try_this_regionmap_square(army_list[army_no].map_ref + 0x1d8, movement_kind, unused_arg);
-        else
-            result = 0;
+            return 0;
+        if (army_list[army_no].y >= 0x3b)
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref + 0x1d8, movement_kind, unused_arg);
         break;
     case 6:                                /* W */
         if (army_list[army_no].x <= 0)
-            result = 0;
-        else
-            result = try_this_regionmap_square(army_list[army_no].map_ref - 8, movement_kind, unused_arg);
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref - 8, movement_kind, unused_arg);
         break;
     case 7:                                /* NW */
         if (army_list[army_no].x <= 0)
-            result = 0;
-        else if (army_list[army_no].y <= 0)
-            result = 0;
-        else
-            result = try_this_regionmap_square(army_list[army_no].map_ref - 0x1e8, movement_kind, unused_arg);
+            return 0;
+        if (army_list[army_no].y <= 0)
+            return 0;
+        result = try_this_regionmap_square(army_list[army_no].map_ref - 0x1e8, movement_kind, unused_arg);
         break;
     }
     return result;
