@@ -2146,26 +2146,24 @@ int entering_new_square(void)
 // FUNCTION: C2WIN 0x0040bd88
 int region_go_to_target(int unused_kind)
 {
-    int step_limit;
     int cell_result;
-    signed char ready_flag;
     (void)unused_kind;
 
-    ready_flag = army_list[army_no].flags & 1;
     army_list[army_no].flags &= 0xf7;
-    step_limit = ready_flag;
-    if (step_limit != 0) {
+    if ((army_list[army_no].flags & 1) != 0) {
         army_list[army_no].target_kind = 0;
         army_list[army_no].target_count = 0;
     } else {
         if (army_list[army_no].target_flag == 0) {
             if (army_list[army_no].type == 1)
-                step_limit = 2;
+                cell_result = 2;
             else
-                step_limit = 3;
+                cell_result = 3;
+        } else {
+            cell_result = 0;
         }
         army_list[army_no].target_count++;
-        if (army_list[army_no].target_count > step_limit) {
+        if (army_list[army_no].target_count > cell_result) {
             army_list[army_no].target_count = 0;
             army_list[army_no].target_kind++;
             if (army_list[army_no].target_kind > 0xf) {
