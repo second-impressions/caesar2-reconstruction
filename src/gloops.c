@@ -130,6 +130,102 @@ void floop_end(void)
     button_time_flag = running_delay1();
 }
 
+#if PLATFORM_WINDOWS
+// Rotates the animated map colours, advances the red pulse, and realizes the changed entries in
+// every palette and DIB used by the game windows.
+// FUNCTION: C2WIN 0x0040f8ca
+void cycle_map_colours(void)
+{
+    struct game_colour {
+        int red;
+        int green;
+        int blue;
+    };
+    struct palette_entry {
+        unsigned char red;
+        unsigned char green;
+        unsigned char blue;
+        unsigned char flags;
+    };
+    struct logical_palette {
+        unsigned short version;
+        unsigned short entry_count;
+        struct palette_entry entries[256];
+    };
+    struct dib_colour {
+        unsigned char blue;
+        unsigned char green;
+        unsigned char red;
+        unsigned char reserved;
+    };
+    extern struct logical_palette logical_palette;
+    extern struct dib_colour dib_colours[];
+    extern void *animated_palette;
+    extern void *system_palette;
+    extern void *main_window_dc;
+    extern void *city_window_dc;
+    extern void *region_window_dc;
+    extern void *battle_window_dc;
+    extern int (__stdcall *AnimatePalette)(void *palette, unsigned int start,
+                                           unsigned int count,
+                                           struct palette_entry *entries);
+    extern int (__stdcall *SetPaletteEntries)(void *palette, unsigned int start,
+                                              unsigned int count,
+                                              struct palette_entry *entries);
+    extern int __stdcall WinGSetDIBColorTable(void *dc, unsigned int start,
+                                              unsigned int count,
+                                              struct dib_colour *colours);
+    extern void cycle_palette_colours(int start, int end);
+    extern void select_system_palette(int select);
+    int loop;
+    int idx;
+    unsigned char red;
+
+    cycle_palette_colours(0x40, 0x47);
+    cycle_palette_colours(0x97, 0x99);
+    red = ((struct game_colour *)current_palette)[0x48].red;
+    red += 6;
+    if (red > 0x3f)
+        red = 0x10;
+
+    ((struct game_colour *)current_palette)[0x48].red = red;
+    ((struct game_colour *)current_palette)[0x48].green = 0;
+    ((struct game_colour *)current_palette)[0x48].blue = 0;
+    ((struct game_colour *)current_palette)[0x49].red = red;
+    ((struct game_colour *)current_palette)[0x49].green = red / 2;
+    ((struct game_colour *)current_palette)[0x49].blue = 0;
+    ((struct game_colour *)current_palette)[0x4a].red = red;
+    ((struct game_colour *)current_palette)[0x4a].green = (red * 3) >> 2;
+    ((struct game_colour *)current_palette)[0x4a].blue = 0;
+
+    for (loop = 0x48; loop <= 0x4a; loop++) {
+        idx = loop * 3;
+        logical_palette.entries[loop].red =
+            ((int *)current_palette)[idx] << 2;
+        logical_palette.entries[loop].green =
+            ((int *)current_palette)[idx + 1] << 2;
+        logical_palette.entries[loop].blue =
+            ((int *)current_palette)[idx + 2] << 2;
+        dib_colours[loop].red = logical_palette.entries[loop].red;
+        dib_colours[loop].green = logical_palette.entries[loop].green;
+        dib_colours[loop].blue = logical_palette.entries[loop].blue;
+    }
+
+    AnimatePalette(animated_palette, 0x40, 8, &logical_palette.entries[0x40]);
+    AnimatePalette(animated_palette, 0x97, 3, &logical_palette.entries[0x97]);
+    AnimatePalette(animated_palette, 0x48, 3, &logical_palette.entries[0x48]);
+    select_system_palette(1);
+    SetPaletteEntries(system_palette, 0x40, 8, &logical_palette.entries[0x40]);
+    SetPaletteEntries(system_palette, 0x97, 3, &logical_palette.entries[0x97]);
+    SetPaletteEntries(system_palette, 0x48, 3, &logical_palette.entries[0x48]);
+    select_system_palette(0);
+    WinGSetDIBColorTable(main_window_dc, 0x40, 0x59, &dib_colours[0x40]);
+    WinGSetDIBColorTable(city_window_dc, 0x40, 0x59, &dib_colours[0x40]);
+    WinGSetDIBColorTable(region_window_dc, 0x40, 0x59, &dib_colours[0x40]);
+    WinGSetDIBColorTable(battle_window_dc, 0x40, 0x59, &dib_colours[0x40]);
+}
+#endif
+
 // Advances the city simulation when due, renders the active map and interface, handles player
 // actions, and services animation and ambient audio for one frame.
 // FUNCTION: C2 0x3d3ca
