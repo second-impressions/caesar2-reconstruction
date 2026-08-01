@@ -190,24 +190,23 @@ void refresh_sprite2w_square(int tile_x, int tile_y)
     if (tile_y < 0) tile_y = 0;
     if (tile_x < 0) tile_x = 0;
     ref_ptr = tile_x + tile_y * 40;
-    if (ref_ptr < 0x4b0) {
-        if (svga_refresh_table[ref_ptr + 0x00] < 2)
-            svga_refresh_table[ref_ptr + 0x00] = 2;
-        if (svga_refresh_table[ref_ptr + 0x01] < 2)
-            svga_refresh_table[ref_ptr + 0x01] = 2;
-        if (svga_refresh_table[ref_ptr + 0x02] < 2)
-            svga_refresh_table[ref_ptr + 0x02] = 2;
-        if (svga_refresh_table[ref_ptr + 0x03] < 2)
-            svga_refresh_table[ref_ptr + 0x03] = 2;
-        if (svga_refresh_table[ref_ptr + 0x28] < 2)
-            svga_refresh_table[ref_ptr + 0x28] = 2;
-        if (svga_refresh_table[ref_ptr + 0x29] < 2)
-            svga_refresh_table[ref_ptr + 0x29] = 2;
-        if (svga_refresh_table[ref_ptr + 0x2a] < 2)
-            svga_refresh_table[ref_ptr + 0x2a] = 2;
-        if (svga_refresh_table[ref_ptr + 0x2b] < 2)
-            svga_refresh_table[ref_ptr + 0x2b] = 2;
-    }
+    if (ref_ptr >= 0x4b0) return;
+    if (svga_refresh_table[ref_ptr + 0x00] < 2)
+        svga_refresh_table[ref_ptr + 0x00] = 2;
+    if (svga_refresh_table[ref_ptr + 0x01] < 2)
+        svga_refresh_table[ref_ptr + 0x01] = 2;
+    if (svga_refresh_table[ref_ptr + 0x02] < 2)
+        svga_refresh_table[ref_ptr + 0x02] = 2;
+    if (svga_refresh_table[ref_ptr + 0x03] < 2)
+        svga_refresh_table[ref_ptr + 0x03] = 2;
+    if (svga_refresh_table[ref_ptr + 0x28] < 2)
+        svga_refresh_table[ref_ptr + 0x28] = 2;
+    if (svga_refresh_table[ref_ptr + 0x29] < 2)
+        svga_refresh_table[ref_ptr + 0x29] = 2;
+    if (svga_refresh_table[ref_ptr + 0x2a] < 2)
+        svga_refresh_table[ref_ptr + 0x2a] = 2;
+    if (svga_refresh_table[ref_ptr + 0x2b] < 2)
+        svga_refresh_table[ref_ptr + 0x2b] = 2;
 }
 
 // Raise a 5×6 tile rectangle to at least priority 2.
