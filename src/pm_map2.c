@@ -432,19 +432,31 @@ void mid2_line_no_sides_top(void)
 // FUNCTION: C2WIN 0x004466a9
 void mid2_line_with_sides_top(void)
 {
+    int ptr;
+    int x;
+    int y;
     int col_idx;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     pm_shown_x = pm_x;
     sprite_x   = pm_screen_x_start;
 
     /* left edge */
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
-    if (!((pm_shown_ptr) >= 0x0FFF0000)) {
-        if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) place2_a_building_top(3);
+    if (pm_shown_ptr >= 0x0fff0000) {
+    } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
+        place2_a_building_top(3);
+        place2_sprite(1);
+    } else {
         place2_sprite(1);
     }
     sprite_x += pm_diamond_half_width;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* middle */
     for (col_idx = 0; col_idx < pm_screen_width - 1; col_idx++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
@@ -453,17 +465,24 @@ void mid2_line_with_sides_top(void)
         } else {
             if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
                 place2_a_building_top(0);
+                place2_sprite(0);
             } else {
                 sprite_x += pm_diamond_width;
+                place2_sprite(0);
             }
-            place2_sprite(0);
         }
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* right edge */
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
-    if (!((pm_shown_ptr) >= 0x0FFF0000)) {
-        if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) place2_a_building_top(4);
+    if (pm_shown_ptr >= 0x0fff0000) {
+    } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
+        place2_a_building_top(4);
+        place2_sprite(2);
+    } else {
         place2_sprite(2);
     }
 
