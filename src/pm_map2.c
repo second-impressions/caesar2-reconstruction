@@ -452,7 +452,10 @@ void bottom2_line_no_sides(void)
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place2_sprite(2);
     }
 
-    sprite_x   = pm_screen_x_start;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
+    sprite_x = pm_screen_x_start;
     col_idx = 0;
     pm_shown_x = pm_x;
     for (; col_idx < pm_screen_width; col_idx++) {
@@ -462,12 +465,17 @@ void bottom2_line_no_sides(void)
         } else {
             if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
                 place2_a_building_roof(0);
+                place2_sprite(0);
             } else {
                 sprite_x += pm_diamond_width;
+                place2_sprite(0);
             }
-            place2_sprite(0);
         }
     }
+
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
 
     /* right spillover */
     if (pm_shown_x < 80) {
