@@ -760,6 +760,12 @@ void place2_a_building_base(int draw_style)
     }
 }
 
+extern void write_large_diamond_hat(unsigned char *sprite_addr, int y_clip);
+extern void write_medium_diamond_hat(unsigned char *sprite_addr, int y_clip);
+extern void write_small_diamond_hat(unsigned char *sprite_addr, int y_clip);
+extern void write_large_diamond_lefthat(unsigned char *sprite_addr, int y_clip);
+extern void write_large_diamond_roof(unsigned char *sprite_addr);
+
 // Draw a building's visible upper slice, province label, and any regional marker.
 // FUNCTION: C2 0x3a402
 // FUNCTION: C2WIN 0x0044707e
