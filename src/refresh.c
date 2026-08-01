@@ -517,6 +517,33 @@ void refresh_zoom_mode(int zoom)
 // FUNCTION: C2WIN 0x0043b5b2
 void refresh_battle_zoom_mode(int zoom)
 {
+#if PLATFORM_WINDOWS
+    zoom_level = zoom;
+    if (zoom_level == 1) {
+        scroll_amount = 2;
+        pm_screen_width = 22;
+        pm_screen_height = 70;
+        pm_screen_x_start = 0;
+        pm_screen_y_start = -7;
+        pm_diamond_width = 28;
+        pm_diamond_full_height = 14;
+        pm_diamond_half_width = 14;
+        pm_diamond_half_height = 7;
+    } else if (zoom_level == 2) {
+        scroll_amount = 4;
+        pm_screen_width = 50;
+        pm_screen_height = 120;
+        pm_screen_x_start = 0;
+        pm_screen_y_start = 58;
+        pm_diamond_width = 12;
+        pm_diamond_full_height = 6;
+        pm_diamond_half_width = 6;
+        pm_diamond_half_height = 3;
+    }
+    pm_screen_x_end = pm_diamond_width * pm_screen_width + pm_screen_x_start;
+    pm_screen_y_end = (pm_screen_height + 1) * pm_diamond_half_height
+                      + pm_screen_y_start;
+#else
     zoom_level = zoom;
     if ((zoom & 0xff) == 1) {
         scroll_amount = 2;
@@ -542,6 +569,7 @@ void refresh_battle_zoom_mode(int zoom)
     pm_screen_x_end = pm_screen_x_start + pm_screen_width * pm_diamond_width;
     pm_screen_y_end = pm_screen_y_start
                       + (pm_screen_height + 1) * pm_diamond_half_height;
+#endif
 }
 
 // Redraw dirty tiles, splitting copies that cross an SVGA bank boundary.
