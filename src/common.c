@@ -133,10 +133,10 @@ int create_citizen(int type, int x, int y, unsigned char is_barb)
 // Allocates an army on an unoccupied region cell allowed by the requested mode.
 // FUNCTION: C2 0x2ab1a
 // FUNCTION: C2WIN 0x004695b9
-int create_army(int army_type, int region_x, int region_y, char placement_mode)
+int create_army(int army_type, int region_x, int region_y, unsigned char placement_mode)
 {
-    int cell_offset;
-    char terrain_flags;
+    int map_ptr;
+    unsigned char terrain_type;
 
     if (region_x < 0)
         return 0;
@@ -147,17 +147,17 @@ int create_army(int army_type, int region_x, int region_y, char placement_mode)
     if (region_y >= 0x3C)
         return 0;
 
-    cell_offset = (region_x + region_y * 0x3C) * 8;
-    terrain_flags = RM_CELL(cell_offset).terrain;
-    army_a = (unsigned char)RM_CELL(cell_offset).occupant;
+    map_ptr = (region_x + region_y * 0x3C) * 8;
+    terrain_type = RM_CELL(map_ptr).terrain;
+    army_a = (unsigned char)RM_CELL(map_ptr).occupant;
     if (army_a != 0)
         return 0;
 
     if (placement_mode == 1) {
-        if ((terrain_flags & 8) == 0)
+        if ((terrain_type & 8) == 0)
             return 0;
     } else if (placement_mode == 2) {
-        if ((terrain_flags & 0x1F) != 0)
+        if ((terrain_type & 0x1F) != 0)
             return 0;
     }
 
@@ -166,22 +166,20 @@ int create_army(int army_type, int region_x, int region_y, char placement_mode)
             clear_army(&army_list[created_army_no]);
             army_list[created_army_no].exists = 1;
             army_list[created_army_no].morale = 2;
-            army_list[created_army_no].evolve_timer = (evolve_count + (short)rand128) & 0x7fff;
+            army_list[created_army_no].evolve_timer = (evolve_count + rand128) & 0x7fff;
             army_list[created_army_no].type = army_type;
-            army_list[created_army_no].x = region_x;
-            army_list[created_army_no].target_x = region_x;
-            army_list[created_army_no].y = region_y;
-            army_list[created_army_no].target_y = region_y;
-            army_list[created_army_no].map_ref = cell_offset;
-            army_list[created_army_no].home_ref = cell_offset;
-            army_list[created_army_no].fort_ref = cell_offset;
+            army_list[created_army_no].target_x = army_list[created_army_no].x = region_x;
+            army_list[created_army_no].target_y = army_list[created_army_no].y = region_y;
+            army_list[created_army_no].map_ref = map_ptr;
+            army_list[created_army_no].home_ref = map_ptr;
+            army_list[created_army_no].fort_ref = map_ptr;
             army_list[created_army_no].pixel_x = region_x << 4;
             army_list[created_army_no].pixel_y = region_y << 4;
             army_list[created_army_no].world_dir = 1;
             army_list[created_army_no].heading = 5;
             army_list[created_army_no].flags |= 1;
-            RM_CELL(cell_offset).occupant = created_army_no;
-            RM_CELL(cell_offset).edge_bits |= 1;
+            RM_CELL(map_ptr).occupant = created_army_no;
+            RM_CELL(map_ptr).edge_bits |= 1;
             return 1;
         }
     }
