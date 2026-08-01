@@ -200,7 +200,8 @@ void stop_smacking(void)
 // FUNCTION: C2 0x139f7
 int are_smacking(void)
 {
-    return smacker_on != 0;
+    if (smacker_on == 0) return 0;
+    return 1;
 }
 
 // Intentionally performs no work.
