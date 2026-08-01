@@ -307,11 +307,15 @@ void clear_army(struct army_rec *record_ptr)
 // FUNCTION: C2WIN 0x00469f9c
 void clear_unit(struct unit_rec *record_ptr)
 {
+#if PLATFORM_WINDOWS
+    memset(record_ptr, 0, sizeof(struct unit_rec));
+#else
     unsigned int i;
     char *record_bytes = (char *)record_ptr;
     for (i = 0; i < sizeof(struct unit_rec); i++) {
         record_bytes[i] = 0;
     }
+#endif
 }
 
 // Zeros a battle-figure record.
