@@ -48,6 +48,7 @@ unsigned char get_ferret2(int direction);
 void clear_army(struct army_rec *record_ptr);
 void load_ferret_run(int start_x, int start_y, int max_length);
 void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int map_height, int cell_size, int start_x, int start_y, int end_x, int end_y);
+void clear_ferret_map(int margin, unsigned char *map_base, int map_width, int map_height, int cell_size, int start_x, int start_y, int end_x, int end_y);
 void run_clock_ferret(void);
 void run_anti_ferret(void);
 void move_clock_ferret(signed char direction, char update_existing);
@@ -698,84 +699,66 @@ char get_heading(int start_x, int start_y, int end_x, int end_y, unsigned char s
 void clear_ferret_map(int margin, unsigned char *map_base, int map_width, int map_height,
                       int cell_size, int start_x, int start_y, int end_x, int end_y)
 {
-    int min_y;
-    int max_y;
-    int min_x;
+    int lower_y;
+    int y_max;
+    int left_x;
     int max_x;
-    int corridor_start_x;
-    int corridor_start_y;
-    int corridor_end_y;
-    int corridor_end_x;
-    int row_offset;
+    int left;
+    int top;
+    int hi_y;
+    int right_edge;
+    int ptr;
     int cell_x;
-    int cell_y;
-    int cell_offset;
-    unsigned char terrain_flags;
-    unsigned char path_value;
+    int ypos;
+    int map_ptr;
+    int tmp;
+    unsigned char terrain;
+    unsigned char value;
+    int first_row;
 
-    if (start_x <= end_x) {
-        min_x = start_x;
-        max_x = end_x;
-    } else {
-        min_x = end_x;
-        max_x = start_x;
-    }
-    if (start_y <= end_y) {
-        min_y = start_y;
-        max_y = end_y;
-    } else {
-        min_y = end_y;
-        max_y = start_y;
-    }
-    corridor_start_x = min_x - margin;
-    corridor_start_y = min_y - margin;
-    corridor_end_x = max_x + margin;
-    corridor_end_y = max_y + margin;
-    if (corridor_start_x < 0) corridor_start_x = 0;
-    if (corridor_start_y < 0) corridor_start_y = 0;
-    if (corridor_end_x >= map_width) corridor_end_x = map_width - 1;
-    if (corridor_end_y >= map_height) corridor_end_y = map_height - 1;
+    if (start_x <= end_x) { left_x = start_x; max_x = end_x; }
+    else { left_x = end_x; max_x = start_x; }
+    if (start_y <= end_y) { lower_y = start_y; y_max = end_y; }
+    else { lower_y = end_y; y_max = start_y; }
+    left = left_x - margin;
+    top = lower_y - margin;
+    right_edge = max_x + margin;
+    hi_y = y_max + margin;
+    if (left < 0) left = 0;
+    if (top < 0) top = 0;
+    if (right_edge >= map_width) right_edge = map_width - 1;
+    if (hi_y >= map_height) hi_y = map_height - 1;
 
-    row_offset = cell_size * (corridor_start_x + corridor_start_y * map_width);
-    for (cell_y = corridor_start_y; cell_y <= corridor_end_y; cell_y++, row_offset += map_width * cell_size) {
-        for (cell_x = corridor_start_x, cell_offset = row_offset; cell_x <= corridor_end_x; cell_x++, cell_offset += cell_size) {
-            if (cell_y == corridor_start_y)
-                path_value = 0xFF;
-            else if (cell_y == corridor_end_y)
-                path_value = 0xFF;
-            else if (cell_x == corridor_start_x)
-                path_value = 0xFF;
-            else if (cell_x == corridor_end_x)
-                path_value = 0xFF;
+    ptr = cell_size * (left + top * map_width);
+    for (ypos = top; ypos <= hi_y; ypos++, ptr += map_width * cell_size) {
+        for (cell_x = left, map_ptr = ptr; cell_x <= right_edge; cell_x++, map_ptr += cell_size) {
+            if (ypos == top) value = 0xFF;
+            else if (ypos == hi_y) value = 0xFF;
+            else if (cell_x == left) value = 0xFF;
+            else if (cell_x == right_edge) value = 0xFF;
             else {
-                path_value = 0;
-                terrain_flags = *(map_base + cell_offset + 1);
-                if ((terrain_flags & 1) != 0) {
-                    path_value = 0xFE;
-                } else if ((terrain_flags & 4) != 0) {
-                    if (citizen_list[citizen_no].type == 3) {
-                        path_value = 0xFE;
-                    } else if ((terrain_flags & 0x20) != 0) {
-                        *(map_base + cell_offset + 6) = 0;
-                        *(map_base + cell_offset + 5) = 1;
+                value = 0;
+                terrain = *(map_base + map_ptr + 1);
+                if ((terrain & 1) != 0) { value = 0xFE;
+                } else if ((terrain & 4) != 0) {
+                    if (citizen_list[citizen_no].type == 3) { value = 0xFE;
+                    } else if ((terrain & 0x20) != 0) {
+                        *(map_base + map_ptr + 6) = 0;
+                        *(map_base + map_ptr + 5) = 1;
                     } else {
-                        path_value = 0xFE;
+                        value = 0xFE;
                     }
                 } else {
-                    *(map_base + cell_offset + 6) = 0;
-                    if ((terrain_flags & 0x20) != 0) {
-                        *(map_base + cell_offset + 5) = 1;
-                    } else if (terrain_flags != 0) {
-                        path_value = 0xFE;
-                        *(map_base + cell_offset + 5) = 0;
-                    } else {
-                        *(map_base + cell_offset + 5) = 2;
+                    *(map_base + map_ptr + 6) = 0;
+                    if ((terrain & 0x20) != 0) {
+                        *(map_base + map_ptr + 5) = 1;
+                    } else if (terrain != 0) { value = 0xFE; *(map_base + map_ptr + 5) = 0;
+                    } else { *(map_base + map_ptr + 5) = 2;
                     }
                 }
             }
-            *(map_base + cell_offset + 2) = path_value;
-        }
-    }
+            *(map_base + map_ptr + 2) = value;
+        } }
 }
 
 // Initializes a region-map corridor for the current army's movement rules.
