@@ -1,5 +1,5 @@
-#ifndef WINGDI_H
-#define WINGDI_H
+#ifndef C2_WINGDI_H
+#define C2_WINGDI_H
 
 struct win_palette_entry {
     unsigned char red;

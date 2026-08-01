@@ -1,5 +1,5 @@
 #include "c2_target.h"
-#include "wingdi.h"
+#include "c2_wingdi.h"
 
 #if PLATFORM_WINDOWS
 
