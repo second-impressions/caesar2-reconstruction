@@ -278,9 +278,12 @@ void mid3_line_no_sides_base(void)
 // FUNCTION: C2WIN 0x0041e622
 void mid3_line_with_sides_base(void)
 {
-    int col_idx;
-    unsigned char dirty_flags;
+    int i;
+    unsigned char tile;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     pm_shown_x = pm_x;
     sprite_x   = pm_screen_x_start;
 
@@ -290,37 +293,41 @@ void mid3_line_with_sides_base(void)
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
             if (sprite_image_no >= 7) place_lefthalf_diamond();
-        } else {
-            dirty_flags = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty;
-            (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty & 0xf0;
-            if (dirty_flags != 0) {
-                if ((dirty_flags & 3) > 1) (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty |= 1;
-                if ((dirty_flags & 0xc) != 0) {
-                    dirty_flags &= 0xc;
-                    if      (dirty_flags == 4) sprite_image_no = 0xf;
-                    else if (dirty_flags == 8) sprite_image_no = 0xd;
-                    else                sprite_image_no = 0xe;
-                    place_lefthalf_diamond();
-                    refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
-                } else {
-terrain_left:
-                    if (((pm_shown_ptr) >= 0x0FFF0000)) {
-                        sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
-                        place_lefthalf_diamond();
-                    } else {
-                        (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty &= 0xf0;
-                        sprite_image_no = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).terrain;
-                        sprite_image_no += 0x10;
-                        place_lefthalf_diamond();
-                    }
-                }
-            }
+            goto left_done;
         }
-    } else goto terrain_left;
+        tile = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty;
+        (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty & 0xf0;
+        if (tile == 0) goto left_done;
+        if ((tile & 3) > 1) (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty |= 1;
+        if ((tile & 0xc) != 0) {
+            tile &= 0xc;
+            if      (tile == 4) sprite_image_no = 0xf;
+            else if (tile == 8) sprite_image_no = 0xd;
+            else                sprite_image_no = 0xe;
+            place_lefthalf_diamond();
+#if PLATFORM_DOS
+            refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
+            goto left_done;
+        }
+    }
+    if (((pm_shown_ptr) >= 0x0FFF0000)) {
+        sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
+        place_lefthalf_diamond();
+    } else {
+        (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty &= 0xf0;
+        sprite_image_no = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).terrain;
+        sprite_image_no += 0x10;
+        place_lefthalf_diamond();
+    }
+left_done:
     sprite_x += pm_diamond_half_width;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* Render the full interior cells. */
-    for (col_idx = 0; col_idx < pm_screen_width - 1; col_idx++) {
+    for (i = 0; i < pm_screen_width - 1; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (update_map == 0) {
             if (((pm_shown_ptr) >= 0x0FFF0000)) {
@@ -328,20 +335,22 @@ terrain_left:
                 if (sprite_image_no >= 7) place_diamond(0);
                 sprite_x += pm_diamond_width; continue;
             }
-            dirty_flags = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty;
+            tile = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty;
             (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty & 0xf0;
-            if (dirty_flags == 0) {
+            if (tile == 0) {
                 sprite_x += pm_diamond_width;
                 continue;
             }
-            if ((dirty_flags & 3) > 1) (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty |= 1;
-            if ((dirty_flags & 0xc) != 0) {
-                dirty_flags &= 0xc;
-                if      (dirty_flags == 4) sprite_image_no = 0xf;
-                else if (dirty_flags == 8) sprite_image_no = 0xd;
+            if ((tile & 3) > 1) (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty |= 1;
+            if ((tile & 0xc) != 0) {
+                tile &= 0xc;
+                if      (tile == 4) sprite_image_no = 0xf;
+                else if (tile == 8) sprite_image_no = 0xd;
                 else                sprite_image_no = 0xe;
                 place_diamond(0);
+#if PLATFORM_DOS
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
                 sprite_x += pm_diamond_width;
                 continue;
             }
@@ -349,16 +358,22 @@ terrain_left:
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
             place_diamond(0);
+            sprite_x += pm_diamond_width;
         } else {
             (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty &= 0xf0;
             sprite_image_no = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).terrain;
             sprite_image_no += 0x10;
             place_diamond(0);
+            sprite_x += pm_diamond_width;
         }
-        sprite_x += pm_diamond_width;
+#if PLATFORM_DOS
         print3_test_info();
+#endif
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* Render the clipped right edge cell. */
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (update_map == 0) {
@@ -367,17 +382,19 @@ terrain_left:
             if (sprite_image_no >= 7) place_righthalf_diamond();
             goto mid_done;
         }
-        dirty_flags = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty;
+        tile = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty;
         (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty &= 0xf0;
-        if (dirty_flags == 0) goto mid_done;
-        if ((dirty_flags & 3) > 1) (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty |= 1;
-        if ((dirty_flags & 0xc) != 0) {
-            dirty_flags &= 0xc;
-            if      (dirty_flags == 4) sprite_image_no = 0xf;
-            else if (dirty_flags == 8) sprite_image_no = 0xd;
+        if (tile == 0) goto mid_done;
+        if ((tile & 3) > 1) (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).dirty |= 1;
+        if ((tile & 0xc) != 0) {
+            tile &= 0xc;
+            if      (tile == 4) sprite_image_no = 0xf;
+            else if (tile == 8) sprite_image_no = 0xd;
             else                sprite_image_no = 0xe;
             place_righthalf_diamond();
+#if PLATFORM_DOS
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             goto mid_done;
         }
     }
