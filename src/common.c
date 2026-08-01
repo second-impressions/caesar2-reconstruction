@@ -1019,6 +1019,8 @@ void load_ferret_run(int start_x, int start_y, int max_length)
     }
 }
 
+signed char check_clock_ferret_move(signed char direction);
+
 // Relaxes pathfinding costs within the corridor around the current ferret route.
 // FUNCTION: C2 0x2bd7c
 // FUNCTION: C2WIN 0x0046b96b
@@ -1041,9 +1043,9 @@ void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int m
     int cy;
     int i;
     unsigned char initial_value;
+    unsigned char best;
     unsigned char cell_value;
     unsigned char new_value;
-    unsigned char best;
     unsigned char occupant_b;
     unsigned char a_ref;
 
@@ -1114,7 +1116,6 @@ void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int m
     *(map_base + ferret_targ_ptr + 2) = initial_value;
 }
 
-signed char check_clock_ferret_move(signed char direction);
 signed char check_anti_ferret_move(signed char direction);
 unsigned char ferret_heading(int x, int y);
 
