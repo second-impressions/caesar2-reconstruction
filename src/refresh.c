@@ -119,24 +119,23 @@ void refresh_figure_square(int tile_x, int tile_y)
     if (tile_y < 0) tile_y = 0;
     if (tile_x < 0) tile_x = 0;
     ref_ptr = tile_x + tile_y * 40;
-    if (ref_ptr < 0x4b0) {
-        svga_refresh_table[ref_ptr + 0x00] = 2;
-        svga_refresh_table[ref_ptr + 0x01] = 2;
-        svga_refresh_table[ref_ptr + 0x02] = 2;
-        svga_refresh_table[ref_ptr + 0x03] = 2;
-        svga_refresh_table[ref_ptr + 0x28] = 2;
-        svga_refresh_table[ref_ptr + 0x29] = 2;
-        svga_refresh_table[ref_ptr + 0x2a] = 2;
-        svga_refresh_table[ref_ptr + 0x2b] = 2;
-        svga_refresh_table[ref_ptr + 0x50] = 2;
-        svga_refresh_table[ref_ptr + 0x51] = 2;
-        svga_refresh_table[ref_ptr + 0x52] = 2;
-        svga_refresh_table[ref_ptr + 0x53] = 2;
-        svga_refresh_table[ref_ptr + 0x78] = 2;
-        svga_refresh_table[ref_ptr + 0x79] = 2;
-        svga_refresh_table[ref_ptr + 0x7a] = 2;
-        svga_refresh_table[ref_ptr + 0x7b] = 2;
-    }
+    if (ref_ptr >= 0x4b0) return;
+    svga_refresh_table[ref_ptr + 0x00] = 2;
+    svga_refresh_table[ref_ptr + 0x01] = 2;
+    svga_refresh_table[ref_ptr + 0x02] = 2;
+    svga_refresh_table[ref_ptr + 0x03] = 2;
+    svga_refresh_table[ref_ptr + 0x28] = 2;
+    svga_refresh_table[ref_ptr + 0x29] = 2;
+    svga_refresh_table[ref_ptr + 0x2a] = 2;
+    svga_refresh_table[ref_ptr + 0x2b] = 2;
+    svga_refresh_table[ref_ptr + 0x50] = 2;
+    svga_refresh_table[ref_ptr + 0x51] = 2;
+    svga_refresh_table[ref_ptr + 0x52] = 2;
+    svga_refresh_table[ref_ptr + 0x53] = 2;
+    svga_refresh_table[ref_ptr + 0x78] = 2;
+    svga_refresh_table[ref_ptr + 0x79] = 2;
+    svga_refresh_table[ref_ptr + 0x7a] = 2;
+    svga_refresh_table[ref_ptr + 0x7b] = 2;
 }
 
 // Mark a 5×5 tile square at priority 2.
