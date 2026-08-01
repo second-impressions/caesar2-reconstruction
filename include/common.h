@@ -33,13 +33,13 @@ extern int ferret_run_length;
 extern int ferret_targ_y;
 extern int map_actual_atom;
 extern int map_actual_height;
-extern int map_actual_width;
 extern unsigned char map_mode;
 
 /* Page 2: the remaining 24 members of the first dword run.  Equal-hash
  * declarations are reversed so Watcom's hash chain emits PS order. */
 extern int anti_ferret_moves;
 extern int last_anti_ferret_dirc;
+extern int map_actual_width;
 extern int tb_y;
 extern int tb_x;
 extern int tb_ptr;
