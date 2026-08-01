@@ -62,7 +62,6 @@ extern void win_bitblt();
 /* Forward declarations (functions defined later in this file). */
 void setup_refresh_area(int screen_x, int screen_y, int width, int height, int refresh_value);
 
-
 // Mark every clean screen tile for one redraw.
 // FUNCTION: C2 0x28e94
 // FUNCTION: C2WIN 0x0043a640
