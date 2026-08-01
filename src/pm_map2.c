@@ -14,8 +14,11 @@ extern void write_i_right_sprite(unsigned char *sprite_addr);
 #if PLATFORM_WINDOWS
 extern void *active_window;
 extern unsigned char screen_buffer[];
-extern void win_bitblt();
+extern void win_bitblt(void *window, unsigned char *buffer, int x, int y,
+                       int width, int height, int source_x, int source_y);
 #endif
+extern void place_lefthalf_diamond(void);
+extern void place_righthalf_diamond(void);
 /* Forward declarations (functions defined later in this file). */
 void show_regionmap_base(void);
 void show_regionmap_top(void);
