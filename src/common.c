@@ -291,11 +291,15 @@ void clear_citizen(struct citizen_rec *record_ptr)
 // FUNCTION: C2WIN 0x00469f7e
 void clear_army(struct army_rec *record_ptr)
 {
+#if PLATFORM_WINDOWS
+    memset(record_ptr, 0, sizeof(struct army_rec));
+#else
     unsigned int i;
     char *record_bytes = (char *)record_ptr;
     for (i = 0; i < sizeof(struct army_rec); i++) {
         record_bytes[i] = 0;
     }
+#endif
 }
 
 // Clears every field in a unit record.
