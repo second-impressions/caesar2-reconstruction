@@ -136,7 +136,7 @@ extern int fb_count;
 extern struct dpmi_mem_info memory;
 extern unsigned char allow_padding;
 extern unsigned char hot_key_out_off_build;
-extern char hold_hot_keys;
+extern unsigned char hold_hot_keys;
 extern char padding_off;
 extern void cycle_colours(int start_idx, int end_idx);
 extern void pulse_red(int idx, int delta);
@@ -245,10 +245,10 @@ extern int cnt8;
 extern int cnt2;
 extern int cnt4;
 extern int cnt256;
-extern char test_mode3;
+extern unsigned char test_mode3;
 extern unsigned char test_mode2;
 extern unsigned char test_mode1;
-extern char test_mode4;
+extern unsigned char test_mode4;
 extern unsigned char develop_mode;
 
 /* Symbol page 9 (PS emission page 2). */
@@ -271,7 +271,7 @@ extern int rand8;
 extern unsigned char format_buffer[];
 extern unsigned char hot_exit_flag;
 extern unsigned char decision;
-extern char confirming;
+extern unsigned char confirming;
 extern unsigned char exit_flag;
 extern unsigned char restart_flag;
 #if PLATFORM_WINDOWS
