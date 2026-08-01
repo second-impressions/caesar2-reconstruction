@@ -389,9 +389,7 @@ void remove_citizen(int citizen_idx)
 // FUNCTION: C2WIN 0x0046a102
 void remove_army(int army_idx)
 {
-    char zero = 0;
-    int cell_offset = army_list[army_idx].map_ref;
-    RM_CELL(cell_offset).occupant = zero;
+    RM_CELL(army_list[army_idx].map_ref).occupant = 0;
     clear_army(&army_list[army_idx]);
 }
 
