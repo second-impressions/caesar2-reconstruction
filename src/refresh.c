@@ -56,8 +56,7 @@ extern void resize_pm_screen(void);
 extern void update_map_scrollbars(unsigned int mode);
 extern void *active_window;
 extern unsigned char screen_buffer[];
-extern void win_bitblt(void *window_ptr, void *buffer, int dest_x, int dest_y,
-                       int width, int height, int source_x, int source_y);
+extern void win_bitblt();
 #endif
 
 /* Forward declarations (functions defined later in this file). */
