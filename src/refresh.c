@@ -100,16 +100,15 @@ void refresh_sprite_square(int tile_x, int tile_y)
     if (tile_y < 0) tile_y = 0;
     if (tile_x < 0) tile_x = 0;
     ref_ptr = tile_x + tile_y * 40;
-    if (ref_ptr < 0x4b0) {
-        if (svga_refresh_table[ref_ptr] < 2)
-            svga_refresh_table[ref_ptr] = 2;
-        if (svga_refresh_table[ref_ptr + 1] < 2)
-            svga_refresh_table[ref_ptr + 1] = 2;
-        if (svga_refresh_table[ref_ptr + 0x28] < 2)
-            svga_refresh_table[ref_ptr + 0x28] = 2;
-        if (svga_refresh_table[ref_ptr + 0x29] < 2)
-            svga_refresh_table[ref_ptr + 0x29] = 2;
-    }
+    if (ref_ptr >= 0x4b0) return;
+    if (svga_refresh_table[ref_ptr] < 2)
+        svga_refresh_table[ref_ptr] = 2;
+    if (svga_refresh_table[ref_ptr + 1] < 2)
+        svga_refresh_table[ref_ptr + 1] = 2;
+    if (svga_refresh_table[ref_ptr + 0x28] < 2)
+        svga_refresh_table[ref_ptr + 0x28] = 2;
+    if (svga_refresh_table[ref_ptr + 0x29] < 2)
+        svga_refresh_table[ref_ptr + 0x29] = 2;
 }
 
 // Mark a 4×4 tile square at priority 2, replacing any existing priority.
