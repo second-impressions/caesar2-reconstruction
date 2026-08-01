@@ -295,9 +295,14 @@ void mid2_line_no_sides_base(void)
 // FUNCTION: C2WIN 0x0044611a
 void mid2_line_with_sides_base(void)
 {
-    int col_idx;
+    int i;
+#if PLATFORM_DOS
     int half_height;
+#endif
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     pm_shown_x = pm_x;
     sprite_x   = pm_screen_x_start;
 
@@ -305,72 +310,126 @@ void mid2_line_with_sides_base(void)
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (((pm_shown_ptr) >= 0x0FFF0000)) {
         sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
+#if PLATFORM_WINDOWS
+        place_lefthalf_diamond();
+#endif
     } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
         place2_a_building_base(3);
+#if PLATFORM_DOS
         goto left_edge_done;
+#endif
     } else {
         if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
             (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
         }
         sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
         sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
         sprite_image_no += 0x10;
+#if PLATFORM_WINDOWS
+        place_lefthalf_diamond();
+#endif
     }
+#if PLATFORM_DOS
     place_lefthalf_diamond();
+#endif
 left_edge_done:
     if (!((pm_shown_ptr) >= 0x0FFF0000))
         (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits |= 2;
     sprite_x += pm_diamond_half_width;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* middle full diamonds */
-    for (col_idx = 0; col_idx < pm_screen_width - 1; col_idx++) {
+    for (i = 0; i < pm_screen_width - 1; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
+#if PLATFORM_WINDOWS
+            place_diamond(0);
+            sprite_x += pm_diamond_width;
+#endif
         } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
             place2_a_building_base(0);
+#if PLATFORM_DOS
             print2_test_info();
             continue;
+#endif
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             }
             sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
             sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
             sprite_image_no += 0x10;
+#if PLATFORM_WINDOWS
+            place_diamond(0);
+            sprite_x += pm_diamond_width;
+#endif
         }
+#if PLATFORM_DOS
         place_diamond(0);
         sprite_x += pm_diamond_width;
         print2_test_info();
+#endif
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* rightmost half-diamond */
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (((pm_shown_ptr) >= 0x0FFF0000)) {
         sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
+#if PLATFORM_WINDOWS
+        place_righthalf_diamond();
+#endif
     } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
         place2_a_building_base(4);
+#if PLATFORM_DOS
         goto right_edge_done;
+#endif
     } else {
         if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
             (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
         }
         sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
+#if PLATFORM_DOS
         sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + sprite_image_no * 4];
+#else
+        sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
+#endif
         sprite_image_no += 0x10;
+#if PLATFORM_WINDOWS
+        place_righthalf_diamond();
+#endif
     }
+#if PLATFORM_DOS
     place_righthalf_diamond();
+#endif
 right_edge_done:
     if (!((pm_shown_ptr) >= 0x0FFF0000))
         (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits |= 2;
 
+#if PLATFORM_DOS
     half_height = pm_diamond_half_height;
     sprite_y  += half_height;
     pm_shown_y++;
     pm_y_clip += half_height;
+#else
+    sprite_y  += pm_diamond_half_height;
+    pm_shown_y++;
+    pm_y_clip += pm_diamond_half_height;
+#endif
 }
 
 // Draw an unclipped row of building tops and sprites, including adjacent spillover sprites.
