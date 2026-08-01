@@ -908,72 +908,74 @@ void clear_region_ferret_map(int movement_mode, int margin, unsigned char *map_b
 // Initializes a map corridor so only navigable sea cells remain passable.
 // FUNCTION: C2 0x2ba5e
 // FUNCTION: C2WIN 0x0046b4a9
-void clear_sea_ferret_map(int unused, int margin, unsigned char *map_base, int map_width,
-                          int map_height, int cell_size, int start_x, int start_y,
-                          int end_x, int end_y)
+void clear_sea_ferret_map(int unused, int margin, unsigned char *map_base, int map_wi,
+                          int map_hi, int cell_size, int x1, int y1,
+                          int x2, int y2)
 {
-    int min_y;
-    int max_y;
-    int min_x;
+    int first_y;
+    int highy;
+    int left_col;
     int max_x;
-    int corridor_start_x;
-    int corridor_start_y;
-    int corridor_end_y;
-    int corridor_end_x;
-    int row_offset;
-    int cell_offset;
-    int cell_x;
-    int cell_y;
-    unsigned char terrain_flags;
+    int x_begin;
+    int min_y;
+    int end_line;
+    int high_col;
+    int ptr;
+    int map_ptr;
+    int x;
+    int cy;
+    int cell_no;
+    int j;
+    unsigned char terrain_type;
     unsigned char path_value;
 
-    if (start_x <= end_x) {
-        min_x = start_x;
-        max_x = end_x;
+    if (x1 <= x2) {
+        left_col = x1;
+        max_x = x2;
     } else {
-        min_x = end_x;
-        max_x = start_x;
+        left_col = x2;
+        max_x = x1;
     }
-    if (start_y <= end_y) {
-        min_y = start_y;
-        max_y = end_y;
+    if (y1 <= y2) {
+        first_y = y1;
+        highy = y2;
     } else {
-        min_y = end_y;
-        max_y = start_y;
+        first_y = y2;
+        highy = y1;
     }
-    corridor_start_x = min_x - margin;
-    corridor_start_y = min_y - margin;
-    corridor_end_x = max_x + margin;
-    corridor_end_y = max_y + margin;
-    if (corridor_start_x < 0) corridor_start_x = 0;
-    if (corridor_start_y < 0) corridor_start_y = 0;
-    if (corridor_end_x >= map_width) corridor_end_x = map_width - 1;
-    if (corridor_end_y >= map_height) corridor_end_y = map_height - 1;
+    x_begin = left_col - margin;
+    min_y = first_y - margin;
+    high_col = max_x + margin;
+    end_line = highy + margin;
+    if (x_begin < 0) x_begin = 0;
+    if (min_y < 0) min_y = 0;
+    if (high_col >= map_wi) high_col = map_wi - 1;
+    if (end_line >= map_hi) end_line = map_hi - 1;
 
-    row_offset = cell_size * (corridor_start_x + corridor_start_y * map_width);
-    for (cell_y = corridor_start_y; cell_y <= corridor_end_y; cell_y++, row_offset += map_width * cell_size) {
-        for (cell_x = corridor_start_x, cell_offset = row_offset; cell_x <= corridor_end_x; cell_x++, cell_offset += cell_size) {
-            if (cell_y == corridor_start_y)
+    ptr = cell_size * (x_begin + min_y * map_wi);
+    for (cy = min_y; cy <= end_line; cy++, ptr += map_wi * cell_size) {
+        for (x = x_begin, map_ptr = ptr; x <= high_col; x++, map_ptr += cell_size) {
+            if (cy == min_y)
                 path_value = 0xFF;
-            else if (cell_y == corridor_end_y)
+            else if (cy == end_line)
                 path_value = 0xFF;
-            else if (cell_x == corridor_start_x)
+            else if (x == x_begin)
                 path_value = 0xFF;
-            else if (cell_x == corridor_end_x)
+            else if (x == high_col)
                 path_value = 0xFF;
             else {
                 path_value = 0xFE;
-                terrain_flags = *(map_base + cell_offset + 1);
-                *(map_base + cell_offset + 6) = 0;
-                *(map_base + cell_offset + 5) = 0;
-                if ((terrain_flags & 0x10) != 0) {
-                    if ((terrain_flags & 8) != 0) {
+                terrain_type = *(map_base + map_ptr + 1);
+                *(map_base + map_ptr + 6) = 0;
+                *(map_base + map_ptr + 5) = 0;
+                if ((terrain_type & 0x10) != 0) {
+                    if ((terrain_type & 8) != 0) {
                         path_value = 0;
-                        *(map_base + cell_offset + 5) = 1;
+                        *(map_base + map_ptr + 5) = 1;
                     }
                 }
             }
-            *(map_base + cell_offset + 2) = path_value;
+            *(map_base + map_ptr + 2) = path_value;
         }
     }
 }
