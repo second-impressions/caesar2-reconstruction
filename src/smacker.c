@@ -187,13 +187,16 @@ int continue_smacking(int left, int top, int mode)
 // FUNCTION: C2 0x139ab
 void stop_smacking(void)
 {
-    if (smacker_on) {
-        if (smack_from_cd) cd_path(smack_filename);
-        SmackClose(smk);
-        setup_scratch_buffer();
-        smacker_on = 0;
-        if (smack_from_cd) main_path();
-    }
+    if (smacker_on == 0) return;
+#if C2_FEAT_SMACK_CD_PATH
+    if (smack_from_cd) cd_path(smack_filename);
+#endif
+    SmackClose(smk);
+    setup_scratch_buffer();
+    smacker_on = 0;
+#if C2_FEAT_SMACK_CD_PATH
+    if (smack_from_cd) main_path();
+#endif
 }
 
 // Reports whether a Smacker movie is active.
