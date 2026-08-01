@@ -751,41 +751,71 @@ void place2_a_building_base(int draw_style)
 // FUNCTION: C2WIN 0x0044707e
 void place2_a_building_top(int draw_style)
 {
-    unsigned char bank_kind;
-    unsigned char *sprite_bank_ptr;
+#if PLATFORM_WINDOWS
+    unsigned char bank_index;
+    int mode;
+    int rotation;
+#else
+    unsigned char bank_index;
     int rotation_idx;
-    unsigned char base_kind;
-    unsigned char height_class;
+#endif
+    unsigned char *bank;
+    unsigned char sprite_kind;
+    unsigned char sprite_class;
     int edge_class;
-    int x_offset;
+    int label_x;
     int y_offset;
-    int text_width;
-    unsigned char province_label;
-    unsigned char stored_goods;
-    unsigned char stored_quantity;
-    int goods_x_offset;
-    int goods_y_offset;
+    int label_width;
+    unsigned char province_no;
+    unsigned char goods_amount;
+    unsigned char qty;
+    int goods_x;
+    int sprite_y_off;
+#if PLATFORM_DOS
     int header_byte;
     int header_high_byte;
+#endif
 
+#if PLATFORM_WINDOWS
+    if (screen_mode > 1) mode = 0;
+    else mode = screen_mode;
+#endif
     sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).gfx;
 
-    bank_kind = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x1c; rotation_idx = (map_direction >> 1) + sprite_image_no * 4;
+#if PLATFORM_WINDOWS
+    bank_index = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x1c;
 
-    if (bank_kind == 0) { sprite_bank_ptr = house_data; sprite_image_no = rotated2_bank0[rotation_idx] & 0xff; }
-    else if (bank_kind == 4) { sprite_bank_ptr = building_data1; sprite_image_no = rotated2_bank1[rotation_idx] & 0xff; }
-    else if (bank_kind == 8) { sprite_bank_ptr = building_data2; sprite_image_no = rotated2_bank2[rotation_idx] & 0xff; }
-    else if (bank_kind == 0xc) { sprite_bank_ptr = building_data3; sprite_image_no = (unsigned char)rotated2_bank3[rotation_idx]; }
-    else if (bank_kind == 0x10) {
-        sprite_bank_ptr = fixt_data; sprite_image_no = (rotated2_map[sprite_image_no - 0x10].dir[map_direction >> 1] & 0xff) + 0x10; }
+    if (bank_index == 0) { bank = (&house_data)[mode]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank0)[sprite_image_no].dir[map_direction >> 1]; }
+    else if (bank_index == 4) { bank = (&building_data1)[mode]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank1)[sprite_image_no].dir[map_direction >> 1]; }
+    else if (bank_index == 8) { bank = (&building_data2)[mode]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank2)[sprite_image_no].dir[map_direction >> 1]; }
+    else if (bank_index == 0xc) { bank = (&building_data3)[mode]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank3)[sprite_image_no].dir[map_direction >> 1]; }
+    else if (bank_index == 0x10) {
+        bank = (&fixt_data)[mode]; sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + sprite_image_no * 4] + 0x10; }
     else return;
+#else
+    bank_index = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x1c; rotation_idx = (map_direction >> 1) + sprite_image_no * 4;
+
+    if (bank_index == 0) { bank = house_data; sprite_image_no = rotated2_bank0[rotation_idx] & 0xff; }
+    else if (bank_index == 4) { bank = building_data1; sprite_image_no = rotated2_bank1[rotation_idx] & 0xff; }
+    else if (bank_index == 8) { bank = building_data2; sprite_image_no = rotated2_bank2[rotation_idx] & 0xff; }
+    else if (bank_index == 0xc) { bank = building_data3; sprite_image_no = (unsigned char)rotated2_bank3[rotation_idx]; }
+    else if (bank_index == 0x10) {
+        bank = fixt_data; sprite_image_no = (rotated2_map[sprite_image_no - 0x10].dir[map_direction >> 1] & 0xff) + 0x10; }
+    else return;
+#endif
 
     data_ptr     = sprite_image_no * 16 + 8;
-    y_length     = sprite_bank_ptr[data_ptr + 0xd];
-    height_class           = sprite_bank_ptr[data_ptr + 0xc];
-    sprite_start = sprite_bank_ptr[data_ptr + 4]
-                 + (sprite_bank_ptr[data_ptr + 5] << 8)
-                 + (sprite_bank_ptr[data_ptr + 6] << 16);
+    y_length     = bank[data_ptr + 0xd];
+    sprite_class = bank[data_ptr + 0xc];
+#if PLATFORM_WINDOWS
+    sprite_start = (bank[data_ptr + 5] << 8)
+                 + (bank[data_ptr + 6] << 16)
+                 + bank[data_ptr + 4];
+#else
+    sprite_start = bank[data_ptr + 4]
+                 + (bank[data_ptr + 5] << 8)
+                 + (bank[data_ptr + 6] << 16);
+#endif
     if (zoom_level == 0)      sprite_hat_start = sprite_start + 0x384;
     else if (zoom_level == 1) sprite_hat_start = sprite_start + 0xc4;
     else                      sprite_hat_start = sprite_start + 0x24;
@@ -797,94 +827,111 @@ void place2_a_building_top(int draw_style)
 
     if (draw_style == 3) {
         if (y_length != 0) {
-            if (height_class == 2) {
-                if      (zoom_level == 0) write_large_diamond_lefthat(sprite_bank_ptr, pm_y_clip);
-                else if (zoom_level == 1) write_medium_diamond_lefthat(sprite_bank_ptr, pm_y_clip);
-                else                      write_small_diamond_lefthat(sprite_bank_ptr, pm_y_clip);
-            } else if (height_class == 4) {
-                if      (zoom_level == 0) write_large_diamond_righthalfhat(sprite_bank_ptr, pm_y_clip, 2);
-                else if (zoom_level == 1) write_medium_diamond_righthalfhat(sprite_bank_ptr, pm_y_clip, 2);
-                else                      write_small_diamond_righthalfhat(sprite_bank_ptr, pm_y_clip, 2);
+            if (sprite_class == 2) {
+                if      (zoom_level == 0) write_large_diamond_lefthat(bank, pm_y_clip);
+                else if (zoom_level == 1) write_medium_diamond_lefthat(bank, pm_y_clip);
+                else                      write_small_diamond_lefthat(bank, pm_y_clip);
+            } else if (sprite_class == 4) {
+                if      (zoom_level == 0) write_large_diamond_righthalfhat(bank, pm_y_clip, 2);
+                else if (zoom_level == 1) write_medium_diamond_righthalfhat(bank, pm_y_clip, 2);
+                else                      write_small_diamond_righthalfhat(bank, pm_y_clip, 2);
             }
         }
     } else if (draw_style == 4) {
         if (y_length != 0) {
-            if (height_class == 2) {
-                if      (zoom_level == 0) write_large_diamond_righthat(sprite_bank_ptr, pm_y_clip);
-                else if (zoom_level == 1) write_medium_diamond_righthat(sprite_bank_ptr, pm_y_clip);
-                else                      write_small_diamond_righthat(sprite_bank_ptr, pm_y_clip);
+            if (sprite_class == 2) {
+                if      (zoom_level == 0) write_large_diamond_righthat(bank, pm_y_clip);
+                else if (zoom_level == 1) write_medium_diamond_righthat(bank, pm_y_clip);
+                else                      write_small_diamond_righthat(bank, pm_y_clip);
             }
-            if (height_class == 3) {
-                if      (zoom_level == 0) write_large_diamond_lefthalfhat(sprite_bank_ptr, pm_y_clip, 2);
-                else if (zoom_level == 1) write_medium_diamond_lefthalfhat(sprite_bank_ptr, pm_y_clip, 2);
-                else                      write_small_diamond_lefthalfhat(sprite_bank_ptr, pm_y_clip, 2);
+            if (sprite_class == 3) {
+                if      (zoom_level == 0) write_large_diamond_lefthalfhat(bank, pm_y_clip, 2);
+                else if (zoom_level == 1) write_medium_diamond_lefthalfhat(bank, pm_y_clip, 2);
+                else                      write_small_diamond_lefthalfhat(bank, pm_y_clip, 2);
             }
         }
     } else {
         if (draw_style != 2 && y_length != 0) {
-            if (height_class == 2) {
-                if      (zoom_level == 0) write_large_diamond_hat(sprite_bank_ptr, pm_y_clip);
-                else if (zoom_level == 1) write_medium_diamond_hat(sprite_bank_ptr, pm_y_clip);
-                else                      write_small_diamond_hat(sprite_bank_ptr, pm_y_clip);
-            } else if (height_class == 3) {
-                if      (zoom_level == 0) write_large_diamond_lefthalfhat(sprite_bank_ptr, pm_y_clip, 0);
-                else if (zoom_level == 1) write_medium_diamond_lefthalfhat(sprite_bank_ptr, pm_y_clip, 0);
-                else                      write_small_diamond_lefthalfhat(sprite_bank_ptr, pm_y_clip, 0);
-            } else if (height_class == 4) {
-                if      (zoom_level == 0) write_large_diamond_righthalfhat(sprite_bank_ptr, pm_y_clip, 0);
-                else if (zoom_level == 1) write_medium_diamond_righthalfhat(sprite_bank_ptr, pm_y_clip, 0);
-                else                      write_small_diamond_righthalfhat(sprite_bank_ptr, pm_y_clip, 0);
+            if (sprite_class == 2) {
+                if      (zoom_level == 0) write_large_diamond_hat(bank, pm_y_clip);
+                else if (zoom_level == 1) write_medium_diamond_hat(bank, pm_y_clip);
+                else                      write_small_diamond_hat(bank, pm_y_clip);
+            } else if (sprite_class == 3) {
+                if      (zoom_level == 0) write_large_diamond_lefthalfhat(bank, pm_y_clip, 0);
+                else if (zoom_level == 1) write_medium_diamond_lefthalfhat(bank, pm_y_clip, 0);
+                else                      write_small_diamond_lefthalfhat(bank, pm_y_clip, 0);
+            } else if (sprite_class == 4) {
+                if      (zoom_level == 0) write_large_diamond_righthalfhat(bank, pm_y_clip, 0);
+                else if (zoom_level == 1) write_medium_diamond_righthalfhat(bank, pm_y_clip, 0);
+                else                      write_small_diamond_righthalfhat(bank, pm_y_clip, 0);
             }
         }
         sprite_x += pm_diamond_width;
     }
 
-    base_kind = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
-    if (base_kind >= 0x98 && base_kind <= 0x9f) {
+    sprite_kind = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
+    if (sprite_kind >= 0x98 && sprite_kind <= 0x9f) {
         old_sprite_y = sprite_y; old_sprite_x = sprite_x;
-        if (base_kind == 0x98 || base_kind == 0x9c)      edge_class = 0;
-        else if (base_kind == 0x99 || base_kind == 0x9d) edge_class = 2;
-        else if (base_kind == 0x9a || base_kind == 0x9e) edge_class = 4;
+        if (sprite_kind == 0x98 || sprite_kind == 0x9c)      edge_class = 0;
+        else if (sprite_kind == 0x99 || sprite_kind == 0x9d) edge_class = 2;
+        else if (sprite_kind == 0x9a || sprite_kind == 0x9e) edge_class = 4;
         else                                   edge_class = 6;
 
-        province_label = region_borders[province_is].u.dir[edge_class >> 1];
-        if (province_label != 0) province_label++;
-        get_text_pointer(6, province_label);
-        text_width = get_string_width(text_pointer, font1);
+        province_no = region_borders[province_is].u.dir[edge_class >> 1];
+        if (province_no != 0) province_no++;
+        get_text_pointer(6, province_no);
+        label_width = get_string_width(text_pointer, font1);
 
         if (map_direction == 2)      edge_class += 6;
         else if (map_direction == 4) edge_class += 4;
         else if (map_direction == 6) edge_class += 2;
         if (edge_class >= 8) edge_class %= 8;
 
-        if (edge_class == 0)      { x_offset = -8; y_offset = -8; }
-        else if (edge_class == 2) { x_offset = 0; y_offset = 0x28; }
-        else if (edge_class == 4) { x_offset = -(text_width + 0x3c); y_offset = 0x2c; }
-        else                      { x_offset = -(text_width + 0x3c); y_offset = -0xc; }
+        if (edge_class == 0)      { label_x = -8; y_offset = -8; }
+        else if (edge_class == 2) { label_x = 0; y_offset = 0x28; }
+        else if (edge_class == 4) { label_x = -(label_width + 0x3c); y_offset = 0x2c; }
+        else                      { label_x = -(label_width + 0x3c); y_offset = -0xc; }
 
         font_screen_limit = 1;
-        put_a_font_string(text_pointer, sprite_x + x_offset, sprite_y + y_offset, font1, 0x20);
+        put_a_font_string(text_pointer, sprite_x + label_x, sprite_y + y_offset, font1, 0x20);
         font_screen_limit = 1;
         sprite_y = old_sprite_y; sprite_x = old_sprite_x;
-        font_list(0x1b, 0, sprite_x + x_offset, sprite_y + y_offset - 0x14, font1, 0x20);
+        font_list(0x1b, 0, sprite_x + label_x, sprite_y + y_offset - 0x14, font1, 0x20);
         sprite_y = old_sprite_y; sprite_x = old_sprite_x;
     }
-    else if (base_kind == 0xd4) {
-        stored_goods = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).occupant & 0xf0;
-        stored_quantity = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).occupant & 0xf;
-        stored_goods >>= 4;
+    else if (sprite_kind == 0xd4) {
+        goods_amount = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).occupant & 0xf0;
+        qty = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).occupant & 0xf;
+        goods_amount >>= 4;
         if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x40) == 0) return;
-        sprite_image_no = stored_goods + 9;
-        goods_x_offset = reg_type_x_off[zoom_level][map_direction / 2];
-        goods_y_offset = reg_type_y_off[zoom_level][map_direction / 2];
-        if (draw_style == 1) goods_x_offset -= pm_diamond_half_width;
+        sprite_image_no = goods_amount + 9;
+#if PLATFORM_WINDOWS
+        goods_x = *(int *)((unsigned char *)reg_type_x_off
+                               + (map_direction / 2) * 4 + zoom_level * 16);
+        sprite_y_off = *(int *)((unsigned char *)reg_type_y_off
+                               + (map_direction / 2) * 4 + zoom_level * 16);
+#else
+        goods_x = reg_type_x_off[zoom_level][map_direction / 2];
+        sprite_y_off = reg_type_y_off[zoom_level][map_direction / 2];
+#endif
+        if (draw_style == 1) goods_x -= pm_diamond_half_width;
 
         data_ptr = sprite_image_no * 16 + 8;
-        sprite_bank_ptr = tops_data + data_ptr; sprite_start = ((header_byte = sprite_bank_ptr[5]) << 8)
-                     + (header_byte = sprite_bank_ptr[4])
-                     + ((header_high_byte = sprite_bank_ptr[6]) << 16);
-        sprite_width = (header_byte = sprite_bank_ptr[0]) + ((header_byte = sprite_bank_ptr[1]) << 8);
-        sprite_height = (sprite_bank_ptr[2]) + (sprite_bank_ptr[3] << 8);
+#if PLATFORM_WINDOWS
+        sprite_start = ((&tops_data)[mode][data_ptr + 6] << 16)
+                     + ((&tops_data)[mode][data_ptr + 5] << 8)
+                     + (&tops_data)[mode][data_ptr + 4];
+        sprite_width = ((&tops_data)[mode][data_ptr + 1] << 8)
+                     + (&tops_data)[mode][data_ptr];
+        sprite_height = ((&tops_data)[mode][data_ptr + 3] << 8)
+                      + (&tops_data)[mode][data_ptr + 2];
+#else
+        bank = tops_data + data_ptr; sprite_start = ((header_byte = bank[5]) << 8)
+                     + (header_byte = bank[4])
+                     + ((header_high_byte = bank[6]) << 16);
+        sprite_width = (header_byte = bank[0]) + ((header_byte = bank[1]) << 8);
+        sprite_height = (bank[2]) + (bank[3] << 8);
+#endif
 
         if (sprite_start > 0x4baf0) { sprite_error++; return; }
         if (sprite_start < 0)       { sprite_error++; return; }
@@ -892,14 +939,25 @@ void place2_a_building_top(int draw_style)
         if (sprite_height > 0x1e0)  { sprite_error++; return; }
 
         old_sprite_x = sprite_x; old_sprite_y = sprite_y;
-        sprite_x += goods_x_offset; sprite_y += goods_y_offset;
+        sprite_x += goods_x; sprite_y += sprite_y_off;
 
+#if PLATFORM_WINDOWS
+        xclip(pm_screen_x_start, pm_screen_x_end);
+        yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x1de);
         yclip(0x18, 0x1da);
+#endif
         if (yclipped == 5) goto put_back;
+#if PLATFORM_WINDOWS
+        if      (xclipped == 1) write_i_left_sprite((&tops_data)[mode]);
+        else if (xclipped == 2) write_i_right_sprite((&tops_data)[mode]);
+        else                    write_i_sprite((&tops_data)[mode]);
+#else
         if      (xclipped == 1) write_i_left_sprite(tops_data);
         else if (xclipped == 2) write_i_right_sprite(tops_data);
         else                    write_i_sprite(tops_data);
+#endif
 put_back: sprite_x = old_sprite_x; sprite_y = old_sprite_y;
     }
 }
