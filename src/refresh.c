@@ -306,28 +306,27 @@ void refresh_a_bigger_square(int tile_x, int tile_y)
 // FUNCTION: C2WIN 0x0043afc4
 void refresh_big_action_square(int tile_x, int tile_y)
 {
-    int width;
-    int height;
-    int row_idx;
-    int col_idx;
+    int i;
+    int j;
+    int ymax;
+    int xmax;
 
-    height = 12;
-    width = 14;
+    ymax = 12;
+    xmax = 14;
     if (tile_x < 0) {
         tile_x = 0;
-        width = 8;
+        xmax = 8;
     }
     if (tile_y < 0) {
         tile_y = 0;
-        height = 8;
+        ymax = 8;
     }
     ref_ptr = tile_x + tile_y * 40;
-    for (row_idx = 0; row_idx < height; row_idx++, ref_ptr += 40) {
-        for (col_idx = 0; col_idx < width; col_idx++) {
-            int tile_idx = ref_ptr + col_idx;
-            if (tile_idx >= 0x4b0) return;
-            if (svga_refresh_table[tile_idx] < 2) {
-                svga_refresh_table[tile_idx] = 2;
+    for (i = 0; i < ymax; i++, ref_ptr += 40) {
+        for (j = 0; j < xmax; j++) {
+            if (ref_ptr + j >= 0x4b0) return;
+            if (svga_refresh_table[ref_ptr + j] < 2) {
+                svga_refresh_table[ref_ptr + j] = 2;
             }
         }
     }
