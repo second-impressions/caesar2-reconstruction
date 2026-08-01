@@ -246,8 +246,8 @@ extern int cnt2;
 extern int cnt4;
 extern int cnt256;
 extern char test_mode3;
-extern char test_mode2;
-extern char test_mode1;
+extern unsigned char test_mode2;
+extern unsigned char test_mode1;
 extern char test_mode4;
 extern unsigned char develop_mode;
 

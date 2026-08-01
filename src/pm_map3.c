@@ -699,29 +699,32 @@ void place3_sprite(int edge_style)
 // FUNCTION: C2WIN 0x0041fe23
 void print3_test_info(void)
 {
-    int debug_value;
-    int figure_idx;
+    int v;
+    int col;
+    int fig;
 
     if (test_mode1 != 0) {
         if (((pm_shown_ptr) >= 0x0FFF0000)) return;
         old_sprite_x = sprite_x;
         old_sprite_y = sprite_y;
-        figure_idx = ((unsigned char *)battle_map)[(pm_shown_ptr) + 1];
-        if (figure_idx != 0) debug_value = figure_list[figure_idx].state_idx;
-        else debug_value = 0;
-        font_no(debug_value, 0x20, " ",
+        v = ((unsigned char *)battle_map)[(pm_shown_ptr) + 1];
+        if (v != 0) v = figure_list[v].state_idx;
+        else v = 0;
+        col = 0x3f;
+        font_no(v, 0x20, " ",
                 sprite_x + 0x14 - pm_diamond_width, sprite_y + 0xa,
-                font1, 0x3f);
+                font1, col);
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     } else if (test_mode2 != 0) {
         if (((pm_shown_ptr) >= 0x0FFF0000)) return;
         old_sprite_x = sprite_x;
         old_sprite_y = sprite_y;
-        debug_value = (signed char)((unsigned char *)battle_map)[(pm_shown_ptr) + 3];
-        font_no(debug_value, 0x20, " ",
+        v = (signed char)((unsigned char *)battle_map)[(pm_shown_ptr) + 3];
+        col = 0x3f;
+        font_no(v, 0x20, " ",
                 sprite_x + 0x14 - pm_diamond_width, sprite_y + 0xa,
-                font1, 0x3f);
+                font1, col);
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     }
