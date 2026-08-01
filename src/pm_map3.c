@@ -402,6 +402,9 @@ void mid3_line_no_sides_top(void)
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place3_sprite(2);
     }
     sprite_x = pm_screen_x_start;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     col_idx = 0;
     pm_shown_x = pm_x;
     for (; col_idx < pm_screen_width; col_idx++) {
@@ -414,6 +417,9 @@ void mid3_line_no_sides_top(void)
         }
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     if (pm_shown_x < 80) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x];
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place3_sprite(2);
