@@ -370,16 +370,14 @@ void remove_figure(int figure_idx)
 // Releases a citizen's city-map slot and clears its record.
 // FUNCTION: C2 0x2afe3
 // FUNCTION: C2WIN 0x0046a055
-void remove_citizen(int citizen_idx)
+void remove_citizen(int n)
 {
-    char zero = 0;
-    int cell_offset = citizen_list[citizen_idx].map_ref;
-    if (CM_CELL((cell_offset)).citizen_a == citizen_idx) {
-        CM_CELL((cell_offset)).citizen_a = zero;
-    } else if (CM_CELL((cell_offset)).citizen_b == citizen_idx) {
-        CM_CELL((cell_offset)).citizen_b = zero;
+    if (CM_CELL(citizen_list[n].map_ref).citizen_a == n) {
+        CM_CELL(citizen_list[n].map_ref).citizen_a = 0;
+    } else if (CM_CELL(citizen_list[n].map_ref).citizen_b == n) {
+        CM_CELL(citizen_list[n].map_ref).citizen_b = 0;
     }
-    clear_citizen(&citizen_list[citizen_idx]);
+    clear_citizen(&citizen_list[n]);
 }
 
 // Releases an army's region-map cell and clears its record.
