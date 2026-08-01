@@ -244,20 +244,20 @@ int create_figure(int sprite_type, int base_x, int off_x, int base_y, int off_y,
 // Allocates an arrow and initializes its flight path between two battle cells.
 // FUNCTION: C2 0x2ae0e
 // FUNCTION: C2WIN 0x00469d49
-int create_arrow(unsigned char *arrow_data_ptr, int owner_idx, int start_x, int start_y, int end_x, int end_y)
+int create_arrow(unsigned char *arrow_data_ptr, int owner, int sx, int sy, int ex, int ey)
 {
     for (created_arrow_no = 1; created_arrow_no < 0xC9; created_arrow_no++) {
         if (arrow_list[created_arrow_no].exists == 0) {
             arrow_list[created_arrow_no].exists = 1;
-            arrow_list[created_arrow_no].owner = owner_idx;
-            arrow_list[created_arrow_no].end_x = end_x * 7;
-            arrow_list[created_arrow_no].end_y = end_y * 7;
-            arrow_list[created_arrow_no].start_x = (short)start_x * 7;
-            arrow_list[created_arrow_no].start_y = start_y * 7;
-            arrow_list[created_arrow_no].grid_x = start_x;
-            arrow_list[created_arrow_no].grid_y = start_y;
+            arrow_list[created_arrow_no].owner = owner;
+            arrow_list[created_arrow_no].end_x = ex * 7;
+            arrow_list[created_arrow_no].end_y = ey * 7;
+            arrow_list[created_arrow_no].start_x = sx * 7;
+            arrow_list[created_arrow_no].start_y = sy * 7;
+            arrow_list[created_arrow_no].grid_x = sx;
+            arrow_list[created_arrow_no].grid_y = sy;
             arrow_list[created_arrow_no].map_ref = (arrow_list[created_arrow_no].grid_x + arrow_list[created_arrow_no].grid_y * 0x34) * 4;
-            arrow_list[created_arrow_no].heading = get_heading(start_x, start_y, end_x, end_y, 0);
+            arrow_list[created_arrow_no].heading = get_heading(sx, sy, ex, ey, 0);
             arrow_list[created_arrow_no].arrow_data_ptr = arrow_data_ptr;
             arrow_list[created_arrow_no].anim_count = 0;
             arrow_no = created_arrow_no;
