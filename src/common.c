@@ -39,15 +39,11 @@ unsigned char tb_occ_a_flag;
 /* Forward declarations */
 char get_heading(int start_x, int start_y, int end_x, int end_y, unsigned char still_offset);
 void init_bd(int start_x, int start_y, int end_x, int end_y);
-signed char check_clock_ferret_move(signed char direction);
-signed char check_anti_ferret_move(signed char direction);
-unsigned char ferret_heading(int x, int y);
 unsigned char get_tb_value(int direction);
 unsigned char get_ferret2(int direction);
 /* Forward declarations (functions defined later in this file). */
 void clear_army(struct army_rec *record_ptr);
 void load_ferret_run(int start_x, int start_y, int max_length);
-void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int map_height, int cell_size, int start_x, int start_y, int end_x, int end_y);
 void clear_ferret_map(int margin, unsigned char *map_base, int map_width, int map_height, int cell_size, int start_x, int start_y, int end_x, int end_y);
 void run_clock_ferret(void);
 void run_anti_ferret(void);
@@ -870,6 +866,10 @@ void clear_region_ferret_map(int movement_mode, int margin, unsigned char *map_b
         } }
 }
 
+void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int map_height,
+                       int cell_size, int start_x, int start_y,
+                       int end_x, int end_y);
+
 // Initializes a map corridor so only navigable sea cells remain passable.
 // FUNCTION: C2 0x2ba5e
 // FUNCTION: C2WIN 0x0046b4a9
@@ -881,14 +881,14 @@ void clear_sea_ferret_map(int unused, int margin, unsigned char *map_base, int m
     int highy;
     int left_col;
     int max_x;
+    int x;
     int x_begin;
+    int cy;
+    int high_col;
     int min_y;
     int end_line;
-    int high_col;
     int ptr;
     int map_ptr;
-    int x;
-    int cy;
     int cell_no;
     int j;
     unsigned char terrain_type;
@@ -954,16 +954,11 @@ int run_2_map_ferrets(int margin, unsigned char *map_base, int map_width, int ma
 {
     int i;
 
-    anti_ferret_x = start_x;
-    clock_ferret_x = start_x;
-    anti_ferret_y = start_y;
-    clock_ferret_y = start_y;
-    anti_ferret_ptr = cell_size * (start_y * map_width + start_x);
-    clock_ferret_ptr = anti_ferret_ptr;
-    anti_ferret_running = 1;
-    clock_ferret_running = 1;
-    anti_ferret_count = *(map_base + clock_ferret_ptr + 5) + 1;
-    clock_ferret_count = anti_ferret_count;
+    clock_ferret_x = anti_ferret_x = start_x;
+    clock_ferret_y = anti_ferret_y = start_y;
+    anti_ferret_ptr = clock_ferret_ptr = cell_size * (start_y * map_width + start_x);
+    clock_ferret_running = anti_ferret_running = 1;
+    clock_ferret_count = anti_ferret_count = *(map_base + clock_ferret_ptr + 5) + 1;
     *(map_base + clock_ferret_ptr + 2) = 1;
     ferret_energy = 200;
     ferret_home = 0;
@@ -1116,6 +1111,10 @@ void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int m
     }
     *(map_base + ferret_targ_ptr + 2) = initial_value;
 }
+
+signed char check_clock_ferret_move(signed char direction);
+signed char check_anti_ferret_move(signed char direction);
+unsigned char ferret_heading(int x, int y);
 
 // Traces a ferret route backward from the target along decreasing path costs.
 // FUNCTION: C2 0x2bf23
