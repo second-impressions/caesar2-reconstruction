@@ -268,12 +268,11 @@ void capture_shot(char *filename)
     screenshot_fd = open(filename,
               O_BINARY | O_TRUNC | O_CREAT | O_WRONLY,
               S_IRUSR | S_IWUSR);
-    if (screenshot_fd != -1) {
-        write(screenshot_fd, &LBM_HEADER1, 0x30);
-        write(screenshot_fd, &current_palette, 0x300);
-        write(screenshot_fd, &LBM_HEADER2, 8);
-        write(screenshot_fd, internal_screen, 0x4b000);
-        close(screenshot_fd);
-        go_64k_palette(&current_palette);
-    }
+    if (screenshot_fd == -1) return;
+    write(screenshot_fd, &LBM_HEADER1, 0x30);
+    write(screenshot_fd, &current_palette, 0x300);
+    write(screenshot_fd, &LBM_HEADER2, 8);
+    write(screenshot_fd, internal_screen, 0x4b000);
+    close(screenshot_fd);
+    go_64k_palette(&current_palette);
 }
