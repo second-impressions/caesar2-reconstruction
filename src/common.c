@@ -363,9 +363,7 @@ void remove_unit(int unit_idx)
 // FUNCTION: C2WIN 0x0046a016
 void remove_figure(int figure_idx)
 {
-    char zero = 0;
-    int cell_offset = figure_list[figure_idx].map_ref;
-    ((unsigned char *)battle_map)[(cell_offset) + 1] = zero;
+    ((unsigned char *)battle_map)[figure_list[figure_idx].map_ref + 1] = 0;
     clear_figure(&figure_list[figure_idx]);
 }
 
