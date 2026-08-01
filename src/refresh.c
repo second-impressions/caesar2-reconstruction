@@ -2,6 +2,9 @@
 /* The refresh table stores redraw priorities for a 40×30 grid of 16-pixel tiles. */
 #include "refresh.h"
 #include "c2_data.h"
+#if PLATFORM_WINDOWS
+#include <windows.h>
+#endif
 
 struct refresh_bank_row refresh_bank_switch_data[30] = {
     { 0, 0, 0, 0 },
@@ -51,6 +54,10 @@ extern void refresh_16x16_partblock(int screen_off, unsigned short bank_off,
 extern int pm_diamond_full_height;
 extern void resize_pm_screen(void);
 extern void update_map_scrollbars(unsigned int mode);
+extern void *active_window;
+extern unsigned char screen_buffer[];
+extern void win_bitblt(void *window_ptr, void *buffer, int dest_x, int dest_y,
+                       int width, int height, int source_x, int source_y);
 #endif
 
 /* Forward declarations (functions defined later in this file). */
@@ -577,6 +584,16 @@ void refresh_battle_zoom_mode(int zoom)
 // FUNCTION: C2WIN 0x0043b6cd
 void refresh_svga_screen(void)
 {
+#if PLATFORM_WINDOWS
+    RECT rect;
+    int w;
+    int h;
+
+    GetClientRect(active_window, &rect);
+    w = rect.right - rect.left;
+    h = rect.bottom - rect.top;
+    win_bitblt(active_window, screen_buffer, 0, 0, w, h, 0, 0);
+#else
     int row_idx;
     int col_idx;
     int tile_idx;
@@ -634,4 +651,5 @@ void refresh_svga_screen(void)
             }
         }
     }
+#endif
 }
