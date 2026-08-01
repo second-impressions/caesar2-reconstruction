@@ -52,7 +52,7 @@ void clear_ferret_map(int margin, unsigned char *map_base, int map_width, int ma
 void run_clock_ferret(void);
 void run_anti_ferret(void);
 void move_clock_ferret(signed char dir, unsigned char mode);
-void move_anti_ferret(signed char direction, char update_existing);
+void move_anti_ferret(signed char dir, unsigned char mode);
 void move_to_tb_value(int direction);
 
 
@@ -1490,12 +1490,12 @@ signed char check_anti_ferret_move(signed char direction)
 // Moves the anticlockwise path probe one cell and stamps its accumulated route cost.
 // FUNCTION: C2 0x2cc73
 // FUNCTION: C2WIN 0x0046d179
-void move_anti_ferret(signed char direction, char update_existing)
+void move_anti_ferret(signed char dir, unsigned char mode)
 {
     unsigned char path_value;
     unsigned char road_cost;
 
-    switch (direction) {
+    switch (dir) {
     case 0:
         --anti_ferret_y;
         anti_ferret_ptr -= ferret_vert_off;
@@ -1543,7 +1543,7 @@ void move_anti_ferret(signed char direction, char update_existing)
         *(ferret_map + anti_ferret_ptr + 2) = anti_ferret_count;
         anti_ferret_count += road_cost;
         anti_ferret_moves++;
-    } else if (update_existing != 0) {
+    } else if (mode != 0) {
         anti_ferret_count = path_value + road_cost;
     }
 }
