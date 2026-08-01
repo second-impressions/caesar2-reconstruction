@@ -619,6 +619,11 @@ void bottom2_line_with_sides(void)
     pm_y_clip += pm_diamond_half_height;
 }
 
+extern void refresh_a_bigger_square(int tile_x, int tile_y);
+extern void get_text_pointer(int entry_idx, int word_count);
+extern void set_prov_ambient(int event);
+extern void write_large_diamond_leftroof(unsigned char *sprite_addr);
+
 // Draw an unclipped bottom row using building roofs and adjacent spillover sprites.
 // FUNCTION: C2 0x3a096
 // FUNCTION: C2WIN 0x00446ae3
