@@ -5,9 +5,15 @@ int elephant_riders[96] = { 16, -10, 15, -9, 15, -10, 16, -10, 15, -9, 15, -9, 1
 
 
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
-extern void write_i_sprite(unsigned char *sprite_addr);
-extern void write_i_left_sprite(unsigned char *sprite_addr);
-extern void write_i_right_sprite(unsigned char *sprite_addr);
+extern void show_internal_2x8(int x, int y, int color);
+extern void show_battle_setup_box(void);
+extern void place_diamond(int style);
+extern void refresh_a_square(int tile_x, int tile_y, char refresh_value);
+extern void refresh_figure_square(int tile_x, int tile_y);
+extern void refresh_figure2_square(int tile_x, int tile_y);
+extern void refresh_figure3_square(int tile_x, int tile_y);
+extern void put_a_font_string(char *str, int x, int y, unsigned char *font, int color);
+extern void font_list(int idx, int word_count, int x, int y, unsigned char *font, int color);
 /* Forward declarations (functions defined later in this file). */
 void show_battlemap_base(void);
 void show_battlemap_top(void);
@@ -220,6 +226,9 @@ void show_battlemap_top(void)
     bottom3_line_with_sides();
     bottom3_line_no_sides();
 }
+
+extern void place_lefthalf_diamond(void);
+extern void place_righthalf_diamond(void);
 
 // Render one interior terrain row with full diamonds and optional debug labels.
 // FUNCTION: C2 0x3c0af
@@ -612,6 +621,11 @@ void bottom3_line_no_sides(void)
 // and screen clipping.
 // FUNCTION: C2 0x3ca7f
 // FUNCTION: C2WIN 0x0041f231
+extern void write_i_sprite(unsigned char *sprite_addr);
+extern void write_i_left_sprite(unsigned char *sprite_addr);
+extern void write_i_right_sprite(unsigned char *sprite_addr);
+extern void xclip(int clip_left, int clip_right);
+extern void yclip(int clip_top, int clip_bottom);
 void place3_sprite(int style)
 {
     int base_y_offset;
