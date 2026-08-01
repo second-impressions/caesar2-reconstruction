@@ -1,5 +1,9 @@
 #include "pcsound.h"
 #include <stdlib.h>      /* malloc, free */
+#if PLATFORM_WINDOWS
+#include <stdio.h>       /* sprintf */
+#include <string.h>      /* strcpy */
+#endif
 
 #include "c2_data.h"
 #include "c2_types.h"
@@ -17,6 +21,19 @@ int smksumy[15];
 int smacker_on;
 struct smk_handle *smk;
 int smk_ref_wi;
+
+#if PLATFORM_WINDOWS
+extern char smacker_path[];
+extern char cd_drive_path[];
+extern void *smacker_window;
+extern unsigned char smacker_screen[];
+
+int file_exists(char *filename);
+void stretch_window_buffer(void *window, int dest_x, int dest_y,
+                           int dest_width, int dest_height, void *buffer,
+                           int source_x, int source_y, int source_width,
+                           int source_height);
+#endif
 
 #pragma aux high_beep modify exact [eax ebx ecx];
 
@@ -47,6 +64,79 @@ void __pascal radfree(void *ptr)
 // FUNCTION: C2 0x135de
 void start_smacking(char *file_or_palette_ptr, int left, int top, int mode)
 {
+#if PLATFORM_WINDOWS
+    int sample_flags;
+    int sample_id;
+
+    my_strcpy("SMK", extension, 4);
+    put_filename_extension(file_or_palette_ptr);
+    smack_filename = file_or_palette_ptr;
+    if (is_file_on_harddrive(smack_filename) != 0) {
+        strcpy(smacker_path, smack_filename);
+    } else {
+        sprintf(smacker_path, "Smk\\%s", smack_filename);
+        if (file_exists(smacker_path) == 0) {
+            sprintf(smacker_path, "%s%s\\Smk\\%s", cd_drive_path,
+                    "C2Win95", smack_filename);
+        }
+    }
+    free_scratch_buffer();
+
+    if (allow_samples() == 0) {
+        sample_flags = 0;
+        sample_id = 0;
+    } else if (c2inf.samples_on == 0) {
+        sample_flags = 0;
+        sample_id = 0;
+    } else {
+        sample_flags = 0x2000;
+        if (mode == 1) sample_flags |= 0x400;
+    }
+    if (c2inf.anims_on != 0)
+        smk = SmackOpen(smacker_path, 0xfe000, -1);
+    else
+        smk = 0;
+
+    if (smk == 0) {
+        setup_scratch_buffer();
+        if (mode != 1) return;
+
+        my_strcpy("pl8", extension, 4);
+        put_filename_extension(file_or_palette_ptr);
+        if (readfile(file_or_palette_ptr, scratch_buffer, 0x186a0, 0) == 0) return;
+
+        my_strcpy("256", extension, 4);
+        put_filename_extension(file_or_palette_ptr);
+        if (readfile(file_or_palette_ptr, temp_palette, 0x300, 0) == 0) return;
+
+        set_palette(temp_palette);
+        general_sprite(0, left, top);
+        refresh_svga_screen();
+        return;
+    }
+
+    smacker_on = 1;
+    stop_samples();
+    SmackToBuffer(smk, left, top, 0x280, 0x1e0, internal_screen, 0);
+    if (smk->NewPalette != 0)
+        set_palette((char *)&smk->PalType);
+    SmackDoFrame(smk);
+    SmackNextFrame(smk);
+    if (mode == 0)
+        refresh_svga_screen();
+    while (SmackWait(smk) != 0) { }
+
+    smack_frame = 2;
+    if (mode == 0) {
+        refresh_svga_screen();
+        return;
+    }
+    if (mode == 1) return;
+    if (mode == 2) {
+        stretch_window_buffer(smacker_window, 0, 0, 0x280, 0x1e0,
+                              smacker_screen, 0, 0, 0x140, 0xc8);
+    }
+#else
     int sample_flags;
 
     smacker_on = 0;
@@ -144,6 +234,7 @@ void start_smacking(char *file_or_palette_ptr, int left, int top, int mode)
 
     smack_frame = 2;
     if (smack_from_cd != 0) main_path();
+#endif
 }
 
 // Advances a ready movie frame, applies palette changes, schedules any required refresh region,
