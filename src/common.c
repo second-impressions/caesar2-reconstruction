@@ -1189,55 +1189,49 @@ int trace_forward_ferret(int steps_remaining)
 // FUNCTION: C2WIN 0x0046bedd
 void run_clock_ferret(void)
 {
-    unsigned char heading;
+    int direction;
     int move_result;
     int attempt_count;
-    int direction;
 
     if (clock_ferret_running == 0) return;
 
-    heading = ferret_heading(clock_ferret_x, clock_ferret_y);
-    if (heading == 8) {
-        ferret_home = 1;
-        return;
+    direction = ferret_heading(clock_ferret_x, clock_ferret_y);
+    if (direction == 8) { ferret_home = 1; return;
     }
 
-    direction = heading;
-    attempt_count = 0;
-    do {
-        move_result = (unsigned char)check_clock_ferret_move((signed char)direction);
+    for (attempt_count = 0; attempt_count < 8; attempt_count++) {
+        move_result = (unsigned char)check_clock_ferret_move(direction);
         if (tb_occ_a_flag != 0 && tb_occ_b_flag != 0) move_result = 0xFE;
         if (move_result == 0xFF) { clock_ferret_running = 0; return; }
         if (move_result == 0) {
-            move_clock_ferret((signed char)direction, 0);
+            move_clock_ferret(direction, 0);
             last_clock_ferret_dirc = direction;
             return;
         }
         if (++direction >= 8) direction = 0;
-    } while (++attempt_count < 8);
+    }
 
     direction = last_clock_ferret_dirc;
-    attempt_count = 0;
-    do {
-        move_result = (unsigned char)check_clock_ferret_move((signed char)direction);
+    for (attempt_count = 0; attempt_count < 8; attempt_count++) {
+        move_result = (unsigned char)check_clock_ferret_move(direction);
         if (tb_occ_a_flag != 0 && tb_occ_b_flag != 0) move_result = 0xFE;
-        if (move_result < 0xFE && tb_prev_flag == 0) {
-            move_clock_ferret((signed char)direction, 1);
-            *(ferret_map + clock_ferret_ptr + 5) |= 0x80;
-            return;
-        }
-        if (++direction >= 8) direction = 0;
-    } while (++attempt_count < 8);
-
-    attempt_count = 0;
-    do {
-        move_result = (unsigned char)check_clock_ferret_move((signed char)direction);
         if (move_result < 0xFE) {
-            move_clock_ferret((signed char)direction, 1);
+            if (tb_prev_flag == 0) {
+                move_clock_ferret(direction, 1);
+                *(ferret_map + clock_ferret_ptr + 5) |= 0x80;
+                return;
+            }
+        }
+        if (++direction >= 8) direction = 0;
+    }
+
+    for (attempt_count = 0; attempt_count < 8; attempt_count++) {
+        move_result = (unsigned char)check_clock_ferret_move(direction);
+        if (move_result < 0xFE) { move_clock_ferret(direction, 1);
             return;
         }
         if (++direction >= 8) direction = 0;
-    } while (++attempt_count < 8);
+    }
     clock_ferret_running = 0;
 }
 
