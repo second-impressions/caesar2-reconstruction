@@ -574,15 +574,11 @@ void clear_army_from_fort_ref(int fort_ref)
 // FUNCTION: C2WIN 0x0046a85b
 int get_army_name_from_fort_ref(int fort_ref)
 {
-    int cohort_id;
-    /* Callers guarantee a matching fort reference. */
     for (army_no = 0; army_no < 26; army_no++) {
         if (army_list[army_no].exists != 0 && fort_ref == army_list[army_no].fort_ref) {
-            cohort_id = army_list[army_no].cohort_id;
-            return cohort_id;
+            return army_list[army_no].cohort_id;
         }
     }
-    return cohort_id;
 }
 
 // Selects the nearest friendly field army and returns its distance.
