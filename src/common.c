@@ -1117,7 +1117,7 @@ void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int m
 int trace_back_ferret(void)
 {
     unsigned char current_value;
-    unsigned char best_value;
+    unsigned char new_value;
     int best_direction;
     int direction;
     int steps_left;
@@ -1130,20 +1130,18 @@ int trace_back_ferret(void)
     steps_left = 100;
 
     while (current_value > 1) {
-        steps_left--;
-        if (steps_left < 0) return 0;
+        unsigned char best_value;
+
+        steps_left--; if (steps_left < 0) return 0;
         current_value++;
         best_value = current_value;
         best_direction = 0;
         for (direction = 0; direction < 8; direction++) {
-            unsigned char neighbor_value = get_tb_value(direction);
-            if (neighbor_value != 0) {
-                if (neighbor_value < best_value) {
-                    best_value = neighbor_value;
-                    best_direction = direction;
-                } else if (neighbor_value == best_value && tb_road_flag == 1) {
-                    best_direction = direction;
-                }
+            new_value = get_tb_value(direction);
+            if (new_value == 0) continue;
+            if (new_value < best_value) { best_value = new_value;
+                best_direction = direction;
+            } else if (new_value == best_value && tb_road_flag == 1) { best_direction = direction;
             }
         }
         if (best_value == current_value) return 0;      /* cur_val was pre-incremented */
