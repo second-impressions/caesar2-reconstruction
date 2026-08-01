@@ -41,7 +41,7 @@ char get_heading(int start_x, int start_y, int end_x, int end_y, unsigned char s
 void init_bd(int start_x, int start_y, int end_x, int end_y);
 signed char check_clock_ferret_move(signed char direction);
 signed char check_anti_ferret_move(signed char direction);
-unsigned char ferret_heading(int current_x, int current_y);
+unsigned char ferret_heading(int x, int y);
 unsigned char get_tb_value(int direction);
 unsigned char get_ferret2(int direction);
 /* Forward declarations (functions defined later in this file). */
@@ -1040,6 +1040,11 @@ void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int m
     int corridor_end_x;
     int row_offset;
     int direction;
+    int tmp;
+    int first_row;
+    int cell_no;
+    int i;
+    int j;
     unsigned char saved_target_value;
     unsigned char current_value;
     unsigned char best_value;
@@ -1157,7 +1162,8 @@ int trace_back_ferret(void)
 int trace_forward_ferret(int steps_remaining)
 {
     unsigned char current_value;
-    unsigned char best_value;
+    unsigned char new_value;
+    unsigned char high_value;
     int best_direction;
     int direction;
 
@@ -1168,17 +1174,17 @@ int trace_forward_ferret(int steps_remaining)
     *(ferret_map + tb_ptr + 6) = 1;
 
     while (steps_remaining-- > 0) {
-        best_value = current_value;
+        high_value = current_value;
         best_direction = 0;
         for (direction = 0; direction < 8; direction++) {
-            unsigned char neighbor_value = get_tb_value(direction);
-            if (neighbor_value != 0 && neighbor_value < 0xFE) {
-                if (neighbor_value > best_value) { best_value = neighbor_value; best_direction = direction; }
-                else if (neighbor_value == best_value && tb_road_flag == 1) best_direction = direction;
-            }
+            new_value = get_tb_value(direction);
+            if (new_value == 0) continue;
+            if (new_value >= 0xFE) continue;
+            if (new_value > high_value) { high_value = new_value; best_direction = direction; }
+            else if (new_value == high_value && tb_road_flag == 1) best_direction = direction;
         }
-        if (best_value == current_value) return 0;
-        current_value = best_value;
+        if (high_value == current_value) return 0;
+        current_value = high_value;
         move_to_tb_value(best_direction);
     }
     return 1;
@@ -1551,20 +1557,20 @@ void move_anti_ferret(signed char dir, unsigned char mode)
 // Returns the compass direction from a point toward the ferret target.
 // FUNCTION: C2 0x2cdcd
 // FUNCTION: C2WIN 0x0046d35d
-unsigned char ferret_heading(int current_x, int current_y)
+unsigned char ferret_heading(int x, int y)
 {
-    if (current_x > ferret_targ_x) {
-        if (current_y > ferret_targ_y) return 7;
-        if (current_y == ferret_targ_y) return 6;
-        if (current_y < ferret_targ_y) return 5;
-    } else if (current_x == ferret_targ_x) {
-        if (current_y > ferret_targ_y) return 0;
-        if (current_y == ferret_targ_y) return 8;
-        if (current_y < ferret_targ_y) return 4;
-    } else if (current_x < ferret_targ_x) {
-        if (current_y > ferret_targ_y) return 1;
-        if (current_y == ferret_targ_y) return 2;
-        if (current_y < ferret_targ_y) return 3;
+    if (x > ferret_targ_x) {
+        if (y > ferret_targ_y) return 7;
+        else if (y == ferret_targ_y) return 6;
+        else if (y < ferret_targ_y) return 5;
+    } else if (x == ferret_targ_x) {
+        if (y > ferret_targ_y) return 0;
+        else if (y == ferret_targ_y) return 8;
+        else if (y < ferret_targ_y) return 4;
+    } else if (x < ferret_targ_x) {
+        if (y > ferret_targ_y) return 1;
+        else if (y == ferret_targ_y) return 2;
+        else if (y < ferret_targ_y) return 3;
     }
     return 8;
 }
