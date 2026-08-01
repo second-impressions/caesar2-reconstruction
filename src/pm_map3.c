@@ -33,13 +33,22 @@ void show_battlemap(void)
     show_battlemap_base();
     show_battlemap_top();
     if (zoom_level == 1) {
+#if PLATFORM_DOS
         for (screen_y = 0x18; screen_y < 0x164; screen_y += 8)
             show_internal_2x8(0, screen_y, 0);
+#endif
+#if PLATFORM_WINDOWS
+    } else if (zoom_level == 2) {
+        memset(internal_screen, 0, 0xb180);
+        memset(internal_screen + 0x3f980, 0, 0xb180);
+#endif
     }
     if (update_map != 0)
         --update_map;
+#if PLATFORM_DOS
     if (battle_setup_count > 1)
         show_battle_setup_box();
+#endif
 }
 
 // Render the visible battle terrain rows, honoring dirty-cell updates, clipped edges, and virtual tiles.
