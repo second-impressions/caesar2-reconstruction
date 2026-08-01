@@ -1030,90 +1030,91 @@ void load_ferret_run(int start_x, int start_y, int max_length)
 void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int map_height,
                        int cell_size, int start_x, int start_y, int end_x, int end_y)
 {
-    int min_x;
-    int min_y;
+    int x_coord;
+    int y_coord;
     int max_x;
-    int max_y;
-    int corridor_start_x;
-    int corridor_start_y;
-    int corridor_end_y;
-    int corridor_end_x;
-    int row_offset;
-    int direction;
-    int tmp;
-    int first_row;
+    int highy;
+    int firstx;
+    int min_y;
+    int end_line;
+    int high_col;
+    int ptr;
+    int dir;
+    int map_ptr;
+    int x;
     int cell_no;
+    int cy;
     int i;
-    int j;
-    unsigned char saved_target_value;
-    unsigned char current_value;
-    unsigned char best_value;
-    unsigned char neighbor_value;
+    unsigned char initial_value;
+    unsigned char cell_value;
+    unsigned char new_value;
+    unsigned char best;
     unsigned char occupant_b;
-    unsigned char occupant_a;
+    unsigned char a_ref;
 
-    saved_target_value = *(map_base + ferret_targ_ptr + 2);
+    initial_value = *(map_base + ferret_targ_ptr + 2);
 
     if (start_x <= end_x) {
-        min_x = start_x;
+        x_coord = start_x;
         max_x = end_x;
     } else {
-        min_x = end_x;
+        x_coord = end_x;
         max_x = start_x;
     }
     if (start_y <= end_y) {
-        min_y = start_y;
-        max_y = end_y;
+        y_coord = start_y;
+        highy = end_y;
     } else {
-        min_y = end_y;
-        max_y = start_y;
+        y_coord = end_y;
+        highy = start_y;
     }
-    corridor_start_x = min_x - margin;
-    corridor_start_y = min_y - margin;
-    corridor_end_x = max_x + margin;
-    corridor_end_y = max_y + margin;
-    if (corridor_start_x < 0) corridor_start_x = 0;
-    if (corridor_start_y < 0) corridor_start_y = 0;
-    if (corridor_end_x >= map_width) corridor_end_x = map_width - 1;
-    if (corridor_end_y >= map_height) corridor_end_y = map_height - 1;
+    firstx = x_coord - margin;
+    min_y = y_coord - margin;
+    high_col = max_x + margin;
+    end_line = highy + margin;
+    if (firstx < 0) firstx = 0;
+    if (min_y < 0) min_y = 0;
+    if (high_col >= map_width) high_col = map_width - 1;
+    if (end_line >= map_height) end_line = map_height - 1;
 
-    row_offset = (corridor_start_x + corridor_start_y * map_width) * cell_size;
-    for (tb_y = corridor_start_y; tb_y <= corridor_end_y; tb_y++, row_offset += map_width * cell_size) {
-        for (tb_x = corridor_start_x, tb_ptr = row_offset; tb_x <= corridor_end_x; tb_x++, tb_ptr += cell_size) {
-            current_value = *(map_base + tb_ptr + 2);
-            occupant_a = *(map_base + tb_ptr + 7);
+    ptr = (firstx + min_y * map_width) * cell_size;
+    for (tb_y = min_y; tb_y <= end_line; tb_y++, ptr += map_width * cell_size) {
+        for (tb_x = firstx, tb_ptr = ptr; tb_x <= high_col; tb_x++, tb_ptr += cell_size) {
+            cell_value = *(map_base + tb_ptr + 2);
+            a_ref = *(map_base + tb_ptr + 7);
             occupant_b = *(map_base + tb_ptr + 8);
-            if (current_value < 0xFE) {
-                if (current_value == 0) {
-                    best_value = 0xFA;
+            if (cell_value < 0xFE) {
+                if (cell_value == 0) {
+                    best = 0xFA;
                 } else {
-                    best_value = current_value;
+                    best = cell_value;
                 }
-                for (direction = 0; direction < 8; direction++) {
-                    neighbor_value = get_tb_value(direction);
-                    if (neighbor_value < 0xFE && neighbor_value != 0) {
-                        if (tb_road_flag == 1) {
-                            neighbor_value++;
-                        } else if (tb_road_flag == 2) {
-                            neighbor_value += 2;
-                        } else {
-                            continue;
-                        }
-                        if (neighbor_value < best_value) {
-                            best_value = neighbor_value;
-                        }
+                for (dir = 0; dir < 8; dir++) {
+                    new_value = get_tb_value(dir);
+                    if (new_value >= 0xFE) continue;
+                    if (new_value == 0) continue;
+                    if (tb_road_flag == 1) {
+                        new_value = new_value + 1;
+                    } else if (tb_road_flag == 2) {
+                        new_value += 2;
+                    } else {
+                        continue;
+                    }
+                    if (new_value < best) {
+                        best = new_value;
                     }
                 }
-                if (current_value == 0 || best_value != current_value) {
-                    *(map_base + tb_ptr + 2) = best_value;
-                    if (occupant_a != 0 && occupant_b != 0) {
-                        *(map_base + tb_ptr + 2) = 0xFE;
-                    }
+                if (cell_value != 0) {
+                    if (best == cell_value) continue;
+                }
+                *(map_base + tb_ptr + 2) = best;
+                if (a_ref != 0 && occupant_b != 0) {
+                    *(map_base + tb_ptr + 2) = 0xFE;
                 }
             }
         }
     }
-    *(map_base + ferret_targ_ptr + 2) = saved_target_value;
+    *(map_base + ferret_targ_ptr + 2) = initial_value;
 }
 
 // Traces a ferret route backward from the target along decreasing path costs.
