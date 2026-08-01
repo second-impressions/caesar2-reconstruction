@@ -460,26 +460,29 @@ void check_citizen_list(void)
 void check_army_list(void)
 {
     int i;
+    unsigned char terrain_flag;
+
     /* Clear army slots in region_map where terrain bit 0 is clear (unrolled 4x, 8 bytes/cell) */
-    i = 0;
-    do {
-        if ((RM_CELL(i).terrain & 1) == 0)
+    for (i = 0; i < 28800; i += 32) {
+        terrain_flag = RM_CELL(i).terrain;
+        if ((terrain_flag & 1) == 0)
             RM_CELL(i).occupant = 0;
-        if ((RM_CELL(i + 8).terrain & 1) == 0)
+        terrain_flag = RM_CELL(i + 8).terrain;
+        if ((terrain_flag & 1) == 0)
             RM_CELL(i + 8).occupant = 0;
-        if ((RM_CELL(i + 16).terrain & 1) == 0)
+        terrain_flag = RM_CELL(i + 16).terrain;
+        if ((terrain_flag & 1) == 0)
             RM_CELL(i + 16).occupant = 0;
-        if ((RM_CELL(i + 24).terrain & 1) == 0)
+        terrain_flag = RM_CELL(i + 24).terrain;
+        if ((terrain_flag & 1) == 0)
             RM_CELL(i + 24).occupant = 0;
-        i += 32;
-    } while (i < 28800);
+    }
     /* Re-assign armies to their map cells */
     for (army_no = 1; army_no < 26; army_no++) {
-        if (army_list[army_no].exists != 0) {
-            army_a = (unsigned char)RM_CELL(army_list[army_no].map_ref).occupant;
-            if (army_a == 0) {
-                RM_CELL(army_list[army_no].map_ref).occupant = army_no;
-            }
+        if (army_list[army_no].exists != 0 &&
+            (army_a = (unsigned char)RM_CELL(army_list[army_no].map_ref).occupant) == 0) {
+            RM_CELL(army_list[army_no].map_ref).occupant = army_no;
+            continue;
         }
     }
 }
