@@ -426,8 +426,7 @@ void check_citizen_list(void)
 {
     int i;
     /* Clear citizen slots in city_map (unrolled 4x, 20 bytes/cell) */
-    i = 0;
-    do {
+    for (i = 0; i < 128000; i += 80) {
         CM_CELL((i)).citizen_a = 0;
         CM_CELL((i)).citizen_b = 0;
         CM_CELL((i + 1 * CITY_CELL_BYTES)).citizen_a = 0;
@@ -436,21 +435,21 @@ void check_citizen_list(void)
         CM_CELL((i + 2 * CITY_CELL_BYTES)).citizen_b = 0;
         CM_CELL((i + 3 * CITY_CELL_BYTES)).citizen_a = 0;
         CM_CELL((i + 3 * CITY_CELL_BYTES)).citizen_b = 0;
-        i += 80;
-    } while (i < 128000);
+    }
     /* Re-assign citizens to their map cells */
     for (citizen_no = 1; citizen_no < 201; citizen_no++) {
         if (citizen_list[citizen_no].exists != 0) {
-            int ref = citizen_list[citizen_no].map_ref;
-            citizen_a = (unsigned char)CM_CELL((ref)).citizen_a;
-            citizen_b = (unsigned char)CM_CELL((ref)).citizen_b;
+            citizen_a = (unsigned char)CM_CELL(citizen_list[citizen_no].map_ref).citizen_a;
+            citizen_b = (unsigned char)CM_CELL(citizen_list[citizen_no].map_ref).citizen_b;
             if (citizen_a == 0) {
-                CM_CELL((ref)).citizen_a = citizen_no;
-            } else if (citizen_b == 0) {
-                CM_CELL((ref)).citizen_b = citizen_no;
-            } else {
-                clear_citizen(&citizen_list[citizen_no]);
+                CM_CELL(citizen_list[citizen_no].map_ref).citizen_a = citizen_no;
+                continue;
             }
+            if (citizen_b == 0) {
+                CM_CELL(citizen_list[citizen_no].map_ref).citizen_b = citizen_no;
+                continue;
+            }
+            clear_citizen(&citizen_list[citizen_no]);
         }
     }
 }
