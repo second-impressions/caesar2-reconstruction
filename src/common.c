@@ -339,11 +339,15 @@ void clear_figure(struct figure_rec *record_ptr)
 // FUNCTION: C2WIN 0x00469fd2
 void clear_arrow(struct arrow_rec *record_ptr)
 {
+#if PLATFORM_WINDOWS
+    memset(record_ptr, 0, sizeof(struct arrow_rec));
+#else
     unsigned int i;
     char *record_bytes = (char *)record_ptr;
     for (i = 0; i < sizeof(struct arrow_rec); i++) {
         record_bytes[i] = 0;
     }
+#endif
 }
 
 // Removes a battle unit by clearing its record.
