@@ -638,9 +638,14 @@ int get_nearest_enemy_to_track(int map_x, int map_y)
 // FUNCTION: C2WIN 0x0046ab7e
 int get_tracking_army_distance(int army_idx, int map_x, int map_y)
 {
-    if (army_list[army_idx].map_x == 0 || army_list[army_idx].map_y == 0) return 999;
-    return get_longest_distance(army_list[army_idx].map_x,
-                                army_list[army_idx].map_y, map_x, map_y);
+    int distance;
+
+    if (army_list[army_idx].map_x == 0 || army_list[army_idx].map_y == 0) {
+        return 999;
+    }
+    distance = get_longest_distance(army_list[army_idx].map_x,
+                                    army_list[army_idx].map_y, map_x, map_y);
+    return distance;
 }
 
 // Finds the battle unit under a left-click, if any.
