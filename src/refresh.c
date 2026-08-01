@@ -47,6 +47,11 @@ unsigned char svga_refresh_table[1364];
 /* Copies part of a 16×16 tile into the active SVGA bank. */
 extern void refresh_16x16_partblock(int screen_off, unsigned short bank_off,
                                     int width);
+#if PLATFORM_WINDOWS
+extern int pm_diamond_full_height;
+extern void resize_pm_screen(void);
+extern void update_map_scrollbars(unsigned int mode);
+#endif
 
 /* Forward declarations (functions defined later in this file). */
 void setup_refresh_area(int screen_x, int screen_y, int width, int height, int refresh_value);
@@ -429,6 +434,46 @@ void setup_svga_refresh_data(void)
 // FUNCTION: C2WIN 0x0043b412
 void refresh_zoom_mode(int zoom)
 {
+#if PLATFORM_WINDOWS
+    if (screen_mode == 0) {
+        city_zoom_level = zoom;
+    } else if (screen_mode == 1) {
+        prov_zoom_level = zoom;
+    }
+    zoom_level = zoom;
+    if (zoom_level == 0) {
+        scroll_amount = 1;
+        pm_screen_x_start = 0;
+        pm_screen_y_start = -15;
+        pm_diamond_width = 60;
+        pm_diamond_full_height = 32;
+        pm_diamond_half_width = 30;
+        pm_diamond_half_height = 15;
+        resize_pm_screen();
+    } else if (zoom_level == 1) {
+        scroll_amount = 2;
+        pm_screen_x_start = -2;
+        pm_screen_y_start = -7;
+        pm_diamond_width = 28;
+        pm_diamond_full_height = 14;
+        pm_diamond_half_width = 14;
+        pm_diamond_half_height = 7;
+        resize_pm_screen();
+    } else if (zoom_level == 2) {
+        scroll_amount = 4;
+        pm_screen_x_start = 0;
+        pm_screen_y_start = -3;
+        pm_diamond_width = 12;
+        pm_diamond_full_height = 6;
+        pm_diamond_half_width = 6;
+        pm_diamond_half_height = 3;
+        resize_pm_screen();
+    }
+    pm_screen_x_end = pm_diamond_width * pm_screen_width + pm_screen_x_start;
+    pm_screen_y_end = (pm_screen_height + 1) * pm_diamond_half_height
+                      + pm_screen_y_start;
+    update_map_scrollbars(screen_mode);
+#else
     zoom_level = zoom;
     if (zoom_level == 0) {
         scroll_amount = 1;
@@ -464,6 +509,7 @@ void refresh_zoom_mode(int zoom)
     pm_screen_x_end = pm_screen_x_start + pm_screen_width * pm_diamond_width;
     pm_screen_y_end = pm_screen_y_start
                       + (pm_screen_height + 1) * pm_diamond_half_height;
+#endif
 }
 
 // Reconfigure pseudo-map (PM) viewport globals for the battle screen at the given zoom level.
