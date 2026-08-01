@@ -403,19 +403,16 @@ void setup_svga_refresh_data(void)
     int screen_y;
     int screen_x;
     int tile_idx;
-    int bank_size;
-    int clear_idx;
 
-    for (clear_idx = 0; clear_idx < 0x4b0; clear_idx++)
-        svga_refresh_table[clear_idx] = 0;
+    for (tile_idx = 0; tile_idx < 0x4b0; tile_idx++)
+        svga_refresh_table[tile_idx] = 0;
 
     screen_y = 0;
     tile_idx = 0;
-    bank_size = 0x10000;
     for ( ; screen_y < 0x1e0; screen_y += 0x10) {
     for (screen_x = 0; screen_x < 0x280; screen_x += 0x10, tile_idx++) {
         svga_refresh_data[tile_idx].screen_off = screen_y * 5 * 128 + screen_x;
-        svga_refresh_data[tile_idx].bank_off   = (unsigned short)(screen_y * 0x280 + screen_x) % bank_size;
+        svga_refresh_data[tile_idx].bank_off   = (unsigned short)(screen_y * 0x280 + screen_x) % 0x10000;
         svga_refresh_data[tile_idx].split_off  = 0;
 
         if (refresh_bank_switch_data[screen_y / 16].split != 0) {
