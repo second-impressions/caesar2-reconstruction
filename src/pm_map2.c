@@ -1060,31 +1060,34 @@ restore_event:
 // FUNCTION: C2WIN 0x00449419
 void print2_test_info(void)
 {
-    int test_value;
-    int border_flag;
+    int v;
+    int col;
+    int fig;
 
     if (test_mode1 != 0) {
         if (((pm_shown_ptr) >= 0x0FFF0000)) return;
         old_sprite_x = sprite_x;
         old_sprite_y = sprite_y;
-        test_value = ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).outside &= 0x40);
-        border_flag = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x20;
-        if (test_value != 0 && border_flag != 0) test_value = 1;
-        else if (border_flag != 0) test_value = 2;
-        else test_value = 0;
-        font_no(test_value, 0x20, " ",
+        v = ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).outside &= 0x40);
+        col = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x20;
+        if (v != 0 && col != 0) v = 1;
+        else if (col != 0) v = 2;
+        else v = 0;
+        col = 0x20;
+        font_no(v, 0x20, " ",
                 sprite_x + 0x14 - pm_diamond_width, sprite_y + 0xa,
-                font1, 0x20);
+                font1, col);
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     } else if (test_mode2 != 0) {
         if (((pm_shown_ptr) >= 0x0FFF0000)) return;
         old_sprite_x = sprite_x;
         old_sprite_y = sprite_y;
-        test_value = (signed char)(*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).place_state;
-        font_no(test_value, 0x20, " ",
+        v = (signed char)(*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).place_state;
+        col = 0x20;
+        font_no(v, 0x20, " ",
                 sprite_x + 0x14 - pm_diamond_width, sprite_y + 0xa,
-                font1, 0x20);
+                font1, col);
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     }
