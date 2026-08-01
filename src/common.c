@@ -609,17 +609,16 @@ int get_nearest_army_to_track(int map_x, int map_y)
 int get_nearest_enemy_to_track(int map_x, int map_y)
 {
     int distance;
-    int best_distance = 9999;
+    int best_distance;
+
+    best_distance = 9999;
     for (army_no = 0; army_no < 26; army_no++) {
-        if (army_list[army_no].exists != 0
-            && army_list[army_no].type >= 2
-            && army_list[army_no].type <= 5
-            && army_list[army_no].map_x != 0 && army_list[army_no].map_y != 0) {
-            distance = get_longest_distance(army_list[army_no].map_x,
-                                        army_list[army_no].map_y, map_x, map_y);
-            if (distance < best_distance) {
-                hunting_army = army_no;
-                best_distance = distance;
+        if (army_list[army_no].exists != 0) {
+            if (army_list[army_no].type >= 2 && army_list[army_no].type <= 5) {
+                if (army_list[army_no].map_x == 0 || army_list[army_no].map_y == 0) continue;
+                distance = get_longest_distance(army_list[army_no].map_x,
+                                            army_list[army_no].map_y, map_x, map_y);
+                if (distance < best_distance) { hunting_army = army_no; best_distance = distance; }
             }
         }
     }
