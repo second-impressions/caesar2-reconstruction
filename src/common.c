@@ -92,10 +92,8 @@ int create_citizen(int type, int x, int y, unsigned char is_barb)
             citizen_list[created_citizen_no].exists = 1;
             citizen_list[created_citizen_no].evolve_timer = (evolve_count + rand128) & 0x7fff;
             citizen_list[created_citizen_no].type = type;
-            citizen_list[created_citizen_no].x = x;
-            citizen_list[created_citizen_no].dest_x = citizen_list[created_citizen_no].x;
-            citizen_list[created_citizen_no].y = y;
-            citizen_list[created_citizen_no].dest_y = citizen_list[created_citizen_no].y;
+            citizen_list[created_citizen_no].dest_x = citizen_list[created_citizen_no].x = x;
+            citizen_list[created_citizen_no].dest_y = citizen_list[created_citizen_no].y = y;
             citizen_list[created_citizen_no].map_ref = ref;
             citizen_list[created_citizen_no].pixel_x = x << 4;
             citizen_list[created_citizen_no].pixel_y = y << 4;
