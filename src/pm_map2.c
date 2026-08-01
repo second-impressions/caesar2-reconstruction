@@ -378,14 +378,25 @@ right_edge_done:
 // FUNCTION: C2WIN 0x004464de
 void mid2_line_no_sides_top(void)
 {
+    int ptr;
+    int x;
+    int y;
     int col_idx;
+#if PLATFORM_WINDOWS
+    unsigned char redraw;
 
+    redraw = 0;
+    if (pm_shown_y >= PM_H) return;
+#endif
     if (pm_x > 0) {
         sprite_x = pm_screen_x_start - pm_diamond_width;
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_x - 1];
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place2_sprite(2);
     }
     sprite_x = pm_screen_x_start;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     col_idx = 0;
     pm_shown_x = pm_x;
     for (; col_idx < pm_screen_width; col_idx++) {
@@ -395,13 +406,17 @@ void mid2_line_no_sides_top(void)
         } else {
             if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
                 place2_a_building_top(0);
+                place2_sprite(0);
             } else {
                 sprite_x += pm_diamond_width;
+                place2_sprite(0);
             }
-            place2_sprite(0);
         }
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     if (pm_shown_x < 80) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x];
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place2_sprite(2);
