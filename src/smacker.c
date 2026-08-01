@@ -153,24 +153,37 @@ int continue_smacking(int left, int top, int mode)
 {
     int result = 0;
 
+#if PLATFORM_DOS
     if (link_to_smacker() == 0) return 0;
+#endif
     if (smacker_on == 0) return 0;
+#if PLATFORM_DOS
     if ((short)SmackWait(smk) != 0) return 0;
+#else
+    if (SmackWait(smk) != 0) return 0;
+#endif
 
     if (smk->NewPalette != 0) {
+#if PLATFORM_WINDOWS
+        SmackBufferNewPalette(internal_screen, &smk->PalType, 0);
+        set_palette((char *)&smk->PalType);
+#else
         unsigned char *palette_ptr;
         if (smk->PalType == 1) palette_ptr = smk->Palette;
         else                   palette_ptr = smk->Palette2;
         PaletteSet(palette_ptr);
+#endif
     }
 
     SmackDoFrame(smk);
     if (smack_frame < smk->Frames) {
         SmackNextFrame(smk);
+#if PLATFORM_DOS
         if (mode == 0)
             setup_refresh_area(0, 0, smk_ref_wi, smk_ref_hi, 1);
         else if (mode == 1)
             setup_refresh_area(left, top, 0x14, 0xa, mode);
+#endif
         result = 1;
     }
     smack_frame = smack_frame + 1;
