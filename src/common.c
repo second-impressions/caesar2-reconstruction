@@ -1078,7 +1078,9 @@ void smooth_ferret_run(int margin, unsigned char *map_base, int map_width, int m
             cell_value = *(map_base + tb_ptr + 2);
             a_ref = *(map_base + tb_ptr + 7);
             occupant_b = *(map_base + tb_ptr + 8);
-            if (cell_value < 0xFE) {
+            if (cell_value >= 0xFE) {
+                continue;
+            } else {
                 if (cell_value == 0) {
                     best = 0xFA;
                 } else {
