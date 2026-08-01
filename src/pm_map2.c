@@ -3,6 +3,8 @@
 
 
 extern int  get_string_width(char *src, unsigned char *font);
+extern void set_this_ambient(int ambient_idx);
+extern void place_diamond(int style);
 extern void put_a_font_string(char *str, int x, int y, unsigned char *font, int color);
 extern void font_list(int idx, int word_count, int x, int y, unsigned char *font, int color);
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
