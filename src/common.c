@@ -206,26 +206,28 @@ int create_unit(int owner, int x, int y, int type)
 // Allocates a battle figure and claims its destination map cell.
 // FUNCTION: C2 0x2acfb
 // FUNCTION: C2WIN 0x00469aa3
-int create_figure(int sprite_type, int base_x, int off_x, int base_y, int off_y, int owner_idx, int unit_idx)
+int create_figure(int sprite_type, int base_x, int off_x, int base_y, int off_y, int owner, int unit_no)
 {
     for (created_figure_no = 1; created_figure_no < 0xC9; created_figure_no++) {
         if (figure_list[created_figure_no].exists == 0) {
             figure_list[created_figure_no].exists = 1;
-            figure_list[created_figure_no].owner = owner_idx;
+            figure_list[created_figure_no].owner = owner;
             base_x = base_x + off_x;
             base_y = base_y + off_y;
             figure_list[created_figure_no].grid_x = base_x;
             figure_list[created_figure_no].grid_y = base_y;
             figure_list[created_figure_no].map_ref = (base_x + base_y * 0x34) * 4;
-            if (((unsigned char *)battle_map)[figure_list[created_figure_no].map_ref + 1] != 0)
+            if (((unsigned char *)battle_map)[figure_list[created_figure_no].map_ref + 1] != 0) {
                 return 0;
-            ((unsigned char *)battle_map)[figure_list[created_figure_no].map_ref + 1] = created_figure_no;
+            } else {
+                ((unsigned char *)battle_map)[figure_list[created_figure_no].map_ref + 1] = created_figure_no;
+            }
             figure_list[created_figure_no].sprite_type = sprite_type;
-            figure_list[created_figure_no].unit_ref = unit_idx;
-            figure_list[created_figure_no].unit_type = unit_list[unit_idx].fig_count;
+            figure_list[created_figure_no].unit_ref = unit_no;
+            figure_list[created_figure_no].unit_type = unit_list[unit_no].fig_count;
             figure_list[created_figure_no].offset_x = off_x;
             figure_list[created_figure_no].offset_y = off_y;
-            if (unit_list[unit_idx].heading == -1)
+            if (unit_list[unit_no].heading == -1)
                 figure_list[created_figure_no].direction = 4;
             else
                 figure_list[created_figure_no].direction = 0;
