@@ -475,9 +475,15 @@ void bottom3_line_with_sides(void)
     sprite_x   = pm_screen_x_start;
 
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
-    if (!((pm_shown_ptr) >= 0x0FFF0000)) place3_sprite(1);
+    if (pm_shown_ptr >= 0x0fff0000) {
+    } else {
+        place3_sprite(1);
+    }
     sprite_x += pm_diamond_half_width;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     for (col_idx = 0; col_idx < pm_screen_width - 1; col_idx++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
@@ -488,8 +494,14 @@ void bottom3_line_with_sides(void)
         }
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
-    if (!((pm_shown_ptr) >= 0x0FFF0000)) place3_sprite(2);
+    if (pm_shown_ptr >= 0x0fff0000) {
+    } else {
+        place3_sprite(2);
+    }
 
     sprite_y  += pm_diamond_half_height;
     pm_shown_y++;
