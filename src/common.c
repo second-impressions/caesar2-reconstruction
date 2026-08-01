@@ -187,18 +187,16 @@ int create_army(int army_type, int region_x, int region_y, unsigned char placeme
 // Allocates and initializes a battle unit.
 // FUNCTION: C2 0x2ac8b
 // FUNCTION: C2WIN 0x0046993d
-int create_unit(int owner_idx, int grid_x, int grid_y, int unit_type)
+int create_unit(int owner, int x, int y, int type)
 {
     for (created_unit_no = 1; created_unit_no < 0x33; created_unit_no++) {
         if (unit_list[created_unit_no].exists == 0) {
             unit_list[created_unit_no].exists = 1;
-            unit_list[created_unit_no].owner = owner_idx;
-            unit_list[created_unit_no].x = grid_x;
-            unit_list[created_unit_no].prev_x = grid_x;
-            unit_list[created_unit_no].y = grid_y;
-            unit_list[created_unit_no].prev_y = grid_y;
+            unit_list[created_unit_no].owner = owner;
+            unit_list[created_unit_no].prev_x = unit_list[created_unit_no].x = x;
+            unit_list[created_unit_no].prev_y = unit_list[created_unit_no].y = y;
             unit_list[created_unit_no].state = 0;
-            unit_list[created_unit_no].type = unit_type;
+            unit_list[created_unit_no].type = type;
             return 1;
         }
     }
