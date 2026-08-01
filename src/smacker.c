@@ -47,8 +47,11 @@ void vgawinrout(void)
 // FUNCTION: C2 0x135bf
 void *__pascal radmalloc(unsigned int size)
 {
-    if (size == 0) return (void *)size;
-    return malloc(size);
+    void *result;
+
+    if (size == 0) return 0;
+    result = malloc(size);
+    return result;
 }
 
 // Releases memory on behalf of the Smacker library.
