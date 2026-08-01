@@ -428,11 +428,11 @@ struct figure_rec {
     char           exists;           /* +0x00 */
     signed char    owner;            /* +0x01  movsx-read by missile target
                                                 friend/foe filters. */
-    char           sprite_anim;      /* +0x02  written by the shared tail
+    unsigned char  sprite_anim;      /* +0x02  written by the shared tail
                                                 of get_fig_*_image (cnt8 +
                                                 base offset); every read is
                                                 unsigned (image index). */
-    signed char    sprite_dir;       /* +0x03  per-direction sub-frame
+    unsigned char  sprite_dir;       /* +0x03  per-direction sub-frame
                                                 set by the get_fig_*_image
                                                 shared tail (1 = facing). */
     unsigned char  fight_state;      /* +0x04  enum-like fight/animation state.
@@ -884,7 +884,7 @@ struct arrow_rec {
     int            step_x;           /* +0x0E Bresenham x-axis delta */
     int            step_y;           /* +0x12 Bresenham y-axis delta */
     int            step_error;       /* +0x16 Bresenham error term */
-    char           sprite_anim;      /* +0x1A  per-tick sprite frame to draw
+    unsigned char  sprite_anim;      /* +0x1A  per-tick sprite frame to draw
                                                 (sprite_base + rotated heading);
                                                 set by arrow_intelligence. */
     unsigned char  sprite_kind;      /* +0x1B  sprite-data-table selector

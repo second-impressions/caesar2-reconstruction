@@ -612,166 +612,207 @@ void bottom3_line_no_sides(void)
 // and screen clipping.
 // FUNCTION: C2 0x3ca7f
 // FUNCTION: C2WIN 0x0041f231
-void place3_sprite(int edge_style)
+void place3_sprite(int style)
 {
-    int base_x_offset;
     int base_y_offset;
-    int direction_idx;
-    int x_offset;
-    int y_offset;
-    unsigned char *sprite_header_ptr;
-    unsigned char *sprite_data_ptr;
-    int rider_idx;
-    int elephant_anim_idx;
-    int arrow_subcell_x;
-    int arrow_subcell_y;
-    int direction_quadrant;
+    int subcell_y;
+    int direction;
+    unsigned char *sprite_data;
+    int rider;
+    int subcell_x;
+    int base_x_offset;
+    int y_off;
+    int x_off;
 
     figure_a = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).figure;
     arrow_a  = (*(struct battle_cell *)((unsigned char *)battle_map + ((pm_shown_ptr)))).arrow;
 
     if (figure_a != 0) {
-        direction_idx = figure_list[figure_a].direction - map_direction;
-        if (direction_idx < 0) direction_idx += 8;
+        direction = figure_list[figure_a].direction - map_direction;
+        if (direction < 0) direction += 8;
         if (zoom_level == 1) {
-            x_offset = fig_walking_x_ofsets_z1[direction_idx * 8 + figure_list[figure_a].wf_step_x];
-            y_offset = fig_walking_y_ofsets_z1[direction_idx * 8 + figure_list[figure_a].wf_step_x];
+            x_off = fig_walking_x_ofsets_z1[direction * 8 + figure_list[figure_a].wf_step_x];
+            y_off = fig_walking_y_ofsets_z1[direction * 8 + figure_list[figure_a].wf_step_x];
         } else {
-            x_offset = fig_walking_x_ofsets_z2[direction_idx * 8 + figure_list[figure_a].wf_step_x];
-            y_offset = fig_walking_y_ofsets_z2[direction_idx * 8 + figure_list[figure_a].wf_step_x];
+            x_off = fig_walking_x_ofsets_z2[direction * 8 + figure_list[figure_a].wf_step_x];
+            y_off = fig_walking_y_ofsets_z2[direction * 8 + figure_list[figure_a].wf_step_x];
         }
-        if      (edge_style == 1) x_offset -= 2;
-        else if (edge_style == 2) x_offset += pm_diamond_half_width;
-        else                 x_offset += pm_diamond_half_width - pm_diamond_width;
-        y_offset += pm_diamond_half_height;
-        base_x_offset = x_offset; base_y_offset = y_offset;
+        if      (style == 1) x_off -= 2;
+        else if (style == 2) x_off += pm_diamond_half_width;
+        else                 x_off += pm_diamond_half_width - pm_diamond_width;
+        y_off += pm_diamond_half_height;
+        base_x_offset = x_off; base_y_offset = y_off;
 
-        if (figure_list[figure_a].sprite_dir != 0) sprite_data_ptr = figure_list[figure_a].sprite_data_ptr;
-        else sprite_data_ptr = figure_list[figure_a].arrow_data_ptr;
+        if (figure_list[figure_a].sprite_dir != 0) sprite_data = figure_list[figure_a].sprite_data_ptr;
+        else sprite_data = figure_list[figure_a].arrow_data_ptr;
         sprite_image_no = figure_list[figure_a].sprite_anim;
         data_ptr        = sprite_image_no * 0x10 + 8;
-        sprite_header_ptr             = sprite_data_ptr + data_ptr; sprite_start = sprite_header_ptr[4] + (sprite_header_ptr[5] << 8) + (sprite_header_ptr[6] << 16);
-        sprite_width    = sprite_header_ptr[0] + (sprite_header_ptr[1] << 8);
-        sprite_height   = sprite_header_ptr[2] + (sprite_header_ptr[3] << 8);
+        sprite_start = sprite_data[data_ptr + 4] + (sprite_data[data_ptr + 5] << 8) + (sprite_data[data_ptr + 6] << 16);
+        sprite_width = sprite_data[data_ptr] + (sprite_data[data_ptr + 1] << 8);
+        sprite_height = sprite_data[data_ptr + 2] + (sprite_data[data_ptr + 3] << 8);
         if (sprite_start > 0x4baf0) { sprite_error++; return; }
         if (sprite_width <= 0)      { sprite_error++; return; }
         if (sprite_width > 0x12c)   { sprite_error++; return; }
         if (sprite_height <= 0)     { sprite_error++; return; }
         if (sprite_height > 0x12c)  { sprite_error++; return; }
-        sprite_x_off = (signed char)sprite_header_ptr[0xe];
-        sprite_y_off = (signed char)sprite_header_ptr[0xd];
-        x_offset = x_offset - sprite_x_off;
-        y_offset = y_offset - sprite_y_off;
+        sprite_x_off = (signed char)sprite_data[data_ptr + 0xe];
+        sprite_y_off = (signed char)sprite_data[data_ptr + 0xd];
+        x_off = x_off - sprite_x_off;
+        y_off = y_off - sprite_y_off;
         old_sprite_x = sprite_x; old_sprite_y = sprite_y;
-        sprite_x += x_offset;
-        sprite_y += y_offset;
+        sprite_x += x_off;
+        sprite_y += y_off;
         if (figure_list[figure_a].fight_state == 2) {
             if (zoom_level == 1) { sprite_x -= 0x18; sprite_y -= 0x40; }
             else                 { sprite_x -= 0xc;  sprite_y -= 0x20; }
+#if PLATFORM_DOS
             refresh_figure3_square((sprite_x - 4) >> 4, sprite_y >> 4);
+#endif
         } else if (figure_list[figure_a].fight_state != 0) {
             if (zoom_level == 1) { sprite_x -= 0x14; sprite_y -= 0x2a; }
             else                 { sprite_x -= 0xa;  sprite_y -= 0x14; }
+#if PLATFORM_DOS
             refresh_figure2_square((sprite_x - 4) >> 4, sprite_y >> 4);
+#endif
         } else {
             if (zoom_level == 1) { sprite_x -= 0xa;  sprite_y -= 0x20; }
             else                 { sprite_x -= 4;    sprite_y -= 0x10; }
+#if PLATFORM_DOS
             refresh_figure_square((sprite_x - 0x14) >> 4, sprite_y >> 4);
+#endif
         }
+#if PLATFORM_WINDOWS
+        xclip(0, pm_screen_x_end);
+        yclip(pm_screen_y_start + pm_diamond_half_height, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x280);
         yclip(0x18, 0x168);
-        if (yclipped != 5) {
-            if      (xclipped == 1) write_i_left_sprite(sprite_data_ptr);
-            else if (xclipped == 2) write_i_right_sprite(sprite_data_ptr);
-            else                    write_i_sprite(sprite_data_ptr);
-        }
+#endif
+        if (yclipped == 5) goto figure_done;
+        if      (xclipped == 1) write_i_left_sprite(sprite_data);
+        else if (xclipped == 2) write_i_right_sprite(sprite_data);
+        else                    write_i_sprite(sprite_data);
+figure_done:
         sprite_x = old_sprite_x; sprite_y = old_sprite_y;
 
         if (figure_list[figure_a].fight_state == 2) {
-            for (rider_idx = 1; rider_idx >= 0; rider_idx--) {
-                if (rider_idx == 1) sprite_image_no = figure_list[figure_a].archer_image_a;
+            for (rider = 1; rider >= 0; rider--) {
+                if (rider == 1) sprite_image_no = figure_list[figure_a].archer_image_a;
                 else sprite_image_no = figure_list[figure_a].archer_image_b;
                 data_ptr      = sprite_image_no * 0x10 + 8;
-                sprite_header_ptr           = sprite_data_ptr + data_ptr; sprite_start = sprite_header_ptr[4] + (sprite_header_ptr[5] << 8) + (sprite_header_ptr[6] << 16);
-                sprite_width  = sprite_header_ptr[0] + (sprite_header_ptr[1] << 8);
-                sprite_height = sprite_header_ptr[2] + (sprite_header_ptr[3] << 8);
+                sprite_start = sprite_data[data_ptr + 4] + (sprite_data[data_ptr + 5] << 8) + (sprite_data[data_ptr + 6] << 16);
+#if PLATFORM_DOS
+                {
+                    int data_byte;
+
+                    sprite_width = (data_byte = sprite_data[data_ptr]) + ((data_byte = sprite_data[data_ptr + 1]) << 8);
+                }
+                sprite_height = sprite_data[data_ptr + 2] + (sprite_data[data_ptr + 3] << 8);
+#else
+                sprite_width = sprite_data[data_ptr] + (sprite_data[data_ptr + 1] << 8);
+                sprite_height = sprite_data[data_ptr + 2] + (sprite_data[data_ptr + 3] << 8);
+#endif
                 if (sprite_start > 0x4baf0) { sprite_error++; return; }
                 if (sprite_width <= 0)      { sprite_error++; return; }
                 if (sprite_width > 0x12c)   { sprite_error++; return; }
                 if (sprite_height <= 0)     { sprite_error++; return; }
                 if (sprite_height > 0x12c)  { sprite_error++; return; }
-                sprite_x_off = (signed char)sprite_header_ptr[0xe];
-                sprite_y_off = (signed char)sprite_header_ptr[0xd];
-                x_offset = base_x_offset - sprite_x_off;
-                y_offset = base_y_offset - sprite_y_off;
+                sprite_x_off = (signed char)sprite_data[data_ptr + 0xe];
+                sprite_y_off = (signed char)sprite_data[data_ptr + 0xd];
+#if PLATFORM_WINDOWS
+                x_off = base_x_offset;
+                y_off = base_y_offset;
+                x_off = x_off - sprite_x_off;
+                y_off = y_off - sprite_y_off;
+#else
+                x_off = base_x_offset - sprite_x_off;
+                y_off = base_y_offset - sprite_y_off;
+#endif
                 old_sprite_x = sprite_x; old_sprite_y = sprite_y;
-                sprite_x += x_offset;
-                sprite_y += y_offset;
+                sprite_x += x_off;
+                sprite_y += y_off;
                 sprite_x -= 0x18;
                 sprite_y -= 0x40;
-                elephant_anim_idx = figure_list[figure_a].sprite_anim; sprite_x += elephant_riders[elephant_anim_idx * 2];
-                sprite_y += elephant_riders[elephant_anim_idx * 2 + 1];
-                sprite_x += rider_idx * 6;
-                sprite_y -= rider_idx * 6;
-                if (rider_idx <= 0) sprite_height -= 8;
+                sprite_x += elephant_riders[(unsigned char)figure_list[figure_a].sprite_anim * 2];
+                sprite_y += elephant_riders[(unsigned char)figure_list[figure_a].sprite_anim * 2 + 1];
+                sprite_x += rider * 6;
+                sprite_y -= rider * 6;
+                if (rider <= 0) sprite_height -= 8;
+#if PLATFORM_DOS
                 refresh_figure_square((sprite_x - 4) >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+                xclip(0, pm_screen_x_end);
+                yclip(pm_screen_y_start + pm_diamond_half_height, pm_screen_y_end);
+#else
                 xclip(pm_screen_x_start, 0x280);
                 yclip(0x18, 0x168);
-                if (yclipped != 5) {
-                    if      (xclipped == 1) write_i_left_sprite(sprite_data_ptr);
-                    else if (xclipped == 2) write_i_right_sprite(sprite_data_ptr);
-                    else                    write_i_sprite(sprite_data_ptr);
-                }
+#endif
+                if (yclipped == 5) goto rider_done;
+                if      (xclipped == 1) write_i_left_sprite(sprite_data);
+                else if (xclipped == 2) write_i_right_sprite(sprite_data);
+                else                    write_i_sprite(sprite_data);
+rider_done:
                 sprite_x = old_sprite_x; sprite_y = old_sprite_y;
             }
         }
     }
 
     if (arrow_a != 0) {
-        do {
-            direction_idx = (unsigned char)arrow_list[arrow_a].heading - map_direction;
-            if (direction_idx < 0) direction_idx += 8;
-            arrow_subcell_x = arrow_list[arrow_a].start_x % 7; arrow_subcell_y = arrow_list[arrow_a].start_y % 7;
+arrow_loop:
+            direction = (unsigned char)arrow_list[arrow_a].heading - map_direction;
+            if (direction < 0) direction += 8;
+            subcell_x = arrow_list[arrow_a].start_x % 7; subcell_y = arrow_list[arrow_a].start_y % 7;
             if (zoom_level == 1) {
-                direction_quadrant = map_direction / 2; x_offset = arrow_xr_x_ofset[arrow_subcell_x + 7 * direction_quadrant];
-                x_offset += arrow_yr_x_ofset[arrow_subcell_y + 7 * direction_quadrant];
-                y_offset = arrow_xr_y_ofset[arrow_subcell_x + 7 * direction_quadrant];
-                y_offset += arrow_yr_y_ofset[arrow_subcell_y + 7 * direction_quadrant];
+                x_off = arrow_xr_x_ofset[subcell_x + (map_direction / 2) * 7];
+                x_off += arrow_yr_x_ofset[subcell_y + (map_direction / 2) * 7];
+                y_off = arrow_xr_y_ofset[subcell_x + (map_direction / 2) * 7];
+                y_off += arrow_yr_y_ofset[subcell_y + (map_direction / 2) * 7];
             }
-            if      (edge_style == 1) x_offset -= 2;
-            else if (edge_style == 2) x_offset += pm_diamond_half_width;
-            else                 x_offset += pm_diamond_half_width - pm_diamond_width;
-            y_offset += pm_diamond_half_height;
+#if PLATFORM_WINDOWS
+            else { }
+#endif
+            if      (style == 1) x_off -= 2;
+            else if (style == 2) x_off += pm_diamond_half_width;
+            else                 x_off += pm_diamond_half_width - pm_diamond_width;
+            y_off += pm_diamond_half_height;
 
-            sprite_data_ptr = arrow_list[arrow_a].arrow_data_ptr;
-            if (sprite_data_ptr == 0) return;
+            sprite_data = arrow_list[arrow_a].arrow_data_ptr;
+            if (sprite_data == 0) return;
             sprite_image_no = arrow_list[arrow_a].sprite_anim;
             data_ptr        = sprite_image_no * 0x10 + 8;
-            sprite_header_ptr             = sprite_data_ptr + data_ptr; sprite_start = sprite_header_ptr[4] + (sprite_header_ptr[5] << 8) + (sprite_header_ptr[6] << 16);
-            sprite_width    = (sprite_header_ptr[0]) + (sprite_header_ptr[1] << 8);
-            sprite_height   = sprite_header_ptr[2] + (sprite_header_ptr[3] << 8);
+            sprite_start = sprite_data[data_ptr + 4] + (sprite_data[data_ptr + 5] << 8) + (sprite_data[data_ptr + 6] << 16);
+            sprite_width = sprite_data[data_ptr] + (sprite_data[data_ptr + 1] << 8);
+            sprite_height = sprite_data[data_ptr + 2] + (sprite_data[data_ptr + 3] << 8);
             if (sprite_start > 0x4baf0) { sprite_error++; return; }
             if (sprite_width <= 0)      { sprite_error++; return; }
             if (sprite_width > 0x12c)   { sprite_error++; return; }
             if (sprite_height <= 0)     { sprite_error++; return; }
             if (sprite_height > 0x12c)  { sprite_error++; return; }
             old_sprite_x = sprite_x; old_sprite_y = sprite_y;
-            sprite_x += x_offset;
-            sprite_y += y_offset;
+            sprite_x += x_off;
+            sprite_y += y_off;
             sprite_x -= sprite_width >> 1;
             sprite_y -= sprite_height;
             sprite_y -= (unsigned char)arrow_list[arrow_a].anim_count / 2 + 0x20;
+#if PLATFORM_DOS
             refresh_figure_square((sprite_x - 4) >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+            xclip(0, pm_screen_x_end);
+            yclip(pm_screen_y_start + pm_diamond_half_height, pm_screen_y_end);
+#else
             xclip(pm_screen_x_start, 0x280);
             yclip(0x18, 0x168);
-            if (yclipped != 5) {
-                if      (xclipped == 1) write_i_left_sprite(sprite_data_ptr);
-                else if (xclipped == 2) write_i_right_sprite(sprite_data_ptr);
-                else                    write_i_sprite(sprite_data_ptr);
-            }
+#endif
+            if (yclipped == 5) goto arrow_done;
+            if      (xclipped == 1) write_i_left_sprite(sprite_data);
+            else if (xclipped == 2) write_i_right_sprite(sprite_data);
+            else                    write_i_sprite(sprite_data);
+arrow_done:
             sprite_x = old_sprite_x; sprite_y = old_sprite_y;
             arrow_a = (unsigned char)arrow_list[arrow_a].flight_done;
-        } while (arrow_a != 0);
+            if (arrow_a != 0) goto arrow_loop;
     }
 }
 
