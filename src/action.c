@@ -35,7 +35,7 @@ extern unsigned long tutorial_start_time;
 extern void act_query_windows(void);
 extern void clear_mouse_input(void);
 extern unsigned long (*GetTickCount)(void);
-extern void set_main_menu_enabled(int enabled);
+extern void set_main_menu_enabled(unsigned char enabled);
 extern void load_screen_parts(unsigned char mode);
 extern void size_game_window(int mode);
 extern void *game_window;
@@ -64,7 +64,7 @@ extern char *tutorial_window_title;
 extern void update_date_display(void);
 extern void update_denarii_display(int force);
 extern void update_population_display(int force);
-extern void show_native_year_end(void *window);
+extern int show_native_year_end(void *window);
 #endif
 void show_fx_box(int what);
 void stop_all_sounds(void);

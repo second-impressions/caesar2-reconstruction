@@ -1027,6 +1027,16 @@ void set_vga_palette_range(char *p, int start, int end)
 }
 #endif /* PLATFORM_DOS */
 
+#if PLATFORM_WINDOWS
+extern void direct_palette_set(char *p);
+
+// FUNCTION: C2WIN 0x0044b56e
+void set_vga_palette(char *p)
+{
+    direct_palette_set(p);
+}
+#endif
+
 // Rotate the colour entries in current_palette[start_idx..end_idx] (inclusive) by one slot toward
 // higher indices: the colour that was at end_idx moves to start_idx, and every entry in between
 // shifts up by one.
