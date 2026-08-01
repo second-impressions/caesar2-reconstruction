@@ -437,6 +437,10 @@ right_edge_done:
 #endif
 }
 
+extern void xclip(int clip_left, int clip_right);
+extern void yclip(int clip_top, int clip_bottom);
+extern void refresh_region_sprite_square(int tile_x, int tile_y);
+
 // Draw an unclipped row of building tops and sprites, including adjacent spillover sprites.
 // FUNCTION: C2 0x39c9f
 // FUNCTION: C2WIN 0x004464de
