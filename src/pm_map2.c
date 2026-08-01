@@ -667,13 +667,34 @@ void bottom2_line_no_sides(void)
 // FUNCTION: C2WIN 0x00446caa
 void place2_a_building_base(int draw_style)
 {
+#if PLATFORM_WINDOWS
+    unsigned char flags;
+    int mode_no;
+    unsigned char height;
+    int width;
+#else
     char bank_kind;
     char header_high_byte;
     int header_byte;
     int rotation_idx;
+#endif
     unsigned char *sprite_bank_ptr;
 
+#if PLATFORM_WINDOWS
+    if (screen_mode > 1) mode_no = 0;
+    else mode_no = screen_mode;
+#endif
     sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).gfx;
+#if PLATFORM_WINDOWS
+    flags = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x1c;
+
+    if (flags == 0) { sprite_bank_ptr = (&house_data)[mode_no]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank0)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 4) { sprite_bank_ptr = (&building_data1)[mode_no]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank1)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 8) { sprite_bank_ptr = (&building_data2)[mode_no]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank2)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 0xc) { sprite_bank_ptr = (&building_data3)[mode_no]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank3)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 0x10) {
+        sprite_bank_ptr = (&fixt_data)[mode_no]; sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + sprite_image_no * 4] + 0x10; } else { return; }
+#else
     bank_kind = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x1c; rotation_idx = (map_direction >> 1) + sprite_image_no * 4;
 
     if (bank_kind == 0) { sprite_bank_ptr = house_data; sprite_image_no = rotated2_bank0[rotation_idx];
@@ -682,13 +703,21 @@ void place2_a_building_base(int draw_style)
     } else if (bank_kind == 0xc) { sprite_bank_ptr = building_data3; sprite_image_no = rotated2_bank3[rotation_idx];
     } else if (bank_kind == 0x10) {
         sprite_bank_ptr = fixt_data; sprite_image_no = rotated2_map[sprite_image_no - 0x10].dir[map_direction >> 1] + 0x10; } else { return; }
+#endif
 
     set_prov_ambient((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind);
     data_ptr     = sprite_image_no * 16 + 8;
     y_length     = sprite_bank_ptr[data_ptr + 0xd];
+#if PLATFORM_WINDOWS
+    height       = sprite_bank_ptr[data_ptr + 0xc];
+    sprite_start = (sprite_bank_ptr[data_ptr + 6] << 16)
+                 + (sprite_bank_ptr[data_ptr + 5] << 8)
+                 + sprite_bank_ptr[data_ptr + 4];
+#else
     sprite_start = ((header_byte = sprite_bank_ptr[data_ptr + 5]) << 8)
                  + (header_byte = sprite_bank_ptr[data_ptr + 4])
                  + ((header_high_byte = sprite_bank_ptr[data_ptr + 6]) << 16);
+#endif
     if (sprite_start > 0x4baf0) { sprite_error++; return; }
     if (sprite_start < 0) { sprite_error++; return; }
     if (y_length > 0xc8) { sprite_error++; return; }
@@ -696,7 +725,9 @@ void place2_a_building_base(int draw_style)
 
     if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
         (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
         refresh_a_bigger_square(sprite_x >> 4, (sprite_y - 0x30) >> 4);
+#endif
     }
 
     if (draw_style == 3) {
