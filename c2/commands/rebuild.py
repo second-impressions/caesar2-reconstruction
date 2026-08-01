@@ -76,6 +76,10 @@ _REBUILD_DIR = Path(".c2-cache/rebuild")
 # from av.obj; compiling the scaffold too would double-define the data.
 _EXCLUDED_TUS = {
     "smackinp.c", "sndail.c", "sndnull.c",
+    # Native Windows platform modules are retained as source oracles, but
+    # are not inputs to the DOS executable.
+    "winadvisor.c", "winaudio.c", "windialog.c", "winfile.c",
+    "wingdi.c", "winmenu.c", "winplatform.c",
     # All recovered initializers now live in their owning TUs.  This file is
     # declarations/comments only; compiling it creates a synthetic empty
     # debug module that PS never had.
