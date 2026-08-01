@@ -58,69 +58,73 @@ void move_to_tb_value(int direction);
 // Allocates and initializes a citizen in an available city-map slot.
 // FUNCTION: C2 0x2a907
 // FUNCTION: C2WIN 0x004691b0
-int create_citizen(int citizen_type, int cell_x, int cell_y, char is_barbarian)
+int create_citizen(int type, int x, int y, unsigned char is_barb)
 {
-    int cell_offset;
-    char terrain_flags;
-    char citizen_x;
-    char citizen_y;
+    int ref;
+    unsigned char terrain;
 
-    if (cell_x < 0 || cell_x >= 0x50 || cell_y < 0 || cell_y >= 0x50)
+    if (x < 0)
+        return 0;
+    if (x >= 0x50)
+        return 0;
+    if (y < 0)
+        return 0;
+    if (y >= 0x50)
         return 0;
 
-    cell_offset = (cell_y * 0x50 + cell_x) * 0x14;
-    terrain_flags = CM_CELL((cell_offset)).terrain;
-    citizen_a = (unsigned char)CM_CELL((cell_offset)).citizen_a;
-    citizen_b = (unsigned char)CM_CELL((cell_offset)).citizen_b;
-    if ((citizen_a == 0 || citizen_b == 0) && (terrain_flags & 0x8b) == 0) {
-        if (is_barbarian != 0) {
-            if ((terrain_flags & 0x20) == 0)
-                return 0;
-        } else {
-            if ((terrain_flags & 0x54) != 0)
-                return 0;
-        }
-        for (created_citizen_no = 1; created_citizen_no < 0xC9; created_citizen_no++) {
-            if (citizen_list[created_citizen_no].exists == 0) {
-                citizen_list[created_citizen_no].exists = 1;
-                citizen_list[created_citizen_no].evolve_timer = (evolve_count + (short)rand128) & 0x7fff;
-                citizen_x = cell_x;
-                citizen_y = cell_y;
-                citizen_list[created_citizen_no].type = citizen_type;
-                citizen_list[created_citizen_no].x = citizen_x;
-                citizen_list[created_citizen_no].dest_x = citizen_x;
-                citizen_list[created_citizen_no].y = citizen_y;
-                citizen_list[created_citizen_no].dest_y = citizen_y;
-                citizen_list[created_citizen_no].map_ref = cell_offset;
-                citizen_list[created_citizen_no].pixel_x = citizen_x << 4;
-                citizen_list[created_citizen_no].pixel_y = citizen_y << 4;
-                citizen_list[created_citizen_no].world_dir = 1;
-                citizen_list[created_citizen_no].speed = 5;
-                citizen_list[created_citizen_no].state = 0;
-                if (citizen_a == 0) {
-                    CM_CELL((cell_offset)).citizen_a = created_citizen_no;
-                } else {
-                    CM_CELL((cell_offset)).citizen_b = created_citizen_no;
-                }
-                CM_CELL((cell_offset)).edge_bits = CM_CELL((cell_offset)).edge_bits | 1;
-                if (is_barbarian != 0) {
-                    citizen_list[created_citizen_no].is_barbarian = 1;
-                } else {
-                    citizen_list[created_citizen_no].is_barbarian = 0;
-                }
-                if (citizen_type == 3) {
-                    citizen_list[created_citizen_no].name_id = barbarian_name_count;
-                } else {
-                    citizen_list[created_citizen_no].name_id = roman_name_count;
-                }
-                roman_name_count++;
-                if (roman_name_count >= 0x20)
-                    roman_name_count = 0;
-                barbarian_name_count++;
-                if (barbarian_name_count >= 0x10)
-                    barbarian_name_count = 0;
-                return 1;
+    ref = (y * 0x50 + x) * 0x14;
+    terrain = CM_CELL((ref)).terrain;
+    citizen_a = (unsigned char)CM_CELL((ref)).citizen_a;
+    citizen_b = (unsigned char)CM_CELL((ref)).citizen_b;
+    if (citizen_a != 0 && citizen_b != 0)
+        return 0;
+    if ((terrain & 0x8b) != 0)
+        return 0;
+    if (is_barb != 0) {
+        if ((terrain & 0x20) == 0)
+            return 0;
+    } else {
+        if ((terrain & 0x54) != 0)
+            return 0;
+    }
+    for (created_citizen_no = 1; created_citizen_no < 0xC9; created_citizen_no++) {
+        if (citizen_list[created_citizen_no].exists == 0) {
+            citizen_list[created_citizen_no].exists = 1;
+            citizen_list[created_citizen_no].evolve_timer = (evolve_count + rand128) & 0x7fff;
+            citizen_list[created_citizen_no].type = type;
+            citizen_list[created_citizen_no].x = x;
+            citizen_list[created_citizen_no].dest_x = citizen_list[created_citizen_no].x;
+            citizen_list[created_citizen_no].y = y;
+            citizen_list[created_citizen_no].dest_y = citizen_list[created_citizen_no].y;
+            citizen_list[created_citizen_no].map_ref = ref;
+            citizen_list[created_citizen_no].pixel_x = x << 4;
+            citizen_list[created_citizen_no].pixel_y = y << 4;
+            citizen_list[created_citizen_no].world_dir = 1;
+            citizen_list[created_citizen_no].speed = 5;
+            citizen_list[created_citizen_no].state = 0;
+            if (citizen_a == 0) {
+                CM_CELL((ref)).citizen_a = created_citizen_no;
+            } else {
+                CM_CELL((ref)).citizen_b = created_citizen_no;
             }
+            CM_CELL((ref)).edge_bits = CM_CELL((ref)).edge_bits | 1;
+            if (is_barb != 0) {
+                citizen_list[created_citizen_no].is_barbarian = 1;
+            } else {
+                citizen_list[created_citizen_no].is_barbarian = 0;
+            }
+            if (type == 3) {
+                citizen_list[created_citizen_no].name_id = barbarian_name_count;
+            } else {
+                citizen_list[created_citizen_no].name_id = roman_name_count;
+            }
+            roman_name_count++;
+            if (roman_name_count >= 0x20)
+                roman_name_count = 0;
+            barbarian_name_count++;
+            if (barbarian_name_count >= 0x10)
+                barbarian_name_count = 0;
+            return 1;
         }
     }
     return 0;
