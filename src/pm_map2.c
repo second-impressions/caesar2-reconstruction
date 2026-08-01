@@ -41,18 +41,23 @@ void show_regionmap(void)
 // FUNCTION: C2WIN 0x00445939
 void show_regionmap_base(void)
 {
-    int col_idx;
-    int row_idx;
+    int ptr;
+    int x;
+    int i;
+    int j;
 
     sprite_y    = pm_screen_y_start;
     sprite_x    = pm_screen_x_start;
     pm_shown_y  = pm_y;
     pm_y_clip   = 0;
-    col_idx = 0;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
+    i = 0;
     pm_shown_x  = pm_x;
 
     /* top edge */
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
@@ -63,7 +68,9 @@ void show_regionmap_base(void)
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             }
             sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
             sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
@@ -77,18 +84,24 @@ void show_regionmap_base(void)
     sprite_y += pm_diamond_half_height;
     pm_shown_y++;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* interior */
     mid2_line_with_sides_base();
-    for (row_idx = 0; row_idx < (pm_screen_height - 2) / 2; row_idx++) {
+    for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
         mid2_line_no_sides_base();
         mid2_line_with_sides_base();
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* bottom edge — same as top with style=1 */
     sprite_x   = pm_screen_x_start;
-    col_idx = 0;
+    i = 0;
     pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
@@ -99,7 +112,9 @@ void show_regionmap_base(void)
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             }
             sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
             sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
