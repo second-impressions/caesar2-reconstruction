@@ -176,44 +176,42 @@ void show_battlemap_base(void)
 // FUNCTION: C2WIN 0x0041e1e0
 void show_battlemap_top(void)
 {
-    int col_idx;
-    int row_idx;
+    int ptr;
+    int x;
+    int i;
+    int j;
 
     sprite_y   = pm_screen_y_start;
     sprite_x   = pm_screen_x_start;
     pm_shown_y = pm_y;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     pm_y_clip  = 0;
-    pm_shown_x = pm_x;
-    for (col_idx = 0; col_idx < pm_screen_width; col_idx++) {
+    for (i = 0, pm_shown_x = pm_x; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
-        if (((pm_shown_ptr) >= 0x0FFF0000)) {
-            sprite_x += pm_diamond_width;
-        } else {
-            sprite_x += pm_diamond_width;
-            place3_sprite(0);
-        }
+        if (((pm_shown_ptr) >= 0x0FFF0000)) sprite_x += pm_diamond_width;
+        else { sprite_x += pm_diamond_width; place3_sprite(0); }
     }
     sprite_y += pm_diamond_half_height;
     pm_shown_y++;
 
     mid3_line_with_sides_top();
-    for (row_idx = 0; row_idx < (pm_screen_height - 2) / 2; row_idx++) {
+    for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
         mid3_line_no_sides_top();
         mid3_line_with_sides_top();
     }
 
     /* Render the lower overlay row and its two following edge rows. */
     sprite_x   = pm_screen_x_start;
-    col_idx = 0;
-    pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
+    i = 0; pm_shown_x = pm_x;
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
-        if (((pm_shown_ptr) >= 0x0FFF0000)) {
-            sprite_x += pm_diamond_width;
-        } else {
-            sprite_x += pm_diamond_width;
-            place3_sprite(0);
-        }
+        if (((pm_shown_ptr) >= 0x0FFF0000)) sprite_x += pm_diamond_width;
+        else { sprite_x += pm_diamond_width; place3_sprite(0); }
     }
     pm_shown_y++;
     sprite_y  += pm_diamond_half_height;
