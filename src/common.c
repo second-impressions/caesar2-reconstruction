@@ -761,6 +761,10 @@ void clear_ferret_map(int margin, unsigned char *map_base, int map_width, int ma
         } }
 }
 
+void clear_sea_ferret_map(int, int, unsigned char *, int, int, int, int, int, int, int);
+int run_2_map_ferrets(int, unsigned char *, int, int, int, int, int, int, int);
+int trace_back_ferret(void);
+
 // Initializes a region-map corridor for the current army's movement rules.
 // FUNCTION: C2 0x2b7e0
 // FUNCTION: C2WIN 0x0046b083
@@ -768,118 +772,102 @@ void clear_region_ferret_map(int movement_mode, int margin, unsigned char *map_b
                              int map_height, int cell_size, int start_x, int start_y,
                              int end_x, int end_y)
 {
-    int max_y;
-    int min_y;
-    int min_x;
+    int y_max;
+    int first_y;
+    int left_col;
     int max_x;
-    int corridor_start_x;
-    int corridor_start_y;
-    int corridor_end_y;
-    int corridor_end_x;
-    int row_offset;
-    int cell_offset;
+    int left;
+    int top;
+    int hi_y;
+    int right_edge;
+    int first_row;
+    int ptr;
+    int map_ptr;
     int cell_x;
-    int cell_y;
-    unsigned char terrain_flags;
+    int ypos;
+    int tmp;
+    unsigned char terrain;
     unsigned char path_value;
-    unsigned char cell_kind;
-    unsigned char army_id;
+    unsigned char terrain_type;
+    unsigned char cell7;
 
-    if (start_x <= end_x) {
-        min_x = start_x;
-        max_x = end_x;
-    } else {
-        min_x = end_x;
-        max_x = start_x;
-    }
-    if (start_y <= end_y) {
-        min_y = start_y;
-        max_y = end_y;
-    } else {
-        min_y = end_y;
-        max_y = start_y;
-    }
-    corridor_start_x = min_x - margin;
-    corridor_start_y = min_y - margin;
-    corridor_end_x = max_x + margin;
-    corridor_end_y = max_y + margin;
-    if (corridor_start_x < 0) corridor_start_x = 0;
-    if (corridor_start_y < 0) corridor_start_y = 0;
-    if (corridor_end_x >= map_width) corridor_end_x = map_width - 1;
-    if (corridor_end_y >= map_height) corridor_end_y = map_height - 1;
+    if (start_x <= end_x) { left_col = start_x; max_x = end_x; }
+    else { left_col = end_x; max_x = start_x; }
+    if (start_y <= end_y) { first_y = start_y; y_max = end_y; }
+    else { first_y = end_y; y_max = start_y; }
+    left = left_col - margin;
+    top = first_y - margin;
+    right_edge = max_x + margin;
+    hi_y = y_max + margin;
+    if (left < 0) left = 0;
+    if (top < 0) top = 0;
+    if (right_edge >= map_width) right_edge = map_width - 1;
+    if (hi_y >= map_height) hi_y = map_height - 1;
 
-    row_offset = cell_size * (corridor_start_x + corridor_start_y * map_width);
-    for (cell_y = corridor_start_y; cell_y <= corridor_end_y; cell_y++, row_offset += map_width * cell_size) {
-        for (cell_x = corridor_start_x, cell_offset = row_offset; cell_x <= corridor_end_x; cell_x++, cell_offset += cell_size) {
-            if (cell_y == corridor_start_y)
-                path_value = 0xFF;
-            else if (cell_y == corridor_end_y)
-                path_value = 0xFF;
-            else if (cell_x == corridor_start_x)
-                path_value = 0xFF;
-            else if (cell_x == corridor_end_x)
-                path_value = 0xFF;
+    ptr = cell_size * (left + top * map_width);
+    for (ypos = top; ypos <= hi_y; ypos++, ptr += map_width * cell_size) {
+        for (cell_x = left, map_ptr = ptr; cell_x <= right_edge; cell_x++, map_ptr += cell_size) {
+            if (ypos == top) path_value = 0xFF;
+            else if (ypos == hi_y) path_value = 0xFF;
+            else if (cell_x == left) path_value = 0xFF;
+            else if (cell_x == right_edge) path_value = 0xFF;
             else {
                 path_value = 0;
-                terrain_flags = *(map_base + cell_offset + 1);
-                cell_kind = *(map_base + cell_offset);
-                army_id = *(map_base + cell_offset + 7);
+                terrain = *(map_base + map_ptr + 1);
+                terrain_type = *(map_base + map_ptr);
+                cell7 = *(map_base + map_ptr + 7);
 
-                *(map_base + cell_offset + 6) = 0;
-                *(map_base + cell_offset + 5) = 0;
-                if ((terrain_flags & 1) != 0) {
-                    if (army_list[army_no].type == 1) {
-                        path_value = 0xFE;
-                    } else if (cell_kind >= 0x93 && cell_kind <= 0x9B) {
-                        path_value = 0xFE;
+                *(map_base + map_ptr + 6) = 0;
+                *(map_base + map_ptr + 5) = 0;
+                if ((terrain & 1) != 0) {
+                    if (army_list[army_no].type == 1) { path_value = 0xFE;
+                    } else
+                    if (terrain_type >= 0x93 && terrain_type <= 0x9B) { path_value = 0xFE;
                     } else {
-                        *(map_base + cell_offset + 5) = 1;
-                    }
-                } else if ((terrain_flags & 4) != 0) {
+                        *(map_base + map_ptr + 5) = 1; }
+                } else if ((terrain & 4) != 0) {
                     if (army_list[army_no].type == 1) {
-                        *(map_base + cell_offset + 5) = 1;
+                        *(map_base + map_ptr + 5) = 1;
                     } else {
                         path_value = 0xFE;
                     }
-                } else if ((terrain_flags & 2) != 0) {
+                } else if ((terrain & 2) != 0) {
                     if (army_list[army_no].type == 1) {
-                        if ((terrain_flags & 0x20) != 0) {
-                            *(map_base + cell_offset + 5) = 1;
+                        if ((terrain & 0x20) != 0) {
+                            *(map_base + map_ptr + 5) = 1;
                         } else {
                             path_value = 0xFE;
                         }
-                    } else if (movement_mode != 0) {
-                        *(map_base + cell_offset + 5) = 1;
+                    } else if (movement_mode != 0) { *(map_base + map_ptr + 5) = 1;
                     } else {
                         path_value = 0xFE;
                     }
-                } else if ((terrain_flags & 0x20) != 0) {
-                    *(map_base + cell_offset + 5) = 1;
-                } else if ((terrain_flags & 8) != 0) {
-                    if ((terrain_flags & 0x10) != 0) {
+                } else if ((terrain & 0x20) != 0) {
+                    *(map_base + map_ptr + 5) = 1;
+                } else if ((terrain & 8) != 0) {
+                    if ((terrain & 0x10) != 0) {
                         path_value = 0xFE;
                     } else if (army_list[army_no].type != 1) {
                         path_value = 0xFE;
                     } else if (army_list[army_no].state_idx != 4) {
                         path_value = 0xFE;
-                    } else if (army_id == 0) {
+                    } else if (cell7 == 0) {
                         path_value = 0xFE;
-                    } else if (army_id != army_list[army_no].army_id) {
+                    } else if (cell7 != army_list[army_no].army_id) {
                         path_value = 0xFE;
                     } else {
-                        *(map_base + cell_offset + 5) = 2;
+                        *(map_base + map_ptr + 5) = 2;
                     }
-                } else if ((terrain_flags & 0x10) != 0) {
+                } else if ((terrain & 0x10) != 0) {
                     path_value = 0xFE;
-                } else if ((terrain_flags & 8) != 0) {
+                } else if ((terrain & 8) != 0) {
                     path_value = 0xFE;
                 } else {
-                    *(map_base + cell_offset + 5) = 2;
+                    *(map_base + map_ptr + 5) = 2;
                 }
             }
-            *(map_base + cell_offset + 2) = path_value;
-        }
-    }
+            *(map_base + map_ptr + 2) = path_value;
+        } }
 }
 
 // Initializes a map corridor so only navigable sea cells remain passable.
