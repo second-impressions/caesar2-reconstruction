@@ -7,7 +7,6 @@ struct svga_cell {
     unsigned short split_off;
 };
 
-/* The first five declarations fill Watcom's initial symbol-table page. */
 extern unsigned char svga_refresh_table[1364];
 extern unsigned char gen_refresh1;
 extern unsigned char gen_refresh2;
