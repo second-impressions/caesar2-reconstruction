@@ -235,41 +235,59 @@ void show_regionmap_top(void)
 // FUNCTION: C2WIN 0x00445fa4
 void mid2_line_no_sides_base(void)
 {
-    int col_idx;
+    int i;
+#if PLATFORM_DOS
     int half_height;
     int rotation_idx;
     int base_kind;
+#endif
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     sprite_x = pm_screen_x_start;
-    col_idx = 0;
-    pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (i = 0, pm_shown_x = pm_x; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
+            place_diamond(0);
+            sprite_x += pm_diamond_width;
         } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
             place2_a_building_base(0);
-            print2_test_info();
-            continue;
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             }
+#if PLATFORM_DOS
             base_kind = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
             sprite_image_no = base_kind;
             rotation_idx = map_direction >> 1;
             sprite_image_no = rotated2_map[base_kind].dir[rotation_idx];
+#else
+            sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
+            sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
+#endif
             sprite_image_no += 0x10;
+            place_diamond(0);
+            sprite_x += pm_diamond_width;
         }
-        place_diamond(0);
-        sprite_x += pm_diamond_width;
+#if PLATFORM_DOS
         print2_test_info();
+#endif
     }
+#if PLATFORM_DOS
     half_height = pm_diamond_half_height;
     sprite_y  += half_height;
     pm_shown_y++;
     pm_y_clip += half_height;
+#else
+    sprite_y  += pm_diamond_half_height;
+    pm_shown_y++;
+    pm_y_clip += pm_diamond_half_height;
+#endif
 }
 
 // Draw a base row with half-diamonds at the left and right viewport edges.
