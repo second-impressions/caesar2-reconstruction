@@ -394,8 +394,14 @@ mid_done:
 // FUNCTION: C2WIN 0x0041ebe0
 void mid3_line_no_sides_top(void)
 {
+    int ptr;
+    int x;
+    int y;
     int col_idx;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     if (pm_x > 0) {
         sprite_x = pm_screen_x_start - pm_diamond_width;
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_x - 1];
@@ -523,6 +529,9 @@ void bottom3_line_no_sides(void)
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place3_sprite(2);
     }
     sprite_x = pm_screen_x_start;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     col_idx = 0;
     pm_shown_x = pm_x;
     for (; col_idx < pm_screen_width; col_idx++) {
@@ -535,6 +544,9 @@ void bottom3_line_no_sides(void)
         }
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     if (pm_shown_x < 80) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x];
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place3_sprite(2);
