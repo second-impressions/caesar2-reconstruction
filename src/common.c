@@ -1240,55 +1240,49 @@ void run_clock_ferret(void)
 // FUNCTION: C2WIN 0x0046c10f
 void run_anti_ferret(void)
 {
-    unsigned char heading;
+    int direction;
     int move_result;
     int attempt_count;
-    int direction;
 
     if (anti_ferret_running == 0) return;
 
-    heading = ferret_heading(anti_ferret_x, anti_ferret_y);
-    if (heading == 8) {
-        ferret_home = 1;
-        return;
+    direction = ferret_heading(anti_ferret_x, anti_ferret_y);
+    if (direction == 8) { ferret_home = 1; return;
     }
 
-    direction = heading;
-    attempt_count = 0;
-    do {
-        move_result = (unsigned char)check_anti_ferret_move((signed char)direction);
+    for (attempt_count = 0; attempt_count < 8; attempt_count++) {
+        move_result = (unsigned char)check_anti_ferret_move(direction);
         if (tb_occ_a_flag != 0 && tb_occ_b_flag != 0) move_result = 0xFE;
         if (move_result == 0xFF) { anti_ferret_running = 0; return; }
         if (move_result == 0) {
-            move_anti_ferret((signed char)direction, 0);
+            move_anti_ferret(direction, 0);
             last_anti_ferret_dirc = direction;
             return;
         }
         if (--direction < 0) direction = 7;
-    } while (++attempt_count < 8);
+    }
 
     direction = last_anti_ferret_dirc;
-    attempt_count = 0;
-    do {
-        move_result = (unsigned char)check_anti_ferret_move((signed char)direction);
+    for (attempt_count = 0; attempt_count < 8; attempt_count++) {
+        move_result = (unsigned char)check_anti_ferret_move(direction);
         if (tb_occ_a_flag != 0 && tb_occ_b_flag != 0) move_result = 0xFE;
-        if (move_result < 0xFE && tb_prev_flag == 0) {
-            move_anti_ferret((signed char)direction, 1);
-            *(ferret_map + anti_ferret_ptr + 5) |= 0x40;
-            return;
-        }
-        if (--direction < 0) direction = 7;
-    } while (++attempt_count < 8);
-
-    attempt_count = 0;
-    do {
-        move_result = (unsigned char)check_anti_ferret_move((signed char)direction);
         if (move_result < 0xFE) {
-            move_anti_ferret((signed char)direction, 1);
+            if (tb_prev_flag == 0) {
+                move_anti_ferret(direction, 1);
+                *(ferret_map + anti_ferret_ptr + 5) |= 0x40;
+                return;
+            }
+        }
+        if (--direction < 0) direction = 7;
+    }
+
+    for (attempt_count = 0; attempt_count < 8; attempt_count++) {
+        move_result = (unsigned char)check_anti_ferret_move(direction);
+        if (move_result < 0xFE) { move_anti_ferret(direction, 1);
             return;
         }
         if (--direction < 0) direction = 7;
-    } while (++attempt_count < 8);
+    }
     anti_ferret_running = 0;
 }
 
