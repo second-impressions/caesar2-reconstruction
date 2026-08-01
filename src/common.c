@@ -1745,21 +1745,22 @@ int at_edge_of_map(int map_x, int map_y)
 // FUNCTION: C2WIN 0x0046ddab
 void get_over_army(void)
 {
+    int cy;
+    int cell_x;
     int start_y;
     int start_x;
-    int end_y;
-    int end_x;
+    int high_y;
+    int max_x;
     int cell_offset;
-    int army_idx;
 
     over_an_army = 0;
-    if (map_mode != 1 || pointer_mode != 0 || pm_over == 0)
-        return;
-    if ((RM_CELL(pm_over_cm_ptr).terrain & 1) != 0)
-        return;
+    if (map_mode != 1) return;
+    if (pointer_mode != 0) return;
+    if (pm_over == 0) return;
+    if ((RM_CELL(pm_over_cm_ptr).terrain & 1) != 0) return;
 
     army_a = (unsigned char)RM_CELL(pm_over_cm_ptr).occupant;
-    if (army_a != 0 && pm_over_cm_ptr == army_list[army_a].map_ref) {
+    if (army_a != 0 && army_list[army_a].map_ref == pm_over_cm_ptr) {
         over_an_army = army_a;
         return;
     }
@@ -1768,22 +1769,21 @@ void get_over_army(void)
     if (start_x < 0) start_x = 0;
     start_y = over_y - 1;
     if (start_y < 0) start_y = 0;
-    end_x = over_x + 1;
-    if (end_x >= map_actual_width) end_x = map_actual_width - 1;
-    end_y = over_y + 1;
-    if (end_y >= map_actual_height) end_y = map_actual_height - 1;
+    max_x = over_x + 1;
+    if (max_x >= map_actual_width) max_x = map_actual_width - 1;
+    high_y = over_y + 1;
+    if (high_y >= map_actual_height) high_y = map_actual_height - 1;
 
-    for (; start_y <= end_y; start_y++) {
-        int cell_x;
-        for (cell_x = start_x; cell_x <= end_x; cell_x++) {
-            cell_offset = (map_actual_width * start_y + cell_x) * map_actual_atom;
+    for (cy = start_y; cy <= high_y; cy++) {
+        for (cell_x = start_x; cell_x <= max_x; cell_x++) {
+            cell_offset = (map_actual_width * cy + cell_x) * map_actual_atom;
             army_a = (unsigned char)RM_CELL(cell_offset).occupant;
-            if ((RM_CELL(cell_offset).terrain & 1) == 0
-                && army_a != 0
-                && army_a >= 0) {
-                army_idx = army_a;
-                if (army_idx < 26 && army_list[army_idx].home_ref == pm_over_cm_ptr) {
-                    over_an_army = army_idx;
+            if ((RM_CELL(cell_offset).terrain & 1) != 0) continue;
+            if (army_a != 0) {
+                if (army_a < 0) continue;
+                if (army_a >= 26) continue;
+                if (army_list[army_a].home_ref == pm_over_cm_ptr) {
+                    over_an_army = army_a;
                 }
             }
         }
