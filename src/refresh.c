@@ -96,7 +96,7 @@ void set_mouse_refresh(void)
 
     (*(unsigned char (*)[30][40])svga_refresh_table)[ref_y][ref_x] = 2;
     if (ref_x < 39)
-        (*(unsigned char (*)[30][40])svga_refresh_table)[ref_y][ref_x + 1] = 2;
+        (*(unsigned char (*)[30][40])svga_refresh_table)[ref_y + 0][ref_x + 1] = 2;
     if (ref_y < 29)
         (*(unsigned char (*)[30][40])svga_refresh_table)[ref_y + 1][ref_x] = 2;
     if (ref_x < 39 && ref_y < 29)
