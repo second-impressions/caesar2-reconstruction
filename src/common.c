@@ -272,19 +272,23 @@ int create_arrow(unsigned char *arrow_data_ptr, int owner_idx, int start_x, int 
 
 // Zeros a citizen record.
 // FUNCTION: C2 0x2af5a
-// FUNCTION: C2WIN 0x00469f7e
+// FUNCTION: C2WIN 0x00469f63
 void clear_citizen(struct citizen_rec *record_ptr)
 {
+#if PLATFORM_WINDOWS
+    memset(record_ptr, 0, sizeof(struct citizen_rec));
+#else
     unsigned int i;
-    char *record_bytes = (char *)record_ptr;
+
     for (i = 0; i < sizeof(struct citizen_rec); i++) {
-        record_bytes[i] = 0;
+        ((char *)record_ptr)[i] = 0;
     }
+#endif
 }
 
 // Zeros an army record.
 // FUNCTION: C2 0x2af6d
-// FUNCTION: C2WIN 0x00469f9c
+// FUNCTION: C2WIN 0x00469f7e
 void clear_army(struct army_rec *record_ptr)
 {
     unsigned int i;
@@ -296,6 +300,7 @@ void clear_army(struct army_rec *record_ptr)
 
 // Clears every field in a unit record.
 // FUNCTION: C2 0x2afbc
+// FUNCTION: C2WIN 0x00469f9c
 void clear_unit(struct unit_rec *record_ptr)
 {
     unsigned int i;
