@@ -1,9 +1,14 @@
 
+#if PLATFORM_WINDOWS
+#include "pcsound.h"
+#include "winaudio.h"
+#endif
 #include "c2_data.h"
 
 
 extern int  get_string_width(char *src, unsigned char *font);
 extern void set_this_ambient(int ambient_idx);
+extern void set_prov_ambient(int event);
 extern void place_diamond(int style);
 extern void put_a_font_string(char *str, int x, int y, unsigned char *font, int color);
 extern void font_list(int idx, int word_count, int x, int y, unsigned char *font, int color);
@@ -621,8 +626,8 @@ void bottom2_line_with_sides(void)
 
 extern void refresh_a_bigger_square(int tile_x, int tile_y);
 extern void get_text_pointer(int entry_idx, int word_count);
-extern void set_prov_ambient(int event);
 extern void write_large_diamond_leftroof(unsigned char *sprite_addr);
+extern void write_large_diamond_roof(unsigned char *sprite_addr);
 
 // Draw an unclipped bottom row using building roofs and adjacent spillover sprites.
 // FUNCTION: C2 0x3a096
@@ -707,7 +712,7 @@ void place2_a_building_base(int draw_style)
     } else if (flags == 8) { sprite_bank_ptr = (&building_data2)[mode_no]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank2)[sprite_image_no].dir[map_direction >> 1];
     } else if (flags == 0xc) { sprite_bank_ptr = (&building_data3)[mode_no]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank3)[sprite_image_no].dir[map_direction >> 1];
     } else if (flags == 0x10) {
-        sprite_bank_ptr = (&fixt_data)[mode_no]; sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + sprite_image_no * 4] + 0x10; } else { return; }
+        sprite_bank_ptr = (&fixt_data)[mode_no]; sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + (sprite_image_no - 0x10) * 4] + 0x10; } else { return; }
 #else
     bank_kind = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x1c; rotation_idx = (map_direction >> 1) + sprite_image_no * 4;
 
@@ -764,7 +769,24 @@ extern void write_large_diamond_hat(unsigned char *sprite_addr, int y_clip);
 extern void write_medium_diamond_hat(unsigned char *sprite_addr, int y_clip);
 extern void write_small_diamond_hat(unsigned char *sprite_addr, int y_clip);
 extern void write_large_diamond_lefthat(unsigned char *sprite_addr, int y_clip);
-extern void write_large_diamond_roof(unsigned char *sprite_addr);
+extern void write_medium_diamond_lefthat(unsigned char *sprite_addr, int y_clip);
+extern void write_small_diamond_lefthat(unsigned char *sprite_addr, int y_clip);
+extern void write_large_diamond_righthalfhat(unsigned char *sprite_addr, int y_clip, int side);
+extern void write_medium_diamond_righthalfhat(unsigned char *sprite_addr, int y_clip, int side);
+extern void write_small_diamond_righthalfhat(unsigned char *sprite_addr, int y_clip, int side);
+extern void write_large_diamond_righthat(unsigned char *sprite_addr, int y_clip);
+extern void write_medium_diamond_righthat(unsigned char *sprite_addr, int y_clip);
+extern void write_small_diamond_righthat(unsigned char *sprite_addr, int y_clip);
+extern void write_large_diamond_lefthalfhat(unsigned char *sprite_addr, int y_clip, int side);
+extern void write_medium_diamond_lefthalfhat(unsigned char *sprite_addr, int y_clip, int side);
+extern void write_small_diamond_lefthalfhat(unsigned char *sprite_addr, int y_clip, int side);
+extern void write_large_diamond_righthalfroof(unsigned char *sprite_addr, int side);
+extern void write_medium_diamond_roof(unsigned char *sprite_addr);
+extern void write_small_diamond_roof(unsigned char *sprite_addr);
+extern void write_medium_diamond_leftroof(unsigned char *sprite_addr);
+extern void write_small_diamond_leftroof(unsigned char *sprite_addr);
+extern void write_medium_diamond_righthalfroof(unsigned char *sprite_addr, int side);
+extern void write_small_diamond_righthalfroof(unsigned char *sprite_addr, int side);
 
 // Draw a building's visible upper slice, province label, and any regional marker.
 // FUNCTION: C2 0x3a402
@@ -810,7 +832,7 @@ void place2_a_building_top(int draw_style)
     else if (bank_index == 8) { bank = (&building_data2)[mode]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank2)[sprite_image_no].dir[map_direction >> 1]; }
     else if (bank_index == 0xc) { bank = (&building_data3)[mode]; sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank3)[sprite_image_no].dir[map_direction >> 1]; }
     else if (bank_index == 0x10) {
-        bank = (&fixt_data)[mode]; sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + sprite_image_no * 4] + 0x10; }
+        bank = (&fixt_data)[mode]; sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + (sprite_image_no - 0x10) * 4] + 0x10; }
     else return;
 #else
     bank_index = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x1c; rotation_idx = (map_direction >> 1) + sprite_image_no * 4;
@@ -828,9 +850,9 @@ void place2_a_building_top(int draw_style)
     y_length     = bank[data_ptr + 0xd];
     sprite_class = bank[data_ptr + 0xc];
 #if PLATFORM_WINDOWS
-    sprite_start = bank[data_ptr + 4]
-                 + (bank[data_ptr + 5] << 8)
-                 + (bank[data_ptr + 6] << 16);
+    sprite_start = (bank[data_ptr + 5] << 8)
+                 + (bank[data_ptr + 6] << 16)
+                 + bank[data_ptr + 4];
 #else
     sprite_start = bank[data_ptr + 4]
                  + (bank[data_ptr + 5] << 8)
@@ -982,7 +1004,7 @@ put_back: sprite_x = old_sprite_x; sprite_y = old_sprite_y;
     }
 }
 
-extern void write_large_diamond_righthalfroof(unsigned char *sprite_addr, int side);
+extern void write_large_diamond_rightroof(unsigned char *sprite_addr);
 
 // Draw the portion of a building roof that crosses the bottom of the visible map slice.
 // FUNCTION: C2 0x3ab26
@@ -1022,7 +1044,7 @@ void place2_a_building_roof(int draw_style)
         sprite_image_no = ((struct rotated_sprite_rec *)rotated2_bank3)[sprite_image_no].dir[map_direction >> 1];
     } else if (flags == 0x10) {
         bank = (&fixt_data)[mode];
-        sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + sprite_image_no * 4] + 0x10;
+        sprite_image_no = ((unsigned char *)rotated2_map)[(map_direction >> 1) + (sprite_image_no - 0x10) * 4] + 0x10;
     } else {
         return;
     }
@@ -1147,20 +1169,34 @@ void place2_a_building_roof(int draw_style)
 // FUNCTION: C2WIN 0x004482d9
 void place2_sprite(int draw_style)
 {
-    int marker_kind;
-    int y_offset;
-    int x_offset;
-    int relative_direction;
+    int flag;
+    int y_off;
+    int xoff;
+    int direction;
+#if PLATFORM_WINDOWS
+    int mode_no;
+    struct army_rec *army;
+#else
     unsigned char *sprite_header_ptr;
-    unsigned char overlay_flags;
+#endif
+    unsigned char flag_kind;
+#if PLATFORM_DOS
     int sprite_top_y;
+#endif
 
+#if PLATFORM_WINDOWS
+    mode_no = screen_mode;
+    if (mode_no > 1) mode_no = 0;
+#endif
     army_a = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).occupant;
-    marker_kind = 0;
+    flag = 0;
     if (flag_mode != 0)
-        marker_kind = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).place_state;
+        flag = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).place_state;
 
     if (army_a != 0) {
+#if PLATFORM_WINDOWS
+        army = &army_list[army_a];
+#endif
         if (army_a < 0) return;
         if (army_a >= 0x1a) return;
         if (army_list[army_a].exists == 0) return;
@@ -1171,38 +1207,48 @@ void place2_sprite(int draw_style)
         else if (army_list[army_a].type <= 4) set_this_ambient(8);
         else if (army_list[army_a].type == 5) set_this_ambient(0xa);
 
-        relative_direction = army_list[army_a].world_dir - map_direction;
-        if (relative_direction < 0) relative_direction += 8;
+        direction = army_list[army_a].world_dir - map_direction;
+        if (direction < 0) direction += 8;
 
         if (zoom_level == 0) {
-            x_offset = walking_x_ofsets_zoom0[relative_direction * 16 + army_list[army_a].target_kind];
-            y_offset = walking_y_ofsets_zoom0[relative_direction * 16 + army_list[army_a].target_kind];
+            xoff = walking_x_ofsets_zoom0[direction * 16 + army_list[army_a].target_kind];
+            y_off = walking_y_ofsets_zoom0[direction * 16 + army_list[army_a].target_kind];
         } else if (zoom_level == 1) {
-            x_offset = walking_x_ofsets_zoom1[relative_direction * 16 + army_list[army_a].target_kind];
-            y_offset = walking_y_ofsets_zoom1[relative_direction * 16 + army_list[army_a].target_kind];
+            xoff = walking_x_ofsets_zoom1[direction * 16 + army_list[army_a].target_kind];
+            y_off = walking_y_ofsets_zoom1[direction * 16 + army_list[army_a].target_kind];
         } else {
-            x_offset = walking_x_ofsets_zoom2[relative_direction * 16 + army_list[army_a].target_kind];
-            y_offset = walking_y_ofsets_zoom2[relative_direction * 16 + army_list[army_a].target_kind];
+            xoff = walking_x_ofsets_zoom2[direction * 16 + army_list[army_a].target_kind];
+            y_off = walking_y_ofsets_zoom2[direction * 16 + army_list[army_a].target_kind];
         }
 
         if (draw_style == 1) {
-            x_offset -= 2;
+            xoff -= 2;
         } else if (draw_style == 2) {
-            x_offset += pm_diamond_half_width - 2;
+            xoff += pm_diamond_half_width - 2;
         } else {
-            x_offset += pm_diamond_half_width - 2 - pm_diamond_width;
+            xoff += pm_diamond_half_width - 2 - pm_diamond_width;
         }
 
-        if      (zoom_level == 0) y_offset += 0x18;
-        else if (zoom_level == 1) y_offset += 8;
-        else                       y_offset += 2;
+        if      (zoom_level == 0) y_off += 0x18;
+        else if (zoom_level == 1) y_off += 8;
+        else                       y_off += 2;
 
         /* --- Pass 1: main body --- */
         sprite_image_no = army_list[army_a].sprite_image;
         data_ptr        = sprite_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+        sprite_start  = (&people_data)[mode_no][data_ptr + 4]
+                      + ((&people_data)[mode_no][data_ptr + 5] << 8)
+                      + ((&people_data)[mode_no][data_ptr + 6] << 16);
+        sprite_width  = (&people_data)[mode_no][data_ptr]
+                      + ((&people_data)[mode_no][data_ptr + 1] << 8);
+        sprite_height = (&people_data)[mode_no][data_ptr + 2]
+                      + ((&people_data)[mode_no][data_ptr + 3] << 8);
+#else
         sprite_header_ptr          = people_data + data_ptr; sprite_start = sprite_header_ptr[4] + (sprite_header_ptr[5] << 8) + (sprite_header_ptr[6] << 16);
         sprite_width    = (sprite_header_ptr[0]) + (sprite_header_ptr[1] << 8);
         sprite_height   = sprite_header_ptr[2] + (sprite_header_ptr[3] << 8);
+#endif
         if (sprite_start > 0x4baf0) { sprite_error++; return; }
         if (sprite_width <= 0)      { sprite_error++; return; }
         if (sprite_width > 0x12c)   { sprite_error++; return; }
@@ -1213,8 +1259,16 @@ void place2_sprite(int draw_style)
         if (army_list[army_a].sprite_anim != 0) {
             sprite2_image_no = army_list[army_a].sprite_anim;
             data_ptr         = sprite2_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+            sprite2_start  = (&people_data)[mode_no][data_ptr + 4]
+                           + ((&people_data)[mode_no][data_ptr + 5] << 8)
+                           + ((&people_data)[mode_no][data_ptr + 6] << 16);
+            sprite2_height = (&people_data)[mode_no][data_ptr + 2]
+                           + ((&people_data)[mode_no][data_ptr + 3] << 8);
+#else
             sprite_header_ptr           = people_data + data_ptr; sprite2_start = (sprite_header_ptr[6] << 16) + ((sprite_header_ptr[4]) + (sprite_header_ptr[5] << 8));
             sprite2_height   = (sprite_header_ptr[2]) + (sprite_header_ptr[3] << 8);
+#endif
         } else {
             sprite2_height = 0;
         }
@@ -1223,27 +1277,48 @@ void place2_sprite(int draw_style)
         if (army_list[army_a].sprite_dir != 0) {
             sprite3_image_no = army_list[army_a].sprite_dir;
             data_ptr         = sprite3_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+            sprite3_start  = (&people_data)[mode_no][data_ptr + 4]
+                           + ((&people_data)[mode_no][data_ptr + 5] << 8)
+                           + ((&people_data)[mode_no][data_ptr + 6] << 16);
+            sprite3_height = (&people_data)[mode_no][data_ptr + 2]
+                           + ((&people_data)[mode_no][data_ptr + 3] << 8);
+#else
             sprite_header_ptr           = people_data + data_ptr; sprite3_start = sprite_header_ptr[4] + (sprite_header_ptr[5] << 8) + (sprite_header_ptr[6] << 16);
             sprite3_height   = sprite_header_ptr[2] + (sprite_header_ptr[3] << 8);
+#endif
         } else {
             sprite3_height = 0;
         }
 
         /* --- Snapshot + centre + draw body --- */
         old_sprite_x = sprite_x; old_sprite_y = sprite_y;
-        sprite_x    += x_offset; sprite_y += y_offset;
+        sprite_x    += xoff; sprite_y += y_off;
         sprite_x    -= sprite_width >> 1;
-        sprite_y    -= sprite_height + sprite2_height + sprite3_height;
+        sprite_y    -= sprite2_height + sprite_height + sprite3_height;
         sprite_base_x = sprite_x;
         sprite_base_y = sprite_y;
+#if PLATFORM_DOS
         refresh_region_sprite_square(sprite_x >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+        xclip(pm_screen_x_start, pm_screen_x_end);
+        yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x1de);
         if (zoom_level == 1) yclip(0x18, 0x1d8);
         else                  yclip(0x18, 0x1da);
+#endif
         if (yclipped == 5) goto after_body;
+#if PLATFORM_WINDOWS
+        if      (xclipped == 1) write_i_left_sprite((&people_data)[mode_no]);
+        else if (xclipped == 2) write_i_right_sprite((&people_data)[mode_no]);
+        else                    write_i_sprite((&people_data)[mode_no]);
+#else
         if      (xclipped == 1) write_i_left_sprite(people_data);
         else if (xclipped == 2) write_i_right_sprite(people_data);
         else                    write_i_sprite(people_data);
+#endif
 after_body:
 
         /* --- Pass 2: sprite2 stacked above body --- */
@@ -1256,13 +1331,24 @@ after_body:
             if (sprite_start > 0x4baf0) { sprite_error++; return; }
             if (sprite_height <= 0)     { sprite_error++; return; }
             if (sprite_height > 0x12c)  { sprite_error++; return; }
+#if PLATFORM_WINDOWS
+            xclip(pm_screen_x_start, pm_screen_x_end);
+            yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
             xclip(pm_screen_x_start, 0x1de);
             if (zoom_level == 1) yclip(0x18, 0x1d8);
             else                  yclip(0x18, 0x1da);
+#endif
             if (yclipped == 5) goto after_sprite2;
+#if PLATFORM_WINDOWS
+            if      (xclipped == 1) write_i_left_sprite((&people_data)[mode_no]);
+            else if (xclipped == 2) write_i_right_sprite((&people_data)[mode_no]);
+            else                    write_i_sprite((&people_data)[mode_no]);
+#else
             if      (xclipped == 1) write_i_left_sprite(people_data);
             else if (xclipped == 2) write_i_right_sprite(people_data);
             else                    write_i_sprite(people_data);
+#endif
 after_sprite2:
 
             if      (zoom_level == 0) army_list[army_a].map_x = sprite_x + 8;
@@ -1280,14 +1366,25 @@ after_sprite2:
             if (sprite_start > 0x4baf0) { sprite_error++; return; }
             if (sprite_height <= 0)     { sprite_error++; return; }
             if (sprite_height > 0x12c)  { sprite_error++; return; }
+#if PLATFORM_WINDOWS
+            xclip(pm_screen_x_start, pm_screen_x_end);
+            yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
             xclip(pm_screen_x_start, 0x1de);
             if (zoom_level == 1) yclip(0x18, 0x1d8);
             else                  yclip(0x18, 0x1da);
+#endif
             if (army_list[army_a].morale_timer != 0) goto after_sprite3;
             if (yclipped == 5) goto after_sprite3;
+#if PLATFORM_WINDOWS
+            if      (xclipped == 1) write_i_left_sprite((&people_data)[mode_no]);
+            else if (xclipped == 2) write_i_right_sprite((&people_data)[mode_no]);
+            else                    write_i_sprite((&people_data)[mode_no]);
+#else
             if      (xclipped == 1) write_i_left_sprite(people_data);
             else if (xclipped == 2) write_i_right_sprite(people_data);
             else                    write_i_sprite(people_data);
+#endif
 after_sprite3:
             if      (zoom_level == 0) army_list[army_a].map_x = sprite_x + 8;
             else if (zoom_level == 1) army_list[army_a].map_x = sprite_x + 4;
@@ -1299,25 +1396,40 @@ after_sprite3:
         sprite_y = old_sprite_y;
     }
 
-    overlay_flags  = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0xc0;
+    flag_kind  = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0xc0;
     if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind) == 0xd4)
-        overlay_flags = 0;
-    if (overlay_flags != 0) {
-        y_offset = 0;
+        flag_kind = 0;
+    if (flag_kind != 0) {
+#if PLATFORM_WINDOWS
+        xoff = y_off = 0;
         if (draw_style == 1) {
-            x_offset = -2;
+            xoff = -2;
+        } else if (draw_style == 2) {
+            xoff += pm_diamond_half_width - 2;
         } else {
-            x_offset = pm_diamond_half_width - 2;
-            if (draw_style != 2)
-                x_offset -= pm_diamond_width;
+            xoff += pm_diamond_half_width - 2 - pm_diamond_width;
         }
-        y_offset += pm_diamond_half_height;
+#else
+        y_off = 0;
+        if (draw_style == 1) {
+            xoff = -2;
+        } else {
+            xoff = pm_diamond_half_width - 2;
+            if (draw_style != 2)
+                xoff -= pm_diamond_width;
+        }
+#endif
+#if PLATFORM_WINDOWS
+        y_off += pm_diamond_height;
+#else
+        y_off += pm_diamond_half_height;
+#endif
 
-        if ((overlay_flags & 0x80) != 0) {
+        if ((flag_kind & 0x80) != 0) {
             sprite_image_no = 6;
             sprite_width    = 0x10;
             sprite_height   = 0x1c;
-        } else if ((overlay_flags & 0x40) != 0) {
+        } else if ((flag_kind & 0x40) != 0) {
             sprite_image_no = 8;
             sprite_width    = 7;
             sprite_height   = 7;
@@ -1327,14 +1439,28 @@ after_sprite3:
         if (sprite_start > 0x4baf0) { sprite_error++; return; }
         if (sprite_start < 0)       { sprite_error++; return; }
         old_sprite_x = sprite_x; old_sprite_y = sprite_y;
-        sprite_x    += x_offset; sprite_y += y_offset; sprite_top_y = sprite_y - sprite_height;
+        sprite_x    += xoff; sprite_y += y_off;
+#if PLATFORM_WINDOWS
+        if      (zoom_level == 0) { sprite_x -= sprite_width >> 1; sprite_y -= sprite_height; }
+        else if (zoom_level == 1) { sprite_x -= sprite_width >> 2; sprite_y -= sprite_height; }
+        else                      { sprite_x -= sprite_width >> 3; sprite_y -= sprite_height; }
+#else
+        sprite_top_y = sprite_y - sprite_height;
         if      (zoom_level == 0) { sprite_x -= sprite_width >> 1; sprite_y = sprite_top_y; }
         else if (zoom_level == 1) { sprite_x -= sprite_width >> 2; sprite_y = sprite_top_y; }
         else                      { sprite_x -= sprite_width >> 3; sprite_y = sprite_top_y; }
+#endif
+#if PLATFORM_DOS
         refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+        xclip(pm_screen_x_start, pm_screen_x_end);
+        yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x1de);
         if (zoom_level == 1) yclip(0x18, 0x1d8);
         else                  yclip(0x18, 0x1da);
+#endif
         if (yclipped == 5) goto restore_overlay;
         if      (xclipped == 1) write_i_left_sprite(mice);
         else if (xclipped == 2) write_i_right_sprite(mice);
@@ -1344,38 +1470,68 @@ restore_overlay:
         sprite_y = old_sprite_y;
     }
 
-    if (marker_kind != 0) {
-        y_offset = 0;
+    if (flag != 0) {
+#if PLATFORM_WINDOWS
+        xoff = y_off = 0;
         if (draw_style == 1) {
-            x_offset = -2;
+            xoff -= 2;
+        } else if (draw_style == 2) {
+            xoff += pm_diamond_half_width - 2;
         } else {
-            x_offset = pm_diamond_half_width - 2;
-            if (draw_style != 2)
-                x_offset -= pm_diamond_width;
+            xoff += pm_diamond_half_width - 2 - pm_diamond_width;
         }
-        y_offset += pm_diamond_half_height;
+#else
+        y_off = 0;
+        if (draw_style == 1) {
+            xoff = -2;
+        } else {
+            xoff = pm_diamond_half_width - 2;
+            if (draw_style != 2)
+                xoff -= pm_diamond_width;
+        }
+#endif
+#if PLATFORM_WINDOWS
+        y_off += pm_diamond_height;
+#else
+        y_off += pm_diamond_half_height;
+#endif
 
-        if (marker_kind == 3)
+        if (flag == 3)
             sprite_image_no = zoom_level + 0xe;
         else
             sprite_image_no = zoom_level + 0xb;
         data_ptr      = sprite_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+        sprite_start  = mice[data_ptr + 4] + (mice[data_ptr + 5] << 8) + (mice[data_ptr + 6] << 16);
+        sprite_width  = (mice[data_ptr + 1] << 8)
+                      + mice[data_ptr];
+        sprite_height = (mice[data_ptr + 3] << 8)
+                      + mice[data_ptr + 2];
+#else
         sprite_start  = mice[data_ptr + 4] + (mice[data_ptr + 5] << 8) + (mice[data_ptr + 6] << 16);
         sprite_width  = (mice[data_ptr + 0]) + (mice[data_ptr + 1] << 8);
         sprite_height = (mice[data_ptr + 2]) + (mice[data_ptr + 3] << 8);
+#endif
         if (sprite_start > 0x4baf0) { sprite_error++; return; }
         if (sprite_width <= 0)      { sprite_error++; return; }
         if (sprite_width > 0x12c)   { sprite_error++; return; }
         if (sprite_height <= 0)     { sprite_error++; return; }
         if (sprite_height > 0x12c)  { sprite_error++; return; }
         old_sprite_x = sprite_x; old_sprite_y = sprite_y;
-        sprite_x    += x_offset;
-        sprite_y    += y_offset;
+        sprite_x    += xoff;
+        sprite_y    += y_off;
         sprite_y    -= sprite_height;
+#if PLATFORM_DOS
         refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+        xclip(pm_screen_x_start, pm_screen_x_end);
+        yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x1de);
         if (zoom_level == 1) yclip(0x18, 0x1d8);
         else                  yclip(0x18, 0x1da);
+#endif
         if (yclipped == 5) goto restore_event;
         if      (xclipped == 1)
             write_i_left_sprite(mice);
