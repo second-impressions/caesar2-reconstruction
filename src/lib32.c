@@ -562,7 +562,7 @@ int writefile(const char *filename, char *buffer, int size)
 {
     int fd;
     int bytes_written;
-    fd = open(filename, 0x261, 0x180);
+    fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0x180);
     if (fd == -1)
         return 0;
     bytes_written = write(fd, buffer, size);
