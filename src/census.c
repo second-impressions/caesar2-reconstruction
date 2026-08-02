@@ -1,7 +1,16 @@
 
 extern int income_multiple;
+extern int population;
 extern int pop_income_pass_count;
 extern int ind_income_pass_count;
+extern int supplied_fountains_count;
+extern int supplied_baths_count;
+extern int large_temples_count;
+extern int med_temples_count;
+extern int small_temples_count;
+extern int med_robbery_count;
+extern int large_robbery_count;
+extern int small_robbery_count;
 
 #include "c2_data.h"
 #include "c2_types.h"
@@ -221,12 +230,12 @@ void get_census(int quiet)
     else if (population >= 30000 && warned_city_size == 7)  { put_message(0x6f, 0, 10); warned_city_size++; }
     else if (population >= 40000 && warned_city_size == 8)  { put_message(0x70, 0, 10); warned_city_size++; }
     /* Unlock structures at population milestones. */
-    if      (population >= 400   && warned_new_struct == 0) { put_message(0x73, 0, 10); new_structure_is = 0xb2; warned_new_struct++; }
-    else if (population >= 800   && warned_new_struct == 1) { put_message(0x73, 0, 10); new_structure_is = 0xe6; warned_new_struct++; }
-    else if (population >= 1200  && warned_new_struct == 2) { put_message(0x73, 0, 10); new_structure_is = 0xf5; warned_new_struct++; }
-    else if (population >= 1800  && warned_new_struct == 3) { put_message(0x73, 0, 10); new_structure_is = 0xb6; warned_new_struct++; }
-    else if (population >= 2400  && warned_new_struct == 4) { put_message(0x73, 0, 10); new_structure_is = 0xe8; warned_new_struct++; }
-    else if (population >= 4800  && warned_new_struct == 5) { put_message(0x73, 0, 10); new_structure_is = 0xed; warned_new_struct++; }
+    if      (population >= 400   && warned_new_struct == 0) { put_message(0x73, 0, 10); warned_new_struct++; new_structure_is = 0xb2; }
+    else if (population >= 800   && warned_new_struct == 1) { put_message(0x73, 0, 10); warned_new_struct++; new_structure_is = 0xe6; }
+    else if (population >= 1200  && warned_new_struct == 2) { put_message(0x73, 0, 10); warned_new_struct++; new_structure_is = 0xf5; }
+    else if (population >= 1800  && warned_new_struct == 3) { put_message(0x73, 0, 10); warned_new_struct++; new_structure_is = 0xb6; }
+    else if (population >= 2400  && warned_new_struct == 4) { put_message(0x73, 0, 10); warned_new_struct++; new_structure_is = 0xe8; }
+    else if (population >= 4800  && warned_new_struct == 5) { put_message(0x73, 0, 10); warned_new_struct++; new_structure_is = 0xed; }
 
     /* Calculate service staffing requirements. */
     slave_requirements[1].max = fire_running_count      / 8;
@@ -257,15 +266,15 @@ void get_census(int quiet)
     library_coverage();
     employment();
 
-    if (quiet != 0) return;
-
-    slave_warning = 0;
-    fire_trouble();
-    road_trouble();
-    water_trouble();
-    wall_trouble();
-    running_pop_tax();
-    running_ind_tax();
+    if (quiet == 0) {
+        slave_warning = 0;
+        fire_trouble();
+        road_trouble();
+        water_trouble();
+        wall_trouble();
+        running_pop_tax();
+        running_ind_tax();
+    }
 }
 
 // Scan city-map rows, accumulating population, income, service, and accident census data.
