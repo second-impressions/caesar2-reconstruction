@@ -1479,6 +1479,8 @@ void place_sprite(int edge_side)
     int direction;
 #if !PLATFORM_WINDOWS
     unsigned char *sprite_header_ptr;
+#endif
+#if PLATFORM_DOS
     int data_byte;
 #endif
 
@@ -1754,16 +1756,16 @@ after_citizen_b:
     if (marker_kind == 3) sprite_image_no = zoom_level + 0xe;
     else                 sprite_image_no = zoom_level + 0xb;
     data_ptr        = sprite_image_no * 16 + 8;
-#if PLATFORM_WINDOWS
+#if PLATFORM_DOS
+    sprite_start    = (mice[data_ptr + 4] + (mice[data_ptr + 5] << 8)) + ((data_byte = mice[data_ptr + 6]) << 16);
+    sprite_width    = (data_byte = mice[data_ptr + 0]) + ((data_byte = mice[data_ptr + 1]) << 8);
+    sprite_height   = mice[data_ptr + 2] + (mice[data_ptr + 3] << 8);
+#else
     sprite_start  = (mice[data_ptr + 6] << 16)
                   + (mice[data_ptr + 5] << 8)
                   + mice[data_ptr + 4];
     sprite_width  = (mice[data_ptr + 1] << 8) + mice[data_ptr];
     sprite_height = (mice[data_ptr + 3] << 8) + mice[data_ptr + 2];
-#else
-    sprite_start    = (mice[data_ptr + 4] + (mice[data_ptr + 5] << 8)) + ((data_byte = mice[data_ptr + 6]) << 16);
-    sprite_width    = (data_byte = mice[data_ptr + 0]) + ((data_byte = mice[data_ptr + 1]) << 8);
-    sprite_height   = mice[data_ptr + 2] + (mice[data_ptr + 3] << 8);
 #endif
 
     old_sprite_x = sprite_x;
