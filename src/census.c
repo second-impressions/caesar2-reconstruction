@@ -683,25 +683,20 @@ void get_road_cover(void)
 // FUNCTION: C2WIN 0x0043238f
 void get_wall_cover(void)
 {
-    int coverage;
-
     if (slave_requirements[4].max == 0) {
         wall_cover = 100;
-        return;
-    }
-    if (tutorial_mode != 0 && tutorial_page < 22) {
-        wall_cover = 100;
-        return;
-    }
-    coverage = valueDIVtotal(slave_requirements[4].current,
-                             slave_requirements[4].max);
-    wall_cover = coverage;
-    if (coverage >= 100) {
+    } else if (tutorial_mode != 0 && tutorial_page < 22) {
         wall_cover = 100;
     } else {
-        ++slave_warning;
+        wall_cover = valueDIVtotal(slave_requirements[4].current,
+                                   slave_requirements[4].max);
+        if (wall_cover >= 100) {
+            wall_cover = 100;
+        } else {
+            ++slave_warning;
+        }
+        if (wall_cover < 0) wall_cover = 0;
     }
-    if (wall_cover < 0) wall_cover = 0;
 }
 
 // Compute water-service staffing coverage and flag an insufficient workforce.
