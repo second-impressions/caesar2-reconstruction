@@ -1124,10 +1124,13 @@ void swap_background_to(int idx)
 void copy_palette(char *src, char *dst)
 {
     int i;
+
     for (i = 0; i < 256; i++) {
-        dst[i*3]   = src[i*3];
-        dst[i*3+1] = src[i*3+1];
-        dst[i*3+2] = src[i*3+2];
+        int ptr;
+        ptr = i * 3;
+        dst[i*3]   = src[ptr];
+        dst[i*3+1] = src[ptr+1];
+        dst[i*3+2] = src[ptr+2];
     }
 }
 
