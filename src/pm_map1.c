@@ -729,26 +729,38 @@ void bottom_line_with_sides(void)
 // FUNCTION: C2WIN 0x0045c9c9
 void bottom_line_no_sides(void)
 {
-    int col_idx;
+    int i;
+#if PLATFORM_DOS
     int next_screen_x;
     int overlay_flag;
+#endif
 
     if (pm_shown_y >= PM_H) return;
     sprite_x   = pm_screen_x_start;
-    col_idx = 0;
+    i = 0;
     pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_x += pm_diamond_width;
-            continue;
-        }
-        overlay_flag = are_overlays_on();
-        next_screen_x   = sprite_x + pm_diamond_width;
-        if (overlay_flag == 0 && (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) {
-            place_a_building_roof(0);
         } else {
-            sprite_x = next_screen_x;
+#if PLATFORM_DOS
+            overlay_flag = are_overlays_on();
+            next_screen_x   = sprite_x + pm_diamond_width;
+            if (overlay_flag == 0 && (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) {
+                place_a_building_roof(0);
+            } else {
+                sprite_x = next_screen_x;
+            }
+#else
+            if (are_overlays_on() != 0) {
+                sprite_x += pm_diamond_width;
+            } else if ((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) {
+                place_a_building_roof(0);
+            } else {
+                sprite_x += pm_diamond_width;
+            }
+#endif
         }
     }
     pm_shown_y++;
