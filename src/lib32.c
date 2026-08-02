@@ -3751,8 +3751,8 @@ void write_image(unsigned char *sprite_data, int image_idx, int x, int y)
 
     sprite_width  = sprite_data[data_ptr]     + (sprite_data[data_ptr + 1] << 8);
     sprite_height = sprite_data[data_ptr + 2] + (sprite_data[data_ptr + 3] << 8);
-    sprite_start  = sprite_data[data_ptr + 4] + (sprite_data[data_ptr + 5] << 8)
-                  + (sprite_data[data_ptr + 6] << 16);
+    sprite_start  = sprite_data[data_ptr + 4] + sprite_data[data_ptr + 5] * 0x100
+                  + sprite_data[data_ptr + 6] * 0x10000;
     sprite_x = x;
     sprite_y = y;
 
@@ -3760,12 +3760,9 @@ void write_image(unsigned char *sprite_data, int image_idx, int x, int y)
     yclip(0, screen_height);
 
     if (yclipped == 5) return;
-
-    if (xclipped == 1) {
-        write_i_left_sprite(sprite_data);
-    } else if (xclipped == 2) {
-        write_i_right_sprite(sprite_data);
-    } else {
+    else if (xclipped == 1) { write_i_left_sprite(sprite_data); }
+    else if (xclipped == 2) { write_i_right_sprite(sprite_data); }
+    else {
         write_i_sprite(sprite_data);
     }
 }
