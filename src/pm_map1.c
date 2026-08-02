@@ -1597,25 +1597,23 @@ void place_sprite(int edge_side)
         if (zoom_level == 1) yclip(0x18, 0x1d8);
         else                  yclip(0x18, 0x1da);
 #endif
-#if PLATFORM_WINDOWS
         if (yclipped == 5) goto after_citizen_a;
+#if PLATFORM_WINDOWS
             if (xclipped == 1)
                 write_i_left_sprite((&people_data)[mode]);
             else if (xclipped == 2)
                 write_i_right_sprite((&people_data)[mode]);
             else
                 write_i_sprite((&people_data)[mode]);
-after_citizen_a:
 #else
-        if (yclipped != 5) {
             if (xclipped == 1)
                 write_i_left_sprite(people_data);
             else if (xclipped == 2)
                 write_i_right_sprite(people_data);
             else
                 write_i_sprite(people_data);
-        }
 #endif
+after_citizen_a:
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     }
@@ -1717,38 +1715,35 @@ after_citizen_a:
         if (zoom_level == 1) yclip(0x18, 0x1d8);
         else                  yclip(0x18, 0x1da);
 #endif
-#if PLATFORM_WINDOWS
         if (yclipped == 5) goto after_citizen_b;
+#if PLATFORM_WINDOWS
             if (xclipped == 1)
                 write_i_left_sprite((&people_data)[mode]);
             else if (xclipped == 2)
                 write_i_right_sprite((&people_data)[mode]);
             else
                 write_i_sprite((&people_data)[mode]);
-after_citizen_b:
 #else
-        if (yclipped != 5) {
             if (xclipped == 1)
                 write_i_left_sprite(people_data);
             else if (xclipped == 2)
                 write_i_right_sprite(people_data);
             else
                 write_i_sprite(people_data);
-        }
 #endif
+after_citizen_b:
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     }
 
+    if (marker_kind != 0) {
 #if PLATFORM_DOS
-    if (marker_kind == 0) return;
     sprite_offset_y = 0;
     if (edge_side == 1)      sprite_offset_x = -2;
     else if (edge_side == 2) sprite_offset_x = pm_diamond_half_width - 2;
     else                sprite_offset_x = pm_diamond_half_width;
     sprite_offset_y += pm_diamond_half_height;
 #else
-    if (marker_kind != 0) {
     sprite_offset_x = sprite_offset_y = 0;
     if (edge_side == 1)      sprite_offset_x -= 2;
     else if (edge_side == 2) sprite_offset_x += pm_diamond_half_width - 2;
@@ -1787,30 +1782,17 @@ after_citizen_b:
     if (zoom_level == 1) yclip(0x18, 0x1d8);
     else                  yclip(0x18, 0x1da);
 #endif
-#if PLATFORM_WINDOWS
     if (yclipped == 5) goto after_marker;
-        if (xclipped == 1)
-            write_i_left_sprite(mice);
-        else if (xclipped == 2)
-            write_i_right_sprite(mice);
-        else
-            write_i_sprite(mice);
+    if (xclipped == 1)
+        write_i_left_sprite(mice);
+    else if (xclipped == 2)
+        write_i_right_sprite(mice);
+    else
+        write_i_sprite(mice);
 after_marker:
-#else
-    if (yclipped != 5) {
-        if (xclipped == 1)
-            write_i_left_sprite(mice);
-        else if (xclipped == 2)
-            write_i_right_sprite(mice);
-        else
-            write_i_sprite(mice);
-    }
-#endif
     sprite_x = old_sprite_x;
     sprite_y = old_sprite_y;
-#if !PLATFORM_DOS
     }
-#endif
 }
 
 // Display the active diagnostic value over the current city-map cell.
