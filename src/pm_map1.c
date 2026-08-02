@@ -1973,20 +1973,31 @@ int show_right_overlay(int style)
 // FUNCTION: C2WIN 0x0045f7e4
 int are_overlays_on(void)
 {
-    unsigned char x, b;
+    int map_ptr;
+    unsigned char terrain_flags;
+    unsigned char building_kind;
+
     if (overlays_on != 1) return 0;
     if (((pm_shown_ptr) >= 0x0FFF0000)) return 0;
-    if ((unsigned char)landfill_pool[pm_shown_ptr / 20] == 0) {
-        x = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain & 0xe7;
-        if (x == 0) return 0;
+    map_ptr = pm_shown_ptr / 20;
+    if (landfill_pool[map_ptr] == 0) {
+        terrain_flags = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain & 0xe7;
+        if (terrain_flags == 0) return 0;
         if (overlay0_empty_mode != 0) return 0;
         return 1;
     }
-
-    if ((unsigned char)landfill_pool[pm_shown_ptr / 20] != 0x96) return 1;
-    if (ov_map_mode == 1) return 1;
-    if (ov_map_mode != 6) return 0;
-    b = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
-    if (b < 0xe5) return 1; if (b <= 0xf0) return 0;
+    if (landfill_pool[map_ptr] == 0x96) {
+        if (ov_map_mode == 1) {
+            return 1;
+        } else if (ov_map_mode == 6) {
+            building_kind = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
+            if (building_kind >= 0xe5 && building_kind <= 0xf0) {
+                return 0;
+            }
+            return 1;
+        } else {
+            return 0;
+        }
+    }
     return 1;
 }
