@@ -335,6 +335,8 @@ void to_fb(void);
 void del_fb(void);
 void test_for_delimiter(void);
 void string_to_upper(unsigned char *s);
+int my_strcmp(char *s1, char *s2, int n);
+void my_strcpy(char *src, char *dst, int n);
 void xclip(int clip_left, int clip_right);
 void yclip(int clip_top, int clip_bottom);
 void setup_scratch_buffer(void);
