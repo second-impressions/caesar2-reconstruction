@@ -404,6 +404,8 @@ int get_pm_over_diamond(int force_zero_offset)
 }
 
 #if PLATFORM_WINDOWS
+void place_diamond(int style);
+void place_overlay(int style);
 void place_lefthalf_overlay(int style);
 void place_righthalf_overlay(int style);
 #endif
@@ -602,21 +604,42 @@ void four_by_four(int center_x, int center_y)
 // FUNCTION: C2WIN 0x0048545c
 void show_one_ptr(int screen_cell_x, int screen_cell_y)
 {
+#if PLATFORM_WINDOWS
+    int cell_offset;
+#else
     int map_cell_y;
     int map_cell_x;
     int cell_offset;
+#endif
 
+#if PLATFORM_WINDOWS
+    if (screen_cell_y + pm_y < 0) return;
+    if (screen_cell_y + pm_y >= 0xa1) return;
+    if (screen_cell_x + pm_x < 0) return;
+    if (screen_cell_x + pm_x >= 0x51) return;
+
+    cell_offset = pseudo_map[screen_cell_y + pm_y][screen_cell_x + pm_x];
+#else
     map_cell_y = pm_y + screen_cell_y;
     if (map_cell_y < 0 || map_cell_y >= 0xa1) return;
     map_cell_x = pm_x + screen_cell_x;
     if (map_cell_x < 0 || map_cell_x >= 0x51) return;
 
     cell_offset = pseudo_map[map_cell_y][map_cell_x];
+#endif
     if (cell_offset >= 0x0FFF0000) return;
 
+#if PLATFORM_WINDOWS
+    if (screen_mode == 0) {
+#else
     if (map_mode == 0) {
+#endif
         CM_CELL(cell_offset).edge_bits |= 1;
+#if PLATFORM_WINDOWS
+    } else if (screen_mode == 1) {
+#else
     } else if (map_mode == 1) {
+#endif
         RM_CELL(cell_offset).edge_bits |= 1;
     }
 
@@ -624,8 +647,7 @@ void show_one_ptr(int screen_cell_x, int screen_cell_y)
     if (screen_cell_y & 1) lib_para1 -= pm_diamond_half_width;
     lib_para2 = pm_screen_y_start + pm_diamond_half_height * screen_cell_y;
 
-    pm_y_edge = 0;
-    pm_x_edge = 0;
+    pm_x_edge = pm_y_edge = 0;
     if (screen_cell_y == 0) {
         pm_y_edge = 2;
     } else if (screen_cell_y < 0) {
