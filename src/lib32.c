@@ -983,6 +983,12 @@ void get_video_technique(void)
 
 // Print the detected VESA mode, chipset, memory, and banking information.
 // FUNCTION: C2 0x24c7f
+// FUNCTION: C2WIN 0x0044b516
+#if PLATFORM_WINDOWS
+void print_vesa_info(void)
+{
+}
+#else
 void print_vesa_info(void)
 {
     int oem_string_addr;
@@ -1018,6 +1024,7 @@ void print_vesa_info(void)
     printf("Bank function   : %x \n", bank_ptr);
     printf("--------------------------------------------------------\n");
 }
+#endif
 
 #if PLATFORM_DOS
 
