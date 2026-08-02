@@ -340,6 +340,12 @@ void yclip(int clip_top, int clip_bottom);
 void setup_scratch_buffer(void);
 void stop_system(void);
 
+#if PLATFORM_WINDOWS
+extern char file_buffer[80];
+extern char cd_drive[4];
+extern int file_exists(char *filename);
+#endif
+
 #if PLATFORM_DOS
 
 // Populate directory[] with up to 100 DOS 8.3 filenames matching a wildcard pattern.
@@ -494,13 +500,53 @@ char get_filename_length(char *filename)
     return length;
 }
 
-// Try to open `fname` (after cd_path) and report whether it exists. Always restores the working
-// directory via main_path before returning.
+// Locate a file in the platform's local and media search paths.
 // FUNCTION: C2 0x24446
+// FUNCTION: C2WIN 0x0044abdd
+#if PLATFORM_WINDOWS
 int check_file_exists(char *filename)
 {
     int fd;
     int found = 0;
+
+    fd = open(filename, O_BINARY);
+    if (fd >= 0) {
+        found = 1;
+        close(fd);
+        return 1;
+    }
+    sprintf(file_buffer, "data0\\%s", filename);
+    if (file_exists(file_buffer)) return 1;
+
+    get_filename_extension(filename);
+    string_to_upper(extension);
+    if (strcmp("PL8", extension) == 0) {
+        sprintf(file_buffer, "%s%s\\Pl8\\%s", cd_drive, "C2Win95", filename);
+        found = 2;
+    } else if (strcmp("RAW", extension) == 0) {
+        sprintf(file_buffer, "%s%s\\Raw\\%s", cd_drive, "C2Win95", filename);
+        found = 3;
+    } else if (strcmp("XMI", extension) == 0) {
+        sprintf(file_buffer, "%s%s\\Xmi\\%s", cd_drive, "C2Win95", filename);
+        found = 4;
+    } else if (strcmp("SMK", extension) == 0) {
+        sprintf(file_buffer, "%s%s\\Smk\\%s", cd_drive, "C2Win95", filename);
+        found = 5;
+    }
+
+    fd = open(file_buffer, O_BINARY);
+    if (fd >= 0) {
+        close(fd);
+        return found;
+    }
+    return 0;
+}
+#else
+int check_file_exists(char *filename)
+{
+    int fd;
+    int found = 0;
+
     cd_path(filename);
     fd = open(filename, O_BINARY);
     if (fd >= 0) {
@@ -510,6 +556,7 @@ int check_file_exists(char *filename)
     main_path();
     return found;
 }
+#endif
 
 // Variant of check_file_exists that doesn't cd_path/main_path — just opens the file at its given
 // path.
