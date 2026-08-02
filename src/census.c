@@ -1,6 +1,7 @@
 
 extern int income_multiple;
 extern int pop_income_pass_count;
+extern int ind_income_pass_count;
 
 #include "c2_data.h"
 #include "c2_types.h"
@@ -824,8 +825,10 @@ void running_pop_tax(void)
 // FUNCTION: C2WIN 0x004327cc
 void running_ind_tax(void)
 {
-    ind_tax_running_total += totalXpercent(
-        ind_income_pass_count * income_multiple, ind_tax_rate);
+    int tax;
+
+    tax = totalXpercent(ind_income_pass_count * income_multiple, ind_tax_rate);
+    ind_tax_running_total += tax;
     ind_tax_last_count = ind_income_pass_count;
     ind_tax_counts++;
 }
