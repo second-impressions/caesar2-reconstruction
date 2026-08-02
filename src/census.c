@@ -819,24 +819,15 @@ void running_ind_tax(void)
 void region_census(void)
 {
     int i;
-    int region_y;
-    int region_x;
-    unsigned char building_kind;
-    unsigned char cell_flags;
-    unsigned char connection_flag;
-    unsigned char empire_slot;
+    int j;
+    unsigned char image;
+    unsigned char value;
+    unsigned char connection;
+    unsigned char occupant;
 
-    no_of_ports               = 0;
-    no_of_shipyards           = 0;
-    no_of_warehouses          = 0;
-    no_of_workcamps           = 0;
-    no_of_quarrys             = 0;
-    no_of_mines               = 0;
-    no_of_farms               = 0;
-    no_of_trading_posts       = 0;
-    no_of_border_towns        = 0;
-    no_of_towns               = 0;
-    no_of_villages            = 0;
+    no_of_workcamps = no_of_warehouses = no_of_shipyards = no_of_ports = 0;
+    no_of_trading_posts = no_of_farms = no_of_mines = no_of_quarrys = 0;
+    no_of_villages = no_of_towns = no_of_border_towns = 0;
     no_of_connected_towns     = 0;
     no_of_empire_connections  = 0;
 
@@ -850,55 +841,55 @@ void region_census(void)
         return;
     }
 
-    region_y = 0;
+    i = 0;
     cm_sptr = 0;
-    for ( ; region_y < 0x3c; region_y++) {
-    for (region_x = 0; region_x < 0x3c; region_x++, cm_sptr += 8) {
-    cell_flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 3;
+    for ( ; i < 0x3c; i++) {
+    for (j = 0; j < 0x3c; j++, cm_sptr += 8) {
+    value = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 3;
     /* Warehouses (kind 0xD4) ignore the low-bit ignore mask. */
-    if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind == 0xd4) cell_flags = 0;
-    if (cell_flags != 0) continue;
+    if ((*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind == 0xd4) value = 0;
+    if (value != 0) continue;
 
-    building_kind = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
-    if      (building_kind == 0xd3) { no_of_workcamps++; }
-    else if (building_kind == 0xd4) { no_of_warehouses++; }
-    else if (building_kind == 0xd5) { no_of_shipyards++; }
-    else if (building_kind >= 0xdc && building_kind <= 0xdf) { no_of_farms++; }
-    else if (building_kind >= 0xe0 && building_kind <= 0xe3) { no_of_mines++; }
-    else if (building_kind >= 0xe4 && building_kind <= 0xe7) { no_of_quarrys++; }
-    else if (building_kind >= 0xe8 && building_kind <= 0xeb) { no_of_trading_posts++; }
-    else if (building_kind >= 0xec && building_kind <= 0xef) {
+    image = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
+    if      (image == 0xd3) { no_of_workcamps++; }
+    else if (image == 0xd4) { no_of_warehouses++; }
+    else if (image == 0xd5) { no_of_shipyards++; }
+    else if (image >= 0xdc && image <= 0xdf) { no_of_farms++; }
+    else if (image >= 0xe0 && image <= 0xe3) { no_of_mines++; }
+    else if (image >= 0xe4 && image <= 0xe7) { no_of_quarrys++; }
+    else if (image >= 0xe8 && image <= 0xeb) { no_of_trading_posts++; }
+    else if (image >= 0xec && image <= 0xef) {
         no_of_ports++;
-        connection_flag = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits & 0x20;
-        if (connection_flag) {
-            empire_slot = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 0x60;
-            if (empire_slot == 0 && empire_connections[0] == 0) {
+        connection = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits & 0x20;
+        if (connection) {
+            occupant = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 0x60;
+            if (occupant == 0 && empire_connections[0] == 0) {
                 empire_connections[0] = 1;
                 no_of_empire_connections++;
-            } else if (empire_slot == 0x20 && empire_connections[1] == 0) {
+            } else if (occupant == 0x20 && empire_connections[1] == 0) {
                 empire_connections[1] = 1;
                 no_of_empire_connections++;
-            } else if (empire_slot == 0x40 && empire_connections[2] == 0) {
+            } else if (occupant == 0x40 && empire_connections[2] == 0) {
                 empire_connections[2] = 1;
                 no_of_empire_connections++;
-            } else if (empire_slot == 0x60 && empire_connections[3] == 0) {
+            } else if (occupant == 0x60 && empire_connections[3] == 0) {
                 empire_connections[3] = 1;
                 no_of_empire_connections++;
             }
         }
     }
-    else if (building_kind >= 0x93 && building_kind <= 0x96) { no_of_villages++; }
-    else if (building_kind >= 0x98 && building_kind <= 0x9b) {
+    else if (image >= 0x93 && image <= 0x96) { no_of_villages++; }
+    else if (image >= 0x98 && image <= 0x9b) {
         no_of_border_towns++;
-        connection_flag = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits & 0x20;
-        if (connection_flag) {
-            empire_connections[building_kind - 0x98] = 1;
+        connection = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits & 0x20;
+        if (connection) {
             no_of_empire_connections++;
+            empire_connections[image - 0x98] = 1;
         }
     }
-    else if (building_kind == 0x97) {
-        cell_flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits & 0x20;
-        if (cell_flags) no_of_connected_towns++;
+    else if (image == 0x97) {
+        connection = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).edge_bits & 0x20;
+        if (connection) no_of_connected_towns++;
         no_of_towns++;
     }
     }
