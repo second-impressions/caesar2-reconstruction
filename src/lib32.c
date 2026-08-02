@@ -891,6 +891,12 @@ int set_svga_640_480(int mode)
 
 // Detects the installed VGA chipset and records its capabilities.
 // FUNCTION: C2 0x24b0e
+// FUNCTION: C2WIN 0x0044b500
+#if PLATFORM_WINDOWS
+void recognise_card(void)
+{
+}
+#else
 void recognise_card(void)
 {
     int i;
@@ -910,6 +916,7 @@ void recognise_card(void)
         cards_recognised = 0;
     }
 }
+#endif
 
 #if PLATFORM_DOS
 
