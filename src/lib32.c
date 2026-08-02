@@ -716,72 +716,75 @@ char read_config(char *filename, char *buffer)
 // FUNCTION: C2 0x2460f
 int convert_lbm_file(unsigned char *src, unsigned char *dst, char *pal, int length)
 {
-    int body_size_high_byte;
-    short width;
-    int i;
-    unsigned char tag;
+    short bitmap_height;
+    short file_width;
+    int search_left;
+    int pixel;
+    unsigned char count;
     unsigned char run;
+    unsigned char no_of_planes;
+    unsigned char pal_component;
     unsigned char *chunk_ptr;
-    int search_remaining;
-    int body_size_mid_byte;
-    int body_size;
-    int k;
+    int c;
+    int b;
+    int body_length;
 
-    chunk_ptr = (unsigned char *)&i;
     chunk_ptr = src;
-    search_remaining = 0x64;
-    while (search_remaining > 0) {
+    search_left = 0x64;
+    while (search_left > 0) {
         if (my_strcmp((char *)chunk_ptr, "BMHD", 4) == 0) break;
-        search_remaining--; chunk_ptr++;
+        search_left--; chunk_ptr++;
     }
-    if (search_remaining <= 0) return 2;
+    if (search_left <= 0) return 2;
 
     chunk_ptr += 8;
-    width = (*chunk_ptr++ << 8) + *chunk_ptr++;
-    chunk_ptr += 2;
-    if (width == 0x140) screen_mode = 1;
-    else if (width == 0x280) screen_mode = 2;
+    file_width = (*chunk_ptr++ << 8) + *chunk_ptr++;
+    bitmap_height = (*chunk_ptr++ << 8) + *chunk_ptr++;
+    if (file_width == 0x140) screen_mode = 1;
+    else if (file_width == 0x280) screen_mode = 2;
     else return 4;
     chunk_ptr += 5;
-    if ((*chunk_ptr++ & 0xff) == 1) return 3;
+    no_of_planes = *chunk_ptr++;
+    if (no_of_planes == 1) return 3;
 
-    search_remaining = length;
-    while (search_remaining > 0) {
+    search_left = length;
+    while (search_left > 0) {
         if (my_strcmp((char *)chunk_ptr, "CMAP", 4) == 0) break;
-        search_remaining--; chunk_ptr++;
+        search_left--; chunk_ptr++;
     }
-    if (search_remaining <= 0) return 6;
-    i = 0;
+    if (search_left <= 0) return 6;
     chunk_ptr += 8;
-    do {
-        *pal++ = (*chunk_ptr++ & 0xff) >> 2;
-        i++;
-    } while (i < 0x300);
-
-    search_remaining = length;
-    while (search_remaining > 0) {
-        if (my_strcmp((char *)chunk_ptr, "BODY", 4) == 0) break;
-        search_remaining--; chunk_ptr++;
+    for (pixel = 0; pixel < 0x300; pixel++) {
+        pal_component = *chunk_ptr++;
+        pal_component = pal_component >> 2;
+        *pal++ = pal_component;
     }
-    if (search_remaining <= 0) return 7;
-    chunk_ptr += 5;
-    body_size_high_byte = *chunk_ptr++;
-    body_size_mid_byte = *chunk_ptr++;
-    body_size = *chunk_ptr++;
-    body_size += (body_size_high_byte << 16) + (body_size_mid_byte << 8);
-    if (body_size > length) return 8;
 
-    for (i = 0; i < body_size; ++i)
+    search_left = length;
+    while (search_left > 0) {
+        if (my_strcmp((char *)chunk_ptr, "BODY", 4) == 0) break;
+        search_left--; chunk_ptr++;
+    }
+    if (search_left <= 0) return 7;
+    chunk_ptr += 4;
+    pixel = *chunk_ptr++;
+    b = *chunk_ptr++;
+    c = *chunk_ptr++;
+    body_length = *chunk_ptr++;
+    search_left = body_length + ((c << 8) + (b << 16));
+    if (search_left > length) return 8;
+
+    for (pixel = 0; search_left > pixel; ++pixel)
     {
-        tag = *chunk_ptr++;
-        if (tag > 0x80) {
+        count = *chunk_ptr++;
+        if (count > 0x80) {
             run = *chunk_ptr++;
-            for (k = 0; k < 0x100 - tag + 1; k++) *dst++ = run;
-            ++i;
+            for (b = 0; b < 0x100 - count + 1; b++) *dst++ = run;
+            ++pixel;
         }
         else {
-            for (k = 0; k < tag + 1; k++) *dst++ = *chunk_ptr++;
-            i += tag + 1;
+            for (b = 0; b < count + 1; b++) *dst++ = *chunk_ptr++;
+            pixel += count + 1;
         }
     }
     return 0;
