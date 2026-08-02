@@ -772,42 +772,79 @@ void bottom_line_no_sides(void)
 // FUNCTION: C2WIN 0x0045cac7
 void place_a_building_base(int edge_style)
 {
+#if PLATFORM_WINDOWS
+    unsigned char flags;
+    int mode_no;
+    int width;
+#else
     char bank_kind;
     int rotation_idx;
-    unsigned char *gfx_data_ptr;
+#endif
+    unsigned char *sprite_bank_ptr;
+
+#if PLATFORM_WINDOWS
+    if (screen_mode > 1) mode_no = 0;
+    else mode_no = screen_mode;
+#endif
 
     sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
+#if PLATFORM_WINDOWS
+    flags = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 0x1c;
+
+    if (flags == 0) {
+        sprite_bank_ptr = (&house_data)[mode_no];
+        sprite_image_no = ((struct rotated_sprite_rec *)rotated_bank0)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 4) {
+        sprite_bank_ptr = (&building_data1)[mode_no];
+        sprite_image_no = ((struct rotated_sprite_rec *)rotated_bank1)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 8) {
+        sprite_bank_ptr = (&building_data2)[mode_no];
+        sprite_image_no = ((struct rotated_sprite_rec *)rotated_bank2)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 0xc) {
+        sprite_bank_ptr = (&building_data3)[mode_no];
+        sprite_image_no = ((struct rotated_sprite_rec *)rotated_bank3)[sprite_image_no].dir[map_direction >> 1];
+    } else if (flags == 0x10) {
+        sprite_bank_ptr = (&fixt_data)[mode_no];
+        sprite_image_no = ((unsigned char *)rotated_map)[(map_direction >> 1) + (sprite_image_no - 0x10) * 4] + 0x10;
+    } else if (flags == 0x14) {
+        sprite_bank_ptr = (&building_data4)[mode_no];
+        sprite_image_no = ((struct rotated_sprite_rec *)rotated_bank4)[sprite_image_no].dir[map_direction >> 1];
+    } else {
+        return;
+    }
+#else
     bank_kind = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 0x1c;
     rotation_idx = (map_direction >> 1) + sprite_image_no * 4;
 
     if (bank_kind == 0) {
-        gfx_data_ptr = house_data;
+        sprite_bank_ptr = house_data;
         sprite_image_no = rotated_bank0[rotation_idx];
     } else if (bank_kind == 4) {
-        gfx_data_ptr = building_data1;
+        sprite_bank_ptr = building_data1;
         sprite_image_no = rotated_bank1[rotation_idx];
     } else if (bank_kind == 8) {
-        gfx_data_ptr = building_data2;
+        sprite_bank_ptr = building_data2;
         sprite_image_no = rotated_bank2[rotation_idx];
     } else if (bank_kind == 0xc) {
-        gfx_data_ptr = building_data3;
+        sprite_bank_ptr = building_data3;
         sprite_image_no = rotated_bank3[rotation_idx];
     } else if (bank_kind == 0x10) {
-        gfx_data_ptr = fixt_data;
+        sprite_bank_ptr = fixt_data;
         sprite_image_no = rotated_map[sprite_image_no - 0x10].dir[map_direction >> 1] + 0x10;
     } else if (bank_kind == 0x14) {
-        gfx_data_ptr = building_data4;
+        sprite_bank_ptr = building_data4;
         sprite_image_no = rotated_bank4[rotation_idx];
     } else {
         return;
     }
+#endif
 
     set_city_ambient((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind);
     data_ptr     = sprite_image_no * 16 + 8;
-    y_length     = gfx_data_ptr[data_ptr + 0xd];
-    sprite_start = gfx_data_ptr[data_ptr + 4]
-                 + (gfx_data_ptr[data_ptr + 5] << 8)
-                 + (gfx_data_ptr[data_ptr + 6] << 16);
+    y_length     = sprite_bank_ptr[data_ptr + 0xd];
+    sprite_start = sprite_bank_ptr[data_ptr + 4]
+                 + (sprite_bank_ptr[data_ptr + 5] << 8)
+                 + (sprite_bank_ptr[data_ptr + 6] << 16);
     if (sprite_start > 0x4baf0) {
         sprite_error++;
         return;
@@ -827,21 +864,23 @@ void place_a_building_base(int edge_style)
 
     if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
         (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if C2_FEAT_TILE_REFRESH
         refresh_a_bigger_square(sprite_x >> 4, (sprite_y - 0x30) >> 4);
+#endif
     }
 
     if (edge_style == 3) {
-        if      (zoom_level == 0) place_i_large_diamond_lefthalf(gfx_data_ptr, 0);
-        else if (zoom_level == 1) place_i_medium_diamond_lefthalf(gfx_data_ptr, 0);
-        else                       place_i_small_diamond_lefthalf(gfx_data_ptr, 0);
+        if      (zoom_level == 0) place_i_large_diamond_lefthalf(sprite_bank_ptr, 0);
+        else if (zoom_level == 1) place_i_medium_diamond_lefthalf(sprite_bank_ptr, 0);
+        else                       place_i_small_diamond_lefthalf(sprite_bank_ptr, 0);
     } else if (edge_style == 4) {
-        if      (zoom_level == 0) place_i_large_diamond_righthalf(gfx_data_ptr, 0);
-        else if (zoom_level == 1) place_i_medium_diamond_righthalf(gfx_data_ptr, 0);
-        else                       place_i_small_diamond_righthalf(gfx_data_ptr, 0);
+        if      (zoom_level == 0) place_i_large_diamond_righthalf(sprite_bank_ptr, 0);
+        else if (zoom_level == 1) place_i_medium_diamond_righthalf(sprite_bank_ptr, 0);
+        else                       place_i_small_diamond_righthalf(sprite_bank_ptr, 0);
     } else {
-        if      (zoom_level == 0) place_i_large_diamond(gfx_data_ptr, edge_style);
-        else if (zoom_level == 1) place_i_medium_diamond(gfx_data_ptr, edge_style);
-        else                       place_i_small_diamond(gfx_data_ptr, edge_style);
+        if      (zoom_level == 0) place_i_large_diamond(sprite_bank_ptr, edge_style);
+        else if (zoom_level == 1) place_i_medium_diamond(sprite_bank_ptr, edge_style);
+        else                       place_i_small_diamond(sprite_bank_ptr, edge_style);
         sprite_x += pm_diamond_width;
     }
 }
