@@ -1682,6 +1682,7 @@ void __far click_handler(unsigned int ax, unsigned int bx,
                          unsigned int cx, unsigned int dx,
                          unsigned int si, unsigned int di)
 {
+#if !PLATFORM_WINDOWS
     cbd.pending = 1;
     cbd.ax = ax;
     cbd.bx = bx;
@@ -1691,6 +1692,7 @@ void __far click_handler(unsigned int ax, unsigned int bx,
     cbd.di = di;
     if ((cbd.ax & 8) != 0)
         cbd.click_flag = 1;
+#endif
 }
 
 #pragma on(check_stack);
