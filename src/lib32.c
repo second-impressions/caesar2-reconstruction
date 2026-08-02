@@ -1172,15 +1172,9 @@ void go_16m_palette(unsigned char *p)
     for (i = 0; i < 256; i++) {
         int ptr;
         ptr = i * 3;
-#if PLATFORM_DOS
         p[ptr] <<= 2;
         p[ptr + 1] <<= 2;
         p[ptr + 2] <<= 2;
-#else
-        p[ptr] >>= 2;
-        p[ptr + 1] >>= 2;
-        p[ptr + 2] >>= 2;
-#endif
     }
 }
 
