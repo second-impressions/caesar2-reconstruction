@@ -164,7 +164,7 @@ int fb_line_length;
 int got_cursx;
 int cursor_x;
 int cursor_y;
-char * text_pointer;
+unsigned char * text_pointer;
 char insert_text[100];
 int char_count;
 int this_letter;
@@ -2945,7 +2945,6 @@ char get_insert_letter(void)
 void font_centre(int entry_idx, int word_count, int x_left, int y,
                  int total_width, unsigned char *font, int color)
 {
-    char *scan_ptr;
     int width;
     int offset;
 
@@ -2953,18 +2952,15 @@ void font_centre(int entry_idx, int word_count, int x_left, int y,
     text_pointer += get_buffer_ofset(entry_idx);
 
     while (word_count > 0) {
-        scan_ptr = text_pointer;
-        if (*scan_ptr == 0 && (*(scan_ptr - 1) >= ' ' || *(scan_ptr - 1) == 0)) word_count--;
+        if (*text_pointer == 0 && (*(text_pointer - 1) >= ' ' || *(text_pointer - 1) == 0)) word_count--;
         text_pointer++;
     }
 
-    while (*text_pointer < ' ')
-        text_pointer++;
+    while (*text_pointer < ' ') text_pointer++;
 
     width  = get_string_width(text_pointer, font);
     offset = (total_width - width) / 2;
-    if (offset < 0)
-        offset = 0;
+    if (offset < 0) offset = 0;
 
     put_a_font_string(text_pointer, x_left + offset, y, font, color);
     font_screen_limit = 0;
