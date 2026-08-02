@@ -2918,8 +2918,6 @@ skip_letter:
 // FUNCTION: C2WIN 0x0044dcb8
 int one_letter(unsigned char *font, unsigned char letter)
 {
-    unsigned char *p;
-
     sprite_image_no = letter_table[letter];
     if (sprite_image_no == 0) {
         return 0;
@@ -2942,10 +2940,10 @@ int one_letter(unsigned char *font, unsigned char letter)
         }
     }
 
-    p = font + data_ptr;
-    sprite_width  = p[0] + (p[1] << 8);
-    sprite_height = p[2] + (p[3] << 8);
-    sprite_start  = p[4] + (p[5] << 8) + (p[6] << 16);
+    sprite_width  = font[data_ptr] + (font[data_ptr + 1] << 8);
+    sprite_height = font[data_ptr + 2] + (font[data_ptr + 3] << 8);
+    sprite_start  = font[data_ptr + 4] + (font[data_ptr + 5] << 8) +
+                    (font[data_ptr + 6] << 16);
 
     if (font_screen_limit != 0) {
         xclip(pm_screen_x_start, 0x1de);
