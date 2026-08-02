@@ -641,25 +641,20 @@ void wall_trouble(void)
 // FUNCTION: C2WIN 0x0043224b
 void get_fire_cover(void)
 {
-    int coverage;
-
     if (slave_requirements[1].max == 0) {
         fire_cover = 100;
-        return;
-    }
-    if (tutorial_mode != 0 && tutorial_page < 22) {
-        fire_cover = 100;
-        return;
-    }
-    coverage = valueDIVtotal(slave_requirements[1].current,
-                             slave_requirements[1].max);
-    fire_cover = coverage;
-    if (coverage >= 100) {
+    } else if (tutorial_mode != 0 && tutorial_page < 22) {
         fire_cover = 100;
     } else {
-        ++slave_warning;
+        fire_cover = valueDIVtotal(slave_requirements[1].current,
+                                   slave_requirements[1].max);
+        if (fire_cover >= 100) {
+            fire_cover = 100;
+        } else {
+            ++slave_warning;
+        }
+        if (fire_cover < 0) fire_cover = 0;
     }
-    if (fire_cover < 0) fire_cover = 0;
 }
 
 // Compute road-maintenance staffing coverage and flag an insufficient workforce.
