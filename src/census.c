@@ -277,27 +277,30 @@ void get_census(int quiet)
     }
 }
 
+int test_perimeter_for_road_and_forum(int cell_x, int cell_y, int footprint_size, int road_only);
+int test_for_any_admin(int, int);
+
 // Scan city-map rows, accumulating population, income, service, and accident census data.
 // FUNCTION: C2 0x44a94
 // FUNCTION: C2WIN 0x0043107a
-void take_census(int row_count)
+void take_census(int rows)
 {
-    int row_idx;
-    int col_idx;
-    unsigned char culture_flags;
-    int building_tier;
-    unsigned char building_kind;
-    unsigned char robbery_flags;
-    unsigned char wall_terrain;
-    unsigned char plague_flags;
-    unsigned char activity_flags;
-    unsigned char education_flags;
-    unsigned char industry_idx;
-    int saved_cm_sptr;
-    unsigned char cell_flags;
+    int map_y;
+    int col_no;
+    unsigned char cul;
+    int building_variant;
+    unsigned char image;
+    unsigned char robbery;
+    unsigned char terrain;
+    unsigned char health_flags;
+    unsigned char activity;
+    unsigned char edu_val;
+    unsigned char dem_val;
+    int map_ptr;
+    unsigned char tile_flag;
 
     if (evolve_row == 0) {
-        for (row_idx = 0; row_idx < 16; row_idx++) temp_demand_count[row_idx] = 0;
+        for (map_y = 0; map_y < 16; map_y++) temp_demand_count[map_y] = 0;
         population_pass_count                = 0;
         pop_income_pass_count                = 0;
         ind_income_pass_count                = 0;
@@ -352,52 +355,54 @@ void take_census(int row_count)
 
     cm_sptr = evolve_row * 1600;  /* 80 cols × 20 bytes per cell */
 
-    for (row_idx = 0; row_count > row_idx; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
-            cell_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0x27;
-            building_kind  = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+    for (map_y = 0; rows > map_y; map_y++) {
+        for (col_no = 0; col_no < 80; col_no++, cm_sptr += 20) {
+            tile_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0x27;
+            image = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
 
             /* Count plaza and garden culture coverage. */
-            if (building_kind >= 0x7c && building_kind <= 0x7e) {
-                culture_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
-                if (culture_flags) plaza_culture_pass_count++;
-            } else if (building_kind >= 0x78 && building_kind <= 0x7b) {
-                culture_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
-                if (culture_flags) gardens_culture_pass_count++;
+            if (image >= 0x7c && image <= 0x7e) {
+                cul = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
+                if (cul) plaza_culture_pass_count++;
+            } else if (image >= 0x78 && image <= 0x7b) {
+                cul = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
+                if (cul) gardens_culture_pass_count++;
             }
 
-            if (cell_flags == 0) continue;
+            if (tile_flag == 0) continue;
 
             /* Process road, wall, and fort cells. */
-            if (cell_flags & 0x20) {
+            if (tile_flag & 0x20) {
                 /* Trigger a road failure at the selected census position. */
                 if (road_pass_count != road_accident) road_pass_count++;
                 else {
                     destroy_an_atom(cm_sptr, 0); road_accident = 0xf423f;
                 }
+                continue;
             }
-            else if (cell_flags & 0x02) {
+            if (tile_flag & 0x02) {
                 /* Trigger a wall collapse at the selected census position. */
                 if (structure_pass_count != wall_accident) structure_pass_count++;
                 else {
-                    saved_cm_sptr = cm_sptr;
-                    wall_terrain = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain;
-                    if (wall_terrain & 0xc0) unflag_all_cm(3, 0xdf);
-                    clear_an_area(col_idx, evolve_row + row_idx,
-                                  col_idx, evolve_row + row_idx);
-                    cm_sptr           = saved_cm_sptr;
+                    map_ptr = cm_sptr;
+                    terrain = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain;
+                    if (terrain & 0xc0) unflag_all_cm(3, 0xdf);
+                    clear_an_area(col_no, evolve_row + map_y,
+                                  col_no, evolve_row + map_y);
+                    cm_sptr           = map_ptr;
                     wall_accident     = 0xf423f;
                     particles_cleared = 0;
                 }
+                continue;
             }
-            else if (cell_flags & 0x04) {
-                building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-                if (building_kind == 0xbf) forts_pass_count++;
+            if (tile_flag & 0x04) {
+                image = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+                if (image == 0xbf) forts_pass_count++;
+                continue;
             }
-            else {
 
             /* Process fire risk outside the exempt kind range. */
-            if (building_kind < 0xbc || building_kind > 0xe2) {
+            if (image < 0xbc || image > 0xe2) {
                 if (fire_pass_count != fire_accident) fire_pass_count++;
                 else {
                     destroy_an_atom(cm_sptr, 1);
@@ -408,100 +413,99 @@ void take_census(int row_count)
             }
 
             /* Process plague risk for housing. */
-            if (building_kind >= 0x82 && building_kind <= 0xa1) {
+            if (image >= 0x82 && image <= 0xa1) {
                 if (plague_accident == plague_pass_count) {
                     plague_an_atom(cm_sptr);
                     put_message(0x51, cm_sptr, 22);
                     plague_accident = 0xf423f;
                     continue;
                 }
-                plague_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag & 0x30;
-                if (plague_flags == 0x30) plague_pass_count++;
+                health_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag & 0x30;
+                if (health_flags == 0x30) plague_pass_count++;
             }
 
             /* Busy or unfinished buildings do not provide services. */
-            activity_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
-            if (activity_flags != 0) continue;
+            activity = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
+            if (activity != 0) continue;
 
             /* Accumulate census totals for the building kind. */
-            if (building_kind >= 0x82 && building_kind <= 0xa1) {
-                building_kind -= 0x82;
-                population_pass_count += houses_to_people[building_kind];
-                culture_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
-                if (culture_flags) pop_income_pass_count += houses_to_income[building_kind];
-            } else if (building_kind >= 0xae && building_kind <= 0xb9) {
-                building_kind -= 0xae;
-                if      (building_kind < 4) small_forums_pass_count++;
-                else if (building_kind < 8) medium_forums_pass_count++;
+            if (image >= 0x82 && image <= 0xa1) {
+                image -= 0x82;
+                population_pass_count += houses_to_people[image];
+                cul = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
+                if (cul) pop_income_pass_count += houses_to_income[image];
+            } else if (image >= 0xae && image <= 0xb9) {
+                image -= 0xae;
+                if      (image < 4) small_forums_pass_count++;
+                else if (image < 8) medium_forums_pass_count++;
                 else               large_forums_pass_count++;
-            } else if (building_kind >= 0xa2 && building_kind <= 0xa5) {
+            } else if (image >= 0xa2 && image <= 0xa5) {
                 small_temples_pass_count++;
-                robbery_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
-                culture_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
-                if (culture_flags) small_temples_culture_pass_count++;
-                if (robbery_flags == 0) small_robbery_pass_count++;
-            } else if (building_kind >= 0xa6 && building_kind <= 0xa9) {
+                robbery = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
+                cul = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
+                if (cul) small_temples_culture_pass_count++;
+                if (robbery == 0) small_robbery_pass_count++;
+            } else if (image >= 0xa6 && image <= 0xa9) {
                 med_temples_pass_count++;
-                robbery_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
+                robbery = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
                 if (test_for_any_admin(cm_sptr, 2)) med_temples_culture_pass_count++;
-                if (robbery_flags == 0) med_robbery_pass_count++;
-            } else if (building_kind >= 0xaa && building_kind <= 0xad) {
+                if (robbery == 0) med_robbery_pass_count++;
+            } else if (image >= 0xaa && image <= 0xad) {
                 large_temples_pass_count++;
-                robbery_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
+                robbery = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
                 if (test_for_any_admin(cm_sptr, 3)) large_temples_culture_pass_count++;
-                if (robbery_flags == 0) large_robbery_pass_count++;
-            } else if (building_kind >= 0xdf && building_kind <= 0xe2) {
+                if (robbery == 0) large_robbery_pass_count++;
+            } else if (image >= 0xdf && image <= 0xe2) {
                 baths_pass_count++;
-                education_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4;
-                if (education_flags) supplied_baths_pass_count++;
-            } else if (building_kind >= 0xdb && building_kind <= 0xde) {
+                edu_val = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4;
+                if (edu_val) supplied_baths_pass_count++;
+            } else if (image >= 0xdb && image <= 0xde) {
                 fountains_pass_count++;
-                education_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4;
-                if (education_flags) supplied_fountains_pass_count++;
-            } else if (building_kind == 0xe3) prefectures_pass_count++;
-              else if (building_kind == 0xe4) barracks_pass_count++;
-              else if (building_kind == 0xf3) {
+                edu_val = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4;
+                if (edu_val) supplied_fountains_pass_count++;
+            } else if (image == 0xe3) prefectures_pass_count++;
+              else if (image == 0xe4) barracks_pass_count++;
+              else if (image == 0xf3) {
                 grammaticus_pass_count++;
                 if (test_for_any_admin(cm_sptr, 2)) grammaticus_culture_pass_count++;
-            } else if (building_kind == 0xf4) {
+            } else if (image == 0xf4) {
                 rhetor_pass_count++;
                 if (test_for_any_admin(cm_sptr, 3)) rhetor_culture_pass_count++;
-            } else if (building_kind == 0xe5) {
+            } else if (image == 0xe5) {
                 theatre_pass_count++;
                 if (test_for_any_admin(cm_sptr, 2)) theatre_culture_pass_count++;
-            } else if (building_kind == 0xe6) {
+            } else if (image == 0xe6) {
                 odium_pass_count++;
                 if (test_for_any_admin(cm_sptr, 2)) odium_culture_pass_count++;
-            } else if (building_kind == 0xe7) {
+            } else if (image == 0xe7) {
                 arena_pass_count++;
                 if (test_for_any_admin(cm_sptr, 3)) arena_culture_pass_count++;
-            } else if (building_kind == 0xe8) {
+            } else if (image == 0xe8) {
                 colosseum_pass_count++;
                 if (test_for_any_admin(cm_sptr, 3)) colosseum_culture_pass_count++;
-            } else if (building_kind == 0xe9 || building_kind == 0xeb) {
+            } else if (image == 0xe9 || image == 0xeb) {
                 circus_pass_count++;
                 if (test_for_any_admin(cm_sptr, 3)) circus_culture_pass_count++;
-            } else if (building_kind == 0xed || building_kind == 0xef) {
+            } else if (image == 0xed || image == 0xef) {
                 circus_maximus_pass_count++;
                 if (test_for_any_admin(cm_sptr, 4)) circus_maximus_culture_pass_count++;
-            } else if (building_kind >= 0xfc && building_kind <= 0xff) { market_pass_count++;
-            } else if (building_kind == 0xfb) {
+            } else if (image >= 0xfc && image <= 0xff) { market_pass_count++;
+            } else if (image == 0xfb) {
                 hospitals_pass_count++;
-                if (test_perimeter_for_road_and_forum(col_idx, evolve_row + row_idx, 3, 0)) accessed_hospitals_pass_count++;
-            } else if (building_kind == 0xf5) {
+                if (test_perimeter_for_road_and_forum(col_no, evolve_row + map_y, 3, 0)) accessed_hospitals_pass_count++;
+            } else if (image == 0xf5) {
                 libraries_pass_count++;
-                if (test_perimeter_for_road_and_forum(col_idx, evolve_row + row_idx, 3, 0)) accessed_libraries_pass_count++;
-            } else if (building_kind == 0xfa) {
+                if (test_perimeter_for_road_and_forum(col_no, evolve_row + map_y, 3, 0)) accessed_libraries_pass_count++;
+            } else if (image == 0xfa) {
                 business_pass_count++;
-                industry_idx = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).business & 0x0f;
-                temp_demand_count[industry_idx]++;
-                culture_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
-                if (culture_flags) {
-                    building_tier = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building & 0xf0;
-                    building_tier >>= 4;
-                    ind_income_pass_count += building_tier * 0x46;
+                dem_val = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).business & 0x0f;
+                temp_demand_count[dem_val]++;
+                cul = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x0c;
+                if (cul) {
+                    building_variant = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building & 0xf0;
+                    building_variant >>= 4;
+                    ind_income_pass_count += building_variant * 0x46;
                 }
-            }
             }
         } }
 }
