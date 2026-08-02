@@ -581,6 +581,52 @@ int is_file_on_harddrive(char *filename)
 // Read `size` bytes from `fname` at byte `offset` into `buf`. Returns the number of bytes actually
 // read, or 0 if both the hard-drive and CD attempts failed to read anything.
 // FUNCTION: C2 0x2449a
+#if PLATFORM_WINDOWS
+// FUNCTION: C2WIN 0x0044ae48
+int readfile(const char *filename, void *buffer, int size, int offset)
+{
+    int seek_result;
+    int fd;
+    int bytes_read;
+
+    bytes_read = 0;
+    fd = open(filename, O_BINARY);
+    if (fd != -1) {
+        seek_result = _lseek(fd, offset, 0);
+        if (seek_result != -1) {
+            bytes_read = read(fd, buffer, size);
+        }
+        close(fd);
+    }
+
+    if (bytes_read > 0) goto done;
+
+    sprintf(file_buffer, "data0\\%s", filename);
+    if (!file_exists(file_buffer)) {
+        get_filename_extension(filename);
+        string_to_upper(extension);
+        if (strcmp("PL8", extension) == 0)
+            sprintf(file_buffer, "%s%s\\Pl8\\%s", cd_drive, "C2Win95", filename);
+        else if (strcmp("RAW", extension) == 0)
+            sprintf(file_buffer, "%s%s\\Raw\\%s", cd_drive, "C2Win95", filename);
+        else if (strcmp("XMI", extension) == 0)
+            sprintf(file_buffer, "%s%s\\Xmi\\%s", cd_drive, "C2Win95", filename);
+        else if (strcmp("SMK", extension) == 0)
+            sprintf(file_buffer, "%s%s\\Smk\\%s", cd_drive, "C2Win95", filename);
+    }
+    fd = open(file_buffer, O_BINARY);
+    if (fd != -1) {
+        seek_result = _lseek(fd, offset, 0);
+        if (seek_result != -1) {
+            bytes_read = read(fd, buffer, size);
+        }
+        close(fd);
+    }
+
+done:
+    return bytes_read;
+}
+#else
 int readfile(const char *filename, void *buffer, int size, int offset)
 {
     int fd;
@@ -609,6 +655,7 @@ int readfile(const char *filename, void *buffer, int size, int offset)
 
     return bytes_read;
 }
+#endif
 
 // open() the named file (creating it 0644), write `size` bytes, close. Returns the number written,
 // or 0 on open failure.
