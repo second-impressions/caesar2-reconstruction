@@ -3067,6 +3067,8 @@ void font_no(int value, char pad_char, char *suffix, int x,
     font_screen_limit = 0;
 }
 
+int get_next_word_length(char *src, unsigned char *font);
+
 // Word-wrap a text-buffer entry and render the requested number of lines within `max_width`.
 // FUNCTION: C2 0x2712a
 // FUNCTION: C2WIN 0x0044e235
@@ -3075,16 +3077,18 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
                        int x_overflow, int max_width_overflow,
                        unsigned char *font, int color)
 {
-    int   line_index;
-    int   line_y;
-    int   more_lines;
+    int   line_count;
+    int   draw_y;
+    int   looping;
     int   x_count;
-    int   buf_idx;
-    int   skip_lead;
+    int   format_count;
+    int   first_char;
+    int   counter;
+#if PLATFORM_DOS
     int   char_iter;
-    int   i;
     char *p;
-    char  ch;
+#endif
+    unsigned char c;
 
     font_screen_limit = 0;
     text_pointer      = text_buffer;
@@ -3092,9 +3096,15 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
 
     /* Skip word_skip whole words from the entry's offset. */
     while (word_skip > 0) {
+#if PLATFORM_DOS
         p = text_pointer;
         if (*p == 0) {
             if ((unsigned char)*(p - 1) >= ' ' || *(p - 1) == 0) {
+#else
+        if ((unsigned char)*text_pointer == 0) {
+            if ((unsigned char)*(text_pointer - 1) >= ' ' ||
+                (unsigned char)*(text_pointer - 1) == 0) {
+#endif
                 word_skip--;
             }
         }
@@ -3106,46 +3116,54 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
         text_pointer++;
     }
 
-    more_lines = 1;
-    line_index = 0;
-    line_y     = y_start;
+    looping = 1;
+    line_count = 0;
+    draw_y = y_start;
 
-    while (more_lines) {
-        for (i = 0; i < 0x7d0; i++)
-            format_buffer[i] = 0;
+    while (looping) {
+        for (counter = 0; counter < 0x7d0; counter++)
+            format_buffer[counter] = 0;
 
-        x_count   = 0;
-        buf_idx   = 0;
-        skip_lead = 1;
+        x_count = 0;
+        format_count = 0;
+        first_char = 1;
 
-        while (more_lines && x_count < max_width) {
+        while (looping && x_count < max_width) {
             x_count += get_next_word_length(text_pointer,
                                             font);
-            if (x_count >= max_width) continue;
+            if (x_count < max_width) {
 
-            for (char_iter = 0; char_iter < char_count; char_iter++) {
-                p  = text_pointer;
-                text_pointer = p + 1;
-                ch = *p;
-                if (skip_lead == 0 || ch != ' ') {
-                    format_buffer[buf_idx++] = ch;
-                    skip_lead = 0;
+#if PLATFORM_DOS
+                for (char_iter = 0; char_iter < char_count; char_iter++) {
+                    p = text_pointer;
+                    text_pointer = p + 1;
+                    c = *p;
+#else
+                for (counter = 0; counter < char_count; counter++) {
+                    c = *text_pointer;
+                    text_pointer++;
+#endif
+                    if (first_char != 0) {
+                        if (c == ' ') continue;
+                    }
+                    format_buffer[format_count++] = c;
+                    first_char = 0;
                 }
-            }
 
-            if (*text_pointer == 0) {
-                more_lines = 0;
+                if ((unsigned char)*text_pointer == 0) {
+                    looping = 0;
+                }
             }
         }
 
         insert_place  = 1;
         x_is          = 0;       allow_padding = 1;
-        put_a_font_string(format_buffer, x, line_y, font, color);
+        put_a_font_string(format_buffer, x, draw_y, font, color);
 
-        line_index++;
-        line_y += 0x10;
+        line_count++;
+        draw_y += 0x10;
 
-        if (line_index >= line_limit) {
+        if (line_count >= line_limit) {
             x         = x_overflow;
             max_width = max_width_overflow;
         }
