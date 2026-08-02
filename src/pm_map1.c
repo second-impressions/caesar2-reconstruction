@@ -49,9 +49,13 @@ int cmu_count[5];
 
 
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
+extern void set_this_ambient(int ambient_idx);
+extern void place_diamond(int);
 extern void write_i_sprite(unsigned char *sprite_addr);
 extern void write_i_left_sprite(unsigned char *sprite_addr);
 extern void write_i_right_sprite(unsigned char *sprite_addr);
+extern void place_lefthalf_diamond(void);
+extern void place_righthalf_diamond(void);
 #if PLATFORM_WINDOWS
 extern unsigned char game_paused;
 #endif
@@ -130,18 +134,23 @@ void show_citymap(void)
 // FUNCTION: C2WIN 0x0045b314
 void show_citymap_base(void)
 {
-    int col_idx;
-    int row_pair_idx;
+    int ptr;
+    int x;
+    int i;
+    int j;
 
     sprite_y    = pm_screen_y_start;
     sprite_x    = pm_screen_x_start;
     pm_shown_y  = pm_y;
     pm_y_clip   = 0;
-    col_idx = 0;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
+    i = 0;
     pm_shown_x  = pm_x;
 
     /* top edge — style 2 */
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
@@ -154,7 +163,9 @@ void show_citymap_base(void)
         } else {
             if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             }
             sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
             sprite_image_no = rotated_map[sprite_image_no].dir[map_direction >> 1];
@@ -168,18 +179,24 @@ void show_citymap_base(void)
     sprite_y += pm_diamond_half_height;
     pm_shown_y++;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* interior */
     mid_line_with_sides_base();
-    for (row_pair_idx = 0; row_pair_idx < (pm_screen_height - 2) / 2; row_pair_idx++) {
+    for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
         mid_line_no_sides_base();
         mid_line_with_sides_base();
     }
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     /* bottom edge — style 1 */
     sprite_x   = pm_screen_x_start;
-    col_idx = 0;
+    i = 0;
     pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
@@ -192,7 +209,9 @@ void show_citymap_base(void)
         } else {
             if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if PLATFORM_DOS
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             }
             sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
             sprite_image_no = rotated_map[sprite_image_no].dir[map_direction >> 1];
