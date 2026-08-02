@@ -561,15 +561,20 @@ int check_file_exists(char *filename)
 // Variant of check_file_exists that doesn't cd_path/main_path — just opens the file at its given
 // path.
 // FUNCTION: C2 0x24477
+// FUNCTION: C2WIN 0x0044adc8
 int is_file_on_harddrive(char *filename)
 {
     int fd;
     int found = 0;
-    fd = open(filename, 0x202);
+    fd = open(filename, O_RDWR | O_BINARY);
     if (fd >= 0) {
         found = 1;
         close(fd);
     }
+#if PLATFORM_WINDOWS
+    sprintf(file_buffer, "data0\\%s", filename);
+    if (file_exists(file_buffer)) found = 1;
+#endif
     return found;
 }
 
