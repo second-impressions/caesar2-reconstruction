@@ -1439,15 +1439,29 @@ void place_sprite(int edge_side)
 {
     unsigned char terrain_flags;
     int marker_kind;
+#if PLATFORM_WINDOWS
+    int mode;
+#endif
     int sprite_offset_x;
     int sprite_offset_y;
-    int walk_dir_idx;
+    int direction;
+#if !PLATFORM_WINDOWS
     unsigned char *sprite_header_ptr;
     int data_byte;
+#endif
 
+#if PLATFORM_WINDOWS
+    mode = screen_mode;
+    if (mode > 1) mode = 0;
+    if (pm_shown_y >= 0xa1) return;
+#endif
     marker_kind = 0;
+#if PLATFORM_WINDOWS
+    citizen_a = citizen_b = marker_kind;
+#else
     citizen_b = 0;
     citizen_a = 0;
+#endif
     citizen_a = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).citizen_a;
     citizen_b = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).citizen_b;
     terrain_flags = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain;
@@ -1455,17 +1469,17 @@ void place_sprite(int edge_side)
         marker_kind = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).road_aqueduct;
 
     if (citizen_a != 0) {
-        walk_dir_idx = citizen_list[citizen_a].world_dir - map_direction;
-        if (walk_dir_idx < 0) walk_dir_idx += 8;
+        direction = citizen_list[citizen_a].world_dir - map_direction;
+        if (direction < 0) direction += 8;
         if (zoom_level == 0) {
-            sprite_offset_x = walking_x_ofsets_zoom0[walk_dir_idx * 16 + citizen_list[citizen_a].speed_count];
-            sprite_offset_y = walking_y_ofsets_zoom0[walk_dir_idx * 16 + citizen_list[citizen_a].speed_count];
+            sprite_offset_x = walking_x_ofsets_zoom0[direction * 16 + citizen_list[citizen_a].speed_count];
+            sprite_offset_y = walking_y_ofsets_zoom0[direction * 16 + citizen_list[citizen_a].speed_count];
         } else if (zoom_level == 1) {
-            sprite_offset_x = walking_x_ofsets_zoom1[walk_dir_idx * 16 + citizen_list[citizen_a].speed_count];
-            sprite_offset_y = walking_y_ofsets_zoom1[walk_dir_idx * 16 + citizen_list[citizen_a].speed_count];
+            sprite_offset_x = walking_x_ofsets_zoom1[direction * 16 + citizen_list[citizen_a].speed_count];
+            sprite_offset_y = walking_y_ofsets_zoom1[direction * 16 + citizen_list[citizen_a].speed_count];
         } else {
-            sprite_offset_x = walking_x_ofsets_zoom2[walk_dir_idx * 16 + citizen_list[citizen_a].speed_count];
-            sprite_offset_y = walking_y_ofsets_zoom2[walk_dir_idx * 16 + citizen_list[citizen_a].speed_count];
+            sprite_offset_x = walking_x_ofsets_zoom2[direction * 16 + citizen_list[citizen_a].speed_count];
+            sprite_offset_y = walking_y_ofsets_zoom2[direction * 16 + citizen_list[citizen_a].speed_count];
         }
         if (edge_side == 1) {
             sprite_offset_x -= 2;
@@ -1474,12 +1488,21 @@ void place_sprite(int edge_side)
         } else {
             sprite_offset_x += pm_diamond_half_width;
         }
+#if PLATFORM_WINDOWS
+        sprite_offset_y += pm_diamond_height;
+#else
         sprite_offset_y += pm_diamond_half_height;
+#endif
         if (zoom_level == 0) {
-            if (walk_dir_idx <= 3) {
+            if (direction <= 3) {
                 if ((terrain_flags & 0x40) != 0) {
+#if PLATFORM_WINDOWS
+                    sprite_offset_y += 2;
+                    citizen_list[citizen_a].wobble_counter = 0x10;
+#else
                     citizen_list[citizen_a].wobble_counter = 0x10;
                     sprite_offset_y += 2;
+#endif
                 } else if (citizen_list[citizen_a].wobble_counter != 0) {
                     sprite_offset_y += 2;
                     citizen_list[citizen_a].wobble_counter--;
@@ -1492,9 +1515,19 @@ void place_sprite(int edge_side)
         }
         sprite_image_no = citizen_list[citizen_a].image_id;
         data_ptr        = sprite_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+        sprite_start  = ((&people_data)[mode][data_ptr + 5] << 8)
+                      + ((&people_data)[mode][data_ptr + 6] << 16)
+                      + (&people_data)[mode][data_ptr + 4];
+        sprite_width  = ((&people_data)[mode][data_ptr + 1] << 8)
+                      + (&people_data)[mode][data_ptr];
+        sprite_height = ((&people_data)[mode][data_ptr + 3] << 8)
+                      + (&people_data)[mode][data_ptr + 2];
+#else
         sprite_header_ptr = people_data + data_ptr; sprite_start = (sprite_header_ptr[5] << 8) + sprite_header_ptr[4] + (sprite_header_ptr[6] << 16);
         sprite_width    = sprite_header_ptr[0] + (sprite_header_ptr[1] << 8);
         sprite_height   = sprite_header_ptr[2] + (sprite_header_ptr[3] << 8);
+#endif
         if (sprite_start > 0x4baf0) {
             sprite_error++;
             return;
@@ -1521,10 +1554,27 @@ void place_sprite(int edge_side)
         sprite_y    += sprite_offset_y;
         sprite_x    -= sprite_width >> 1;
         sprite_y    -= sprite_height;
+#if C2_FEAT_TILE_REFRESH
         refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+        xclip(pm_screen_x_start, pm_screen_x_end);
+        yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x1de);
         if (zoom_level == 1) yclip(0x18, 0x1d8);
         else                  yclip(0x18, 0x1da);
+#endif
+#if PLATFORM_WINDOWS
+        if (yclipped == 5) goto after_citizen_a;
+            if (xclipped == 1)
+                write_i_left_sprite((&people_data)[mode]);
+            else if (xclipped == 2)
+                write_i_right_sprite((&people_data)[mode]);
+            else
+                write_i_sprite((&people_data)[mode]);
+after_citizen_a:
+#else
         if (yclipped != 5) {
             if (xclipped == 1)
                 write_i_left_sprite(people_data);
@@ -1533,22 +1583,23 @@ void place_sprite(int edge_side)
             else
                 write_i_sprite(people_data);
         }
+#endif
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     }
 
     if (citizen_b != 0) {
-        walk_dir_idx = citizen_list[citizen_b].world_dir - map_direction;
-        if (walk_dir_idx < 0) walk_dir_idx += 8;
+        direction = citizen_list[citizen_b].world_dir - map_direction;
+        if (direction < 0) direction += 8;
         if (zoom_level == 0) {
-            sprite_offset_x = walking_x_ofsets_zoom0[walk_dir_idx * 16 + citizen_list[citizen_b].speed_count];
-            sprite_offset_y = walking_y_ofsets_zoom0[walk_dir_idx * 16 + citizen_list[citizen_b].speed_count];
+            sprite_offset_x = walking_x_ofsets_zoom0[direction * 16 + citizen_list[citizen_b].speed_count];
+            sprite_offset_y = walking_y_ofsets_zoom0[direction * 16 + citizen_list[citizen_b].speed_count];
         } else if (zoom_level == 1) {
-            sprite_offset_x = walking_x_ofsets_zoom1[walk_dir_idx * 16 + citizen_list[citizen_b].speed_count];
-            sprite_offset_y = walking_y_ofsets_zoom1[walk_dir_idx * 16 + citizen_list[citizen_b].speed_count];
+            sprite_offset_x = walking_x_ofsets_zoom1[direction * 16 + citizen_list[citizen_b].speed_count];
+            sprite_offset_y = walking_y_ofsets_zoom1[direction * 16 + citizen_list[citizen_b].speed_count];
         } else {
-            sprite_offset_x = walking_x_ofsets_zoom2[walk_dir_idx * 16 + citizen_list[citizen_b].speed_count];
-            sprite_offset_y = walking_y_ofsets_zoom2[walk_dir_idx * 16 + citizen_list[citizen_b].speed_count];
+            sprite_offset_x = walking_x_ofsets_zoom2[direction * 16 + citizen_list[citizen_b].speed_count];
+            sprite_offset_y = walking_y_ofsets_zoom2[direction * 16 + citizen_list[citizen_b].speed_count];
         }
         if (edge_side == 1) {
             sprite_offset_x -= 2;
@@ -1557,12 +1608,21 @@ void place_sprite(int edge_side)
         } else {
             sprite_offset_x += pm_diamond_half_width;
         }
+#if PLATFORM_WINDOWS
+        sprite_offset_y += pm_diamond_height;
+#else
         sprite_offset_y += pm_diamond_half_height;
+#endif
         if (zoom_level == 0) {
-            if (walk_dir_idx <= 3) {
+            if (direction <= 3) {
                 if ((terrain_flags & 0x40) != 0) {
+#if PLATFORM_WINDOWS
+                    sprite_offset_y += 2;
+                    citizen_list[citizen_b].wobble_counter = 0x10;
+#else
                     citizen_list[citizen_b].wobble_counter = 0x10;
                     sprite_offset_y += 2;
+#endif
                 } else if (citizen_list[citizen_b].wobble_counter != 0) {
                     sprite_offset_y += 2;
                     citizen_list[citizen_b].wobble_counter--;
@@ -1575,9 +1635,19 @@ void place_sprite(int edge_side)
         }
         sprite_image_no = citizen_list[citizen_b].image_id;
         data_ptr        = sprite_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+        sprite_start  = ((&people_data)[mode][data_ptr + 5] << 8)
+                      + ((&people_data)[mode][data_ptr + 6] << 16)
+                      + (&people_data)[mode][data_ptr + 4];
+        sprite_width  = ((&people_data)[mode][data_ptr + 1] << 8)
+                      + (&people_data)[mode][data_ptr];
+        sprite_height = ((&people_data)[mode][data_ptr + 3] << 8)
+                      + (&people_data)[mode][data_ptr + 2];
+#else
         sprite_header_ptr = people_data + data_ptr; sprite_start = (sprite_header_ptr[6] << 16) + (sprite_header_ptr[4] + (sprite_header_ptr[5] << 8));
         sprite_width    = sprite_header_ptr[0] + (sprite_header_ptr[1] << 8);
         sprite_height   = sprite_header_ptr[2] + (sprite_header_ptr[3] << 8);
+#endif
         if (sprite_start > 0x4baf0) {
             sprite_error++;
             return;
@@ -1604,10 +1674,27 @@ void place_sprite(int edge_side)
         sprite_y    += sprite_offset_y;
         sprite_x    -= sprite_width >> 1;
         sprite_y    -= sprite_height;
+#if C2_FEAT_TILE_REFRESH
         refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+        xclip(pm_screen_x_start, pm_screen_x_end);
+        yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x1de);
         if (zoom_level == 1) yclip(0x18, 0x1d8);
         else                  yclip(0x18, 0x1da);
+#endif
+#if PLATFORM_WINDOWS
+        if (yclipped == 5) goto after_citizen_b;
+            if (xclipped == 1)
+                write_i_left_sprite((&people_data)[mode]);
+            else if (xclipped == 2)
+                write_i_right_sprite((&people_data)[mode]);
+            else
+                write_i_sprite((&people_data)[mode]);
+after_citizen_b:
+#else
         if (yclipped != 5) {
             if (xclipped == 1)
                 write_i_left_sprite(people_data);
@@ -1616,35 +1703,68 @@ void place_sprite(int edge_side)
             else
                 write_i_sprite(people_data);
         }
+#endif
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     }
 
-    if (marker_kind == 0)
-        return;
-
+#if PLATFORM_DOS
+    if (marker_kind == 0) return;
     sprite_offset_y = 0;
     if (edge_side == 1)      sprite_offset_x = -2;
     else if (edge_side == 2) sprite_offset_x = pm_diamond_half_width - 2;
     else                sprite_offset_x = pm_diamond_half_width;
     sprite_offset_y += pm_diamond_half_height;
+#else
+    if (marker_kind != 0) {
+    sprite_offset_x = sprite_offset_y = 0;
+    if (edge_side == 1)      sprite_offset_x -= 2;
+    else if (edge_side == 2) sprite_offset_x += pm_diamond_half_width - 2;
+    else                     sprite_offset_x += pm_diamond_half_width;
+    sprite_offset_y += pm_diamond_height;
+#endif
 
     if (marker_kind == 3) sprite_image_no = zoom_level + 0xe;
     else                 sprite_image_no = zoom_level + 0xb;
     data_ptr        = sprite_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+    sprite_start  = (mice[data_ptr + 6] << 16)
+                  + (mice[data_ptr + 5] << 8)
+                  + mice[data_ptr + 4];
+    sprite_width  = (mice[data_ptr + 1] << 8) + mice[data_ptr];
+    sprite_height = (mice[data_ptr + 3] << 8) + mice[data_ptr + 2];
+#else
     sprite_start    = (mice[data_ptr + 4] + (mice[data_ptr + 5] << 8)) + ((data_byte = mice[data_ptr + 6]) << 16);
     sprite_width    = (data_byte = mice[data_ptr + 0]) + ((data_byte = mice[data_ptr + 1]) << 8);
     sprite_height   = mice[data_ptr + 2] + (mice[data_ptr + 3] << 8);
+#endif
 
     old_sprite_x = sprite_x;
     old_sprite_y = sprite_y;
     sprite_x    += sprite_offset_x;
     sprite_y    += sprite_offset_y;
     sprite_y    -= sprite_height;
+#if C2_FEAT_TILE_REFRESH
     refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
+#endif
+#if PLATFORM_WINDOWS
+    xclip(pm_screen_x_start, pm_screen_x_end);
+    yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
     xclip(pm_screen_x_start, 0x1de);
     if (zoom_level == 1) yclip(0x18, 0x1d8);
     else                  yclip(0x18, 0x1da);
+#endif
+#if PLATFORM_WINDOWS
+    if (yclipped == 5) goto after_marker;
+        if (xclipped == 1)
+            write_i_left_sprite(mice);
+        else if (xclipped == 2)
+            write_i_right_sprite(mice);
+        else
+            write_i_sprite(mice);
+after_marker:
+#else
     if (yclipped != 5) {
         if (xclipped == 1)
             write_i_left_sprite(mice);
@@ -1653,8 +1773,12 @@ void place_sprite(int edge_side)
         else
             write_i_sprite(mice);
     }
+#endif
     sprite_x = old_sprite_x;
     sprite_y = old_sprite_y;
+#if PLATFORM_WINDOWS
+    }
+#endif
 }
 
 // Display the active diagnostic value over the current city-map cell.
