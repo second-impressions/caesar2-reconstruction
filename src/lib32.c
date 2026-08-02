@@ -2624,12 +2624,18 @@ void to_fb(void)
 
 // Delete a single character from the format buffer, shifting the tail left by one. Skipped when
 // at_limit is set.
+#if PLATFORM_WINDOWS
+#define edit_cursor fb_count
+#else
+#define edit_cursor this_letter
+#endif
+
 // FUNCTION: C2 0x2689d
 // FUNCTION: C2WIN 0x0044d568
 void del_fb(void)
 {
     if (at_limit != 0) return;
-    pull_string_left(&format_buffer[this_letter],
+    pull_string_left(&format_buffer[edit_cursor],
                      &format_buffer[fb_current_char_length]);
 }
 
@@ -2659,6 +2665,8 @@ void test_for_delimiter(void)
     else
         at_limit = 2;
 }
+
+#undef edit_cursor
 
 // Walk the format buffer and pull-string-left every space character up to fb_current_char_length,
 // returning early on the first NUL.
