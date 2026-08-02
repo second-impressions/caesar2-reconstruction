@@ -3888,6 +3888,8 @@ void scatter(void)
     scat128 = scatseed & 0x7f;
 }
 
+int totalXpercent(int total, int percent);
+
 // Uniformly-distributed bounded random in [0, max]. Pulls a sample from the cached rand32000 word,
 // masks it down to the smallest 2^k - 1 mask >= max, and rejects/retries (calling random() to
 // reseed rand32000) if the masked sample exceeds max.
