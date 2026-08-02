@@ -354,8 +354,9 @@ void place_a_building_roof(int edge_style);
 // FUNCTION: C2WIN 0x0045bb2b
 void sprites_no_sides(void)
 {
-    int col_idx;
+    int i;
 
+    C2_CHECK_PM_ROW();
     /* left spillover */
     if (pm_x > 0) {
         sprite_x = pm_screen_x_start - pm_diamond_width;
@@ -365,15 +366,17 @@ void sprites_no_sides(void)
     }
 
     sprite_x   = pm_screen_x_start;
-    col_idx = 0;
+    C2_CHECK_PM_ROW();
+    i = 0;
     pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (!((pm_shown_ptr) >= 0x0FFF0000))
             place_sprite(0);
         sprite_x += pm_diamond_width;
     }
 
+    C2_CHECK_PM_ROW();
     /* right spillover */
     if (pm_shown_x < 0x50) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x];
