@@ -1808,7 +1808,7 @@ after_marker:
 #endif
     sprite_x = old_sprite_x;
     sprite_y = old_sprite_y;
-#if PLATFORM_WINDOWS
+#if !PLATFORM_DOS
     }
 #endif
 }
