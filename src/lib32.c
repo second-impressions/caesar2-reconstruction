@@ -1579,6 +1579,10 @@ void clear_screens(void)
 // FUNCTION: C2WIN 0x0044be1d
 void clear_a_screen(void)
 {
+#if PLATFORM_WINDOWS
+    if (internal_screen != 0)
+        memset(internal_screen, 0, 0x4b000);
+#else
     int i;
     if (screen_mode == 1) {
         cls_256x(cscreen, 0xfa00);
@@ -1597,6 +1601,7 @@ void clear_a_screen(void)
         for (i = 0; i < 0x3e800; i++)
             internal_screen[i] = 0;
     }
+#endif
 }
 
 // Remap the 640×480 framebuffer through a lookup derived from the active palette.
