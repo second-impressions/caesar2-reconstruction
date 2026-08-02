@@ -274,11 +274,7 @@ extern unsigned char decision;
 extern unsigned char confirming;
 extern unsigned char exit_flag;
 extern unsigned char restart_flag;
-#if PLATFORM_WINDOWS
-extern void go_64k_palette(char *src, char *dst);
-#else
-extern void go_64k_palette(char *p);
-#endif
+extern void go_64k_palette(unsigned char *p);
 extern void go_16m_palette(unsigned char *p);
 extern void load_to_temp_palette(char *fname);
 
