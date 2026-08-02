@@ -12,139 +12,224 @@ void show_one_ptr(int screen_cell_x, int screen_cell_y);
 // Finds an actual map offset in the pseudo-map and stores its row and column in x and y.
 // FUNCTION: C2 0x352aa
 // FUNCTION: C2WIN 0x00484250
-void get_pm_from_actual(int actual_offset)
+void get_pm_from_actual(int actual)
 {
-    int row_idx;
-    int col_idx;
+    int row;
+    int col;
 
     x = 0;
     y = 0;
-    for (row_idx = 0; row_idx < 0xa1; row_idx++) {
-        for (col_idx = 0; col_idx < 0x51; col_idx++) {
-            if (pseudo_map[row_idx][col_idx] >= 0x0FFF0000U) continue;
-            else if (actual_offset == pseudo_map[row_idx][col_idx]) {
-                x = row_idx;
-                y = col_idx;
+    for (row = 0; row < 0xa1; row++) {
+        for (col = 0; col < 0x51; col++) {
+            if (pseudo_map[row][col] >= 0x0FFF0000U) continue;
+            else if (actual == pseudo_map[row][col]) {
+                x = row;
+                y = col;
                 return;
             }
         }
     }
 }
 
+#if PLATFORM_WINDOWS
+void pm_limits(void);
+int get_pm_over_diamond(int);
+void rotate_pm_clockwise(void);
+void rotate_pm_anticlockwise(void);
+void show_diamond_ptr(void);
+void place_diamond(int);
+void place_lefthalf_diamond(void);
+void place_righthalf_diamond(void);
+void place_overlay(int);
+#endif
+
 // Builds the oriented pseudo-map lookup and marks cells outside the active map with sentinels.
 // FUNCTION: C2 0x35311
 // FUNCTION: C2WIN 0x0048430f
 void get_pseudo_map(int direction)
 {
-    int col_x2_step;
-    int x2_step;
-    int start_row;
-    int row_idx;
-    int start_x2;
-    int col_row_step;
-    int col_edge;
-    int row_step;
-    int pseudo_row;
+    int col_x2_delta;
+    int x_move;
+    int start_y;
+    int map_row;
+    int x2_origin;
+#if PLATFORM_WINDOWS
+    int column_idx;
+#endif
+    int col_row_stride;
+    int edge_col;
+    int change_row;
+    int py;
     int row_edge;
-    int pseudo_x2;
-    int col_idx;
+    int p_x2;
+#if PLATFORM_WINDOWS
+    int num;
+    int row_end;
+    int mid_col;
+#else
+    int column_idx;
+#endif
 
-    for (row_idx = 0; row_idx < 0xa1; row_idx++) {
-        for (col_idx = 0; col_idx < 0x51; col_idx++) {
-            if (row_idx <= 0x50) row_edge = row_idx; else row_edge = 0xa0 - row_idx;
-            if (col_idx <= 0x28) col_edge = col_idx; else col_edge = 0x50 - col_idx;
-            if (col_edge < 4 && row_edge < 8) {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000;
-            } else if (col_edge < 8 && row_edge < 0x10) {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000 | 1;
-            } else if (col_edge < 0xc && row_edge < 0x18) {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000 | 2;
-            } else if (col_edge < 0x10 && row_edge < 0x20) {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000 | 3;
-            } else if (col_edge < 0x13 && row_edge < 0x28) {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000 | 4;
-            } else if (col_edge < 0x1c && row_edge < 0x14) {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000 | 5;
-            } else if (col_edge < 8 && row_edge < 0x3c) {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000 | 6;
+#if PLATFORM_WINDOWS
+    num = 0xa1;
+    row_end = 0xa0;
+    mid_col = 0x28;
+    for (map_row = 0; map_row < num; map_row++) {
+        for (column_idx = 0; column_idx < 0x51; column_idx++) {
+            if (map_row <= 0x50) row_edge = map_row; else row_edge = row_end - map_row;
+            if (column_idx <= mid_col) edge_col = column_idx; else edge_col = 0x50 - column_idx;
+            if (edge_col < 4 && row_edge < 8) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000;
+            } else if (edge_col < 8 && row_edge < 0x10) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 1;
+            } else if (edge_col < 0xc && row_edge < 0x18) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 2;
+            } else if (edge_col < 0x10 && row_edge < 0x20) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 3;
+            } else if (edge_col < 0x13 && row_edge < 0x28) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 4;
+            } else if (edge_col < 0x1c && row_edge < 0x14) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 5;
+            } else if (edge_col < 8 && row_edge < 0x3c) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 6;
             } else {
-                pseudo_map[row_idx][col_idx] = 0x0FFF0000 | 7;
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 7;
             }
         }
     }
+#else
+    for (map_row = 0; map_row < 0xa1; map_row++) {
+        for (column_idx = 0; column_idx < 0x51; column_idx++) {
+            if (map_row <= 0x50) row_edge = map_row; else row_edge = 0xa0 - map_row;
+            if (column_idx <= 0x28) edge_col = column_idx; else edge_col = 0x50 - column_idx;
+            if (edge_col < 4 && row_edge < 8) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000;
+            } else if (edge_col < 8 && row_edge < 0x10) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 1;
+            } else if (edge_col < 0xc && row_edge < 0x18) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 2;
+            } else if (edge_col < 0x10 && row_edge < 0x20) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 3;
+            } else if (edge_col < 0x13 && row_edge < 0x28) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 4;
+            } else if (edge_col < 0x1c && row_edge < 0x14) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 5;
+            } else if (edge_col < 8 && row_edge < 0x3c) {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 6;
+            } else {
+                pseudo_map[map_row][column_idx] = 0x0FFF0000 | 7;
+            }
+        }
+    }
+#endif
 
     map_direction = direction;
     if (direction == 0) {
-        start_row = map_height_reduction * 2 + 1;
-        row_step = 1;
-        col_row_step = 1;
-        start_x2 = 0x50;
-        x2_step = -1;
-        col_x2_step = 1;
+        start_y = map_height_reduction * 2 + 1;
+        change_row = 1;
+        col_row_stride = 1;
+        x2_origin = 0x50;
+        x_move = -1;
+        col_x2_delta = 1;
     } else if (direction == 2) {
-        start_row = 0x50;
-        row_step = 1;
-        col_row_step = -1;
-        start_x2 = map_width_reduction * 2 + 1;
-        x2_step = 1;
-        col_x2_step = 1;
+        start_y = 0x50;
+        change_row = 1;
+        col_row_stride = -1;
+        x2_origin = map_width_reduction * 2 + 1;
+        x_move = 1;
+        col_x2_delta = 1;
     } else if (direction == 4) {
-        start_row = (0x50 - map_height_reduction) * 2 - 1;
-        row_step = -1;
-        col_row_step = -1;
-        start_x2 = 0x50;
-        x2_step = 1;
-        col_x2_step = -1;
+        start_y = (0x50 - map_height_reduction) * 2 - 1;
+        change_row = -1;
+        col_row_stride = -1;
+        x2_origin = 0x50;
+        x_move = 1;
+        col_x2_delta = -1;
     } else if (direction == 6) {
-        start_row = 0x50;
-        row_step = -1;
-        col_row_step = 1;
-        start_x2 = (0x50 - map_width_reduction) * 2 - 1;
-        x2_step = -1;
-        col_x2_step = -1;
+        start_y = 0x50;
+        change_row = -1;
+        col_row_stride = 1;
+        x2_origin = (0x50 - map_width_reduction) * 2 - 1;
+        x_move = -1;
+        col_x2_delta = -1;
     }
 
-    for (row_idx = 0; row_idx < map_actual_height; row_idx++) {
-        pseudo_row = start_row;
-        pseudo_x2 = start_x2;
-        for (col_idx = 0; col_idx < map_actual_width; col_idx++) {
-            pseudo_map[pseudo_row][pseudo_x2 / 2] = map_actual_atom * (map_actual_width * row_idx + col_idx);
-            pseudo_row += col_row_step;
-            pseudo_x2 += col_x2_step;
+    for (map_row = 0; map_row < map_actual_height; map_row++) {
+        py = start_y;
+        p_x2 = x2_origin;
+#if PLATFORM_WINDOWS
+        num = map_row * map_actual_width;
+#endif
+        for (column_idx = 0; column_idx < map_actual_width; column_idx++) {
+#if PLATFORM_WINDOWS
+            pseudo_map[py][p_x2 / 2] = map_actual_atom * (column_idx + num);
+#else
+            pseudo_map[py][p_x2 / 2] = map_actual_atom * (map_actual_width * map_row + column_idx);
+#endif
+            py += col_row_stride;
+            p_x2 += col_x2_delta;
         }
-        start_row += row_step;
-        start_x2 += x2_step;
+        start_y += change_row;
+        x2_origin += x_move;
     }
 
-    start_row = map_height_reduction * 2 + 1;
-    start_x2 = 0x50;
-    for (row_idx = 0; row_idx < 0x50 - map_height_reduction * 2; row_idx++) {
-        pseudo_row = start_row;
-        pseudo_x2 = start_x2;
-        for (col_idx = 0; col_idx < map_actual_width; col_idx++) {
-            pseudo_row++;
-            pseudo_x2++;
+    start_y = map_height_reduction * 2 + 1;
+    x2_origin = 0x50;
+#if PLATFORM_WINDOWS
+    num = 0x50 - map_height_reduction * 2;
+    for (map_row = 0; map_row < num; map_row++) {
+        py = start_y;
+        p_x2 = x2_origin;
+        py += map_actual_width;
+        p_x2 += map_actual_width;
+        pseudo_map[py][p_x2 / 2] = 0x0FFF0000 | 0x9;
+        start_y++;
+        x2_origin--;
+    }
+    if (screen_mode > 0) {
+        py = start_y;
+        p_x2 = x2_origin;
+        py += map_actual_width;
+        p_x2 += map_actual_width;
+        pseudo_map[py][p_x2 / 2] = 0x0FFF0000 | 0xa;
+    }
+    py = start_y;
+    p_x2 = x2_origin;
+    num = 0x50 - map_width_reduction * 2;
+    for (column_idx = 0; column_idx < num; column_idx++) {
+        pseudo_map[py][p_x2 / 2] = 0x0FFF0000 | 0x8;
+        py++;
+        p_x2++;
+    }
+#else
+    for (map_row = 0; map_row < 0x50 - map_height_reduction * 2; map_row++) {
+        py = start_y;
+        p_x2 = x2_origin;
+        for (column_idx = 0; column_idx < map_actual_width; column_idx++) {
+            py++;
+            p_x2++;
         }
-        pseudo_map[pseudo_row][pseudo_x2 / 2] = 0x0FFF0000 | 0x9;
-        start_row++;
-        start_x2--;
+        pseudo_map[py][p_x2 / 2] = 0x0FFF0000 | 0x9;
+        start_y++;
+        x2_origin--;
     }
     if (map_mode > 0) {
-        pseudo_row = start_row;
-        pseudo_x2 = start_x2;
-        for (col_idx = 0; col_idx < map_actual_width; col_idx++) {
-            pseudo_row++;
-            pseudo_x2++;
+        py = start_y;
+        p_x2 = x2_origin;
+        for (column_idx = 0; column_idx < map_actual_width; column_idx++) {
+            py++;
+            p_x2++;
         }
-        pseudo_map[pseudo_row][pseudo_x2 / 2] = 0x0FFF0000 | 0xa;
+        pseudo_map[py][p_x2 / 2] = 0x0FFF0000 | 0xa;
     }
-    pseudo_row = start_row;
-    pseudo_x2 = start_x2;
-    for (col_idx = 0; col_idx < 0x50 - map_width_reduction * 2; col_idx++) {
-        pseudo_map[pseudo_row][pseudo_x2 / 2] = 0x0FFF0000 | 0x8;
-        pseudo_row++;
-        pseudo_x2++;
+    py = start_y;
+    p_x2 = x2_origin;
+    for (column_idx = 0; column_idx < 0x50 - map_width_reduction * 2; column_idx++) {
+        pseudo_map[py][p_x2 / 2] = 0x0FFF0000 | 0x8;
+        py++;
+        p_x2++;
     }
+#endif
 }
 
 // Clamps the pseudo-map viewport to the active map bounds.
