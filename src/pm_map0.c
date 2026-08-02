@@ -638,10 +638,22 @@ void place_lefthalf_diamond(void)
 // FUNCTION: C2WIN 0x00485a5e
 void place_righthalf_diamond(void)
 {
+#if PLATFORM_WINDOWS
+    int mode;
+
+    if (screen_mode > 1) mode = 0;
+    else mode = screen_mode;
+#endif
     data_ptr = sprite_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+    sprite_start = ((&fixt_data)[mode][data_ptr + 5] << 8)
+                 + ((&fixt_data)[mode][data_ptr + 6] << 16)
+                 + (&fixt_data)[mode][data_ptr + 4];
+#else
     sprite_start = *(fixt_data + data_ptr + 4)
                  + (*(fixt_data + data_ptr + 5) << 8)
                  + (*(fixt_data + data_ptr + 6) << 16);
+#endif
 
     if (sprite_start > 0x4baf0) {
         sprite_error++;
@@ -652,14 +664,26 @@ void place_righthalf_diamond(void)
         return;
     }
     if (zoom_level == 0) {
+#if PLATFORM_WINDOWS
+        place_i_large_diamond_righthalf((&fixt_data)[mode], 0);
+#else
         place_i_large_diamond_righthalf(fixt_data, 0);
+#endif
         return;
     }
     if (zoom_level == 1) {
+#if PLATFORM_WINDOWS
+        place_i_medium_diamond_righthalf((&fixt_data)[mode], 0);
+#else
         place_i_medium_diamond_righthalf(fixt_data, 0);
+#endif
         return;
     }
+#if PLATFORM_WINDOWS
+    place_i_small_diamond_righthalf((&fixt_data)[mode], 0);
+#else
     place_i_small_diamond_righthalf(fixt_data, 0);
+#endif
 }
 
 // Loads a people sprite and draws its full overlay diamond at the current zoom level.
