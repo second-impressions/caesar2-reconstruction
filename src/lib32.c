@@ -3295,24 +3295,26 @@ int timer(int mode)
     static int unused_timer_state;
     static int start_ms;
     static int start_sec;
-    struct timeb tb;
-    int now_ms, delta;
+    struct timeb tbuff;
+    int now_ms;
+    int now_sec;
+    int delta;
 
-    ftime(&tb);
-    if (mode == 0)
-    {
-        start_ms = (int)(unsigned short)tb.millitm;
-        start_sec = tb.time;
+    ftime(&tbuff);
+    if (mode == 0) {
+        start_ms = (int)(unsigned short)tbuff.millitm;
+        start_sec = tbuff.time;
         return 0;
-    }
-    if (mode == 1)
-    {
-        now_ms = (int)(unsigned short)tb.millitm;
-        delta = (tb.time - start_sec) * 1000;
-        if (now_ms < start_ms) {
-            now_ms += 0x3e8; return delta + (now_ms - start_ms);
+    } else if (mode == 1) {
+        now_ms = (int)(unsigned short)tbuff.millitm;
+        now_sec = tbuff.time;
+        delta = (now_sec - start_sec) * 1000;
+        if (now_ms >= start_ms) {
+            delta += now_ms - start_ms;
+        } else {
+            delta += (now_ms + 0x3e8) - start_ms;
         }
-        return delta + (now_ms - start_ms);
+        return delta;
     }
     return 0;
 }
