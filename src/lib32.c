@@ -335,7 +335,7 @@ void to_fb(void);
 void del_fb(void);
 void test_for_delimiter(void);
 void string_to_upper(unsigned char *s);
-int my_strcmp(char *s1, char *s2, int n);
+int my_strcmp(unsigned char *s1, unsigned char *s2, int n);
 void my_strcpy(char *src, char *dst, int n);
 void xclip(int clip_left, int clip_right);
 void yclip(int clip_top, int clip_bottom);
@@ -2157,13 +2157,11 @@ void pull_string_left(char *p, char *end);
 // Bounded byte-compare of two strings: returns 1-based index of first mismatch, or 0 if all `n`
 // bytes are equal.
 // FUNCTION: C2 0x260ea
-int my_strcmp(char *s1, char *s2, int n)
+int my_strcmp(unsigned char *s1, unsigned char *s2, int n)
 {
     int i;
     for (i = 0; i < n; i++) {
-        if (s2[i] != s1[i])
-            return i + 1;
-    }
+        if (s2[i] != s1[i]) return i + 1; }
     return 0;
 }
 
