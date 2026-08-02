@@ -1169,142 +1169,210 @@ void place_a_building_roof(int edge_style)
     }
 }
 
+extern void set_ambient_minimum(int ambient_idx, int minimum_delay);
+
 // Draw the current cell's animated fire, unrest, smoke, decoration, or landmark effect.
 // FUNCTION: C2 0x3820d
 // FUNCTION: C2WIN 0x0045dc3f
 void top_it(int edge_side)
 {
-    int ambient_mode;
-    int map_dir_idx;
-    unsigned char tile_kind;
-    int sprite_offset_x;
-    unsigned char animation_seed;
-    unsigned char activity_kind;
-    unsigned char jar_kind;
-    unsigned char gfx_idx;
-    unsigned char *sprite_header_ptr;
-    int sprite_offset_y;
-    int zoom_idx;
+    int ambient;
+#if PLATFORM_WINDOWS
+    int mode;
+#endif
+    int direction_index;
+    unsigned char tile_type;
+    int image_off_x;
+    unsigned char building_animation;
+    unsigned char activity_value;
+    unsigned char jar_num;
+    unsigned char sprite_num;
+#if !PLATFORM_WINDOWS
+    unsigned char *t;
+#endif
+    int y_delta;
+    int scale;
 
-    ambient_mode = 0;
-    tile_kind        = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
-    animation_seed    = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).building;
-    sprite_offset_x   = 0;
+    ambient = 0;
+#if PLATFORM_WINDOWS
+    mode = screen_mode;
+    if (mode > 1) mode = 0;
+    direction_index = map_direction / 2;
+#endif
+    tile_type          = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
+    building_animation = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).building;
+#if PLATFORM_DOS
+    image_off_x        = 0;
+#endif
 
-    if (tile_kind < 8) {
+    if (tile_type < 8) {
         /* Fire flames */
-        sprite_image_no = (animation_seed + city_anim64) & 7;
-        sprite_offset_x       = fire_offs[((animation_seed + city_anim16) & 0xf)].dx;
-        sprite_offset_y       = fire_offs[((animation_seed + city_anim16) & 0xf)].dy;
+        sprite_image_no = (building_animation + city_anim64) & 7;
+        image_off_x     = fire_offs[((building_animation + city_anim16) & 0xf)].dx;
+        y_delta         = fire_offs[((building_animation + city_anim16) & 0xf)].dy;
         if (zoom_level == 1) {
-            sprite_offset_x >>= 1;
-            sprite_offset_y >>= 1;
+            image_off_x >>= 1;
+            y_delta >>= 1;
         } else if (zoom_level == 2) {
-            sprite_offset_x >>= 2;
-            sprite_offset_y >>= 2;
+            image_off_x >>= 2;
+            y_delta >>= 2;
         }
-        ambient_mode = 1;
+        ambient = 1;
         set_this_ambient(6);
         set_ambient_minimum(6, 0xbe);
         emergency_mood = 0xa;
-    } else if (tile_kind >= 0x82 && tile_kind <= 0xa1) {
+    } else if (tile_type >= 0x82 && tile_type <= 0xa1) {
         /* Riot */
         sprite_image_no = 8;
-        sprite_offset_x       = 0x14;
-        sprite_offset_y       = -2;
+        image_off_x    = 0x14;
+        y_delta        = -2;
         emergency_mood  = 0xa;
         if (zoom_level == 1) {
-            sprite_offset_x = 0xa;
-            sprite_offset_y = -1;
+            image_off_x >>= 1;
+            y_delta >>= 1;
         } else if (zoom_level == 2) {
-            sprite_offset_x = 5;
-            sprite_offset_y = -1;
+            image_off_x >>= 2;
+            y_delta >>= 2;
         }
     } else {
-        if (tile_kind == 0xfa) {
-            activity_kind = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).activity_a & 0xf;
-            if (activity_kind != 0) {
+        if (tile_type == 0xfa) {
+            activity_value = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).activity_a & 0xf;
+            if (activity_value != 0) {
                 /* Flower jars use the neighboring cell's variant. */
-                jar_kind = (*(struct city_cell *)((unsigned char *)city_map + ((pm_shown_ptr) - 0x14))).building & 0xf0;
-                jar_kind >>= 4;
-                if (jar_kind == 0)
+                jar_num = (*(struct city_cell *)((unsigned char *)city_map + ((pm_shown_ptr) - 0x14))).building & 0xf0;
+                jar_num >>= 4;
+                if (jar_num == 0)
                     return;
-                sprite_image_no = jar_kind + 0x18;
-                sprite_offset_x       = city_jars_x_off[zoom_level][(map_direction / 2)];
-                sprite_offset_y       = city_jars_y_off[zoom_level][(map_direction / 2)];
+                sprite_image_no = jar_num + 0x18;
+#if PLATFORM_WINDOWS
+                image_off_x = city_jars_x_off[zoom_level][direction_index];
+                y_delta     = city_jars_y_off[zoom_level][direction_index];
+#else
+                image_off_x = city_jars_x_off[zoom_level][map_direction / 2];
+                y_delta     = city_jars_y_off[zoom_level][map_direction / 2];
+#endif
             } else {
                 /* Plain jars */
+#if PLATFORM_WINDOWS
+                jar_num = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).business & 0xf;
+                sprite_image_no = jar_num + 9;
+                image_off_x = city_type_x_off[zoom_level][direction_index];
+                y_delta     = city_type_y_off[zoom_level][direction_index];
+#else
                 sprite_image_no = ((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).business & 0xf) + 9;
-                sprite_offset_x       = city_type_x_off[zoom_level][(map_direction / 2)];
-                sprite_offset_y       = city_type_y_off[zoom_level][(map_direction / 2)];
+                image_off_x = city_type_x_off[zoom_level][map_direction / 2];
+                y_delta     = city_type_y_off[zoom_level][map_direction / 2];
+#endif
             }
-        } else if (tile_kind == 0xe3) {
+        } else if (tile_type == 0xe3) {
             /* Smoke / steam */
-            sprite_image_no = ((animation_seed + city_anim64) & 7) + 0x21;
-            sprite_offset_x       = 0x1c;
-            sprite_offset_y       = -0x1e;
+            sprite_image_no = ((building_animation + city_anim64) & 7) + 0x21;
+            image_off_x = 0x1c;
+            y_delta     = -0x1e;
             if (zoom_level == 1) {
-                sprite_offset_x = 0xe;
-                sprite_offset_y = -0xf;
+                image_off_x = 0xe;
+                y_delta = -0xf;
             } else if (zoom_level == 2) {
-                sprite_offset_x = 3;
-                sprite_offset_y = -6;
+                image_off_x = 3;
+                y_delta = -6;
             }
-            ambient_mode = 1;
-        } else if (tile_kind == 0xe7) {
+            ambient = 1;
+        } else if (tile_type == 0xe7) {
             if (arena_top_count < 6)
                 return;
             sprite_image_no = 0x3b;
-            sprite_offset_x       = arena_top_data[zoom_level][(map_direction / 2)].dx;
-            sprite_offset_y       = arena_top_data[zoom_level][(map_direction / 2)].dy;
-        } else if (tile_kind == 0xe8) {
+#if PLATFORM_WINDOWS
+            image_off_x = arena_top_data[zoom_level][direction_index].dx;
+            y_delta     = arena_top_data[zoom_level][direction_index].dy;
+#else
+            image_off_x = arena_top_data[zoom_level][map_direction / 2].dx;
+            y_delta     = arena_top_data[zoom_level][map_direction / 2].dy;
+#endif
+        } else if (tile_type == 0xe8) {
             if (colosseum_top_count < 9)
                 return;
             sprite_image_no = 0x3c;
-            sprite_offset_x       = colos_top_data[zoom_level][(map_direction / 2)].dx;
-            sprite_offset_y       = colos_top_data[zoom_level][(map_direction / 2)].dy;
-        } else { map_dir_idx = map_direction >> 1; if (tile_kind == 0xc0) {
+#if PLATFORM_WINDOWS
+            image_off_x = colos_top_data[zoom_level][direction_index].dx;
+            y_delta     = colos_top_data[zoom_level][direction_index].dy;
+#else
+            image_off_x = colos_top_data[zoom_level][map_direction / 2].dx;
+            y_delta     = colos_top_data[zoom_level][map_direction / 2].dy;
+#endif
+#if PLATFORM_DOS
+        } else {
+            direction_index = map_direction >> 1;
+            if (tile_type == 0xc0) {
+#else
+        } else if (tile_type == 0xc0) {
+#endif
             /* Aqueduct top */
-            gfx_idx = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
-            sprite_image_no = rotated_bank2[gfx_idx * 4 + map_dir_idx] & 0xff;
+            sprite_num = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
+            sprite_image_no = rotated_bank2[sprite_num * 4 + direction_index] & 0xff;
             sprite_image_no = sprite_image_no + 0x1d;
-            sprite_offset_x       = 0;
-            sprite_offset_y       = -0x17;
-            if (zoom_level == 1)      sprite_offset_y = -0xb;
-            else if (zoom_level == 2) sprite_offset_y = -5;
-        } else if (tile_kind >= 0xd5 && tile_kind <= 0xd6) {
-            zoom_idx = zoom_level;
-            if (zoom_idx > 1)
+            image_off_x = 0;
+            y_delta     = -0x17;
+            if (zoom_level == 1)      y_delta = -0xb;
+            else if (zoom_level == 2) y_delta = -5;
+        } else if (tile_type >= 0xd5 && tile_type <= 0xd6) {
+#if PLATFORM_WINDOWS
+            if (zoom_level > 1)
                 return;
-            gfx_idx = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
-            sprite_image_no = (unsigned char)rotated_map[gfx_idx - 0x10].dir[map_dir_idx];
+#else
+            scale = zoom_level;
+            if (scale > 1)
+                return;
+#endif
+            sprite_num = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
+            sprite_image_no = (unsigned char)rotated_map[sprite_num - 0x10].dir[direction_index];
+#if PLATFORM_WINDOWS
+            sprite_image_no = sprite_image_no - 0x60;
+#else
             sprite_image_no -= 0x60;
+#endif
             if (sprite_image_no > 2) {
-                sprite_offset_x = 0;
-            } else if (zoom_idx == 1) {
-                sprite_offset_x = 8;
+                image_off_x = 0;
+#if PLATFORM_WINDOWS
+            } else if (zoom_level == 1) {
+#else
+            } else if (scale == 1) {
+#endif
+                image_off_x = 8;
             } else {
-                sprite_offset_x = 0x10;
+                image_off_x = 0x10;
             }
             if (zoom_level == 0) {
                 sprite_image_no = aquaduct_tops2[sprite_image_no];
             } else {
                 sprite_image_no = aquaduct_tops2[sprite_image_no];
             }
-            sprite_offset_y       = 0;
+            y_delta = 0;
         } else {
             return;
-        } }
+        }
+#if PLATFORM_DOS
+        }
+#endif
     }
 
     if (edge_side == 1)
-        sprite_offset_x -= pm_diamond_half_width;
+        image_off_x -= pm_diamond_half_width;
 
     data_ptr     = sprite_image_no * 16 + 8;
-    sprite_header_ptr = tops_data + data_ptr;
-    sprite_start  = (sprite_header_ptr[5] << 8) + sprite_header_ptr[4] + (sprite_header_ptr[6] << 16);
-    sprite_width  = sprite_header_ptr[0] + (sprite_header_ptr[1] << 8);
-    sprite_height = (sprite_header_ptr[2]) + (sprite_header_ptr[3] << 8);
+#if PLATFORM_WINDOWS
+    sprite_start  = ((&tops_data)[mode][data_ptr + 5] << 8)
+                  + ((&tops_data)[mode][data_ptr + 6] << 16)
+                  + (&tops_data)[mode][data_ptr + 4];
+    sprite_width  = ((&tops_data)[mode][data_ptr + 1] << 8)
+                  + (&tops_data)[mode][data_ptr];
+    sprite_height = ((&tops_data)[mode][data_ptr + 3] << 8)
+                  + (&tops_data)[mode][data_ptr + 2];
+#else
+    t = tops_data + data_ptr;
+    sprite_start  = (t[5] << 8) + t[4] + (t[6] << 16);
+    sprite_width  = t[0] + (t[1] << 8);
+    sprite_height = (t[2]) + (t[3] << 8);
+#endif
     if (sprite_start > 0x4baf0) {
         sprite_error++;
         return;
@@ -1324,25 +1392,41 @@ void top_it(int edge_side)
 
     old_sprite_x = sprite_x;
     old_sprite_y = sprite_y;
-    sprite_x    += sprite_offset_x;
-    sprite_y    += sprite_offset_y;
+    sprite_x    += image_off_x;
+    sprite_y    += y_delta;
 
-    if (ambient_mode == 1)
+#if C2_FEAT_TILE_REFRESH
+    if (ambient == 1)
         refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
-    else if (ambient_mode == 2)
+    else if (ambient == 2)
         refresh_sprite2w_square(sprite_x >> 4, sprite_y >> 4);
+#endif
 
+#if PLATFORM_WINDOWS
+    xclip(pm_screen_x_start, pm_screen_x_end);
+    yclip(pm_screen_y_start + pm_diamond_height, pm_screen_y_end);
+#else
     xclip(pm_screen_x_start, 0x1de);
     if (zoom_level == 1)
         yclip(0x18, 0x1d8);
     else
         yclip(0x18, 0x1da);
+#endif
 
+#if PLATFORM_WINDOWS
+    if (yclipped == 5)
+        goto put_back;
+    if      (xclipped == 1) write_i_left_sprite((&tops_data)[mode]);
+    else if (xclipped == 2) write_i_right_sprite((&tops_data)[mode]);
+    else                    write_i_sprite((&tops_data)[mode]);
+put_back:
+#else
     if (yclipped != 5) {
         if      (xclipped == 1) write_i_left_sprite(tops_data);
         else if (xclipped == 2) write_i_right_sprite(tops_data);
         else                    write_i_sprite(tops_data);
     }
+#endif
 
     sprite_x = old_sprite_x;
     sprite_y = old_sprite_y;
