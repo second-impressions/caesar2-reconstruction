@@ -573,6 +573,22 @@ void mid_line_with_sides_base(void)
     pm_y_clip += pm_diamond_half_height;
 }
 
+extern void write_large_diamond_hat(unsigned char *, int);
+extern void write_large_diamond_lefthat(unsigned char *, int);
+extern void write_large_diamond_righthat(unsigned char *, int);
+extern void write_large_diamond_lefthalfhat(unsigned char *, int, int);
+extern void write_large_diamond_righthalfhat(unsigned char *, int, int);
+extern void write_medium_diamond_hat(unsigned char *, int);
+extern void write_medium_diamond_lefthat(unsigned char *, int);
+extern void write_medium_diamond_righthat(unsigned char *, int);
+extern void write_medium_diamond_lefthalfhat(unsigned char *, int, int);
+extern void write_medium_diamond_righthalfhat(unsigned char *, int, int);
+extern void write_small_diamond_hat(unsigned char *, int);
+extern void write_small_diamond_lefthat(unsigned char *, int);
+extern void write_small_diamond_righthat(unsigned char *, int);
+extern void write_small_diamond_lefthalfhat(unsigned char *, int, int);
+extern void write_small_diamond_righthalfhat(unsigned char *, int, int);
+
 // Draw building tops and overhead effects across an unclipped interior row.
 // FUNCTION: C2 0x372a9
 // FUNCTION: C2WIN 0x0045c430
@@ -766,6 +782,8 @@ void bottom_line_no_sides(void)
     pm_shown_y++;
     pm_y_clip += pm_diamond_half_height;
 }
+
+extern void set_city_ambient(int kind);
 
 // Select the current building's rotated sprite and draw its base at the requested edge style.
 // FUNCTION: C2 0x3779d
@@ -1005,6 +1023,20 @@ void place_a_building_top(int edge_style)
 
 extern void write_large_diamond_rightroof(unsigned char *sprite_addr);
 extern void write_large_diamond_righthalfroof(unsigned char *sprite_addr, int side);
+extern void write_large_diamond_leftroof(unsigned char *);
+extern void write_large_diamond_roof(unsigned char *);
+extern void write_large_diamond_lefthalfroof(unsigned char *, int);
+extern void write_medium_diamond_leftroof(unsigned char *);
+extern void write_medium_diamond_rightroof(unsigned char *);
+extern void write_medium_diamond_roof(unsigned char *);
+extern void write_medium_diamond_lefthalfroof(unsigned char *, int);
+extern void write_medium_diamond_righthalfroof(unsigned char *, int);
+extern void write_small_diamond_leftroof(unsigned char *);
+extern void write_small_diamond_rightroof(unsigned char *);
+extern void write_small_diamond_roof(unsigned char *);
+extern void write_small_diamond_lefthalfroof(unsigned char *, int);
+extern void write_small_diamond_righthalfroof(unsigned char *, int);
+extern void refresh_a_bigger_square(int x, int y);
 
 // Draw the portion of the current building roof exposed at the lower viewport boundary.
 // FUNCTION: C2 0x37dc4
