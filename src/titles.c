@@ -131,6 +131,9 @@ void show_want_promotion_box(int rank)
 // FUNCTION: C2WIN 0x004aeac9
 void demo_lead_in_slideshow(void)
 {
+    int i;
+    int j;
+    int k;
 }
 
 // Does nothing; reserved for the demo lead-out slideshow.
