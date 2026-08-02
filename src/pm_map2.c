@@ -813,7 +813,7 @@ void place2_a_building_top(int draw_style)
     unsigned char qty;
     int goods_x;
     int sprite_y_off;
-#if PLATFORM_DOS
+#if !PLATFORM_WINDOWS
     int header_byte;
     int header_high_byte;
 #endif
@@ -1180,7 +1180,7 @@ void place2_sprite(int draw_style)
     unsigned char *sprite_header_ptr;
 #endif
     unsigned char flag_kind;
-#if PLATFORM_DOS
+#if !PLATFORM_WINDOWS
     int sprite_top_y;
 #endif
 
