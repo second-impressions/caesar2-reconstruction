@@ -1830,19 +1830,19 @@ void print_test_info(void)
 // FUNCTION: C2WIN 0x0045f0f8
 int show_overlay(int style)
 {
-    int idx;
+    int map_ptr;
+    unsigned char terrain_flags;
     unsigned char tile;
-    unsigned char flag_lsb;
-    int tile_in_building_range;
+    int in_range = 0;
 
     if (overlays_on != 1)
         return 0;
-    idx = pm_shown_ptr / 20;
+    map_ptr = pm_shown_ptr / 20;
 
-    if (landfill_pool[idx] == 0) {
-        flag_lsb = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain & 0xe7;
+    if (landfill_pool[map_ptr] == 0) {
+        terrain_flags = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain & 0xe7;
         tile = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
-        if (flag_lsb == 0)
+        if (terrain_flags == 0)
             return 0;
         if (overlay0_empty_mode != 0)
             return 0;
@@ -1850,26 +1850,27 @@ int show_overlay(int style)
             sprite_image_no = 7;
         else
             sprite_image_no = 0;
-    } else if (landfill_pool[idx] == 0x96) {
+    } else if (landfill_pool[map_ptr] == 0x96) {
         if (ov_map_mode == 1) {
-            sprite_image_no = landfill_pool[idx] - 0x76;
-        } else {
-            if (ov_map_mode != 6) return 0;
+            sprite_image_no = landfill_pool[map_ptr] - 0x76;
+        } else if (ov_map_mode == 6) {
             tile = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
             if (tile >= 0xe5 && tile <= 0xf0)
                 return 0;
-            sprite_image_no = landfill_pool[idx] - 0x76;
+            sprite_image_no = landfill_pool[map_ptr] - 0x76;
+        } else {
+            return 0;
         }
     } else {
-        sprite_image_no = landfill_pool[idx] - 0x76;
+        sprite_image_no = landfill_pool[map_ptr] - 0x76;
     }
 
     if (sprite_image_no >= 8) {
         tile                  = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
-        flag_lsb              = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain & 1;
-        tile_in_building_range = (tile >= 0x82 && tile <= 0xa1);
-        if (tile_in_building_range && sprite_image_no >= 8) sprite_image_no += 2;
-        else if (flag_lsb) sprite_image_no++;
+        terrain_flags         = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain & 1;
+        in_range = (tile >= 0x82 && tile <= 0xa1);
+        if (in_range && sprite_image_no >= 8) sprite_image_no += 2;
+        else if (terrain_flags) sprite_image_no++;
     }
     if (sprite_image_no < 0x23)
         place_overlay(style);
