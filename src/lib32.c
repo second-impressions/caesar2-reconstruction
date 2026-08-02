@@ -3621,6 +3621,8 @@ void draw_a_diamond(int x, int y, int width, int height, int colour)
     }
 }
 
+void xor_a_diamond_lhs_top(int x, int y, int width, int height, int color);
+
 // XOR-plot the top half of a tile diamond (both quadrants). Like draw_a_diamond but routes through
 // xor_internal_2point and stops at the equator (height/2).
 // FUNCTION: C2 0x27b35
@@ -3632,15 +3634,11 @@ void xor_a_diamond_top(int x, int y, int width, int height, int colour)
     int k;
 
     width += 2;
-    i = 0;
-    j = height / 2 - 1;
-    k = height / 2;
+    i = 0; j = height / 2 - 1; k = height / 2;
     for ( ; i < width / 2; i += 2, j--, k++)
         xor_internal_2point(x + i, y + j, colour);
 
-    i = width / 2;
-    j = height - 2;
-    k = 1;
+    i = width / 2; j = height - 2; k = 1;
     for ( ; i < width - 2; i += 2, j--, k++)
         xor_internal_2point(x + i, y + k, colour);
 }
