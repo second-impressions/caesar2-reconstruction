@@ -694,22 +694,20 @@ int write_to_file(char *filename, char *buffer, int size, int offset)
 // FUNCTION: C2 0x245be
 char read_config(char *filename, char *buffer)
 {
-    char *search_ptr;
     int search_remaining;
 
-    search_ptr = buffer;
     search_remaining = 1000;
-    if (readfile(filename, search_ptr, search_remaining, 0) == 0) return 1;
+    if (readfile(filename, buffer, 1000, 0) == 0) return 1;
 
     while (search_remaining > 0) {
-        if (my_strcmp(search_ptr, "resaud", 6) == 0) break;
+        if (my_strcmp(buffer, "resaud", 6) == 0) break;
         search_remaining--;
-        search_ptr++;
+        buffer++;
     }
     if (search_remaining <= 0) return 0;
 
-    search_ptr += 7;
-    return *search_ptr;
+    buffer += 7;
+    return *buffer;
 }
 
 // Decode an IFF ILBM image into a palette and raster buffer.
