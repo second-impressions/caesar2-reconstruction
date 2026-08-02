@@ -229,16 +229,22 @@ void show_citymap_base(void)
 // FUNCTION: C2WIN 0x0045b6bc
 void show_citymap_sprites(void)
 {
-    int col_idx;
-    int row_pair_idx;
+    int ptr;
+    int x;
+    int i;
+    int j;
 
     sprite_y    = pm_screen_y_start;
     sprite_x    = pm_screen_x_start;
     pm_shown_y  = pm_y;
     pm_y_clip   = 0;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
+    i = 0;
     pm_shown_x  = pm_x;
 
-    for (col_idx = 0; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (!((pm_shown_ptr) >= 0x0FFF0000))
             place_sprite(0);
@@ -247,16 +253,22 @@ void show_citymap_sprites(void)
     sprite_y += pm_diamond_half_height;
     pm_shown_y++;
 
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
     sprites_with_sides();
-    for (row_pair_idx = 0; row_pair_idx < (pm_screen_height - 2) / 2; row_pair_idx++) {
+    for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
         sprites_no_sides();
         sprites_with_sides();
     }
 
     sprite_x   = pm_screen_x_start;
-    col_idx = 0;
+#if PLATFORM_WINDOWS
+    if (pm_shown_y >= PM_H) return;
+#endif
+    i = 0;
     pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (!((pm_shown_ptr) >= 0x0FFF0000))
             place_sprite(0);
