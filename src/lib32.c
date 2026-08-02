@@ -3690,12 +3690,10 @@ void draw_a_rect(int x, int y, int w, int h, int colour)
 {
     int cur_y;
 
-    if (w <= 0) return;
-    if (h <= 0) return;
+    if (w <= 0 || h <= 0) return;
 
     for (cur_y = y; cur_y < y + h; cur_y++) {
-        draw_a_line(x, cur_y, x + (w - 1), cur_y, colour);
-    }
+        draw_a_line(x, cur_y, x + (w - 1), cur_y, colour); }
 }
 
 // Sprite-blit dispatcher. `buf` is a packed sprite-bank: an 8-byte header followed by 16-byte
