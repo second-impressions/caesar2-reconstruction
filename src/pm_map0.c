@@ -382,23 +382,35 @@ void show_diamond_ptr(void)
 
     if (pm_build_shape == 0) {
         show_one_ptr(pm_x_coord, pm_y_coord);
-    } else if (pm_build_shape == 1) {
+        return;
+    }
+    if (pm_build_shape == 1) {
         show_one_ptr(pm_x_coord, pm_y_coord);
         show_one_ptr(pm_x_coord - odd_row, pm_y_coord + 1);
         show_one_ptr(pm_x_coord - odd_row + 1, pm_y_coord + 1);
         show_one_ptr(pm_x_coord, pm_y_coord + 2);
-    } else if (pm_build_shape == 2) {
+        return;
+    }
+    if (pm_build_shape == 2) {
         three_by_three(pm_x_coord, pm_y_coord);
-    } else if (pm_build_shape == 3) {
+        return;
+    }
+    if (pm_build_shape == 3) {
         four_by_four(pm_x_coord, pm_y_coord);
-    } else if (pm_build_shape == 4) {
+        return;
+    }
+    if (pm_build_shape == 4) {
         three_by_three(pm_x_coord, pm_y_coord);
         if (odd_row) three_by_three(pm_x_coord - 2, pm_y_coord + 3);
         else        three_by_three(pm_x_coord - 1, pm_y_coord + 3);
-    } else if (pm_build_shape == 5) {
+        return;
+    }
+    if (pm_build_shape == 5) {
         four_by_four(pm_x_coord, pm_y_coord);
         four_by_four(pm_x_coord - 2, pm_y_coord + 4);
+        return;
     }
+    return;
 }
 
 // Draws a nine-tile isometric pointer footprint centered at (x, y).
