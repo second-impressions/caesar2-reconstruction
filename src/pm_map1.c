@@ -52,6 +52,9 @@ extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsign
 extern void write_i_sprite(unsigned char *sprite_addr);
 extern void write_i_left_sprite(unsigned char *sprite_addr);
 extern void write_i_right_sprite(unsigned char *sprite_addr);
+#if PLATFORM_WINDOWS
+extern unsigned char game_paused;
+#endif
 /* Forward declarations (functions defined later in this file). */
 void show_citymap_base(void);
 void show_citymap_sprites(void);
@@ -78,6 +81,9 @@ void print_test_info(void);
 void show_citymap(void)
 {
     sprite_error = 0;
+#if PLATFORM_WINDOWS
+    if (game_paused == 0) {
+#endif
     cmu_count[0]++;
     if (cmu_count[0] > 3) {
         cmu_count[0] = 0;
@@ -88,9 +94,16 @@ void show_citymap(void)
         city_anim128 = 0;
     }
     city_anim64 = city_anim128 >> 1;
+#if PLATFORM_WINDOWS
+    city_anim32 = city_anim64 >> 1;
+    city_anim16 = city_anim32 >> 1;
+    city_anim8  = city_anim16 >> 1;
+    }
+#else
     city_anim32 = city_anim128 >> 2;
     city_anim16 = city_anim128 >> 3;
     city_anim8  = city_anim128 >> 4;
+#endif
 
     if (ov_map_mode == 0 || ov_map_mode == 1 ||
         ov_map_mode == 4 || ov_map_mode == 8) {
