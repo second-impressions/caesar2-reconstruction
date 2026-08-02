@@ -3852,6 +3852,10 @@ void xclip(int clip_left, int clip_right)
 // FUNCTION: C2WIN 0x0044f7ad
 void yclip(int clip_top, int clip_bottom)
 {
+#if PLATFORM_WINDOWS
+    if (clip_top < 0) clip_top = 0;
+#endif
+
     yclipped = 0;
     y_start = 0;
     y_end = sprite_height;
