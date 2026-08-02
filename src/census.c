@@ -762,13 +762,13 @@ void hospital_coverage(void)
 void library_coverage(void)
 {
     library_cover = 0;
-    if (accessed_libraries_count > 0) {
-        if (population < 100) {
-            library_cover = 100;
-            return;
-        }
+    if (accessed_libraries_count <= 0) return;
+
+    if (population < 100) {
+        library_cover = 100;
+    } else {
         library_cover = valueDIVtotal(accessed_libraries_count * 1200,
-                                      population);
+                                       population);
     }
 }
 
