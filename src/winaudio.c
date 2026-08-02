@@ -50,7 +50,7 @@ void pause_cityprov_tune(void)
 void set_forum_tune(unsigned char tune)
 {
     if (tune < 0) {
-        forum_tune = tune;
+        forum_tune = 0;
     } else if (tune >= forum_tune_count) {
         tune = forum_tune_count - 1;
     } else {
