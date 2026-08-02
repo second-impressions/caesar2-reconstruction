@@ -119,9 +119,9 @@ void init_census(void)
     fire_rate = 0; road_rate = 0; wall_rate = 0;
     water_trouble_rate = 0;
 
-    no_of_ports = 0; no_of_shipyards = 0; no_of_warehouses = 0; no_of_workcamps = 0;
-    no_of_quarrys = 0; no_of_mines = 0; no_of_farms = 0; no_of_trading_posts = 0;
-    no_of_border_towns = 0; no_of_towns = 0; no_of_villages = 0;
+    no_of_workcamps = no_of_warehouses = no_of_shipyards = no_of_ports = 0;
+    no_of_trading_posts = no_of_farms = no_of_mines = no_of_quarrys = 0;
+    no_of_villages = no_of_towns = no_of_border_towns = 0;
 
     for (i = 0; i < 16; i++) {
         industry[i].status      = 0;
