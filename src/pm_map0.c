@@ -403,6 +403,11 @@ int get_pm_over_diamond(int force_zero_offset)
     return 1;
 }
 
+#if PLATFORM_WINDOWS
+void place_lefthalf_overlay(int style);
+void place_righthalf_overlay(int style);
+#endif
+
 // Rotates the pseudo-map orientation clockwise.
 // FUNCTION: C2 0x35a37
 // FUNCTION: C2WIN 0x00484cb9
