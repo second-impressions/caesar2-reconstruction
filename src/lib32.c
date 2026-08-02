@@ -1558,6 +1558,10 @@ void copy_to_physical_screen(int source_addr, int screen_offset)
 // FUNCTION: C2 0x25714
 void clear_screens(void)
 {
+#if PLATFORM_WINDOWS
+    if (internal_screen != 0)
+        memset(internal_screen, 0, 0x4b000);
+#else
     if (screen_mode == 1) {
         cls_256x(0,       0xfa00);
         cls_256x(0x4000,  0xfa00);
@@ -1566,6 +1570,7 @@ void clear_screens(void)
     } else {
         clear_a_screen();
     }
+#endif
 }
 
 // Wipe the current visible page. In mode 1 (320×200 mode-X) defer to cls_256x; in modes 2/3
