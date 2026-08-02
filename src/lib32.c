@@ -3213,19 +3213,19 @@ int running_delay1(void)
 {
     static int running_delay_last;
     struct timeb tb;
-    int current_time_ms;
-    int elapsed_ms;
+    int current;
+    int elapsed;
 
     ftime(&tb);
-    time_is = tb.time;
-    current_time_ms = tb.time * 1000;
-    current_time_ms = current_time_ms + tb.millitm;
-    if (current_time_ms >= running_delay_last)
-        elapsed_ms = current_time_ms - running_delay_last;
+    time_is = current = tb.time;
+    current = current * 1000;
+    current = current + tb.millitm;
+    if (current >= running_delay_last)
+        elapsed = current - running_delay_last;
     else
-        elapsed_ms = 999;
-    running_delay_last = current_time_ms;
-    return elapsed_ms;
+        elapsed = 999;
+    running_delay_last = current;
+    return elapsed;
 }
 
 // Report when `delay_ms` has elapsed since this palette-cycle gate last fired.
