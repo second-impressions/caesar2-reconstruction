@@ -1636,10 +1636,17 @@ void grey_a_screen(void)
 // FUNCTION: C2 0x25845
 void clear_all_screens(void)
 {
+#if PLATFORM_WINDOWS
+    extern HWND hWnd;
+    extern void clear_window(HWND window, int x, int y, int width, int height);
+
+    clear_window(hWnd, 0, 0, 0x280, 0x1e0);
+#else
     cls_256x(0,      0x10000);
     cls_256x(0x4000, 0x10000);
     cls_256x(0x8000, 0x10000);
     cls_256x(0xa000, 0x10000);
+#endif
 }
 
 // Handle CBC completion without performing any action.
