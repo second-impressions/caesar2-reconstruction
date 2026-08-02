@@ -152,13 +152,10 @@ void get_pseudo_map(int direction)
 // FUNCTION: C2WIN 0x00484805
 void pm_limits(void)
 {
-    int max_coord;
     if (pm_x < 0) pm_x = 0;
     if (pm_y < 0) pm_y = 0;
-    max_coord = 0x50 - pm_screen_width;
-    if (max_coord <= pm_x) pm_x = max_coord;
-    max_coord = 0xa0 - pm_screen_height;
-    if (max_coord <= pm_y) pm_y = max_coord;
+    if (0x50 - pm_screen_width <= pm_x) pm_x = 0x50 - pm_screen_width;
+    if (0xa0 - pm_screen_height <= pm_y) pm_y = 0xa0 - pm_screen_height;
 }
 
 // Resolves the mouse position to a visible pseudo-map diamond and updates the selection globals.
