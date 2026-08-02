@@ -469,9 +469,12 @@ void mid_line_no_sides_base(void)
 // FUNCTION: C2WIN 0x0045bfd3
 void mid_line_with_sides_base(void)
 {
-    int col_idx;
-    int map_dir_idx;
+    int i;
+#if PLATFORM_DOS
+    int dir;
+#endif
 
+    C2_CHECK_PM_ROW();
     pm_shown_x = pm_x;
     sprite_x   = pm_screen_x_start;
 
@@ -487,11 +490,17 @@ void mid_line_with_sides_base(void)
     } else {
         if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
             (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if C2_FEAT_TILE_REFRESH
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
         }
         sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
-        map_dir_idx = map_direction >> 1;
-        sprite_image_no = rotated_map[sprite_image_no].dir[map_dir_idx];
+#if PLATFORM_DOS
+        dir = map_direction >> 1;
+        sprite_image_no = rotated_map[sprite_image_no].dir[dir];
+#else
+        sprite_image_no = rotated_map[sprite_image_no].dir[map_direction >> 1];
+#endif
         sprite_image_no += 0x10;
         place_lefthalf_diamond();
     }
@@ -499,33 +508,38 @@ void mid_line_with_sides_base(void)
         (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits |= 2;
     sprite_x += pm_diamond_half_width;
 
+    C2_CHECK_PM_ROW();
     /* middle full diamonds */
-    for (col_idx = 0; col_idx < pm_screen_width - 1; col_idx++) {
+    for (i = 0; i < pm_screen_width - 1; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
             if (update_map != 0 || sprite_image_no >= 7) place_diamond(0);
             sprite_x += pm_diamond_width;
-            continue;
         } else if (show_overlay(0)) {
-            continue;
         } else if ((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) {
             place_a_building_base(0);
-            continue;
         } else {
             if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
             }
             sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
-            map_dir_idx = map_direction >> 1;
-            sprite_image_no = rotated_map[sprite_image_no].dir[map_dir_idx];
+#if PLATFORM_DOS
+            dir = map_direction >> 1;
+            sprite_image_no = rotated_map[sprite_image_no].dir[dir];
+#else
+            sprite_image_no = rotated_map[sprite_image_no].dir[map_direction >> 1];
+#endif
             sprite_image_no += 0x10;
+            place_diamond(0);
+            sprite_x += pm_diamond_width;
         }
-        place_diamond(0);
-        sprite_x += pm_diamond_width;
     }
 
+    C2_CHECK_PM_ROW();
     /* rightmost half-diamond */
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (((pm_shown_ptr) >= 0x0FFF0000)) {
@@ -538,11 +552,17 @@ void mid_line_with_sides_base(void)
     } else {
         if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
             (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
+#if C2_FEAT_TILE_REFRESH
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
+#endif
         }
         sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;
-        map_dir_idx = map_direction >> 1;
-        sprite_image_no = rotated_map[sprite_image_no].dir[map_dir_idx];
+#if PLATFORM_DOS
+        dir = map_direction >> 1;
+        sprite_image_no = rotated_map[sprite_image_no].dir[dir];
+#else
+        sprite_image_no = rotated_map[sprite_image_no].dir[map_direction >> 1];
+#endif
         sprite_image_no += 0x10;
         place_righthalf_diamond();
     }
