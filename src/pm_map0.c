@@ -248,101 +248,152 @@ void pm_limits(void)
 // FUNCTION: C2WIN 0x0048488c
 int get_pm_over_diamond(int force_zero_offset)
 {
-    int x_adj;
-    int y_adj;
+#if PLATFORM_WINDOWS
+    int row;
+    int x;
+    int xp;
+    int y;
+    int part;
+    int odd;
+    int y_mod;
+    int odd_y;
+    int xpos;
+    int grid_x;
+#else
+    int x;
+    int y;
     int rel_x;
     int rel_y;
-    int tile_x2;
-    int rem_x;
-    int rem_y;
-    int sum_parity;
-    int x_parity;
-    int y_parity;
-    int tile_y;
+    int grid_x;
+    int xpos;
+    int y_mod;
+    int part;
+    int xp;
+    int odd_y;
+    int row;
     int next_x;
     int next_y;
-    int odd_row;
+    int odd;
+#endif
 
-    if (mouse_x < pm_screen_x_start) return 0;
-    if (pm_screen_x_start + pm_screen_width * pm_diamond_width <= mouse_x) return 0;
-    if (pm_screen_y_start + pm_diamond_half_height > mouse_y) return 0;
-    if (pm_screen_y_start + pm_diamond_half_height + pm_screen_height * pm_diamond_half_height <= mouse_y) return 0;
+    if (mouse_x + 0 < pm_screen_x_start) return 0;
+    if (pm_screen_x_start + (pm_diamond_width + 0) * pm_screen_width <= mouse_x) return 0;
+    if ((pm_screen_y_start - 0) + pm_diamond_half_height > mouse_y) return 0;
+    if ((pm_screen_y_start - 0) + pm_diamond_half_height + pm_screen_height * pm_diamond_half_height <= mouse_y) return 0;
 
+#if PLATFORM_WINDOWS
+    if (screen_mode == 2) {
+#else
     if (map_mode == 2) {
-        x_adj = 0;
-        y_adj = 0x10;
+#endif
+        x = 0;
+        y = 0x10;
     } else if (force_zero_offset) {
-        x_adj = 0;
-        y_adj = 0;
+        x = 0;
+        y = 0;
+#if PLATFORM_WINDOWS
+    } else if (pointer_mode > 0 && screen_mode < 2) {
+#else
     } else if (pointer_mode > 0 && map_mode < 2) {
-        x_adj = 8;
-        y_adj = 8;
+#endif
+        x = 8;
+        y = 8;
     } else if (pm_build_shape < 1) {
-        x_adj = 0;
-        y_adj = 0;
+        x = 0;
+        y = 0;
     } else if (pm_build_shape < 2) {
-        x_adj = 0;
-        y_adj = -pm_diamond_half_height;
+        x = 0;
+        y = -pm_diamond_half_height;
     } else if (pm_build_shape < 3) {
-        x_adj = 0;
-        y_adj = -pm_diamond_half_height * 2;
+        x = 0;
+        y = -pm_diamond_half_height * 2;
     } else if (pm_build_shape < 4) {
-        x_adj = 0;
-        y_adj = -pm_diamond_half_height * 3;
+        x = 0;
+        y = -pm_diamond_half_height * 3;
     } else if (pm_build_shape < 5) {
-        x_adj = pm_diamond_width;
-        y_adj = -pm_diamond_half_height * 4;
+        x = pm_diamond_width;
+        y = -pm_diamond_half_height * 4;
     } else {
-        x_adj = pm_diamond_width;
-        y_adj = -pm_diamond_half_height * 5;
+        x = pm_diamond_width;
+        y = -pm_diamond_half_height * 5;
     }
 
-    rel_y = mouse_y + y_adj - (pm_screen_y_start + pm_diamond_half_height);
-    tile_y = rel_y / pm_diamond_half_height;
-    rel_x = mouse_x + x_adj - pm_screen_x_start;
-    tile_x2 = rel_x / pm_diamond_half_width;
-    sum_parity = (tile_x2 + tile_y) & 1;
-    x_parity = tile_x2 & 1;
-    y_parity = tile_y & 1;
-    rem_x = rel_x % pm_diamond_half_width;
-    rem_x /= 2;
-    rem_y = rel_y % pm_diamond_half_height;
+#if PLATFORM_WINDOWS
+    row = (mouse_y + y - ((pm_screen_y_start - 0) + pm_diamond_half_height)) / pm_diamond_half_height;
+    grid_x = (mouse_x + x - pm_screen_x_start) / pm_diamond_half_width;
+#else
+    rel_y = mouse_y + y - ((pm_screen_y_start - 0) + pm_diamond_half_height);
+    row = rel_y / pm_diamond_half_height;
+    rel_x = mouse_x + x - pm_screen_x_start;
+    grid_x = rel_x / pm_diamond_half_width;
+#endif
+    part = (grid_x + row) & 1;
+    xp = grid_x & 1;
+    odd_y = row & 1;
+#if PLATFORM_WINDOWS
+    xpos = (mouse_x + x - pm_screen_x_start) % pm_diamond_half_width;
+#else
+    xpos = rel_x % pm_diamond_half_width;
+#endif
+    xpos /= 2;
+#if PLATFORM_WINDOWS
+    y_mod = (mouse_y + y - ((pm_screen_y_start - 0) + pm_diamond_half_height)) % pm_diamond_half_height;
+#else
+    y_mod = rel_y % pm_diamond_half_height;
+#endif
 
-    pm_y_coord = tile_y;
-    pm_x_coord = tile_x2 / 2;
-    next_y = tile_y + 1;
+    pm_y_coord = row;
+    pm_x_coord = grid_x / 2;
+#if PLATFORM_DOS
+    next_y = row + 1;
     next_x = pm_x_coord + 1;
-    if (sum_parity == 0) {
-        if (rem_y > rem_x) {
+#endif
+    if (part == 0) {
+        if (y_mod > xpos) {
+#if PLATFORM_WINDOWS
+            pm_y_coord++;
+#else
             pm_y_coord = next_y;
-        } else if (x_parity != 0 && y_parity != 0) {
+#endif
+        } else if (xp != 0 && odd_y != 0) {
+#if PLATFORM_WINDOWS
+            pm_x_coord++;
+#else
             pm_x_coord = next_x;
+#endif
         }
-    } else if (sum_parity == 1) {
-        if (rem_y + rem_x >= pm_diamond_half_height - 1) {
+    } else if (part == 1) {
+        if (y_mod + xpos >= pm_diamond_half_height - 1) {
+#if PLATFORM_WINDOWS
+            pm_y_coord++;
+#else
             pm_y_coord = next_y;
-            if (x_parity != 0 && y_parity == 0) {
+#endif
+            if (xp != 0 && odd_y == 0) {
+#if PLATFORM_WINDOWS
+                pm_x_coord++;
+#else
                 pm_x_coord = next_x;
+#endif
             }
         }
     }
 
-    odd_row = pm_y_coord & 1;
+    odd = pm_y_coord & 1;
     pm_over_x = pm_screen_x_start + pm_x_coord * pm_diamond_width;
-    if (odd_row)
+    if (odd)
         pm_over_x -= pm_diamond_half_width;
     pm_over_y = pm_screen_y_start + pm_y_coord * pm_diamond_half_height;
-    pm_over_cm_ptr = pseudo_map[(pm_y_coord + pm_y)][pm_x_coord + pm_x];
+    pm_over_cm_ptr = pseudo_map[(pm_y_coord + pm_y)][pm_x_coord + pm_x + 0];
     if (pm_over_cm_ptr >= 0x0FFF0000) return 0;
 
-    pm_y_edge = 0;
-    pm_x_edge = 0;
+    pm_x_edge = pm_y_edge = 0;
     if (pm_y_coord == 0) {
         pm_y_edge = 2;
     } else if (pm_y_coord >= pm_screen_height) {
         pm_y_edge = 1;
     }
-    if (odd_row) {
+    if (odd) {
         if (pm_x_coord == 0) {
             pm_x_edge = 2;
         } else if (pm_x_coord >= pm_screen_width) {
