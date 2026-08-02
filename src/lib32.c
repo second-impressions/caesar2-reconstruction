@@ -2946,23 +2946,29 @@ int one_letter(unsigned char *font, unsigned char letter)
                     (font[data_ptr + 6] << 16);
 
     if (font_screen_limit != 0) {
+#if PLATFORM_WINDOWS
+        xclip(0, 0x280);
+        yclip(pm_diamond_height + pm_screen_y_start, pm_screen_y_end);
+#else
         xclip(pm_screen_x_start, 0x1de);
         yclip(0x18, pm_screen_y_end);
+#endif
     } else {
         xclip(0, screen_width);
         yclip(0, screen_height);
     }
 
-    if (yclipped != 5) {
-        if (xclipped == 1) {
-            write_i_left_font(font);
-        } else if (xclipped == 2) {
-            write_i_right_font(font);
-        } else {
-            write_i_font(font);
-        }
+    if (yclipped == 5)
+        goto done;
+    if (xclipped == 1) {
+        write_i_left_font(font);
+    } else if (xclipped == 2) {
+        write_i_right_font(font);
+    } else {
+        write_i_font(font);
     }
 
+done:
     return sprite_width + 1;
 }
 
