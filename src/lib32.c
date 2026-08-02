@@ -676,12 +676,14 @@ int writefile(const char *filename, char *buffer, int size)
 // FUNCTION: C2 0x24572
 int write_to_file(char *filename, char *buffer, int size, int offset)
 {
+    int seek_result;
     int fd;
     int bytes_written;
-    fd = open(filename, 0x221, 0x180);
+    fd = open(filename, O_WRONLY | O_CREAT | O_BINARY, 0x180);
     if (fd == -1)
         return 0;
-    if (_lseek(fd, offset, 0) == -1)
+    seek_result = _lseek(fd, offset, 0);
+    if (seek_result == -1)
         return 0;
     bytes_written = write(fd, buffer, size);
     close(fd);
