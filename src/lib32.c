@@ -2022,6 +2022,18 @@ void get_mouse(void)
 // FUNCTION: C2WIN 0x0044c3d3
 void show_mouse(int image_idx)
 {
+#if PLATFORM_WINDOWS
+    extern void set_windows_mouse(char image_idx);
+
+    if (image_idx == 0 || image_idx == 1 || image_idx == 2 ||
+        image_idx == 3 || image_idx == 4 || image_idx == 6 ||
+        image_idx == 7 || image_idx == 9 || image_idx == 0x11 ||
+        image_idx == 0x13 || image_idx == 0x14) {
+        set_windows_mouse(image_idx);
+        return;
+    }
+#endif
+
     data_ptr = image_idx * 16 + 8;
 
     sprite_width  = mice[data_ptr]     + (mice[data_ptr + 1] << 8);
@@ -2041,8 +2053,7 @@ void show_mouse(int image_idx)
     yclip(0, screen_height);
 
     if (yclipped == 5) return;
-
-    if (xclipped == 1) {
+    else if (xclipped == 1) {
         write_i_left_sprite(mice);
     } else if (xclipped == 2) {
         write_i_right_sprite(mice);
