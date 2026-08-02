@@ -2153,6 +2153,7 @@ void clear_keys(void)
 }
 
 void pull_string_left(char *p, char *end);
+void push_string_right(char *start, char *end);
 
 // Bounded byte-compare of two strings: returns 1-based index of first mismatch, or 0 if all `n`
 // bytes are equal.
@@ -2171,8 +2172,7 @@ int my_strcmp(unsigned char *s1, unsigned char *s2, int n)
 void my_strcpy(char *src, char *dst, int n)
 {
     int i;
-    for (i = 0; i < n; i++)
-        dst[i] = src[i];
+    for (i = 0; i < n; i++) dst[i] = src[i];
 }
 
 // Uppercase a single ASCII letter; non-letters pass through unchanged.
