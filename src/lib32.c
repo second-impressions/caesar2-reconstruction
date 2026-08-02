@@ -4137,14 +4137,15 @@ void free_scratch_buffer(void)
 void get_free_memory(void)
 {
     void *block_ptr;
-    int block_size;
 
+    block_ptr = 0;
     allocable_memory = 0x400;
-    block_size = allocable_memory;
-    while ((block_ptr = malloc(block_size)) != NULL) {
+    block_ptr = malloc(allocable_memory);
+    while (block_ptr != NULL) {
         free(block_ptr);
+        block_ptr = 0;
         allocable_memory += 0x400;
-        block_size = allocable_memory;
+        block_ptr = malloc(allocable_memory);
     }
     allocable_memory -= 0x400;
     allocable_memory = allocable_memory / 0x400;
