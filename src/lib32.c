@@ -464,19 +464,20 @@ void get_filename_extension(const char *filename)
 // Walk past the filename to the '.' separator and overwrite the 3-char extension with the global
 // `extension[]` (NUL-terminated).
 // FUNCTION: C2 0x243ef
+// FUNCTION: C2WIN 0x0044ab28
 void put_filename_extension(char *filename)
 {
-    char character;
+    unsigned char character;
     do {
         character = *filename;
         filename++;
     } while (character != '.' && character != 0);
-    if (character != '.')
-        return;
-    *filename++ = extension[0];
-    *filename++ = extension[1];
-    *filename++ = extension[2];
-    *filename   = 0;
+    if (character == '.') {
+        *filename++ = extension[0];
+        *filename++ = extension[1];
+        *filename++ = extension[2];
+        *filename++ = 0;
+    }
 }
 
 // Length of a filename up to (and including) the first '.' or '\0'.
