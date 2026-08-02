@@ -3205,10 +3205,8 @@ void click_on_text(int x, int y, int w, int h)
 {
     if (cursor_y != 0)                  return;
     if (mouse_left_preclick == 0)       return;
-    if (x > mouse_x)                    return;
-    if (x + w <= mouse_x)               return;
-    if (y > mouse_y)                    return;
-    if (y + h <= mouse_y)               return;
+    if (x > mouse_x || x + w <= mouse_x) return;
+    if (y > mouse_y || y + h <= mouse_y) return;
     cursor_y = y;
 }
 
