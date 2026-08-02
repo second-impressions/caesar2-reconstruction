@@ -277,7 +277,7 @@ int get_pm_over_diamond(int force_zero_offset)
 #endif
 
     if (mouse_x + 0 < pm_screen_x_start) return 0;
-    if (pm_screen_x_start + (pm_diamond_width + 0) * pm_screen_width <= mouse_x) return 0;
+    if (pm_screen_x_start + pm_screen_width * (pm_diamond_width + 0) <= mouse_x) return 0;
     if ((pm_screen_y_start - 0) + pm_diamond_half_height > mouse_y) return 0;
     if ((pm_screen_y_start - 0) + pm_diamond_half_height + pm_screen_height * pm_diamond_half_height <= mouse_y) return 0;
 
