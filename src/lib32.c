@@ -2971,19 +2971,15 @@ void font_centre(int entry_idx, int word_count, int x_left, int y,
 // FUNCTION: C2WIN 0x0044e018
 void font_list(int entry_idx, int word_count, int x, int y, unsigned char *font, int color)
 {
-    char *scan_ptr;
-
     text_pointer = text_buffer;
     text_pointer += get_buffer_ofset(entry_idx);
 
     while (word_count > 0) {
-        scan_ptr = text_pointer;
-        if (*scan_ptr == 0 && (*(scan_ptr - 1) >= ' ' || *(scan_ptr - 1) == 0)) word_count--;
+        if (*text_pointer == 0 && (*(text_pointer - 1) >= ' ' || *(text_pointer - 1) == 0)) word_count--;
         text_pointer++;
     }
 
-    while (*text_pointer < ' ')
-        text_pointer++;
+    while (*text_pointer < ' ') text_pointer++;
 
     put_a_font_string(text_pointer, x, y, font, color);
     font_screen_limit = 0;
