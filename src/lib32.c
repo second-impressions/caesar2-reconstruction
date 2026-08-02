@@ -3241,14 +3241,14 @@ char colour_cycle_delay1(int delay_ms)
     ms = tb.millitm;
 
     if (ms > last_cycle_ms1) {
-        delta = ms - last_cycle_ms1;
+        elapsed = ms - last_cycle_ms1;
     } else if (ms < last_cycle_ms1) {
-        delta = (ms + 1000) - last_cycle_ms1;
+        elapsed = (ms + 1000) - last_cycle_ms1;
     } else {
-        delta = 0;
+        elapsed = 0;
     }
 
-    if ((int)delta >= delay_ms) {
+    if ((int)elapsed >= delay_ms) {
         last_cycle_ms1 = ms;
         return 1;
     }
