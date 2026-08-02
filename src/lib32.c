@@ -2656,11 +2656,11 @@ void copy_fb(char *src, char *dst)
 void test_for_delimiter(void)
 {
     at_limit = 0;
-    if (format_buffer[this_letter] == 0)
+    if (format_buffer[edit_cursor] == 0)
         at_limit = 1;
     if (fb_limit != 1) return;
-    if (format_buffer[this_letter] != '.') return;
-    if (this_letter < 8)
+    if (format_buffer[edit_cursor] != '.') return;
+    if (edit_cursor < 8)
         at_limit = 1;
     else
         at_limit = 2;
