@@ -3119,33 +3119,23 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
 int get_next_word_length(char *src, unsigned char *font)
 {
     int width;
-    int started;
-    int i;
-    char c;
+    int found_char;
+    int n;
+    int loops;
+    unsigned char c;
 
     char_count = 0;
-    width   = 0;
-    started = 0;
-    i = 0;
-    while (1) {
-        i++;
-        if (i >= 0x7d0) break;
-        c = *src;
-        src++;
-        if (c == 0) break;
-        if ((unsigned char)c == ' ') {
-            if (started) break;
-            width += 4;
-        } else if ((unsigned char)c == '$') {
-            if (started == 0)
-                goto next;
-            break;
-        } else if ((unsigned char)c >= ' ') {
-            width += get_letter_width(c, font);
-            started = 1;
+    width = 0; n = 0; found_char = 0;
+    while (++n < 0x7d0) {
+        c = *src; src++;
+        if (c == 0) return width;
+        if (c == ' ') { if (found_char != 0) return width; else width += 4;
+        } else if (c == '$') { if (found_char != 0) return width; else { }
+        } else {
+            if (c < ' ') goto next;
+            width += get_letter_width(c, font); found_char = 1;
         }
-    next:
-        char_count++;
+    next: char_count++;
     }
     return width;
 }
