@@ -750,7 +750,7 @@ extern int overlay0_empty_mode;
 extern int overlays_on;
 extern unsigned char p_code[];
 extern unsigned char p_len[];
-extern char padding_off;
+extern unsigned char padding_off;
 extern int para1;
 extern int para2;
 extern int particles_built;

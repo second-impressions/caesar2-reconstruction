@@ -246,7 +246,7 @@ char highlight;
 unsigned char allow_padding;
 unsigned char hot_key_out_off_build;
 unsigned char hold_hot_keys;
-char padding_off;
+unsigned char padding_off;
 char screen_refresh_flag;
 unsigned char hold_mouse_replace;
 unsigned char screen_mode;
@@ -2828,15 +2828,18 @@ void save_format_buffer_to_disk(char *filename, int entry_idx)
                   fb_max_char_length, word_value + 0x1c);
 }
 
+int one_letter(unsigned char *font, unsigned char letter);
+
 // Render a printable string `str` at pixel (x, y) using the bitmap font (font1 / font2). `color`
 // is the palette index for solid pixels; 0 selects the shadow font_style with the default colour.
 // FUNCTION: C2 0x26c2e
 // FUNCTION: C2WIN 0x0044dabc
 void put_a_font_string(char *str, int x, int y, unsigned char *font, int color)
 {
-    char prev_char;
-    char ch;
-    int  width;
+    unsigned char prev_char;
+    unsigned char ch;
+    unsigned char letter_count;
+    int letter_width;
 
     font_style = 1;
     if (color != 0) {
@@ -2846,6 +2849,7 @@ void put_a_font_string(char *str, int x, int y, unsigned char *font, int color)
     sprite_x      = x;
 
     ch = *str;
+    letter_count = 0;
     while (ch != 0) {
         prev_char = ch;
 
@@ -2861,39 +2865,41 @@ void put_a_font_string(char *str, int x, int y, unsigned char *font, int color)
             ch = 0x20;
         }
 
-        if ((unsigned char)ch >= 0x20) {
-            ch -= 0x20;
+        if (ch < 0x20)
+            goto skip_letter;
+        ch -= 0x20;
 
-            if (fb_count == this_letter && got_cursx == 0) {
-                cursor_x  = x_is;
-                got_cursx = 1;
-            }
-
-            sprite_y = y;
-
-            if (letter_table[(unsigned char)ch] > 0) {
-                width = one_letter(font, ch);
-            } else {
-                width = 4;
-            }
-
-            sprite_x += width;
-            x_is     += width;
+        if (fb_count == this_letter && got_cursx == 0) {
+            cursor_x  = x_is;
+            got_cursx = 1;
         }
 
+        sprite_y = y;
+
+        if (letter_table[(unsigned char)ch] > 0) {
+            letter_width = one_letter(font, ch);
+        } else {
+            letter_width = 4;
+        }
+
+        sprite_x += letter_width;
+        x_is     += letter_width;
+
+skip_letter:
         if (insert_count != 0) {
             ch = get_insert_letter();
         } else {
             str++;
             ch = *str;
         }
+        letter_count++;
         fb_count++;
 
         if (allow_padding == 0 && padding_off != 0) {
             if (prev_char == ch) {
                 if (ch == 0x20 || ch == '_') {
-                    x_is     -= width;
-                    sprite_x -= width;
+                    x_is     -= letter_width;
+                    sprite_x -= letter_width;
                 }
             }
         }

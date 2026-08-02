@@ -137,7 +137,7 @@ extern struct dpmi_mem_info memory;
 extern unsigned char allow_padding;
 extern unsigned char hot_key_out_off_build;
 extern unsigned char hold_hot_keys;
-extern char padding_off;
+extern unsigned char padding_off;
 extern void cycle_colours(int start_idx, int end_idx);
 extern void pulse_red(int idx, int delta);
 extern void swap_background_to_red(void);
