@@ -585,10 +585,22 @@ void place_diamond(int style)
 // FUNCTION: C2WIN 0x0048592d
 void place_lefthalf_diamond(void)
 {
+#if PLATFORM_WINDOWS
+    int mode;
+
+    if (screen_mode > 1) mode = 0;
+    else mode = screen_mode;
+#endif
     data_ptr = sprite_image_no * 16 + 8;
+#if PLATFORM_WINDOWS
+    sprite_start = (&fixt_data)[mode][data_ptr + 4]
+                 + ((&fixt_data)[mode][data_ptr + 5] << 8)
+                 + ((&fixt_data)[mode][data_ptr + 6] << 16);
+#else
     sprite_start = *(fixt_data + data_ptr + 4)
                  + (*(fixt_data + data_ptr + 5) << 8)
                  + (*(fixt_data + data_ptr + 6) << 16);
+#endif
 
     if (sprite_start > 0x4baf0) {
         sprite_error++;
@@ -599,14 +611,26 @@ void place_lefthalf_diamond(void)
         return;
     }
     if (zoom_level == 0) {
+#if PLATFORM_WINDOWS
+        place_i_large_diamond_lefthalf((&fixt_data)[mode], 0);
+#else
         place_i_large_diamond_lefthalf(fixt_data, 0);
+#endif
         return;
     }
     if (zoom_level == 1) {
+#if PLATFORM_WINDOWS
+        place_i_medium_diamond_lefthalf((&fixt_data)[mode], 0);
+#else
         place_i_medium_diamond_lefthalf(fixt_data, 0);
+#endif
         return;
     }
+#if PLATFORM_WINDOWS
+    place_i_small_diamond_lefthalf((&fixt_data)[mode], 0);
+#else
     place_i_small_diamond_lefthalf(fixt_data, 0);
+#endif
 }
 
 // Loads a fixture sprite and draws its right half at the current zoom level.
