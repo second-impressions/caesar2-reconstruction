@@ -1850,7 +1850,7 @@ void set_mouse(void)
     SetCursorPos(point.x, point.y);
 }
 
-// WIN: 0x0044c0fb
+// FUNCTION: C2WIN 0x0044c0fb
 void read_mouse(void)
 {
     extern HWND main_window;
