@@ -3661,20 +3661,25 @@ void xor_a_diamond_lhs_top(int x, int y, int width, int height, int color)
         xor_internal_2point(x + i, y + j, color); }
 }
 
+void draw_a_rect(int x, int y, int w, int h, int colour);
+void write_image(unsigned char *sprite_data, int image_idx, int x, int y);
+void xclip(int clip_left, int clip_right);
+void yclip(int clip_top, int clip_bottom);
+void do_32_count(void);
+
 // Draw the top-right half of an XOR diamond outline.
 // FUNCTION: C2 0x27c1b
 // FUNCTION: C2WIN 0x0044f315
 void xor_a_diamond_rhs_top(int x, int y, int width, int height, int color)
 {
-    int x_offset;
-    int y_offset;
+    int i;
+    int j;
+    int k;
 
     width += 2;
-    x_offset = width / 2; y_offset = 1;
-    for ( ; x_offset < width - 2; x_offset += 2, y_offset++) {
-        xor_internal_2point(x + x_offset, y + y_offset, color);
-    }
-    (void)height;
+    i = width / 2; j = height - 2; k = 1;
+    for ( ; i < width - 2; i += 2, j--, k++) {
+        xor_internal_2point(x + i, y + k, color); }
 }
 
 // Filled (solid) rectangle by stacking horizontal draw_a_line calls from y to y + h - 1. Returns
