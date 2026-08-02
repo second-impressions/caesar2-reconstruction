@@ -704,25 +704,20 @@ void get_wall_cover(void)
 // FUNCTION: C2WIN 0x00432431
 void get_water_cover(void)
 {
-    int coverage;
-
     if (slave_requirements[3].max == 0) {
         water_cover = 100;
-        return;
-    }
-    if (tutorial_mode != 0 && tutorial_page < 22) {
-        water_cover = 100;
-        return;
-    }
-    coverage = valueDIVtotal(slave_requirements[3].current,
-                             slave_requirements[3].max);
-    water_cover = coverage;
-    if (coverage >= 100) {
+    } else if (tutorial_mode != 0 && tutorial_page < 22) {
         water_cover = 100;
     } else {
-        ++slave_warning;
+        water_cover = valueDIVtotal(slave_requirements[3].current,
+                                    slave_requirements[3].max);
+        if (water_cover >= 100) {
+            water_cover = 100;
+        } else {
+            ++slave_warning;
+        }
+        if (water_cover < 0) water_cover = 0;
     }
-    if (water_cover < 0) water_cover = 0;
 }
 
 // Compute hospital capacity coverage, allowing 1,000 residents per accessible hospital.
