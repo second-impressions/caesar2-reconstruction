@@ -51,9 +51,6 @@ int cmu_count[5];
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
 extern void set_this_ambient(int ambient_idx);
 extern void place_diamond(int);
-extern void write_i_sprite(unsigned char *sprite_addr);
-extern void write_i_left_sprite(unsigned char *sprite_addr);
-extern void write_i_right_sprite(unsigned char *sprite_addr);
 extern void place_lefthalf_diamond(void);
 extern void place_righthalf_diamond(void);
 #if PLATFORM_WINDOWS
@@ -67,16 +64,8 @@ void sprites_no_sides(void);
 void sprites_with_sides(void);
 void mid_line_no_sides_base(void);
 void mid_line_with_sides_base(void);
-void mid_line_no_sides_top(void);
-void mid_line_with_sides_top(void);
-void bottom_line_with_sides(void);
-void bottom_line_no_sides(void);
 void place_a_building_base(int edge_style);
-void place_a_building_top(int edge_style);
-void place_a_building_roof(int edge_style);
-void top_it(int edge_side);
 void place_sprite(int edge_side);
-void print_test_info(void);
 
 
 // Render the city map for the current frame, updating animation and dirty-map state.
@@ -143,9 +132,7 @@ void show_citymap_base(void)
     sprite_x    = pm_screen_x_start;
     pm_shown_y  = pm_y;
     pm_y_clip   = 0;
-#if PLATFORM_WINDOWS
-    if (pm_shown_y >= PM_H) return;
-#endif
+    C2_CHECK_PM_ROW();
     i = 0;
     pm_shown_x  = pm_x;
 
@@ -179,9 +166,7 @@ void show_citymap_base(void)
     sprite_y += pm_diamond_half_height;
     pm_shown_y++;
 
-#if PLATFORM_WINDOWS
-    if (pm_shown_y >= PM_H) return;
-#endif
+    C2_CHECK_PM_ROW();
     /* interior */
     mid_line_with_sides_base();
     for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
@@ -189,9 +174,7 @@ void show_citymap_base(void)
         mid_line_with_sides_base();
     }
 
-#if PLATFORM_WINDOWS
-    if (pm_shown_y >= PM_H) return;
-#endif
+    C2_CHECK_PM_ROW();
     /* bottom edge — style 1 */
     sprite_x   = pm_screen_x_start;
     i = 0;
@@ -238,9 +221,7 @@ void show_citymap_sprites(void)
     sprite_x    = pm_screen_x_start;
     pm_shown_y  = pm_y;
     pm_y_clip   = 0;
-#if PLATFORM_WINDOWS
-    if (pm_shown_y >= PM_H) return;
-#endif
+    C2_CHECK_PM_ROW();
     i = 0;
     pm_shown_x  = pm_x;
 
@@ -253,9 +234,7 @@ void show_citymap_sprites(void)
     sprite_y += pm_diamond_half_height;
     pm_shown_y++;
 
-#if PLATFORM_WINDOWS
-    if (pm_shown_y >= PM_H) return;
-#endif
+    C2_CHECK_PM_ROW();
     sprites_with_sides();
     for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
         sprites_no_sides();
@@ -263,9 +242,7 @@ void show_citymap_sprites(void)
     }
 
     sprite_x   = pm_screen_x_start;
-#if PLATFORM_WINDOWS
-    if (pm_shown_y >= PM_H) return;
-#endif
+    C2_CHECK_PM_ROW();
     i = 0;
     pm_shown_x = pm_x;
     for (; i < pm_screen_width; i++) {
@@ -276,59 +253,89 @@ void show_citymap_sprites(void)
     }
 }
 
+extern void write_i_sprite(unsigned char *sprite_addr);
+extern void write_i_left_sprite(unsigned char *sprite_addr);
+extern void write_i_right_sprite(unsigned char *sprite_addr);
+void mid_line_no_sides_top(void);
+void mid_line_with_sides_top(void);
+void bottom_line_with_sides(void);
+void bottom_line_no_sides(void);
+void place_a_building_top(int edge_style);
+void top_it(int edge_side);
+void print_test_info(void);
+
 // Draw building tops and overhead effects above the city-map base and sprite layers.
 // FUNCTION: C2 0x369ca
 // FUNCTION: C2WIN 0x0045b874
 void show_citymap_top(void)
 {
-    int col_idx;
-    int row_pair_idx;
-    int gfx_idx;
+    int ptr;
+    int x;
+    int i;
+    int j;
+#if PLATFORM_DOS
+    int k;
+#endif
 
-    if (zoom_level == 1) for (gfx_idx = 0x18; gfx_idx < 0x1bc; gfx_idx++) show_internal_4point(0, gfx_idx, 0);
+#if PLATFORM_DOS
+    if (zoom_level == 1) for (k = 0x18; k < 0x1bc; k++) show_internal_4point(0, k, 0);
+#endif
 
     sprite_y    = pm_screen_y_start;
     sprite_x    = pm_screen_x_start;
     pm_shown_y  = pm_y;
     pm_y_clip   = 0;
-    col_idx = 0;
+    C2_CHECK_PM_ROW();
+    i = 0;
     pm_shown_x  = pm_x;
 
     /* top edge */
-    for (; col_idx < pm_screen_width; col_idx++) {
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
 
-        if (are_overlays_on() != 0) sprite_x += pm_diamond_width;
-        else if (((pm_shown_ptr) >= 0x0FFF0000)) sprite_x += pm_diamond_width;
-        else {
-            if ((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) place_a_building_top(2);
-            if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 0x80) != 0) top_it(0);
+        if (are_overlays_on() != 0) {
             sprite_x += pm_diamond_width;
+            continue;
         }
+        if (((pm_shown_ptr) >= 0x0FFF0000)) {
+            sprite_x += pm_diamond_width;
+            continue;
+        } else if ((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) {
+            place_a_building_top(2);
+        }
+        if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 0x80) != 0) top_it(0);
+        sprite_x += pm_diamond_width;
     }
     sprite_y += pm_diamond_half_height;
     pm_shown_y++;
 
+    C2_CHECK_PM_ROW();
     /* interior */
     mid_line_with_sides_top();
-    for (row_pair_idx = 0; row_pair_idx < (pm_screen_height - 2) / 2; row_pair_idx++) {
+    for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
         mid_line_no_sides_top();
         mid_line_with_sides_top();
     }
 
     /* one more pre-bottom row */
+    C2_CHECK_PM_ROW();
     sprite_x   = pm_screen_x_start;
-    col_idx = 0; pm_shown_x = pm_x;
-    for (; col_idx < pm_screen_width; col_idx++) {
+    i = 0; pm_shown_x = pm_x;
+    for (; i < pm_screen_width; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
 
-        if (are_overlays_on() != 0) sprite_x += pm_diamond_width;
-        else if (((pm_shown_ptr) >= 0x0FFF0000)) sprite_x += pm_diamond_width;
-        else {
-            if ((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) place_a_building_top(1);
-            if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 0x80) != 0) top_it(0);
+        if (are_overlays_on() != 0) {
             sprite_x += pm_diamond_width;
+            continue;
         }
+        if (((pm_shown_ptr) >= 0x0FFF0000)) {
+            sprite_x += pm_diamond_width;
+            continue;
+        } else if ((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind >= 0x78) {
+            place_a_building_top(1);
+        }
+        if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 0x80) != 0) top_it(0);
+        sprite_x += pm_diamond_width;
     }
     pm_shown_y++;
     sprite_y += pm_diamond_half_height;
@@ -339,6 +346,8 @@ void show_citymap_top(void)
     bottom_line_with_sides();
     bottom_line_no_sides();
 }
+
+void place_a_building_roof(int edge_style);
 
 // Draw an interior sprite row, including neighboring cells whose sprites spill into view.
 // FUNCTION: C2 0x36bfe

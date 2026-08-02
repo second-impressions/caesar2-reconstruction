@@ -96,4 +96,12 @@
  * its native file path and omits both calls. */
 #define C2_FEAT_SMACK_CD_PATH     PLATFORM_DOS
 
+/* The later Windows map renderer rejects pseudo-map rows past the city-map
+ * boundary before each scanline pass. */
+#if PLATFORM_WINDOWS
+#  define C2_CHECK_PM_ROW() if (pm_shown_y >= PM_H) return
+#else
+#  define C2_CHECK_PM_ROW()
+#endif
+
 #endif /* C2_TARGET_H */
