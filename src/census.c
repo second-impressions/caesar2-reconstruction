@@ -746,13 +746,13 @@ void get_water_cover(void)
 void hospital_coverage(void)
 {
     hospital_cover = 0;
-    if (accessed_hospitals_count > 0) {
-        if (population < 100) {
-            hospital_cover = 100;
-            return;
-        }
+    if (accessed_hospitals_count <= 0) return;
+
+    if (population < 100) {
+        hospital_cover = 100;
+    } else {
         hospital_cover = valueDIVtotal(accessed_hospitals_count * 1000,
-                                       population);
+                                        population);
     }
 }
 
