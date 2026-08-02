@@ -547,12 +547,12 @@ int test_for_any_admin(int start_sptr, int footprint_size)
 {
     int row_idx;
     int col_idx;
-    int cell_sptr = start_sptr;
-    int row_stride = 1600 - footprint_size * 20;
-    for (row_idx = 0; row_idx < footprint_size; row_idx++, cell_sptr += row_stride) {
-        for (col_idx = 0; col_idx < footprint_size; col_idx++, cell_sptr += 20) {
-            char admin_flags = (*(struct city_cell *)((unsigned char *)city_map + (cell_sptr))).range_flag & 0x0C;
-            if (admin_flags) {
+    int sptr_skip = 1600 - footprint_size * 20;
+    unsigned char range_flags;
+    for (row_idx = 0; row_idx < footprint_size; row_idx++, start_sptr += sptr_skip) {
+        for (col_idx = 0; col_idx < footprint_size; col_idx++, start_sptr += 20) {
+            range_flags = (*(struct city_cell *)((unsigned char *)city_map + (start_sptr))).range_flag & 0x0c;
+            if (range_flags) {
                 return 1;
             }
         }
