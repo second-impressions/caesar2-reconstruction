@@ -1545,11 +1545,13 @@ void convert256_to_256xscreen(unsigned char *src, unsigned char *dst)
 // FUNCTION: C2 0x256f8
 void copy_to_physical_screen(int source_addr, int screen_offset)
 {
+#if !PLATFORM_WINDOWS
     if (screen_mode == 1) {
         convert_and_copy_to_256xscreen(source_addr, screen_offset);
         return;
     }
     copy_to_640_480_screen(source_addr);
+#endif
 }
 
 // Clear all mode-X pages, or the active linear framebuffer in an SVGA mode.
