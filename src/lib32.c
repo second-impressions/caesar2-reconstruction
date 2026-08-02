@@ -961,6 +961,12 @@ int check_for_Tseng(void)
 // Set vid_tech / vid_bank_tech / vid_no_of_banks based on the detected VESA memory and recognised
 // cards.
 // FUNCTION: C2 0x24c2f
+// FUNCTION: C2WIN 0x0044b50b
+#if PLATFORM_WINDOWS
+void get_video_technique(void)
+{
+}
+#else
 void get_video_technique(void)
 {
     vid_tech         = 0;
@@ -973,6 +979,7 @@ void get_video_technique(void)
     if (vid_bank_tech == 0)
         vid_tech = vid_bank_tech;
 }
+#endif
 
 // Print the detected VESA mode, chipset, memory, and banking information.
 // FUNCTION: C2 0x24c7f
