@@ -1874,7 +1874,7 @@ void read_mouse(void)
 
 // Poll the mouse until the user clicks any button.
 // FUNCTION: C2 0x25c0c
-// WIN: 0x0044c161
+// FUNCTION: C2WIN 0x0044c161
 void wait_click(void)
 {
 #if PLATFORM_WINDOWS
