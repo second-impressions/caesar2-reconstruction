@@ -394,19 +394,22 @@ void sprites_no_sides(void)
 // FUNCTION: C2WIN 0x0045bcb4
 void sprites_with_sides(void)
 {
-    int col_idx;
+    int i;
 
+    C2_CHECK_PM_ROW();
     pm_shown_x = pm_x;
     sprite_x = pm_screen_x_start;
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (!((pm_shown_ptr) >= 0x0FFF0000)) place_sprite(1);
     sprite_x += pm_diamond_half_width;
 
-    for (col_idx = 0; col_idx < pm_screen_width - 1; col_idx++) {
+    C2_CHECK_PM_ROW();
+    for (i = 0; i < pm_screen_width - 1; i++) {
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (!((pm_shown_ptr) >= 0x0FFF0000)) place_sprite(0);
         sprite_x += pm_diamond_width;
     }
+    C2_CHECK_PM_ROW();
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (!((pm_shown_ptr) >= 0x0FFF0000)) place_sprite(0);
     sprite_y += pm_diamond_half_height;
