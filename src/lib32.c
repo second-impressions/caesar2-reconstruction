@@ -3545,49 +3545,46 @@ void draw_a_2point(int x, int y, int colour)
 // FUNCTION: C2WIN 0x0044ed47
 void draw_a_line(int x1, int y1, int x2, int y2, int colour)
 {
-    int line_x;
-    int line_y;
+    int x;
+    int y;
 
     get_longest_side(x1, y1, x2, y2);
-    line_y = iy;
-    line_x = ix;
+    y = iy;
+    x = ix;
 
     if (x1 == x2) {
-        while (line_y <= ey) {
-            draw_a_point(x1, line_y, colour);
-            line_y++;
+        while (y <= ey) {
+            draw_a_point(x1, y, colour);
+            y++;
         }
-        return;
-    }
-
-    if (y1 == y2) {
-        while (line_x <= ex) {
-            draw_a_point(line_x, y1, colour);
-            line_x++;
+    } else if (y1 == y2) {
+        while (x <= ex) {
+            draw_a_point(x, y1, colour);
+            x++;
         }
-        return;
-    }
-
-    if (dy > dx) {
+    } else if (dy > dx) {
         D = 2 * dx - dy;
-        for ( ; line_y <= ey; line_y++) {
-            draw_a_point(line_x, line_y, colour);
+        x = ix;
+        for (y = iy; y <= ey; y++) {
+            draw_a_point(x, y, colour);
             Bresenham_decision(1);
             dy--;
             if (D >= 1) {
                 dx--;
-                line_x += gx;
+                x += gx;
             }
         }
     } else {
         D = 2 * dy - dx;
-        for ( ; line_x <= ex; line_x++) {
-            draw_a_point(line_x, line_y, colour);
+        x = ix;
+        y = iy;
+        for ( ; x <= ex; x++) {
+            draw_a_point(x, y, colour);
             Bresenham_decision(0);
             dx--;
             if (D >= 1) {
                 dy--;
-                line_y += gy;
+                y += gy;
             }
         }
     }
