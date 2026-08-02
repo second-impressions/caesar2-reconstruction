@@ -4116,16 +4116,24 @@ void exit_game(void)
 // Initialize random state, video, framebuffers, audio, scratch memory, and mouse limits.
 // FUNCTION: C2 0x283fa REORDERED
 // FUNCTION: C2WIN 0x0044ff39
+#if PLATFORM_WINDOWS
+extern unsigned char *game_screen;
+#endif
+
 int start_system(void)
 {
     int i;
 
     randseed = 0x54657687;
     scatseed = 0x34518632;
+#if PLATFORM_WINDOWS
+    test_mode1 = test_mode2 = test_mode3 = test_mode4 = 0;
+#else
     test_mode4 = 0;
     test_mode3 = 0;
     test_mode2 = 0;
     test_mode1 = 0;
+#endif
     used_memory = 0;
     for (i = 0; i < 0x300; i++)
         black_out_data[i] = 0;
@@ -4134,17 +4142,30 @@ int start_system(void)
         clear_all_screens();
         set_vga_256x();
     }
+#if PLATFORM_WINDOWS
+    else if (screen_mode == 2) vid_error = set_svga_640_480();
+#else
     else if (screen_mode == 2) vid_error = set_svga_640_480(0);
     else if (screen_mode == 3) vid_error = set_svga_640_480(1);
+#endif
 
     screen_refresh_flag = 0;
+#if PLATFORM_WINDOWS
+    if (screen_mode == 1) { screen_width = 0x140; screen_height = 0xc8; }
+    else                  { screen_width = 0x280; screen_height = 0x1e0; }
+#else
     if (screen_mode == 1)      { screen_width = 0x140; screen_height = 0xc8; }
     else if (screen_mode == 2) { screen_width = 0x280; screen_height = 0x1e0; }
     else                       { screen_width = 0x280; screen_height = 0x190; }
+#endif
     screen_size = screen_width * screen_height;
 
     internal_screen = 0;
+#if PLATFORM_WINDOWS
+    internal_screen = game_screen;
+#else
     internal_screen = malloc(screen_size);
+#endif
     if (internal_screen != 0) used_memory += (unsigned int)screen_size / 0x400;
     setup_scratch_buffer();
     start_sounds();
@@ -4152,7 +4173,12 @@ int start_system(void)
     set_mouse_limits();
     pointer_mode = 0;
     dos_memory = 0;
+#if PLATFORM_WINDOWS
+    if (exit_flag != 0) return 0;
+    else return 1;
+#else
     return exit_flag == 0;
+#endif
 }
 
 #if PLATFORM_DOS

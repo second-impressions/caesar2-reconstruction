@@ -54,7 +54,11 @@ extern int writefile(const char *fname, char *buf, int size);
 extern int write_to_file(char *fname, char *buf, int size, int offset);
 extern char read_config(char *fname, char *buf);
 extern int convert_lbm_file(unsigned char *src, unsigned char *dst, char *pal, int length);
+#if PLATFORM_WINDOWS
+extern int set_svga_640_480(void);
+#else
 extern int set_svga_640_480(int mode);
+#endif
 extern void recognise_card(void);
 extern int check_for_Trident(void);
 extern int check_for_Tseng(void);
