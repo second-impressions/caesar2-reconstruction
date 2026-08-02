@@ -21,12 +21,12 @@ void get_pm_from_actual(int actual_offset)
     y = 0;
     for (row_idx = 0; row_idx < 0xa1; row_idx++) {
         for (col_idx = 0; col_idx < 0x51; col_idx++) {
-            if (!(pseudo_map[row_idx][col_idx] >= 0x0FFF0000U))
-                if (actual_offset == pseudo_map[row_idx][col_idx]) {
-                    x = row_idx;
-                    y = col_idx;
-                    return;
-                }
+            if (pseudo_map[row_idx][col_idx] >= 0x0FFF0000U) continue;
+            else if (actual_offset == pseudo_map[row_idx][col_idx]) {
+                x = row_idx;
+                y = col_idx;
+                return;
+            }
         }
     }
 }
