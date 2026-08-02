@@ -482,10 +482,11 @@ void put_filename_extension(char *filename)
 
 // Length of a filename up to (and including) the first '.' or '\0'.
 // FUNCTION: C2 0x2442b
+// FUNCTION: C2WIN 0x0044ab9a
 char get_filename_length(char *filename)
 {
     char length = 0;
-    char character;
+    unsigned char character;
     do {
         character = *filename++;
         length++;
