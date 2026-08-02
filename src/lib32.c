@@ -3520,8 +3520,10 @@ void Bresenham_decision(int mode)
 // FUNCTION: C2WIN 0x0044ec7d
 void draw_a_point(int x, int y, int colour)
 {
-    if (x < 0 || x >= screen_width)  return;
-    if (y < 0 || y >= screen_height) return;
+    if (x < 0) return;
+    if (x >= screen_width) return;
+    if (y < 0) return;
+    if (y >= screen_height) return;
     show_internal_point(x, y, colour);
 }
 
