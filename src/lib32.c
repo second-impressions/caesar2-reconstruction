@@ -1796,8 +1796,10 @@ void set_mouse_limits(void)
         return;
     if (screen_mode == 1)
         mouserange(0, 0, 320, 200);
+#if !PLATFORM_WINDOWS
     else if (screen_mode == 3)
         mouserange(0, 0, 640, 400);
+#endif
     else if (screen_mode == 2)
         mouserange(0, 0, 640, 480);
 }
