@@ -3807,6 +3807,11 @@ void write_clipped_image(unsigned char *sprite_data, int image_idx, int x, int y
 // FUNCTION: C2WIN 0x0044f659
 void xclip(int clip_left, int clip_right)
 {
+#if PLATFORM_WINDOWS
+    if (clip_left < 0) clip_left = 0;
+    if (screen_width <= clip_right) clip_right = screen_width;
+#endif
+
     xclipped = 0;
     x_start = 0;
     x_end = sprite_width;
