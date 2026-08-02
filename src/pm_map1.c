@@ -1786,31 +1786,40 @@ after_marker:
 // FUNCTION: C2WIN 0x0045ef7d
 void print_test_info(void)
 {
-    int debug_value;
-    int colour;
+    int v;
+    int col;
+    int fig;
 
     if (test_mode1 != 0) {
         if (((pm_shown_ptr) >= 0x0FFF0000)) return;
         old_sprite_x = sprite_x;
         old_sprite_y = sprite_y;
-        debug_value = (signed char)(*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain;
-        if (debug_value < 0) { debug_value = -debug_value; colour = 3; }
-        else                colour = 0x3f;
-        font_no(debug_value, 0x20, " ",
+        v = (signed char)(*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).terrain;
+#if PLATFORM_WINDOWS
+        if (v < 0) { v = -v; col = 0xf9; }
+#else
+        if (v < 0) { v = -v; col = 3; }
+#endif
+        else       col = 0x3f;
+        font_no(v, 0x20, " ",
                 sprite_x + 0x14 - pm_diamond_width, sprite_y + 0xa,
-                font1, colour);
+                font1, col);
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     } else if (test_mode2 != 0) {
         if (((pm_shown_ptr) >= 0x0FFF0000)) return;
         old_sprite_x = sprite_x;
         old_sprite_y = sprite_y;
-        debug_value = (signed char)(*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).road_aqueduct;
-        if (debug_value < 0) { debug_value = -debug_value; colour = 3; }
-        else                colour = 0x3f;
-        font_no(debug_value, 0x20, " ",
+        v = (signed char)(*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).road_aqueduct;
+#if PLATFORM_WINDOWS
+        if (v < 0) { v = -v; col = 0xf9; }
+#else
+        if (v < 0) { v = -v; col = 3; }
+#endif
+        else       col = 0x3f;
+        font_no(v, 0x20, " ",
                 sprite_x + 0x14 - pm_diamond_width, sprite_y + 0xa,
-                font1, colour);
+                font1, col);
         sprite_x = old_sprite_x;
         sprite_y = old_sprite_y;
     }
