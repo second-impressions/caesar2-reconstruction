@@ -164,7 +164,7 @@ int fb_line_length;
 int got_cursx;
 int cursor_x;
 int cursor_y;
-unsigned char * text_pointer;
+char * text_pointer;
 char insert_text[100];
 int char_count;
 int this_letter;
@@ -2952,11 +2952,11 @@ void font_centre(int entry_idx, int word_count, int x_left, int y,
     text_pointer += get_buffer_ofset(entry_idx);
 
     while (word_count > 0) {
-        if (*text_pointer == 0 && (*(text_pointer - 1) >= ' ' || *(text_pointer - 1) == 0)) word_count--;
+        if ((unsigned char)*text_pointer == 0 && ((unsigned char)*(text_pointer - 1) >= ' ' || (unsigned char)*(text_pointer - 1) == 0)) word_count--;
         text_pointer++;
     }
 
-    while (*text_pointer < ' ') text_pointer++;
+    while ((unsigned char)*text_pointer < ' ') text_pointer++;
 
     width  = get_string_width(text_pointer, font);
     offset = (total_width - width) / 2;
@@ -2975,11 +2975,11 @@ void font_list(int entry_idx, int word_count, int x, int y, unsigned char *font,
     text_pointer += get_buffer_ofset(entry_idx);
 
     while (word_count > 0) {
-        if (*text_pointer == 0 && (*(text_pointer - 1) >= ' ' || *(text_pointer - 1) == 0)) word_count--;
+        if ((unsigned char)*text_pointer == 0 && ((unsigned char)*(text_pointer - 1) >= ' ' || (unsigned char)*(text_pointer - 1) == 0)) word_count--;
         text_pointer++;
     }
 
-    while (*text_pointer < ' ') text_pointer++;
+    while ((unsigned char)*text_pointer < ' ') text_pointer++;
 
     put_a_font_string(text_pointer, x, y, font, color);
     font_screen_limit = 0;
