@@ -280,33 +280,44 @@ void rotate_pm_clockwise(void)
     get_pseudo_map(map_direction);
 
     if (zoom_level == 0) {
-        next_x = (pm_y + 0xe) / 2;
-        next_y = (0x50 - (pm_x + 4)) * 2;
-        pm_x = next_x - 4;
-        pm_y = next_y - 0xe;
+        next_y = (pm_y + 0xe) / 2;
+        next_x = (0x50 - (pm_x + 4)) * 2;
+        pm_x = next_y - 4;
+        pm_y = next_x - 0xe;
     } else if (zoom_level == 1) {
         if (map_mode == 2) {
-            next_x = (pm_y + 0x16) / 2;
-            next_y = (0x50 - (pm_x + 0xb)) * 2;
-            pm_x = next_x - 0xb;
-            pm_y = next_y - 0x16;
+            next_y = (pm_y + 0x16) / 2;
+            next_x = (0x50 - (pm_x + 0xb)) * 2;
+            pm_x = next_y - 0xb;
+            pm_y = next_x - 0x16;
         } else {
-            next_x = (pm_y + 0x1e) / 2;
-            next_y = (0x50 - (pm_x + 8)) * 2;
-            pm_x = next_x - 8;
-            pm_y = next_y - 0x1e;
+            next_y = (pm_y + 0x1e) / 2;
+            next_x = (0x50 - (pm_x + 8)) * 2;
+            pm_x = next_y - 8;
+            pm_y = next_x - 0x1e;
         }
     } else if (zoom_level == 2) {
         if (map_mode == 2) {
             pm_x = 0xd;
             pm_y = 0x18;
+#if PLATFORM_DOS
             return;
+#endif
         }
-        next_x = (pm_y + 0x46) / 2;
-        next_y = (0x50 - (pm_x + 0xa)) * 2;
-        pm_x = next_x - 0x14;
-        pm_y = next_y - 0x46;
+#if PLATFORM_WINDOWS
+        else
+#endif
+        {
+            next_y = (pm_y + 0x46) / 2;
+            next_x = (0x50 - (pm_x + 0xa)) * 2;
+            pm_x = next_y - 0x14;
+            pm_y = next_x - 0x46;
+        }
     }
+#if PLATFORM_WINDOWS
+    if (map_mode == 0) city_rotation = map_direction;
+    else               prov_rotation = map_direction;
+#endif
 }
 
 // Rotates the pseudo-map orientation anticlockwise.
