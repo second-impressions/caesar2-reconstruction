@@ -3650,15 +3650,15 @@ void xor_a_diamond_top(int x, int y, int width, int height, int colour)
 // FUNCTION: C2WIN 0x0044f2a3
 void xor_a_diamond_lhs_top(int x, int y, int width, int height, int color)
 {
-    int x_offset;
-    int y_offset;
+    int i;
+    int j;
+    int k;
 
     width += 2;
-    x_offset = 0; y_offset = height / 2 - 1;
+    i = 0; j = height / 2 - 1; k = height / 2;
 
-    for ( ; x_offset < width / 2; x_offset += 2, y_offset--) {
-        xor_internal_2point(x + x_offset, y + y_offset, color);
-    }
+    for ( ; i < width / 2; i += 2, j--, k++) {
+        xor_internal_2point(x + i, y + j, color); }
 }
 
 // Draw the top-right half of an XOR diamond outline.
