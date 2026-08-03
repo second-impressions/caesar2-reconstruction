@@ -725,7 +725,7 @@ int convert_lbm_file(unsigned char *src, unsigned char *dst, char *pal, int leng
     unsigned char no_of_planes;
     unsigned char pal_component;
     unsigned char *chunk_ptr;
-    int c;
+    unsigned int c;
     int b;
     int body_length;
 
