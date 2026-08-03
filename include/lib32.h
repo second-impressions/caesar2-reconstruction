@@ -137,6 +137,10 @@ extern int x_is;
 extern int fb_no_of_lines;
 extern int fb_limit;
 extern int fb_count;
+#if PLATFORM_WINDOWS
+extern int fb_current_char_length;
+extern int fb_max_char_length;
+#endif
 extern struct dpmi_mem_info memory;
 extern unsigned char allow_padding;
 extern unsigned char hot_key_out_off_build;

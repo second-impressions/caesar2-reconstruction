@@ -2501,17 +2501,23 @@ void get_text_pointer(int entry_idx, int word_count)
 
 // One-iteration handler for the in-place format_buffer text editor (used by the "enter a name"
 // prompts). Reads one keystroke from the keyboard polling globals (key_ready / key_ascii /
-// key_code) and updates `this_letter` (cursor position) and the buffer contents.
+// key_code) and updates the editor cursor and buffer contents.
+#if PLATFORM_WINDOWS
+#define edit_cursor fb_count
+#else
+#define edit_cursor this_letter
+#endif
+
 // FUNCTION: C2 0x26518
 // FUNCTION: C2WIN 0x0044cfeb
 int edit_format_buffer(void)
 {
     int i;
 
-    if (this_letter > fb_current_char_length)
-        this_letter = fb_current_char_length;
-    if (this_letter < 0)
-        this_letter = 0;
+    if (edit_cursor > fb_current_char_length)
+        edit_cursor = fb_current_char_length;
+    if (edit_cursor < 0)
+        edit_cursor = 0;
 
     if (key_ready != 1) return 0;
 
@@ -2523,36 +2529,36 @@ int edit_format_buffer(void)
         /* Function keys / arrows / Home / End / Insert. */
         if (key_code == 0x53) del_fb();           /* Delete */
         if (key_code == 0x52) insert_cursor ^= 1; /* Insert */
-        if (key_code == 0x47) this_letter = 0;    /* Home   */
+        if (key_code == 0x47) edit_cursor = 0;    /* Home   */
 
-        if (key_code == 0x4b && this_letter > 0)  /* Left   */
-            this_letter--;
+        if (key_code == 0x4b && edit_cursor > 0)  /* Left   */
+            edit_cursor--;
 
         if (key_code == 0x48) {                    /* Up     */
             for (i = 0; i < 0xa; i++)
-                if (this_letter > 0) this_letter--;
+                if (edit_cursor > 0) edit_cursor--;
         }
         if (at_limit != 0) return 0;
 
         if (key_code == 0x4d                       /* Right  */
-            && this_letter < fb_current_char_length)
-            this_letter++;
+            && edit_cursor < fb_current_char_length)
+            edit_cursor++;
 
         if (fb_limit == 1) return 0;
 
         if (key_code == 0x50) {                    /* Down   */
             for (i = 0; i < 0xa; i++)
-                if (this_letter < fb_current_char_length) this_letter++;
+                if (edit_cursor < fb_current_char_length) edit_cursor++;
         }
         if (key_code == 0x4f)                      /* End    */
-            this_letter = fb_current_char_length;
+            edit_cursor = fb_current_char_length;
         return 0;
     }
 
     /* Printable / control: backspace and the per-codepage whitelist. */
     if (key_ascii == 8) {                          /* BS     */
-        if (this_letter > 0) {
-            this_letter--;
+        if (edit_cursor > 0) {
+            edit_cursor--;
             at_limit = 0;
             del_fb();
             return 0;
@@ -2574,10 +2580,10 @@ int edit_format_buffer(void)
     else if (key_ascii >= 0xa0 && key_ascii <= 0xa7) to_fb();
     else if (key_ascii == 0xe1) to_fb();
 
-    if (this_letter >= fb_max_char_length)
-        this_letter = fb_max_char_length;
-    if (this_letter < 0)
-        this_letter = 0;
+    if (edit_cursor >= fb_max_char_length)
+        edit_cursor = fb_max_char_length;
+    if (edit_cursor < 0)
+        edit_cursor = 0;
     return 0;
 }
 
@@ -2624,12 +2630,6 @@ void to_fb(void)
 
 // Delete a single character from the format buffer, shifting the tail left by one. Skipped when
 // at_limit is set.
-#if PLATFORM_WINDOWS
-#define edit_cursor fb_count
-#else
-#define edit_cursor this_letter
-#endif
-
 // FUNCTION: C2 0x2689d
 // FUNCTION: C2WIN 0x0044d568
 void del_fb(void)
