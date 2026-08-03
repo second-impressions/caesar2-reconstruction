@@ -3717,7 +3717,6 @@ void xor_a_diamond_lhs_top(int x, int y, int width, int height, int color)
 
 void draw_a_rect(int x, int y, int w, int h, int colour);
 void write_image(unsigned char *sprite_data, int image_idx, int x, int y);
-void xclip(int clip_left, int clip_right);
 void yclip(int clip_top, int clip_bottom);
 void do_32_count(void);
 
@@ -3735,6 +3734,8 @@ void xor_a_diamond_rhs_top(int x, int y, int width, int height, int color)
     for ( ; i < width - 2; i += 2, j--, k++) {
         xor_internal_2point(x + i, y + k, color); }
 }
+
+void xclip(int clip_left, int clip_right);
 
 // Filled (solid) rectangle by stacking horizontal draw_a_line calls from y to y + h - 1. Returns
 // early if w or h is non-positive.
