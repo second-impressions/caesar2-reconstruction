@@ -4065,6 +4065,9 @@ int get_longest_distance(int x1, int y1, int x2, int y2)
     return x_diff;
 }
 
+void start_game(void);
+void exit_game(void);
+
 // min(|dx|, |dy|) — the shortest leg of the bounding rectangle.
 // FUNCTION: C2 0x28368
 // FUNCTION: C2WIN 0x0044fe69
