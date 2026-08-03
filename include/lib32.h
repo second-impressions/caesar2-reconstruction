@@ -163,6 +163,10 @@ extern int sprite_width;
 extern int sprite_image_no;
 extern int sprite3_image_no;
 extern int sprite2_height;
+#if PLATFORM_WINDOWS
+extern int sprite2_image_no;
+extern int sprite_start;
+#endif
 extern int data_ptr;
 extern int sprite2_image_no;
 extern int sprite_start;
