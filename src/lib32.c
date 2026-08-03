@@ -338,6 +338,7 @@ void string_to_upper(unsigned char *s);
 int my_strcmp(unsigned char *s1, unsigned char *s2, int n);
 void my_strcpy(char *src, char *dst, int n);
 void xclip(int clip_left, int clip_right);
+int totalXpercent(int total, int percent);
 void yclip(int clip_top, int clip_bottom);
 void setup_scratch_buffer(void);
 void stop_system(void);
@@ -3958,8 +3959,6 @@ void scatter(void)
     }
     scat128 = scatseed & 0x7f;
 }
-
-int totalXpercent(int total, int percent);
 
 // Uniformly-distributed bounded random in [0, max]. Pulls a sample from the cached rand32000 word,
 // masks it down to the smallest 2^k - 1 mask >= max, and rejects/retries (calling random() to
