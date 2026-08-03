@@ -2597,34 +2597,34 @@ void to_fb(void)
     int cursor_idx;
     int last_idx;
 
-    if (fb_limit == 2) { if (this_letter > fb_current_char_length) return;
+    if (fb_limit == 2) { if (edit_cursor > fb_current_char_length) return;
     } else {
-        if (this_letter >= fb_current_char_length) return;
+        if (edit_cursor >= fb_current_char_length) return;
     }
 
-    cursor_idx = this_letter;
+    cursor_idx = edit_cursor;
     if (insert_cursor || at_limit == 1) {
         /* Insert a character and shift the remaining text right. */
         if (fb_max_width_reached) return;
         if (fb_current_char_length < fb_max_char_length) {
-            push_string_right(&format_buffer[this_letter],
+            push_string_right(&format_buffer[edit_cursor],
                               &format_buffer[fb_current_char_length + 1]);
-            format_buffer[this_letter] = key_ascii;
-            this_letter = this_letter + 1;
+            format_buffer[edit_cursor] = key_ascii;
+            edit_cursor = edit_cursor + 1;
         }
     } else {
         /* Overwrite the current character and advance when space permits. */
-        format_buffer[this_letter] = key_ascii;
+        format_buffer[edit_cursor] = key_ascii;
         if (fb_max_width_reached) return;
         if (fb_current_char_length >= fb_max_char_length) {
-            if (this_letter < fb_current_char_length)
-                this_letter = this_letter + 1;
+            if (edit_cursor < fb_current_char_length)
+                edit_cursor = edit_cursor + 1;
             return;
         }
         if (fb_limit == 2)
-            this_letter = this_letter + 1;
-        else if (this_letter < fb_current_char_length - 1)
-            this_letter = this_letter + 1;
+            edit_cursor = edit_cursor + 1;
+        else if (edit_cursor < fb_current_char_length - 1)
+            edit_cursor = edit_cursor + 1;
     }
 }
 
