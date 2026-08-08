@@ -192,31 +192,30 @@ int war_trouble(void)
 // FUNCTION: C2 0x5341a
 // FUNCTION: C2WIN 0x0046f33d
 int chance_of_attack(int trouble_type, int months_since,
-                     int probe_only, int scan_all_borders)
+                     int probe_only, int p4)
 {
-    int honeymoon_years;
+    int honeymoon;
     int frequency;
-    int debar_months;
+    int debar;
 
     attack_from_sea = 0;
-    honeymoon_years = skill_to_trouble_honeymoons[c2inf.skill_level][trouble_type];
+    honeymoon = skill_to_trouble_honeymoons[c2inf.skill_level][trouble_type];
     frequency = skill_to_trouble_frequency[c2inf.skill_level][trouble_type];
-    debar_months = skill_to_trouble_debar[c2inf.skill_level][trouble_type];
+    debar = skill_to_trouble_debar[c2inf.skill_level][trouble_type];
 
-    if (honeymoon_years > years_elapsed_in_region) return 0;
-    if (months_since <= debar_months)               return 0;
+    if (honeymoon > years_elapsed_in_region) return 0;
+    if (months_since <= debar) return 0;
     random();
     if (rand128 < 20)                        return 0;
     if (frequency + 20 <= rand128)           return 0;
 
-    if (probe_only == 0) {
-        attack_direction = get_attackers(rand128 & 3, scan_all_borders);
-        if (attack_direction >= 8) return 0;
-        if (attack_direction == 0 && north_trader_is == 1) attack_from_sea = 1;
-        if (attack_direction == 2 && east_trader_is  == 1) attack_from_sea = 1;
-        if (attack_direction == 4 && south_trader_is == 1) attack_from_sea = 1;
-        if (attack_direction == 6 && west_trader_is  == 1) attack_from_sea = 1;
-    }
+    if (probe_only != 0) return 1;
+    attack_direction = get_attackers(rand128 & 3, p4);
+    if (attack_direction >= 8) return 0;
+    if (attack_direction == 0 && north_trader_is == 1) attack_from_sea = 1;
+    if (attack_direction == 2 && east_trader_is  == 1) attack_from_sea = 1;
+    if (attack_direction == 4 && south_trader_is == 1) attack_from_sea = 1;
+    if (attack_direction == 6 && west_trader_is  == 1) attack_from_sea = 1;
     return 1;
 }
 
