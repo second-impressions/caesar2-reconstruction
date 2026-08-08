@@ -2192,6 +2192,7 @@ void clear_keys(void)
 
 void pull_string_left(char *p, char *end);
 void push_string_right(char *start, char *end);
+void strip_fb_spaces(void);
 unsigned char to_upper(unsigned char c);
 
 // Bounded byte-compare of two strings: returns 1-based index of first mismatch, or 0 if all `n`
