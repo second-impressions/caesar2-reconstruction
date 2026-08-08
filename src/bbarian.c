@@ -581,22 +581,29 @@ int get_next_temp_cohort(int strict)
 // FUNCTION: C2WIN 0x004706fe
 void get_cohorts_in_action(void)
 {
-    int cohort_idx;
+    int i;
 
-    for (no_of_cohorts_in_action = cohort_idx = 0; cohort_idx < 10; cohort_idx++) cohort_in_action[cohort_idx] = 0;
+    i = 0;
+    no_of_cohorts_in_action = 0;
+    for (; i < 10; i++) cohort_in_action[i] = 0;
 
     for (army_no = 1; army_no < 26; army_no++) {
         if (army_list[army_no].exists != 0 &&
             army_list[army_no].type   == 1) {
-            if (army_list[army_no].cohort_id >= 10) test_beeps();
-            else {
-                cohort_in_action[army_list[army_no].cohort_id] = 1;
-                no_of_cohorts_in_action++;
+            if (army_list[army_no].cohort_id >= 10) {
+                test_beeps();
+                continue;
             }
+            cohort_in_action[army_list[army_no].cohort_id] = 1;
+            no_of_cohorts_in_action++;
         }
     }
 
-    for (next_cohort_free = cohort_idx = 0; cohort_idx < 10; ) { if (cohort_in_action[cohort_idx] == 0) break; cohort_idx++; next_cohort_free++; }
+    i = 0;
+    next_cohort_free = 0;
+    for (; i < 10; i++, next_cohort_free++) {
+        if (cohort_in_action[i] == 0) break;
+    }
 }
 
 // Selects the previous or next active cohort in the forum view.
