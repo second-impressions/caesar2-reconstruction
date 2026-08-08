@@ -223,21 +223,21 @@ int chance_of_attack(int trouble_type, int months_since,
 // Selects an eligible neighboring region and returns its compass direction.
 // FUNCTION: C2 0x534fd
 // FUNCTION: C2WIN 0x0046f4d0
-int get_attackers(int border_idx, int scan_all_borders)
+int get_attackers(int dir, int scan_all)
 {
-    int region_idx;
+    int kind;
     int i;
 
-    if (scan_all_borders) {
+    if (scan_all) {
         /* Scan all four borders; return the first one whose kind is a
            known hostile category (6/f/12/22) and whose empire entry is
            not the friendly value (6). */
         for (i = 0; i < 4; i++) {
-            region_idx = region_borders[province_is].u.dir[i];
-            if (region_idx == 6 || region_idx == 0xf || region_idx == 0x12 || region_idx == 0x22) {
-                if (empire[region_idx] != 6) {
-                    attacking_region = region_idx;
-                    return i + i;
+            kind = region_borders[province_is].u.dir[i];
+            if (kind == 6 || kind == 0xf || kind == 0x12 || kind == 0x22) {
+                if (empire[kind] != 6) {
+                    attacking_region = kind;
+                    return i * 2;
                 }
             }
         }
@@ -246,14 +246,12 @@ int get_attackers(int border_idx, int scan_all_borders)
         /* Single-direction probe with the opposite eligibility test:
            the four "hostile" kinds (6/f/12/22) are rejected here, only
            neighbours outside that set are candidates. */
-        region_idx = region_borders[province_is].u.dir[border_idx];
-        if (region_idx == 6)    return 8;
-        if (region_idx == 0xf)  return 8;
-        if (region_idx == 0x12) return 8;
-        if (region_idx == 0x22) return 8;
-        if (empire[region_idx] == 6) return 8;
-        attacking_region = region_idx;
-        return border_idx * 2;
+        kind = region_borders[province_is].u.dir[dir];
+        if (kind == 6 || kind == 0xf || kind == 0x12 || kind == 0x22) return 8;
+        if (empire[kind] != 6) {
+            attacking_region = kind;
+            return dir * 2;
+        }
     }
     return 8;
 }
