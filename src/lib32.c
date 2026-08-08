@@ -2905,7 +2905,7 @@ int one_letter(unsigned char *font, unsigned char letter)
     sprite_image_no = sprite_image_no - 1;
     data_ptr = (sprite_image_no << 4) + 8;
 
-    sprite_y += (unsigned char)font[data_ptr + 13];
+    sprite_y += font[data_ptr + 13];
 
     if (font == font1) {
         if (letter >= 'a' && letter <= 'm') {
