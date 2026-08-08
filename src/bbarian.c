@@ -424,26 +424,27 @@ int get_region_revolt_points(void)
 // FUNCTION: C2WIN 0x0046ff71
 int barbarian_invades_city(int army_idx)
 {
-    int   invader_count;
-    int   direction;
-    int   placed_count;
-    int   attempts;
-    unsigned char terrain;
+    int count;
+    int dir;
+    int placed;
+    unsigned char square;
 
-    if      (army_list[army_idx].total_troops >= 0x320) invader_count = 9;
-    else if (army_list[army_idx].total_troops >= 0x258) invader_count = 7;
-    else if (army_list[army_idx].total_troops >= 0x190) invader_count = 5;
-    else if (army_list[army_idx].total_troops >=  0xc8) invader_count = 3;
-    else                                                invader_count = 2;
+    if      (army_list[army_idx].total_troops >= 0x320) count = 9;
+    else if (army_list[army_idx].total_troops >= 0x258) count = 7;
+    else if (army_list[army_idx].total_troops >= 0x190) count = 5;
+    else if (army_list[army_idx].total_troops >=  0xc8) count = 3;
+    else                                                count = 2;
 
-    direction = (army_list[army_idx].world_dir + 4) % 8;
+    dir = (army_list[army_idx].world_dir + 4) % 8;
 
-    for (placed_count = 0; placed_count < invader_count; placed_count++) {
+    for (placed = 0; placed < count; placed++) {
+        int attempts;
+
         for (attempts = 0; attempts++ < 10; ) {
-            get_random_start_points_from_dirc(direction, 0x50, 0x3f);
+            get_random_start_points_from_dirc(dir, 0x50, 0x3f);
             barb_ptr = (barb_y * CITY_W + barb_x) * CITY_CELL_BYTES;
-            terrain = (*(struct city_cell *)((unsigned char *)city_map + (barb_ptr))).terrain;
-            if (terrain & 0xe7) {
+            square = (*(struct city_cell *)((unsigned char *)city_map + (barb_ptr))).terrain;
+            if (square & 0xe7) {
                 clear_an_area(barb_x, barb_y, barb_x, barb_y);
             }
             if (create_citizen(3, barb_x, barb_y, 0) == 0) goto finished;
@@ -458,7 +459,7 @@ int barbarian_invades_city(int army_idx)
     }
 
 finished:
-    if (placed_count == 0) return 0;
+    if (placed == 0) return 0;
 
     put_message(0x53, citizen_list[created_citizen_no].map_ref, 0x17);
 
