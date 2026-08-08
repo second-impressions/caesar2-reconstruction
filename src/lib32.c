@@ -3210,18 +3210,15 @@ void click_delay(int delay)
     int i;
     int j;
     int k;
-    for (i = 0; i < 1000; i++)
-        get_mouse();
+    for (i = 0; i < 1000; i++) get_mouse();
     for (j = 0; j < delay; j++) {
         for (k = 0; k < 8000; k++) {
             get_mouse();
-            if (mouse_left_click != 0 || mouse_right_click != 0) {
-                clear_mouse();
-                return;
-            }
-        }
-    }
+            if (mouse_left_click != 0 || mouse_right_click != 0) { clear_mouse(); return; }
+        } }
 }
+
+int clicked_delay(int delay);
 
 // Waits for a click or timeout and reports whether a click occurred.
 // FUNCTION: C2 0x273a4
@@ -3231,17 +3228,12 @@ int clicked_delay(int delay)
     int i;
     int j;
     int k;
-    for (i = 0; i < 1000; i++)
-        get_mouse();
+    for (i = 0; i < 1000; i++) get_mouse();
     for (j = 0; j < delay; j++) {
         for (k = 0; k < 8000; k++) {
             get_mouse();
-            if (mouse_left_click != 0 || mouse_right_click != 0) {
-                clear_mouse();
-                return 1;
-            }
-        }
-    }
+            if (mouse_left_click != 0 || mouse_right_click != 0) { clear_mouse(); return 1; }
+        } }
     return 0;
 }
 
