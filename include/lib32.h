@@ -108,7 +108,6 @@ extern unsigned char * internal_screen;
 extern char extension[4];
 extern int file_no;
 extern char *media_file;
-extern int screen_height;
 extern int drive_name;
 extern int file_string;
 extern char screen_refresh_flag;
@@ -117,6 +116,7 @@ extern unsigned char screen_mode;
 extern unsigned char pointer_mode;
 extern void set_vga_mode(int mode);
 extern void page1_read(void);
+extern int screen_height;
 extern void set_vga_palette(char *p);
 extern void set_vga_palette_range(char *p, int start, int end);
 
