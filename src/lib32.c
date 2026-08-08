@@ -4096,14 +4096,7 @@ int start_system(void)
 
     randseed = 0x54657687;
     scatseed = 0x34518632;
-#if PLATFORM_WINDOWS
     test_mode1 = test_mode2 = test_mode3 = test_mode4 = 0;
-#else
-    test_mode4 = 0;
-    test_mode3 = 0;
-    test_mode2 = 0;
-    test_mode1 = 0;
-#endif
     used_memory = 0;
     for (i = 0; i < 0x300; i++)
         black_out_data[i] = 0;
@@ -4143,12 +4136,8 @@ int start_system(void)
     set_mouse_limits();
     pointer_mode = 0;
     dos_memory = 0;
-#if PLATFORM_WINDOWS
     if (exit_flag != 0) return 0;
     else return 1;
-#else
-    return exit_flag == 0;
-#endif
 }
 
 #if PLATFORM_DOS
