@@ -3960,6 +3960,9 @@ void scatter(void)
     scat128 = scatseed & 0x7f;
 }
 
+int totalXpercentX100(int total, int percent_x100);
+int valueDIVtotal(int value, int total);
+
 // Uniformly-distributed bounded random in [0, max]. Pulls a sample from the cached rand32000 word,
 // masks it down to the smallest 2^k - 1 mask >= max, and rejects/retries (calling random() to
 // reseed rand32000) if the masked sample exceeds max.
@@ -3968,7 +3971,7 @@ void scatter(void)
 int get_rand_max(int max)
 {
     int i;
-    int mask;
+    unsigned int mask;
     int v;
 
     if (max <= 0) return 0;
@@ -4048,6 +4051,14 @@ int get_distance(int x1, int y1, int x2, int y2)
     return x_diff + y_diff;
 }
 
+int get_longest_distance(int x1, int y1, int x2, int y2);
+int get_shortest_distance(int x1, int y1, int x2, int y2);
+int lock_region(unsigned int address, unsigned int size);
+void start_game(void);
+void exit_game(void);
+void stop_system(void);
+void free_scratch_buffer(void);
+
 // Chebyshev (king-move) distance: max(|dx|, |dy|).
 // FUNCTION: C2 0x28333
 // FUNCTION: C2WIN 0x0044fdc9
@@ -4064,9 +4075,6 @@ int get_longest_distance(int x1, int y1, int x2, int y2)
     if (x_diff < y_diff) return y_diff;
     return x_diff;
 }
-
-void start_game(void);
-void exit_game(void);
 
 // min(|dx|, |dy|) — the shortest leg of the bounding rectangle.
 // FUNCTION: C2 0x28368
