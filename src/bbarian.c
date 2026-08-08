@@ -555,22 +555,23 @@ void get_random_start_points_from_dirc(int direction, int map_size, int random_m
 // Advances `temp_army` to the next eligible cohort in round-robin order.
 // FUNCTION: C2 0x53e8e
 // FUNCTION: C2WIN 0x00470607
-int get_next_temp_cohort(int require_target)
+int get_next_temp_cohort(int strict)
 {
-    int attempts;
+    int retries;
 
-    for (attempts = 0; attempts < 26; attempts++) {
+    for (retries = 0; retries < 26; retries++) {
         temp_army++;
         if (temp_army >= 26)
             temp_army = 1;
 
-        if (army_list[temp_army].exists == 0) continue;
-        if (army_list[temp_army].type   != 1) continue;
-        if (require_target != 0) {
-            if (army_list[temp_army].state_idx    == 10) continue;
-            if (army_list[temp_army].target_timer == 0)  continue;
+        if (army_list[temp_army].exists != 0 &&
+            army_list[temp_army].type == 1) {
+            if (strict != 0) {
+                if (army_list[temp_army].state_idx == 10) continue;
+                if (army_list[temp_army].target_timer == 0) continue;
+            }
+            return 1;
         }
-        return 1;
     }
     return 0;
 }
