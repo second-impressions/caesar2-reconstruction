@@ -61,7 +61,8 @@ void init_region_trouble(void)
 int revolt_trouble(void)
 {
     months_since_last_revolt++;
-    if (chance_of_attack(0, months_since_last_revolt, 0, 0) && revolt_in_region(0, 0)) {
+    if (chance_of_attack(0, months_since_last_revolt, 0, 0) == 0) return 0;
+    if (revolt_in_region(0, 0)) {
         army_list[created_army_no].source_region = province_is;
         army_list[created_army_no].tribe_id = tribe_type[province_is];
 
