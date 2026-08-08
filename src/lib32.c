@@ -2105,14 +2105,9 @@ void cover_mouse_droppings(void)
 // FUNCTION: C2WIN 0x0044c6d3
 int mouse_in_area(int x, int y, int w, int h)
 {
-    if (x <= mouse_x) {
-        if (x + w > mouse_x) {
-            if (y <= mouse_y) {
-                if (y + h > mouse_y) {
-                    return 1;
-                }
-            }
-        }
+    if (x <= mouse_x && x + w > mouse_x) {
+        if (y <= mouse_y && y + h > mouse_y)
+            return 1;
     }
     return 0;
 }
