@@ -131,14 +131,12 @@ extern char * text_pointer;
 extern char insert_text[];
 extern int char_count;
 extern int this_letter;
-#if PLATFORM_WINDOWS
 extern int fb_current_char_length;
 extern int fb_max_char_length;
 extern void cycle_colours(int start_idx, int end_idx);
 extern void pulse_red(int idx, int delta);
 extern void swap_background_to_red(void);
 extern void swap_background_to(int idx);
-#endif
 extern int insert_count;
 extern int insert_place;
 extern int x_is;
@@ -150,12 +148,6 @@ extern unsigned char allow_padding;
 extern unsigned char hot_key_out_off_build;
 extern unsigned char hold_hot_keys;
 extern unsigned char padding_off;
-#if !PLATFORM_WINDOWS
-extern void cycle_colours(int start_idx, int end_idx);
-extern void pulse_red(int idx, int delta);
-extern void swap_background_to_red(void);
-extern void swap_background_to(int idx);
-#endif
 
 /* Symbol page 5 (PS emission page 6). */
 extern int sprite_height;
@@ -169,13 +161,9 @@ extern int sprite_width;
 extern int sprite_image_no;
 extern int sprite3_image_no;
 extern int sprite2_height;
-#if PLATFORM_WINDOWS
 extern int sprite2_image_no;
 extern int sprite_start;
-#endif
 extern int data_ptr;
-extern int sprite2_image_no;
-extern int sprite_start;
 extern int sprite2_width;
 extern int sprite3_width;
 extern int sprite_base_y;
