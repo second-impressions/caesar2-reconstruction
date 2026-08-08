@@ -1,6 +1,11 @@
 
 #include "c2_data.h"
 
+#if PLATFORM_WINDOWS
+extern void *main_window;
+extern void show_native_battle_outtro(void *window);
+#endif
+
 /* File-local state. */
 int revolt_size;
 int barb_ptr;
@@ -940,6 +945,16 @@ void battle_intro(void)
 // FUNCTION: C2WIN 0x00471794
 void battle_outtro(void)
 {
+#if PLATFORM_WINDOWS
+    pointer_mode = 0;
+    last_icon_over = 0;
+    selected_icon_text = 0;
+    selected_icon_no = 0;
+    last_icon_used = 0;
+    refresh_svga_screen();
+    show_native_battle_outtro(main_window);
+    stop_db();
+#else
     pointer_mode = 0;
     show_battle_outtro_screen();
     out1 = 0;
@@ -950,6 +965,7 @@ void battle_outtro(void)
         }
     }
     stop_db();
+#endif
 }
 
 // Removes all troops from the player's army after a surrender.
