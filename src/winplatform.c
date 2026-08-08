@@ -8,6 +8,30 @@ extern unsigned char window_mouse_state_3;
 extern unsigned char window_mouse_state_4;
 extern unsigned char window_mouse_state_5;
 extern unsigned char window_mouse_state_6;
+extern void *main_window;
+extern unsigned int window_timer;
+
+extern int (__stdcall *KillTimer)(void *window, unsigned int timer);
+
+void close_window_graphics(void);
+void free_window_images(void);
+void free_window_image_list(void);
+void delete_window_fonts(void);
+
+// FUNCTION: C2WIN 0x0043a1ad
+void close_windows(void)
+{
+    int i;
+
+    if (window_timer != 0) {
+        KillTimer(main_window, window_timer);
+        window_timer = 0;
+    }
+    close_window_graphics();
+    free_window_images();
+    free_window_image_list();
+    delete_window_fonts();
+}
 
 // FUNCTION: C2WIN 0x0041dbab
 void clear_mouse_input(void)
