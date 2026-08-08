@@ -1878,17 +1878,11 @@ void read_mouse(void)
 // FUNCTION: C2WIN 0x0044c161
 void wait_click(void)
 {
-#if PLATFORM_WINDOWS
     for (;;) {
         read_mouse();
         if (mse_button != 0)
             break;
     }
-#else
-    do {
-        read_mouse();
-    } while (mse_button == 0);
-#endif
 }
 
 // Drain any held mouse buttons and reset the click/preclick latches.
