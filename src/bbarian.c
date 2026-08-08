@@ -663,7 +663,6 @@ int get_actual_viewed_army(void)
 // FUNCTION: C2WIN 0x00470a6a
 void init_traders(void)
 {
-    int province_idx;
     int neighbor_region;
 
     north_trader_count0 = 2;
@@ -675,14 +674,13 @@ void init_traders(void)
     west_trader_count0  = 8;
     west_trader_count1  = 0x10;
 
-    province_idx = province_is;
-    neighbor_region = region_borders[province_idx].u.side.north;
+    neighbor_region = region_borders[province_is].u.side.north;
     north_trader_brings = region_sources[neighbor_region].primary;
-    neighbor_region = region_borders[province_idx].u.side.east;
+    neighbor_region = region_borders[province_is].u.side.east;
     east_trader_brings  = region_sources[neighbor_region].primary;
-    neighbor_region = region_borders[province_idx].u.side.south;
+    neighbor_region = region_borders[province_is].u.side.south;
     south_trader_brings = region_sources[neighbor_region].primary;
-    neighbor_region = region_borders[province_idx].u.side.west;
+    neighbor_region = region_borders[province_is].u.side.west;
     west_trader_brings  = region_sources[neighbor_region].primary;
 }
 
