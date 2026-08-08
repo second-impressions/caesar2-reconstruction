@@ -3245,8 +3245,7 @@ void do_delay(int n)
     int i;
     int j;
     for (i = 0; i < n; i++)
-        for (j = 0; j < 25; j++)
-            wvbl2();
+        for (j = 0; j < 25; j++) wvbl2();
 }
 
 // Returns the number of milliseconds since the previous call, or 999 if the wallclock went
