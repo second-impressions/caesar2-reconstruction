@@ -617,7 +617,7 @@ void get_next_viewed_cohort(int direction)
         if (forum_viewed_army <  0) forum_viewed_army = 10;
         if (forum_viewed_army > 10) forum_viewed_army = 0;
         if (forum_viewed_army == 10) return;
-        if ((cohort_in_action[forum_viewed_army] & 0xff) == 1) return;
+        if (cohort_in_action[forum_viewed_army] == 1) return;
         ++attempts;
         if (attempts >= 11) break;
     }
@@ -632,10 +632,9 @@ void check_viewed_cohort(void)
     get_cohorts_in_action();
     if (forum_viewed_army <  0) forum_viewed_army = 10;
     if (forum_viewed_army > 10) forum_viewed_army = 0;
-    if (forum_viewed_army != 10 &&
-        (cohort_in_action[forum_viewed_army] & 0xff) != 1) {
-        get_next_viewed_cohort(1);
-    }
+    if (forum_viewed_army == 10) return;
+    if (cohort_in_action[forum_viewed_army] == 1) return;
+    get_next_viewed_cohort(1);
 }
 
 // Resolves the cohort selected in the forum to its army-list index.

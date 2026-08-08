@@ -228,7 +228,7 @@ extern int start_sptr;
 extern struct help_hotspot help_page_hot_spots[];
 extern short help_history[];
 extern unsigned char q_people_list[];
-extern char cohort_in_action[];
+extern unsigned char cohort_in_action[];
 extern short citizen_a;
 
 /* Symbol page 9 (PS emission page 23). */

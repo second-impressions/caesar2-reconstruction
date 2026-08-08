@@ -688,7 +688,7 @@ struct army_route_rec army_routes[10];
 signed char fire_zones[100];
 int pseudo_map[PM_H][PM_W];
 unsigned char q_people_list[10];
-char cohort_in_action[10];
+unsigned char cohort_in_action[10];
 struct citizen_rec citizen_list[201];
 unsigned char empire[50];
 struct unit_rec unit_list[51];

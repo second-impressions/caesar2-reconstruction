@@ -211,7 +211,7 @@ extern int cnt8;
 extern int coast_count;
 extern int codesize;
 extern int cohort_drill_spacing[];
-extern char cohort_in_action[];
+extern unsigned char cohort_in_action[];
 extern int colosseum_count;
 extern int colosseum_culture_count;
 extern int colosseum_culture_pass_count;
