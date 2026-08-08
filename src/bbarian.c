@@ -15,7 +15,7 @@ int barb_entry_count;
 int barb_x;
 int barb_y;
 /* Forward declarations (functions defined later in this file). */
-void get_random_start_points_from_dirc(int direction, int map_size, int random_mask);
+void get_random_start_points_from_dirc(int dirc, int size, int mask);
 void do_land_trade(int direction, int cargo, int border_x, int border_y);
 void battle_intro(void);
 void battle_outtro(void);
@@ -505,41 +505,41 @@ finished:
 // Chooses a pseudo-random point on the map edge indicated by `direction`.
 // FUNCTION: C2 0x53d4e
 // FUNCTION: C2WIN 0x004703be
-void get_random_start_points_from_dirc(int direction, int map_size, int random_mask)
+void get_random_start_points_from_dirc(int dirc, int size, int mask)
 {
-    int wrapped_flag;
-    int random_offset;
-    int edge_x;
-    int edge_y;
+    int flag;
+    int seed;
+    int x;
+    int y;
 
     barb_entry_count++;
-    random_offset = (rand128 + barb_entry_count) & random_mask;
-    edge_x = (map_size - random_mask) / 2;
-    if (edge_x < 0) edge_x = 0;
-    edge_y = map_size - random_mask / 4;
-    if (edge_y < 0) edge_y = 0;
-    edge_x += random_offset;
-    edge_y += random_offset / 2;
-    wrapped_flag = 0;
-    if (edge_x >= map_size) edge_x /= 2;
-    if (edge_y >= map_size) { edge_y -= map_size; wrapped_flag = 1; }
+    seed = (rand128 + barb_entry_count) & mask;
+    x = (size - mask) / 2;
+    if (x < 0) x = 0;
+    y = size - mask / 4;
+    if (y < 0) y = 0;
+    x += seed;
+    y += seed / 2;
+    flag = 0;
+    if (x >= size) x /= 2;
+    if (y >= size) { y -= size; flag = 1; }
 
-    if (direction == 0) { barb_x = edge_x; barb_y = 0; }
-    else if (direction == 1) {
-        if (wrapped_flag) { barb_x = map_size - 1; barb_y = edge_y; }
-        else { barb_x = edge_y; barb_y = 0; }
-    } else if (direction == 2) { barb_x = map_size - 1; barb_y = edge_x; }
-    else if (direction == 3) {
-        if (wrapped_flag) { barb_x = map_size - 1 - edge_y; barb_y = map_size - 1; }
-        else { barb_x = map_size - 1; barb_y = edge_y; }
-    } else if (direction == 4) { barb_x = edge_x; barb_y = map_size - 1; }
-    else if (direction == 5) {
-        if (wrapped_flag) { barb_x = 0; barb_y = map_size - 1 - edge_y; }
-        else { barb_x = map_size - 1 - edge_y; barb_y = map_size - 1; }
-    } else if (direction == 6) { barb_x = 0; barb_y = edge_x; }
-    else if (direction == 7) {
-        if (wrapped_flag) { barb_x = edge_y; barb_y = 0; }
-        else { barb_x = 0; barb_y = map_size - 1 - edge_y; }
+    if (dirc == 0) { barb_x = x; barb_y = 0; }
+    else if (dirc == 1) {
+        if (flag) { barb_x = size - 1; barb_y = y; }
+        else { barb_x = y; barb_y = 0; }
+    } else if (dirc == 2) { barb_x = size - 1; barb_y = x; }
+    else if (dirc == 3) {
+        if (flag) { barb_x = size - 1 - y; barb_y = size - 1; }
+        else { barb_x = size - 1; barb_y = y; }
+    } else if (dirc == 4) { barb_x = x; barb_y = size - 1; }
+    else if (dirc == 5) {
+        if (flag) { barb_x = 0; barb_y = size - 1 - y; }
+        else { barb_x = size - 1 - y; barb_y = size - 1; }
+    } else if (dirc == 6) { barb_x = 0; barb_y = x; }
+    else if (dirc == 7) {
+        if (flag) { barb_x = y; barb_y = 0; }
+        else { barb_x = 0; barb_y = size - 1 - y; }
     }
 }
 
