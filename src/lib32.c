@@ -2502,22 +2502,16 @@ void get_text_pointer(int entry_idx, int word_count)
 // One-iteration handler for the in-place format_buffer text editor (used by the "enter a name"
 // prompts). Reads one keystroke from the keyboard polling globals (key_ready / key_ascii /
 // key_code) and updates the editor cursor and buffer contents.
-#if PLATFORM_WINDOWS
-#define edit_cursor fb_count
-#else
-#define edit_cursor this_letter
-#endif
-
 // FUNCTION: C2 0x26518
 // FUNCTION: C2WIN 0x0044cfeb
 int edit_format_buffer(void)
 {
     int i;
 
-    if (edit_cursor > fb_current_char_length)
-        edit_cursor = fb_current_char_length;
-    if (edit_cursor < 0)
-        edit_cursor = 0;
+    if (this_letter > fb_current_char_length)
+        this_letter = fb_current_char_length;
+    if (this_letter < 0)
+        this_letter = 0;
 
     if (key_ready != 1) return 0;
 
@@ -2529,36 +2523,36 @@ int edit_format_buffer(void)
         /* Function keys / arrows / Home / End / Insert. */
         if (key_code == 0x53) del_fb();           /* Delete */
         if (key_code == 0x52) insert_cursor ^= 1; /* Insert */
-        if (key_code == 0x47) edit_cursor = 0;    /* Home   */
+        if (key_code == 0x47) this_letter = 0;    /* Home   */
 
-        if (key_code == 0x4b && edit_cursor > 0)  /* Left   */
-            edit_cursor--;
+        if (key_code == 0x4b && this_letter > 0)  /* Left   */
+            this_letter--;
 
         if (key_code == 0x48) {                    /* Up     */
             for (i = 0; i < 0xa; i++)
-                if (edit_cursor > 0) edit_cursor--;
+                if (this_letter > 0) this_letter--;
         }
         if (at_limit != 0) return 0;
 
         if (key_code == 0x4d                       /* Right  */
-            && edit_cursor < fb_current_char_length)
-            edit_cursor++;
+            && this_letter < fb_current_char_length)
+            this_letter++;
 
         if (fb_limit == 1) return 0;
 
         if (key_code == 0x50) {                    /* Down   */
             for (i = 0; i < 0xa; i++)
-                if (edit_cursor < fb_current_char_length) edit_cursor++;
+                if (this_letter < fb_current_char_length) this_letter++;
         }
         if (key_code == 0x4f)                      /* End    */
-            edit_cursor = fb_current_char_length;
+            this_letter = fb_current_char_length;
         return 0;
     }
 
     /* Printable / control: backspace and the per-codepage whitelist. */
     if (key_ascii == 8) {                          /* BS     */
-        if (edit_cursor > 0) {
-            edit_cursor--;
+        if (this_letter > 0) {
+            this_letter--;
             at_limit = 0;
             del_fb();
             return 0;
@@ -2580,10 +2574,10 @@ int edit_format_buffer(void)
     else if (key_ascii >= 0xa0 && key_ascii <= 0xa7) to_fb();
     else if (key_ascii == 0xe1) to_fb();
 
-    if (edit_cursor >= fb_max_char_length)
-        edit_cursor = fb_max_char_length;
-    if (edit_cursor < 0)
-        edit_cursor = 0;
+    if (this_letter >= fb_max_char_length)
+        this_letter = fb_max_char_length;
+    if (this_letter < 0)
+        this_letter = 0;
     return 0;
 }
 
@@ -2597,34 +2591,34 @@ void to_fb(void)
     int cursor_idx;
     int last_idx;
 
-    if (fb_limit == 2) { if (edit_cursor > fb_current_char_length) return;
+    if (fb_limit == 2) { if (this_letter > fb_current_char_length) return;
     } else {
-        if (edit_cursor >= fb_current_char_length) return;
+        if (this_letter >= fb_current_char_length) return;
     }
 
-    cursor_idx = edit_cursor;
+    cursor_idx = this_letter;
     if (insert_cursor || at_limit == 1) {
         /* Insert a character and shift the remaining text right. */
         if (fb_max_width_reached) return;
         if (fb_current_char_length < fb_max_char_length) {
-            push_string_right(&format_buffer[edit_cursor],
+            push_string_right(&format_buffer[this_letter],
                               &format_buffer[fb_current_char_length + 1]);
-            format_buffer[edit_cursor] = key_ascii;
-            edit_cursor = edit_cursor + 1;
+            format_buffer[this_letter] = key_ascii;
+            this_letter = this_letter + 1;
         }
     } else {
         /* Overwrite the current character and advance when space permits. */
-        format_buffer[edit_cursor] = key_ascii;
+        format_buffer[this_letter] = key_ascii;
         if (fb_max_width_reached) return;
         if (fb_current_char_length >= fb_max_char_length) {
-            if (edit_cursor < fb_current_char_length)
-                edit_cursor = edit_cursor + 1;
+            if (this_letter < fb_current_char_length)
+                this_letter = this_letter + 1;
             return;
         }
         if (fb_limit == 2)
-            edit_cursor = edit_cursor + 1;
-        else if (edit_cursor < fb_current_char_length - 1)
-            edit_cursor = edit_cursor + 1;
+            this_letter = this_letter + 1;
+        else if (this_letter < fb_current_char_length - 1)
+            this_letter = this_letter + 1;
     }
 }
 
@@ -2635,7 +2629,7 @@ void to_fb(void)
 void del_fb(void)
 {
     if (at_limit != 0) return;
-    pull_string_left(&format_buffer[edit_cursor],
+    pull_string_left(&format_buffer[this_letter],
                      &format_buffer[fb_current_char_length]);
 }
 
@@ -2656,17 +2650,15 @@ void copy_fb(char *src, char *dst)
 void test_for_delimiter(void)
 {
     at_limit = 0;
-    if (format_buffer[edit_cursor] == 0)
+    if (format_buffer[this_letter] == 0)
         at_limit = 1;
     if (fb_limit != 1) return;
-    if (format_buffer[edit_cursor] != '.') return;
-    if (edit_cursor < 8)
+    if (format_buffer[this_letter] != '.') return;
+    if (this_letter < 8)
         at_limit = 1;
     else
         at_limit = 2;
 }
-
-#undef edit_cursor
 
 // Walk the format buffer and pull-string-left every space character up to fb_current_char_length,
 // returning early on the first NUL.
@@ -2842,14 +2834,6 @@ void save_format_buffer_to_disk(char *filename, int entry_idx)
 
 int one_letter(unsigned char *font, unsigned char letter);
 
-#if PLATFORM_WINDOWS
-#define font_count this_letter
-#define font_cursor fb_count
-#else
-#define font_count fb_count
-#define font_cursor this_letter
-#endif
-
 // Render a printable string `str` at pixel (x, y) using the bitmap font (font1 / font2). `color`
 // is the palette index for solid pixels; 0 selects the shadow font_style with the default colour.
 // FUNCTION: C2 0x26c2e
@@ -2882,7 +2866,7 @@ void put_a_font_string(char *str, int x, int y, unsigned char *font, int color)
             goto skip_letter;
         ch -= 0x20;
 
-        if (font_count == font_cursor && got_cursx == 0) { cursor_x = x_is; got_cursx = 1; }
+        if (fb_count == this_letter && got_cursx == 0) { cursor_x = x_is; got_cursx = 1; }
 
         sprite_y = y;
 
@@ -2899,7 +2883,7 @@ skip_letter:
             ch = *str;
         }
         letter_count++;
-        font_count++;
+        fb_count++;
 
         if (allow_padding == 0 && padding_off != 0) {
             if (prev_char == ch && (ch == 0x20 || ch == '_')) {
@@ -2912,9 +2896,6 @@ skip_letter:
     allow_padding     = 0;
     font_screen_limit = 0;
 }
-
-#undef font_count
-#undef font_cursor
 
 // Render a single bitmap-font glyph for `letter` from the font table (font1 or font2) at the
 // current sprite position with the supplied clipping box.

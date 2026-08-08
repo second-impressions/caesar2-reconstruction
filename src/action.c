@@ -5398,11 +5398,7 @@ void act_tog_peace(void)
 void act_choose_name(void)
 {
     insert_cursor = 0;
-#if C2_FEAT_NAME_EDIT_FB_COUNT
-    fb_count = insert_cursor;
-#else
-    this_letter = 0;
-#endif
+    this_letter = insert_cursor;
     in_format_buffer(c2inf.player_name, 0x18, 0xa0, 2);
     show_new_name_box();
     out2 = 0;

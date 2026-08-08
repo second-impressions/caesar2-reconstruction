@@ -76,11 +76,6 @@
  * choice (verified at C2WIN 0x454e88 vs C2 0x554b1). */
 #define C2_FEAT_MODAL_PROMOTION   PLATFORM_WINDOWS
 
-/* The Windows name-entry dialog seeds the format-buffer count from
- * the cleared insert cursor; the DOS build clears this_letter instead
- * (verified at C2WIN 0x4b96d2 vs C2 0x34cfa). */
-#define C2_FEAT_NAME_EDIT_FB_COUNT PLATFORM_WINDOWS
-
 /* The Windows audio port applies the configured effects volume to each
  * allocated sample handle; DOS sets the digital driver's master volume
  * (verified at C2WIN 0x40149b vs C2 0x11a53). */
