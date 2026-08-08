@@ -3067,10 +3067,6 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
     int   format_count;
     int   first_char;
     int   counter;
-#if PLATFORM_DOS
-    int   char_iter;
-    char *p;
-#endif
     unsigned char c;
 
     font_screen_limit = 0;
@@ -3079,13 +3075,7 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
 
     /* Skip word_skip whole words from the entry's offset. */
     while (word_skip > 0) {
-#if PLATFORM_DOS
-        p = text_pointer; if (*p == 0 && ((unsigned char)*(p - 1) >= ' ' || *(p - 1) == 0)) { word_skip--; }
-#else
-        if ((unsigned char)*text_pointer == 0 &&
-            ((unsigned char)*(text_pointer - 1) >= ' ' ||
-             (unsigned char)*(text_pointer - 1) == 0)) { word_skip--; }
-#endif
+        if ((unsigned char)*text_pointer == 0 && ((unsigned char)*(text_pointer - 1) >= ' ' || (unsigned char)*(text_pointer - 1) == 0)) { word_skip--; }
         text_pointer++;
     }
 
@@ -3106,14 +3096,8 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
                                             font);
             if (x_count < max_width) {
 
-#if PLATFORM_DOS
-                for (char_iter = 0; char_iter < char_count; char_iter++) {
-                    p = text_pointer; text_pointer = p + 1; c = *p;
-#else
                 for (counter = 0; counter < char_count; counter++) {
-                    c = *text_pointer;
-                    text_pointer++;
-#endif
+                    c = *text_pointer++;
                     if (first_char != 0) {
                         if (c == ' ') continue;
                     }
