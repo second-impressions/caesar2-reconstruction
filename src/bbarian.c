@@ -448,7 +448,7 @@ int barbarian_invades_city(int army_idx)
                 clear_an_area(barb_x, barb_y, barb_x, barb_y);
             }
             if (create_citizen(3, barb_x, barb_y, 0) == 0) goto finished;
-            break;
+            else break;
         }
 
         citizen_list[created_citizen_no].state_idx       = 1;
