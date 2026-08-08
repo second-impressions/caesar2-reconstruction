@@ -96,7 +96,6 @@ extern void set_mode3(void);
 /* Symbol page 3 (PS emission page 8). */
 extern int first_entry;
 extern int cscreen;
-extern int screen_width;
 extern char *lang_file;
 extern char directory[][13];
 extern int gamesource;
@@ -107,6 +106,7 @@ extern int screen_size;
 extern unsigned char * internal_screen;
 extern char extension[4];
 extern int file_no;
+extern int screen_width;
 extern char *media_file;
 extern int drive_name;
 extern int file_string;
