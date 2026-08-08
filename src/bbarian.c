@@ -253,11 +253,11 @@ int get_attackers(int dir, int scan_all)
 // Spawns a raider army at a valid land or sea invasion point.
 // FUNCTION: C2 0x5358c
 // FUNCTION: C2WIN 0x0046f5e3
-int raider_in_region(int direction, int from_sea)
+int raider_in_region(int dirc, int from_sea)
 {
     int message_map_ref;
 
-    if (get_region_invasion_points(direction, from_sea) == 0) return 0;
+    if (get_region_invasion_points(dirc, from_sea) == 0) return 0;
 
     if (from_sea != 0) {
         if (create_army(4, barb_x, barb_y, 1) == 0) return 0;
@@ -274,11 +274,10 @@ int raider_in_region(int direction, int from_sea)
         army_list[created_army_no].saved_state_idx  = 6;
     }
 
-    army_list[created_army_no].target_y = 0;
-    army_list[created_army_no].target_x = 0;
+    army_list[created_army_no].target_x = army_list[created_army_no].target_y = 0;
 
-    message_map_ref = army_list[created_army_no].map_ref;
-    if (message_map_ref == 0) message_map_ref = 8;
+    if (army_list[created_army_no].map_ref == 0) message_map_ref = 8;
+    else message_map_ref = army_list[created_army_no].map_ref;
     put_message(0x5b, message_map_ref, 0x11);
     return 1;
 }
