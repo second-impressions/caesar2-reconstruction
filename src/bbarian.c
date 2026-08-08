@@ -285,11 +285,11 @@ int raider_in_region(int dirc, int from_sea)
 // Spawns a barbarian army at a valid land or sea invasion point.
 // FUNCTION: C2 0x53688
 // FUNCTION: C2WIN 0x0046f7fd
-int barbarian_in_region(int direction, int from_sea)
+int barbarian_in_region(int dirc, int from_sea)
 {
     int message_map_ref;
 
-    if (get_region_invasion_points(direction, from_sea) == 0) return 0;
+    if (get_region_invasion_points(dirc, from_sea) == 0) return 0;
 
     if (from_sea != 0) {
         if (create_army(3, barb_x, barb_y, 1) == 0) return 0;
@@ -306,8 +306,8 @@ int barbarian_in_region(int direction, int from_sea)
         army_list[created_army_no].saved_state_idx  = 7;
     }
 
-    message_map_ref = army_list[created_army_no].map_ref;
-    message_map_ref = message_map_ref == 0 ? 8 : message_map_ref;
+    if (army_list[created_army_no].map_ref == 0) message_map_ref = 8;
+    else message_map_ref = army_list[created_army_no].map_ref;
     put_message(0x5d, message_map_ref, 0x11);
     return 1;
 }
