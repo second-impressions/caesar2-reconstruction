@@ -155,11 +155,10 @@ int horde_trouble(void)
 // FUNCTION: C2WIN 0x0046f08d
 int war_trouble(void)
 {
-    int   total_troops;
-
     months_since_last_war++;
 
-    if (chance_of_attack(3, months_since_last_war, 0, 1) && empire_in_region(attack_direction, attack_from_sea)) {
+    if (chance_of_attack(3, months_since_last_war, 0, 1) == 0) return 0;
+    if (empire_in_region(attack_direction, attack_from_sea)) {
 
         army_list[created_army_no].source_region = attacking_region;
         army_list[created_army_no].tribe_id = tribe_type[attacking_region];
@@ -170,10 +169,9 @@ int war_trouble(void)
         army_list[created_army_no].num_irregulars  = tribe_to_troop_numbers[army_list[created_army_no].tribe_id].irregulars * 8;
         army_list[created_army_no].num_auxillaries = tribe_to_troop_numbers[army_list[created_army_no].tribe_id].auxiliaries * 8;
 
-        total_troops = army_list[created_army_no].num_specials + army_list[created_army_no].num_horse
+        army_list[created_army_no].total_troops = army_list[created_army_no].num_specials + army_list[created_army_no].num_horse
                      + army_list[created_army_no].num_regulars + army_list[created_army_no].num_irregulars
                      + army_list[created_army_no].num_auxillaries;
-        army_list[created_army_no].total_troops = total_troops;
 
         set_sound("marchb2.wav", 1);
 
