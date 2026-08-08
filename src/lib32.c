@@ -4090,14 +4090,22 @@ void start_game(void)
     start_system();
 }
 
-// Tear-down counterpart of start_system: stop the runtime, print the goodbye banner, and exit(0).
+#if PLATFORM_WINDOWS
+void close_windows(void);
+#endif
+
+// Tear-down counterpart of start_system.
 // FUNCTION: C2 0x28470
 // FUNCTION: C2WIN 0x0044ff24
 void exit_game(void)
 {
     stop_system();
+#if PLATFORM_WINDOWS
+    close_windows();
+#else
     printf("\nExiting Caesar II.\n");
     exit(0);
+#endif
 }
 
 // Initialize random state, video, framebuffers, audio, scratch memory, and mouse limits.
