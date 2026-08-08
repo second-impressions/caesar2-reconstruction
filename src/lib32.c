@@ -2783,6 +2783,8 @@ void out_format_buffer(char *out)
     *out = 0;
 }
 
+void put_a_font_string(char *str, int x, int y, unsigned char *font, int color);
+
 // Read the entry's offset word from the table at file offset idx*4 + 0x1E (big-endian on disk),
 // then load 0x7D0 bytes from (offset + 0x1C) into format_buffer.
 // FUNCTION: C2 0x26b1a
