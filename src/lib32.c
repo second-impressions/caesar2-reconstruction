@@ -2842,6 +2842,14 @@ void save_format_buffer_to_disk(char *filename, int entry_idx)
 
 int one_letter(unsigned char *font, unsigned char letter);
 
+#if PLATFORM_WINDOWS
+#define font_count this_letter
+#define font_cursor fb_count
+#else
+#define font_count fb_count
+#define font_cursor this_letter
+#endif
+
 // Render a printable string `str` at pixel (x, y) using the bitmap font (font1 / font2). `color`
 // is the palette index for solid pixels; 0 selects the shadow font_style with the default colour.
 // FUNCTION: C2 0x26c2e
@@ -2854,9 +2862,7 @@ void put_a_font_string(char *str, int x, int y, unsigned char *font, int color)
     int letter_width;
 
     font_style = 1;
-    if (color != 0) {
-        font_style = 0;
-    }
+    if (color != 0) { font_style = 0; }
     sprite_colour = color;
     sprite_x      = x;
 
@@ -2866,55 +2872,38 @@ void put_a_font_string(char *str, int x, int y, unsigned char *font, int color)
         prev_char = ch;
 
         if (ch == '#') {
-            if (insert_place == 1) {
-                ch = get_insert_letter();
-            } else {
-                ch = 0x20;
-            }
+            if (insert_place == 1) { ch = get_insert_letter();
+            } else { ch = 0x20; }
         }
 
-        if (ch == '_') {
-            ch = 0x20;
-        }
+        if (ch == '_') { ch = 0x20; }
 
         if (ch < 0x20)
             goto skip_letter;
         ch -= 0x20;
 
-        if (fb_count == this_letter && got_cursx == 0) {
-            cursor_x  = x_is;
-            got_cursx = 1;
-        }
+        if (font_count == font_cursor && got_cursx == 0) { cursor_x = x_is; got_cursx = 1; }
 
         sprite_y = y;
 
-        if (letter_table[(unsigned char)ch] > 0) {
-            letter_width = one_letter(font, ch);
-        } else {
-            letter_width = 4;
-        }
+        if (letter_table[(unsigned char)ch] > 0) { letter_width = one_letter(font, ch);
+        } else { letter_width = 4; }
 
         sprite_x += letter_width;
         x_is     += letter_width;
 
 skip_letter:
-        if (insert_count != 0) {
-            ch = get_insert_letter();
+        if (insert_count != 0) { ch = get_insert_letter();
         } else {
             str++;
             ch = *str;
         }
         letter_count++;
-        fb_count++;
+        font_count++;
 
         if (allow_padding == 0 && padding_off != 0) {
-            if (prev_char == ch) {
-                if (ch == 0x20 || ch == '_') {
-                    x_is     -= letter_width;
-                    sprite_x -= letter_width;
-                }
-            }
-        }
+            if (prev_char == ch && (ch == 0x20 || ch == '_')) {
+                x_is -= letter_width; sprite_x -= letter_width; } }
     }
 
     x_is += 4;
@@ -2923,6 +2912,9 @@ skip_letter:
     allow_padding     = 0;
     font_screen_limit = 0;
 }
+
+#undef font_count
+#undef font_cursor
 
 // Render a single bitmap-font glyph for `letter` from the font table (font1 or font2) at the
 // current sprite position with the supplied clipping box.
