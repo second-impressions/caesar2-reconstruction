@@ -3276,25 +3276,21 @@ int running_delay1(void)
 // FUNCTION: C2 0x27483
 char colour_cycle_delay1(int delay_ms)
 {
-    static short last_cycle_ms1;
     struct timeb tb;
     short ms;
+    static short last_cycle_ms1;
     short elapsed;
 
     ftime(&tb);
     ms = tb.millitm;
 
-    if (ms > last_cycle_ms1) {
-        elapsed = ms - last_cycle_ms1;
-    } else if (ms < last_cycle_ms1) {
-        elapsed = (ms + 1000) - last_cycle_ms1;
+    if (ms > last_cycle_ms1) { elapsed = ms - last_cycle_ms1;
+    } else if (ms < last_cycle_ms1) { elapsed = (ms + 1000) - last_cycle_ms1;
     } else {
         elapsed = 0;
     }
 
-    if ((int)elapsed >= delay_ms) {
-        last_cycle_ms1 = ms;
-        return 1;
+    if ((int)elapsed >= delay_ms) { last_cycle_ms1 = ms; return 1;
     }
     return 0;
 }
