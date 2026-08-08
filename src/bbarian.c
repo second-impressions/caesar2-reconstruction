@@ -471,22 +471,23 @@ finished:
 // Drops a requested number of barbarian citizens along a city-map edge.
 // FUNCTION: C2 0x53c43
 // FUNCTION: C2WIN 0x00470206
-void barbarians_drop_by_city(int direction, int invader_count)
+void barbarians_drop_by_city(int dirc, int count)
 {
-    int placed_count;
-    int attempts;
-    unsigned char terrain;
+    int i;
+    unsigned char square;
 
-    for (placed_count = 0; placed_count < invader_count; placed_count++) {
+    for (i = 0; i < count; i++) {
+        int attempts;
+
         for (attempts = 0; attempts++ < 10; ) {
-            get_random_start_points_from_dirc(direction, 0x50, 0x3f);
+            get_random_start_points_from_dirc(dirc, 0x50, 0x3f);
             barb_ptr = (barb_y * CITY_W + barb_x) * CITY_CELL_BYTES;
-            terrain = (*(struct city_cell *)((unsigned char *)city_map + (barb_ptr))).terrain;
-            if (terrain & 0xe7) {
+            square = (*(struct city_cell *)((unsigned char *)city_map + (barb_ptr))).terrain;
+            if (square & 0xe7) {
                 clear_an_area(barb_x, barb_y, barb_x, barb_y);
             }
             if (create_citizen(3, barb_x, barb_y, 0) == 0) goto finished;
-            break;
+            else break;
         }
         citizen_list[created_citizen_no].state_idx       = 1;
         citizen_list[created_citizen_no].saved_state_idx = 5;
@@ -496,11 +497,11 @@ void barbarians_drop_by_city(int direction, int invader_count)
     }
 
 finished:
-    if (placed_count != 0) {
-        put_message(0x53, citizen_list[created_citizen_no].map_ref, 0x17);
-        pax_romanum -= 0x40;
-        if (pax_romanum < 0) pax_romanum = 0;
-    }
+    if (i == 0) return;
+    put_message(0x53, citizen_list[created_citizen_no].map_ref, 0x17);
+    pax_romanum -= 0x40;
+    if (pax_romanum < 0) pax_romanum = 0;
+    return;
 }
 
 // Chooses a pseudo-random point on the map edge indicated by `direction`.
