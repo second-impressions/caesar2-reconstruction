@@ -607,8 +607,7 @@ void get_next_viewed_cohort(int direction)
     int attempts;
 
     get_cohorts_in_action();
-    attempts = 0;
-    for (;;) {
+    for (attempts = 0; attempts < 11; attempts++) {
         if (direction == 0) {
             --forum_viewed_army;
         } else {
@@ -618,8 +617,6 @@ void get_next_viewed_cohort(int direction)
         if (forum_viewed_army > 10) forum_viewed_army = 0;
         if (forum_viewed_army == 10) return;
         if (cohort_in_action[forum_viewed_army] == 1) return;
-        ++attempts;
-        if (attempts >= 11) break;
     }
     forum_viewed_army = 10;
 }
