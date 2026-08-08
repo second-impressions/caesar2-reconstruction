@@ -2100,13 +2100,18 @@ void cover_mouse_droppings(void)
     put_down_mouse_background(mouse_background);
 }
 
+#if PLATFORM_WINDOWS
+int get_windows_key(char *key);
+#endif
+void wait_key(void);
+
 // 1 if (mouse_x, mouse_y) is inside the half-open rectangle [x, x+w) x [y, y+h), 0 otherwise.
 // FUNCTION: C2 0x2601d
 // FUNCTION: C2WIN 0x0044c6d3
 int mouse_in_area(int x, int y, int w, int h)
 {
-    if (x <= mouse_x && x + w > mouse_x) {
-        if (y <= mouse_y && y + h > mouse_y)
+    if (mouse_x >= x && w + x > mouse_x) {
+        if (mouse_y >= y && h + y > mouse_y)
             return 1;
     }
     return 0;
