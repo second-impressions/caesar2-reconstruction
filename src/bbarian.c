@@ -639,6 +639,9 @@ void check_viewed_cohort(void)
 // FUNCTION: C2WIN 0x00470969
 int get_actual_viewed_army(void)
 {
+    int i;
+
+    i = 0;
     if (tracking_army != 0) {
         if (army_list[tracking_army].type == 1)
             return tracking_army;
