@@ -3,6 +3,8 @@
 
 #if PLATFORM_WINDOWS
 extern void *main_window;
+extern unsigned char battle_intro_result;
+extern int show_native_battle_intro(void *window);
 extern void show_native_battle_outtro(void *window);
 #endif
 
@@ -925,6 +927,28 @@ void continue_battle(int pre_loaded)
 // FUNCTION: C2WIN 0x004716c9
 void battle_intro(void)
 {
+#if PLATFORM_WINDOWS
+    pointer_mode = 0;
+    last_icon_over = 0;
+    selected_icon_text = 0;
+    selected_icon_no = 0;
+    last_icon_used = 0;
+    stop_tune();
+    if (c2inf.tunes_on) {
+        set_db_sound("prebatle.raw");
+    }
+    jump_to_regionmap_ptr(army_list[our_battle_army].map_ref + 0x7a0);
+    show_regionmap();
+    refresh_svga_screen();
+    set_palette(&city_palette);
+    if (show_native_battle_intro(main_window) != 0) {
+        battle_intro_result = 1;
+        act_yes();
+    } else {
+        battle_intro_result = 0;
+        act_no();
+    }
+#else
     pointer_mode = 0;
     stop_tune();
     if (c2inf.tunes_on) {
@@ -938,6 +962,7 @@ void battle_intro(void)
         battle_intro_game_loop();
     }
     clear_mouse();
+#endif
 }
 
 // Displays the battle outcome until the player dismisses it.
