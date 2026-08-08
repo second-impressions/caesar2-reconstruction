@@ -374,19 +374,19 @@ int revolt_in_region(int direction, int from_sea)
 // FUNCTION: C2WIN 0x0046fc82
 int get_region_invasion_points(int direction, int from_sea)
 {
-    int attempt;
-    char terrain;
+    int i;
+    unsigned char t;
 
-    attempt = 0;
-    while (attempt++ < 20) {
+    i = 0;
+    while (i++ < 20) {
         get_random_start_points_from_dirc(direction, 0x3c, 0x3f);
         barb_ptr = (barb_x + barb_y * REGION_W) * REGION_CELL_BYTES;
-        terrain = (*(struct region_cell *)((unsigned char *)region_map + (barb_ptr))).terrain;
+        t = (*(struct region_cell *)((unsigned char *)region_map + (barb_ptr))).terrain;
         if (from_sea != 0) {
-            if ((terrain & 8) != 0)
+            if ((t & 8) != 0)
                 return 1;
         } else {
-            if ((terrain & 0x1c) == 0) {
+            if ((t & 0x1c) == 0) {
                 clear_a_reg_area(barb_x, barb_y, barb_x, barb_y, 1);
                 return 1;
             }
