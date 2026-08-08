@@ -2712,6 +2712,8 @@ int get_fb_width(unsigned char *font)
     return width;
 }
 
+void in_format_buffer(char *src, int max_chars, int line_width, int edit_limit);
+
 // Word-wrap measurement: walk the format_buffer and return the number of display lines the text
 // would occupy given a maximum of fb_line_length pixels per line, 0x32 (=50) characters per line,
 // and 0x64 (=100) total lines.
