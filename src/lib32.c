@@ -3712,21 +3712,11 @@ void write_clipped_image(unsigned char *sprite_data, int image_idx, int x, int y
                          int clip_x_lo, int clip_x_hi,
                          int clip_y_lo, int clip_y_hi)
 {
-#if !PLATFORM_WINDOWS
-    unsigned char *sprite_ptr;
-#endif
-
     data_ptr = image_idx * 16 + 8;
-#if PLATFORM_WINDOWS
-    sprite_width  = sprite_data[data_ptr + 1] * 0x100 + sprite_data[data_ptr];
-    sprite_height = sprite_data[data_ptr + 3] * 0x100 + sprite_data[data_ptr + 2];
-    sprite_start  = sprite_data[data_ptr + 6] * 0x10000
-                  + sprite_data[data_ptr + 5] * 0x100 + sprite_data[data_ptr + 4];
-#else
-    sprite_ptr = sprite_data + data_ptr; sprite_width = sprite_ptr[0] + (sprite_ptr[1] << 8);
-    sprite_height = sprite_ptr[2] + (sprite_ptr[3] << 8);
-    sprite_start  = sprite_ptr[4] + (sprite_ptr[5] << 8) + (sprite_ptr[6] << 16);
-#endif
+    sprite_width  = *(sprite_data + data_ptr) + (*(sprite_data + data_ptr + 1) << 8);
+    sprite_height = *(sprite_data + data_ptr + 2) + (*(sprite_data + data_ptr + 3) << 8);
+    sprite_start  = *(sprite_data + data_ptr + 4) + (*(sprite_data + data_ptr + 5) << 8)
+                  + (*(sprite_data + data_ptr + 6) << 16);
     sprite_x = x;
     sprite_y = y;
     xclip(clip_x_lo, clip_y_lo);
