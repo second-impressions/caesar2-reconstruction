@@ -3072,6 +3072,10 @@ void font_no(int value, char pad_char, char *suffix, int x,
 }
 
 int get_next_word_length(char *src, unsigned char *font);
+void font_format_split(int idx, int word_skip, int x, int y_start,
+                       int max_width, int line_limit,
+                       int x_overflow, int max_width_overflow,
+                       unsigned char *font, int color);
 
 // Word-wrap a text-buffer entry and render the requested number of lines within `max_width`.
 // FUNCTION: C2 0x2712a
@@ -3101,35 +3105,25 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
     /* Skip word_skip whole words from the entry's offset. */
     while (word_skip > 0) {
 #if PLATFORM_DOS
-        p = text_pointer;
-        if (*p == 0) {
-            if ((unsigned char)*(p - 1) >= ' ' || *(p - 1) == 0) {
+        p = text_pointer; if (*p == 0 && ((unsigned char)*(p - 1) >= ' ' || *(p - 1) == 0)) { word_skip--; }
 #else
-        if ((unsigned char)*text_pointer == 0) {
-            if ((unsigned char)*(text_pointer - 1) >= ' ' ||
-                (unsigned char)*(text_pointer - 1) == 0) {
+        if ((unsigned char)*text_pointer == 0 &&
+            ((unsigned char)*(text_pointer - 1) >= ' ' ||
+             (unsigned char)*(text_pointer - 1) == 0)) { word_skip--; }
 #endif
-                word_skip--;
-            }
-        }
         text_pointer++;
     }
 
     /* Strip leading control bytes (any byte < ' '). */
-    while ((unsigned char)*text_pointer < ' ') {
-        text_pointer++;
-    }
+    while ((unsigned char)*text_pointer < ' ') { text_pointer++; }
 
-    looping = 1;
-    line_count = 0;
-    draw_y = y_start;
+    looping = 1; line_count = 0; draw_y = y_start;
 
     while (looping) {
         for (counter = 0; counter < 0x7d0; counter++)
             format_buffer[counter] = 0;
 
-        x_count = 0;
-        format_count = 0;
+        x_count = 0; format_count = 0;
         first_char = 1;
 
         while (looping && x_count < max_width) {
@@ -3139,9 +3133,7 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
 
 #if PLATFORM_DOS
                 for (char_iter = 0; char_iter < char_count; char_iter++) {
-                    p = text_pointer;
-                    text_pointer = p + 1;
-                    c = *p;
+                    p = text_pointer; text_pointer = p + 1; c = *p;
 #else
                 for (counter = 0; counter < char_count; counter++) {
                     c = *text_pointer;
@@ -3154,9 +3146,7 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
                     first_char = 0;
                 }
 
-                if ((unsigned char)*text_pointer == 0) {
-                    looping = 0;
-                }
+                if ((unsigned char)*text_pointer == 0) { looping = 0; }
             }
         }
 
@@ -3164,13 +3154,9 @@ void font_format_split(int idx, int word_skip, int x, int y_start,
         x_is          = 0;       allow_padding = 1;
         put_a_font_string(format_buffer, x, draw_y, font, color);
 
-        line_count++;
-        draw_y += 0x10;
+        line_count++; draw_y += 0x10;
 
-        if (line_count >= line_limit) {
-            x         = x_overflow;
-            max_width = max_width_overflow;
-        }
+        if (line_count >= line_limit) { x = x_overflow; max_width = max_width_overflow; }
     }
 }
 
