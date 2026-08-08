@@ -3532,24 +3532,13 @@ void draw_a_line(int x1, int y1, int x2, int y2, int colour)
 // FUNCTION: C2WIN 0x0044ef01
 void draw_a_dotted_line(int x1, int y1, int x2, int y2, int colour)
 {
-    int x;
-    int y;
+    int x, y;
 
     get_longest_side(x1, y1, x2, y2);
-    y = iy;
-    x = ix;
+    y = iy; x = ix;
 
-    if (x1 == x2) {
-        while (y <= ey) {
-            draw_a_point(x1, y, colour);
-            y += 2;
-        }
-    } else if (y1 == y2) {
-        while (x <= ex) {
-            draw_a_point(x, y1, colour);
-            x += 2;
-        }
-    }
+    if (x1 == x2) { while (y <= ey) { draw_a_point(x1, y, colour); y += 2; } }
+    else if (y1 == y2) { while (x <= ex) { draw_a_point(x, y1, colour); x += 2; } }
 }
 
 // Outline a rectangle with four draw_a_line calls -- top edge, bottom edge, left edge, right edge
