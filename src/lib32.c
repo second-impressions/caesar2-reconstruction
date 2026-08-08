@@ -2255,10 +2255,7 @@ void pull_string_left(char *p, char *end)
 void push_string_right(char *start, char *end)
 {
     end[1] = 0;
-    while (end > start) {
-        *end = end[-1];
-        end--;
-    }
+    while (end > start) { *end = end[-1]; end--; }
 }
 
 // Drop leading spaces by repeatedly shifting the string left until the first character is
