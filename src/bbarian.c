@@ -704,12 +704,15 @@ void launch_traders(void)
         }
     }
     north_trader_count1--;
-    if (north_trader_count1 <= 0 && north_trader_is != 0) {
-        if (do_sea_trade(0, north_trader_brings,
-                         north_border_x, north_border_y, 1)) {
-            north_trader_count1 = 0xf423f;
+    if (north_trader_count1 <= 0) {
+        if (north_trader_is == 0) {
         } else {
-            north_trader_count1 = 2;
+            if (do_sea_trade(0, north_trader_brings,
+                             north_border_x, north_border_y, 1)) {
+                north_trader_count1 = 0xf423f;
+            } else {
+                north_trader_count1 = 2;
+            }
         }
     }
 
@@ -728,12 +731,15 @@ void launch_traders(void)
         }
     }
     east_trader_count1--;
-    if (east_trader_count1 <= 0 && east_trader_is != 0) {
-        if (do_sea_trade(2, east_trader_brings,
-                         east_border_x, east_border_y, 1)) {
-            east_trader_count1 = 0xf423f;
+    if (east_trader_count1 <= 0) {
+        if (east_trader_is == 0) {
         } else {
-            east_trader_count1 = 2;
+            if (do_sea_trade(2, east_trader_brings,
+                             east_border_x, east_border_y, 1)) {
+                east_trader_count1 = 0xf423f;
+            } else {
+                east_trader_count1 = 2;
+            }
         }
     }
 
@@ -752,12 +758,15 @@ void launch_traders(void)
         }
     }
     south_trader_count1--;
-    if (south_trader_count1 <= 0 && south_trader_is != 0) {
-        if (do_sea_trade(4, south_trader_brings,
-                         south_border_x, south_border_y, 1)) {
-            south_trader_count1 = 0xf423f;
+    if (south_trader_count1 <= 0) {
+        if (south_trader_is == 0) {
         } else {
-            south_trader_count1 = 2;
+            if (do_sea_trade(4, south_trader_brings,
+                             south_border_x, south_border_y, 1)) {
+                south_trader_count1 = 0xf423f;
+            } else {
+                south_trader_count1 = 2;
+            }
         }
     }
 
@@ -776,12 +785,15 @@ void launch_traders(void)
         }
     }
     west_trader_count1--;
-    if (west_trader_count1 <= 0 && west_trader_is != 0) {
-        if (do_sea_trade(6, west_trader_brings,
-                         west_border_x, west_border_y, 1)) {
-            west_trader_count1 = 0xf423f;
+    if (west_trader_count1 <= 0) {
+        if (west_trader_is == 0) {
         } else {
-            west_trader_count1 = 2;
+            if (do_sea_trade(6, west_trader_brings,
+                             west_border_x, west_border_y, 1)) {
+                west_trader_count1 = 0xf423f;
+            } else {
+                west_trader_count1 = 2;
+            }
         }
     }
 }
