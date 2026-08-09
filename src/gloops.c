@@ -24,6 +24,8 @@ extern void update_window_date(void);
 extern void update_window_denarii(unsigned char force);
 extern void update_window_population(unsigned char force);
 extern void update_window_icon_text(unsigned char force);
+extern void update_window_battle_totals(void);
+extern void update_window_battle_stats(void);
 extern void cycle_map_colours(void);
 extern void cycle_window_colours(int start_idx, int end_idx, unsigned char *bitmap);
 extern void act_cohort_box(void *window);
@@ -557,9 +559,15 @@ void battle_game_loop(void)
 #endif
     old_pm_over = pm_over;
     pm_over = get_pm_over_diamond(0);
+#if PLATFORM_WINDOWS
+    update_window_date();
+    update_window_battle_totals();
+    update_window_battle_stats();
+#else
     show_top_line();
     battle_totals_panel();
     battle_stats_panel();
+#endif
 
 #if !PLATFORM_WINDOWS
     if (scrolling) setup_battle_screen_refresh();
