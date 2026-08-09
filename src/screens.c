@@ -26,16 +26,17 @@ extern void redraw_window_icons(void);
 #endif
 
 #if PLATFORM_WINDOWS
-#define SCREEN_MAP_MODE screen_mode
+#define SCREEN_DISPLAY_MODE map_mode
 #define SCREEN_PEOPLE_DATA(mode) (((unsigned char **)&people_data)[mode])
 #define COHORT_AUTO_FIGHT army_list[tracking_army].state_idx
 #define NON_COHORT_TYPE army_list[tracking_army].type
 #else
-#define SCREEN_MAP_MODE map_mode
+#define SCREEN_DISPLAY_MODE screen_mode
 #define SCREEN_PEOPLE_DATA(mode) people_data
 #define COHORT_AUTO_FIGHT auto_fight
 #define NON_COHORT_TYPE army_type
 #endif
+#define SCREEN_MAP_MODE map_mode
 #define CURRENT_AUXILIARIES current_no_of_auxillaries
 
 /* Forward declarations (functions defined later in this file). */
@@ -265,8 +266,8 @@ void battle_screen(int do_black_out)
 #if PLATFORM_WINDOWS
     write_image(misc, map_direction / 2, 2, 2);
     update_window_titles();
-    load_screen_parts(screen_mode);
-    size_map_window(screen_mode);
+    load_screen_parts(SCREEN_DISPLAY_MODE);
+    size_map_window(SCREEN_DISPLAY_MODE);
     show_window_battle_landfill(0, 0x34, 6, 9, window_buffer);
     refresh_map_window(map_window);
 #else
@@ -634,7 +635,7 @@ void show_cohort_box(void)
 #endif
 
 #if PLATFORM_WINDOWS
-    mode = screen_mode;
+    mode = SCREEN_DISPLAY_MODE;
     if (mode > 1) mode = 0;
 #endif
 
@@ -2967,7 +2968,7 @@ void show_icon_strip(void)
 void show_ov_bar(void)
 {
 #if PLATFORM_WINDOWS
-    if (screen_mode != 0) return;
+    if (SCREEN_DISPLAY_MODE != 0) return;
 #else
     int h;
     int w;
@@ -3851,7 +3852,7 @@ void show_people_query_panel(void)
 #if PLATFORM_WINDOWS
     int display_mode;
 
-    display_mode = screen_mode;
+    display_mode = SCREEN_DISPLAY_MODE;
     if (display_mode > 1) display_mode = 0;
 #endif
 
