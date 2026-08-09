@@ -24,8 +24,6 @@ extern void update_window_date(void);
 extern void update_window_denarii(unsigned char force);
 extern void update_window_population(unsigned char force);
 extern void update_window_icon_text(unsigned char force);
-extern void update_window_battle_totals(void);
-extern void update_window_battle_stats(void);
 extern void cycle_map_colours(void);
 extern void cycle_window_colours(int start_idx, int end_idx, unsigned char *bitmap);
 extern void act_cohort_box(void *window);
@@ -499,6 +497,10 @@ void main_game_loop(void)
 #else
 #define BATTLE_SCREEN_REFRESH() setup_battle_screen_refresh()
 #define WHOLE_SCREEN_REFRESH() setup_whole_screen_refresh()
+#endif
+#if PLATFORM_WINDOWS
+extern void update_window_battle_totals(void);
+extern void update_window_battle_stats(void);
 #endif
 void battle_game_loop(void)
 {
