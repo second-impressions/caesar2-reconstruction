@@ -700,8 +700,8 @@ void place2_a_building_base(int draw_style)
     unsigned char *sprite_bank_ptr;
 
 #if PLATFORM_WINDOWS
-    if (screen_mode > 1) mode_no = 0;
-    else mode_no = screen_mode;
+    if (map_mode > 1) mode_no = 0;
+    else mode_no = map_mode;
 #endif
     sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).gfx;
 #if PLATFORM_WINDOWS
@@ -819,8 +819,8 @@ void place2_a_building_top(int draw_style)
 #endif
 
 #if PLATFORM_WINDOWS
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
     sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).gfx;
 
@@ -1022,8 +1022,8 @@ void place2_a_building_roof(int draw_style)
     unsigned char height;
 
 #if PLATFORM_WINDOWS
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
     old_sprite_y = sprite_y;
     sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).gfx;
@@ -1185,7 +1185,7 @@ void place2_sprite(int draw_style)
 #endif
 
 #if PLATFORM_WINDOWS
-    mode_no = screen_mode;
+    mode_no = map_mode;
     if (mode_no > 1) mode_no = 0;
 #endif
     army_a = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).occupant;
