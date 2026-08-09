@@ -439,9 +439,9 @@ void setup_svga_refresh_data(void)
 void refresh_zoom_mode(int zoom)
 {
 #if PLATFORM_WINDOWS
-    if (screen_mode == 0) {
+    if (map_mode == 0) {
         city_zoom_level = zoom;
-    } else if (screen_mode == 1) {
+    } else if (map_mode == 1) {
         prov_zoom_level = zoom;
     }
     zoom_level = zoom;
@@ -476,7 +476,7 @@ void refresh_zoom_mode(int zoom)
     pm_screen_x_end = pm_diamond_width * pm_screen_width + pm_screen_x_start;
     pm_screen_y_end = (pm_screen_height + 1) * pm_diamond_half_height
                       + pm_screen_y_start;
-    update_map_scrollbars(screen_mode);
+    update_map_scrollbars(map_mode);
 #else
     zoom_level = zoom;
     if (zoom_level == 0) {
