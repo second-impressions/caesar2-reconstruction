@@ -831,22 +831,19 @@ void do_land_trade(int direction, int cargo, int border_x, int border_y)
 int do_sea_trade(int compass_side, int cargo,
                  int home_x, int home_y, int army_id)
 {
-    int army_idx;
-
     if (create_army(6, home_x, home_y, 1) == 0) return 0;
-    army_idx = created_army_no;
-    army_list[army_idx].home_x          = home_x;
-    army_list[army_idx].home_y          = home_y;
-    army_list[army_idx].compass_side    = compass_side;
-    army_list[army_idx].trader_brings   = cargo;
-    army_list[army_idx].state_idx       = 0xb;
-    army_list[army_idx].saved_state_idx = 0xb;
-    army_list[army_idx].exists          = 1;
-    army_list[army_idx].departure_year  = year;
-    army_list[army_idx].target_count = 0; army_list[army_idx].target_kind = 0;
-    army_list[army_idx].return_flag = 0;
-    army_list[army_idx].army_id     = army_id;
-    army_list[army_idx].flags |= 1;
+    army_list[created_army_no].home_x          = home_x;
+    army_list[created_army_no].home_y          = home_y;
+    army_list[created_army_no].compass_side    = compass_side;
+    army_list[created_army_no].trader_brings   = cargo;
+    army_list[created_army_no].state_idx       = 0xb;
+    army_list[created_army_no].saved_state_idx = 0xb;
+    army_list[created_army_no].exists          = 1;
+    army_list[created_army_no].departure_year  = year;
+    army_list[created_army_no].target_count = 0; army_list[created_army_no].target_kind = 0;
+    army_list[created_army_no].return_flag = 0;
+    army_list[created_army_no].army_id     = army_id;
+    army_list[created_army_no].flags |= 1;
     return 1;
 }
 
