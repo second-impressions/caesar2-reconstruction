@@ -35,6 +35,8 @@ int barb_entry_count;
 int barb_x;
 int barb_y;
 /* Forward declarations (functions defined later in this file). */
+int get_attackers(int dir, int scan_all);
+int get_region_invasion_points(int direction, int from_sea);
 void get_random_start_points_from_dirc(int dirc, int size, int mask);
 void do_land_trade(int direction, int cargo, int border_x, int border_y);
 void battle_intro(void);
@@ -209,9 +211,9 @@ int war_trouble(void)
 int chance_of_attack(int trouble_type, int months_since,
                      int probe_only, int p4)
 {
-    int honeymoon;
     int frequency;
     int debar;
+    int honeymoon;
 
     attack_from_sea = 0;
     honeymoon = skill_to_trouble_honeymoons[c2inf.skill_level][trouble_type];
@@ -221,8 +223,8 @@ int chance_of_attack(int trouble_type, int months_since,
     if (honeymoon > years_elapsed_in_region) return 0;
     if (months_since <= debar) return 0;
     random();
-    if (rand128 < 20)                        return 0;
-    if (frequency + 20 <= rand128)           return 0;
+    if (rand128 < 20) return 0;
+    if (frequency + 20 <= rand128) return 0;
 
     if (probe_only != 0) return 1;
     attack_direction = get_attackers(rand128 & 3, p4);
@@ -487,6 +489,19 @@ finished:
     if (pax_romanum < 0) pax_romanum = 0;
     return 1;
 }
+
+/* Forward declarations for the remaining helpers. */
+int get_next_temp_cohort();
+void get_cohorts_in_action();
+void get_next_viewed_cohort();
+void check_viewed_cohort();
+int get_actual_viewed_army();
+void init_traders();
+void launch_traders();
+int do_sea_trade();
+void continue_battle();
+void get_contenders();
+void get_villagers();
 
 // Drops a requested number of barbarian citizens along a city-map edge.
 // FUNCTION: C2 0x53c43
