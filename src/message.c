@@ -18,6 +18,8 @@ extern unsigned char *saved_screen_buffer;
 extern unsigned char message_background[];
 extern unsigned char message_window_closed;
 extern unsigned char map_window_was_visible;
+extern int desktop_width;
+extern int desktop_height;
 extern void *message_window;
 extern void *map_window;
 extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
@@ -188,8 +190,8 @@ void message(int message_idx, int is_emperor, int message_param) {
     cover_mouse_droppings();
     grey_all_windows();
     memcpy(saved_screen_buffer, screen_buffer, 0x4b000);
-    x_start = (screen_width - 0x160) / 2;
-    y_start = (screen_height - 0x170) / 2;
+    x_start = (desktop_width - 0x160) / 2;
+    y_start = (desktop_height - 0x170) / 2;
     if (is_emperor == 0)
         show_basic_message(message_idx, message_param);
     else
