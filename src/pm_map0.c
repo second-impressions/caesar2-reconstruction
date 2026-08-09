@@ -186,7 +186,7 @@ void get_pseudo_map(int direction)
         start_y++;
         x2_origin--;
     }
-    if (screen_mode > 0) {
+    if (map_mode > 0) {
         py = start_y;
         p_x2 = x2_origin;
         py += map_actual_width;
@@ -281,21 +281,13 @@ int get_pm_over_diamond(int force_zero_offset)
     if ((pm_screen_y_start - 0) + pm_diamond_half_height > mouse_y) return 0;
     if ((pm_screen_y_start - 0) + pm_diamond_half_height + pm_screen_height * pm_diamond_half_height <= mouse_y) return 0;
 
-#if PLATFORM_WINDOWS
-    if (screen_mode == 2) {
-#else
     if (map_mode == 2) {
-#endif
         x = 0;
         y = 0x10;
     } else if (force_zero_offset) {
         x = 0;
         y = 0;
-#if PLATFORM_WINDOWS
-    } else if (pointer_mode > 0 && screen_mode < 2) {
-#else
     } else if (pointer_mode > 0 && map_mode < 2) {
-#endif
         x = 8;
         y = 8;
     } else if (pm_build_shape < 1) {
@@ -629,17 +621,9 @@ void show_one_ptr(int screen_cell_x, int screen_cell_y)
 #endif
     if (cell_offset >= 0x0FFF0000) return;
 
-#if PLATFORM_WINDOWS
-    if (screen_mode == 0) {
-#else
     if (map_mode == 0) {
-#endif
         CM_CELL(cell_offset).edge_bits |= 1;
-#if PLATFORM_WINDOWS
-    } else if (screen_mode == 1) {
-#else
     } else if (map_mode == 1) {
-#endif
         RM_CELL(cell_offset).edge_bits |= 1;
     }
 
@@ -694,8 +678,8 @@ void place_diamond(int style)
 #if PLATFORM_WINDOWS
     int mode;
 
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
     if ((&fixt_data)[mode] == 0) {
         sprite_error++;
         return;
@@ -751,8 +735,8 @@ void place_lefthalf_diamond(void)
 #if PLATFORM_WINDOWS
     int mode;
 
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
     data_ptr = sprite_image_no * 16 + 8;
 #if PLATFORM_WINDOWS
@@ -804,8 +788,8 @@ void place_righthalf_diamond(void)
 #if PLATFORM_WINDOWS
     int mode;
 
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
     data_ptr = sprite_image_no * 16 + 8;
 #if PLATFORM_WINDOWS
@@ -857,8 +841,8 @@ void place_overlay(int style)
 #if PLATFORM_WINDOWS
     int mode;
 
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
     data_ptr = sprite_image_no * 16 + 8;
 #if PLATFORM_WINDOWS
@@ -910,8 +894,8 @@ void place_lefthalf_overlay()
 #if PLATFORM_WINDOWS
     int mode;
 
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
     data_ptr = sprite_image_no * 16 + 8;
 #if PLATFORM_WINDOWS
@@ -963,8 +947,8 @@ void place_righthalf_overlay()
 #if PLATFORM_WINDOWS
     int mode;
 
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
     data_ptr = sprite_image_no * 16 + 8;
 #if PLATFORM_WINDOWS
