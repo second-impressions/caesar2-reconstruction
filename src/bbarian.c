@@ -792,35 +792,37 @@ void launch_traders(void)
 void do_land_trade(int direction, int cargo, int border_x, int border_y)
 {
     int distance;
-    char new_level;
-    char current_level;
-    char road_flag;
+    int offset;
+    unsigned char new_lvl;
+    unsigned char current_lvl;
+    unsigned char road_byte;
     (void)cargo;
 
-    road_flag = (*(struct region_cell *)((unsigned char *)region_map + ((border_x + border_y * REGION_W) * REGION_CELL_BYTES))).edge_bits & 0x20;
+    offset = (border_x + border_y * REGION_W) * REGION_CELL_BYTES;
+    road_byte = (*(struct region_cell *)((unsigned char *)region_map + offset)).edge_bits & 0x20;
 
-    if (road_flag == 0) return;
+    if (road_byte == 0) return;
     distance = get_closest_trading_post(border_x, border_y, 0x10);
     if (distance > 0x10) return;
-    current_level = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0x1c;
-    current_level >>= 2;
-    if (distance <= 2)       new_level = 7;
-    else if (distance <= 4)  new_level = 6;
-    else if (distance <= 6)  new_level = 5;
-    else if (distance <= 8)  new_level = 4;
-    else if (distance <= 10) new_level = 3;
-    else if (distance <= 12) new_level = 2;
-    else                     new_level = 1;
-    if (new_level > current_level) current_level = new_level;
-    current_level <<= 2;
+    current_lvl = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant & 0x1c;
+    current_lvl >>= 2;
+    if (distance <= 2)       new_lvl = 7;
+    else if (distance <= 4)  new_lvl = 6;
+    else if (distance <= 6)  new_lvl = 5;
+    else if (distance <= 8)  new_lvl = 4;
+    else if (distance <= 10) new_lvl = 3;
+    else if (distance <= 12) new_lvl = 2;
+    else                     new_lvl = 1;
+    if (new_lvl > current_lvl) current_lvl = new_lvl;
+    current_lvl <<= 2;
     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant &= 0xe3;
-    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= current_level;
+    (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= current_lvl;
 
     (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant &= 0x9f;
     if (direction == 0) return;
     if (direction == 2) { (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= 0x20; return; }
     if (direction == 4) { (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= 0x40; return; }
-    if (direction == 6) { (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= 0x60; return; }
+    if (direction == 6) { (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).occupant |= 0x60; }
 }
 
 // Spawns and initializes a sea-trader army.
