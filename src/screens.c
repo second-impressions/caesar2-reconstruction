@@ -30,14 +30,13 @@ extern void redraw_window_icons(void);
 #define SCREEN_PEOPLE_DATA(mode) (((unsigned char **)&people_data)[mode])
 #define COHORT_AUTO_FIGHT army_list[tracking_army].state_idx
 #define NON_COHORT_TYPE army_list[tracking_army].type
-#define CURRENT_AUXILIARIES total_no_of_cohorts
 #else
 #define SCREEN_MAP_MODE map_mode
 #define SCREEN_PEOPLE_DATA(mode) people_data
 #define COHORT_AUTO_FIGHT auto_fight
 #define NON_COHORT_TYPE army_type
-#define CURRENT_AUXILIARIES current_no_of_auxillaries
 #endif
+#define CURRENT_AUXILIARIES current_no_of_auxillaries
 
 /* Forward declarations (functions defined later in this file). */
 void clip_zoom_level1(void);
