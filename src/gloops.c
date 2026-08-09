@@ -270,10 +270,10 @@ void main_game_loop(void)
         show_turbo_panel();
     }
 #if PLATFORM_WINDOWS
-    else if (screen_mode == 0) {
+    else if (map_mode == 0) {
         if (window_status[0] == 1 && application_active == 1)
             show_citymap();
-    } else if (screen_mode == 1 && pointer_mode != 5) {
+    } else if (map_mode == 1 && pointer_mode != 5) {
         if (window_status[1] == 1 && application_active == 1)
             show_regionmap();
     }
@@ -406,9 +406,9 @@ void main_game_loop(void)
     set_mouse_refresh();
 #endif
 #if PLATFORM_WINDOWS
-    if (screen_mode == 0 && window_status[0] == 1)
+    if (map_mode == 0 && window_status[0] == 1)
         refresh_svga_screen();
-    else if (screen_mode == 1 && window_status[1] == 1)
+    else if (map_mode == 1 && window_status[1] == 1)
         refresh_svga_screen();
     }
 #else
@@ -445,10 +445,10 @@ void main_game_loop(void)
         action();
 
 #if PLATFORM_WINDOWS
-    if (application_active == 1 && screen_mode == 0 &&
+    if (application_active == 1 && map_mode == 0 &&
         tutorial_mode == 0 && turbo_mode == 0)
         city_mode_show_provmap();
-    else if (application_active == 1 && screen_mode == 1 &&
+    else if (application_active == 1 && map_mode == 1 &&
              tutorial_mode == 0 && turbo_mode == 0)
         prov_mode_show_citymap();
 #endif
