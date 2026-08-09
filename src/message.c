@@ -34,7 +34,7 @@ extern void wait_for(int delay);
 extern void draw_window_buffer(void *window, void *buffer, int source_x,
                                int source_y, int width, int height,
                                int dest_x, int dest_y);
-extern void mloop_end(void);
+extern void clear_mouse_input(void);
 extern void act_request_down(void);
 extern void act_request_up(void);
 extern void load_screen_parts(unsigned char mode);
@@ -272,7 +272,7 @@ void message(int message_idx, int is_emperor, int message_param) {
         }
         if (flag_mode != 0)
             flag_mode = 0;
-        mloop_end();
+        clear_mouse_input();
         if (message_param != 0 && click == 1) {
             x = 0xe0;
             y = 0x130;
@@ -296,8 +296,8 @@ void message(int message_idx, int is_emperor, int message_param) {
     memcpy(screen_buffer, saved_screen_buffer, 0x4b000);
     refresh_svga_screen();
     pointer_mode = old_pointer_mode;
-    load_screen_parts(screen_mode);
-    size_map_window(screen_mode);
+    load_screen_parts(map_mode);
+    size_map_window(map_mode);
     refresh_map_window(map_window);
     if (map_window_was_visible == 1)
         toggle_map_window();
@@ -315,16 +315,16 @@ void message(int message_idx, int is_emperor, int message_param) {
                 redraw_city_window();
         }
     }
-    if (screen_mode == 0)
+    if (map_mode == 0)
         set_palette(&city_palette);
-    else if (screen_mode == 1)
+    else if (map_mode == 1)
         set_palette(&region_palette);
     else
         set_palette(&temp_palette);
     if (ret != 1) {
-        if (screen_mode == 0)
+        if (map_mode == 0)
             city_map_screen(0);
-        else if (screen_mode == 1)
+        else if (map_mode == 1)
             region_map_screen(0);
         else
             battle_screen(0);
