@@ -424,9 +424,9 @@ int get_region_revolt_points(void)
 // FUNCTION: C2WIN 0x0046ff71
 int barbarian_invades_city(int army_idx)
 {
-    int count;
     int dir;
     int placed;
+    int count;
     unsigned char square;
 
     if      (army_list[army_idx].total_troops >= 0x320) count = 9;
