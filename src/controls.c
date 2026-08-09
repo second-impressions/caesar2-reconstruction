@@ -1,5 +1,15 @@
 #include "c2_data.h"
 #include "c2_types.h"
+
+#if PLATFORM_WINDOWS
+#define SELECTION_TEXT_WIDTH select_cost_flag
+#define SELECTION_COST_WIDTH select_width
+#define SELECTION_RIGHT_EDGE(x) ((x) + SELECTION_TEXT_WIDTH)
+#else
+#define SELECTION_TEXT_WIDTH select_width
+#define SELECTION_COST_WIDTH select_cost_flag
+#define SELECTION_RIGHT_EDGE(x) (SELECTION_TEXT_WIDTH + (x))
+#endif
 #include "refresh.h"
 
 char button_speed_profile[40] = { 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1 };
@@ -153,9 +163,9 @@ void get_allowed_selections(struct selection_rec *list, int count, int what)
     int text_width;
 
     select_count = 0;
-    select_width = 0;
+    SELECTION_TEXT_WIDTH = 0;
     select_height = 0;
-    select_cost_flag = 0;
+    SELECTION_COST_WIDTH = 0;
     max_cost = 0;
     for (i = 1; i <= count; i++) {
         if (list->max_population > max_population) {
@@ -168,7 +178,7 @@ void get_allowed_selections(struct selection_rec *list, int count, int what)
             text_word_no = list->text_word;
             get_text_pointer(what, text_word_no);
             text_width = get_string_width(text_pointer, font1);
-            if (text_width > select_width) select_width = text_width;
+            if (text_width > SELECTION_TEXT_WIDTH) SELECTION_TEXT_WIDTH = text_width;
             if (list->cost_kind != 0) {
                 if (map_mode == 0) current_cost = city_costs[list->cost_kind];
                 else current_cost = region_costs[list->cost_kind];
@@ -178,12 +188,12 @@ void get_allowed_selections(struct selection_rec *list, int count, int what)
         list->highlighted = check_highlight_list(list->goods_kind) != 0;
         list++;
     }
-    if (max_cost <= 0) select_cost_flag = 0;
-    else if (max_cost < 100) select_cost_flag = 0x30;
-    else if (max_cost < 1000) select_cost_flag = 0x40;
-    else select_cost_flag = 0x50;
+    if (max_cost <= 0) SELECTION_COST_WIDTH = 0;
+    else if (max_cost < 100) SELECTION_COST_WIDTH = 0x30;
+    else if (max_cost < 1000) SELECTION_COST_WIDTH = 0x40;
+    else SELECTION_COST_WIDTH = 0x50;
     select_height = select_count * 20 + 0x20;
-    select_width += 0x30;
+    SELECTION_TEXT_WIDTH += 0x30;
 }
 
 int control_buttons(int, int, struct button_rec *, int);
@@ -282,8 +292,8 @@ void show_selections(struct selection_rec *selection_list, int selection_count, 
     int cost_no;
     int ry;
 
-    sprite_width = select_width / 16 - 1;
-    sprite_width += select_cost_flag / 16;
+    sprite_width = SELECTION_TEXT_WIDTH / 16 - 1;
+    sprite_width += SELECTION_COST_WIDTH / 16;
     sprite_height = select_height - 0x18;
     show_fast_rect(x + 8, y + 8, 0x1a);
     visible_index = 0;
@@ -298,13 +308,13 @@ void show_selections(struct selection_rec *selection_list, int selection_count, 
                 cost_no = 0;
             }
             if (selected_row_idx - 1 == visible_index) {
-                sprite_width = select_width / 16 - 1;
-                sprite_width += select_cost_flag / 16;
+                sprite_width = SELECTION_TEXT_WIDTH / 16 - 1;
+                sprite_width += SELECTION_COST_WIDTH / 16;
                 sprite_height = 0xf;
                 show_fast_rect(x + 8, item_y - 1, 0x10);
                 font_list(text_group, selection_word_no, x + 8, item_y, font1, 0x1a);
                 if (cost_no != 0)
-                    font_no(cost_no, 0x40, "Dn", x + select_width - 0x10, item_y, font1, 0x1a);
+                    font_no(cost_no, 0x40, "Dn", x + SELECTION_TEXT_WIDTH - 0x10, item_y, font1, 0x1a);
             } else {
                 if (selection_list->highlighted != 0)
                     font_list(text_group, selection_word_no, x + 8, item_y, font1, 0xb);
@@ -312,10 +322,10 @@ void show_selections(struct selection_rec *selection_list, int selection_count, 
                     font_list(text_group, selection_word_no, x + 8, item_y, font1, 0x10);
                 if (cost_no != 0) {
                     if (selection_list->highlighted != 0)
-                        font_no(cost_no, 0x40, "Dn", x + select_width - 0x10, item_y,
+                        font_no(cost_no, 0x40, "Dn", x + SELECTION_TEXT_WIDTH - 0x10, item_y,
                                 font1, 0xb);
                     else
-                        font_no(cost_no, 0x40, "Dn", x + select_width - 0x10, item_y,
+                        font_no(cost_no, 0x40, "Dn", x + SELECTION_TEXT_WIDTH - 0x10, item_y,
                                 font1, 0x10);
                 }
             }
@@ -863,18 +873,10 @@ int control_selection(struct selection_rec *selection_list, int selection_count,
 
     selection_is = 0;
     get_allowed_selections(selection_list, selection_count, text_group);
-#if PLATFORM_WINDOWS
-    x -= select_width;
-#else
-    x -= select_cost_flag;
-#endif
+    x -= SELECTION_COST_WIDTH;
     if (x < 0) x = 0;
     if (y < 0x18) y = 0x18;
-#if PLATFORM_WINDOWS
-    if (x + select_cost_flag >= 0x26c) x = 0x26c - select_cost_flag;
-#else
-    if (select_width + x >= 0x26c) x = 0x26c - select_width;
-#endif
+    if (SELECTION_RIGHT_EDGE(x) >= 0x26c) x = 0x26c - SELECTION_TEXT_WIDTH;
     if (y + select_height >= 0x1cc) y = 0x1cc - select_height;
     show_selection_box(selection_count, x, y, text_group);
     setup_whole_screen_refresh();
