@@ -1019,87 +1019,87 @@ void we_retreat(void)
 // FUNCTION: C2WIN 0x00471967
 void battle_auto_resolve(void)
 {
-    int loss_base;
-    int our_strength;
-    int their_strength;
-    int our_score;
-    int their_score;
-    int loss_percent;
-    int survivor_percent;
+    int losses;
+    int our_str;
+    int barb_force;
+    int us_score;
+    int barb_score;
+    int lose;
+    int pct;
     int aggression;
 
     aggression = tribe_ai_data[army_list[their_battle_army].tribe_id].aggression;
     random();   /* discarded — only the side-effect on rand128 matters */
 
-    our_strength = army_list[our_battle_army].num_regulars + army_list[our_battle_army].num_irregulars
+    our_str = army_list[our_battle_army].num_regulars + army_list[our_battle_army].num_irregulars
                  + army_list[our_battle_army].num_auxillaries + army_list[our_battle_army].num_specials;
 
-    if      (our_strength < 50)   our_score = army_list[our_battle_army].morale * 20;
-    else if (our_strength <= 100) our_score = army_list[our_battle_army].morale * 50;
-    else if (our_strength <= 200) our_score = army_list[our_battle_army].morale * 80;
-    else                          our_score = army_list[our_battle_army].morale * 100;
-    our_score += army_list[our_battle_army].num_regulars * 5;
-    our_score += army_list[our_battle_army].num_irregulars * 3;
-    our_score += army_list[our_battle_army].num_auxillaries * 2;
-    our_score += army_list[our_battle_army].num_specials * 3;
-    our_score += rand128;
+    if      (our_str < 50)   us_score = army_list[our_battle_army].morale * 20;
+    else if (our_str <= 100) us_score = army_list[our_battle_army].morale * 50;
+    else if (our_str <= 200) us_score = army_list[our_battle_army].morale * 80;
+    else                     us_score = army_list[our_battle_army].morale * 100;
+    us_score += army_list[our_battle_army].num_regulars * 5;
+    us_score += army_list[our_battle_army].num_irregulars * 3;
+    us_score += army_list[our_battle_army].num_auxillaries * 2;
+    us_score += army_list[our_battle_army].num_specials * 3;
+    us_score += rand128;
 
     random();   /* discarded */
 
-    their_strength = army_list[their_battle_army].num_regulars + army_list[their_battle_army].num_irregulars
+    barb_force = army_list[their_battle_army].num_regulars + army_list[their_battle_army].num_irregulars
                    + army_list[their_battle_army].num_auxillaries + army_list[their_battle_army].num_horse
                    + army_list[their_battle_army].num_specials;
 
-    if      (their_strength < 50)   their_score = army_list[their_battle_army].morale * 20;
-    else if (their_strength <= 100) their_score = army_list[their_battle_army].morale * 50;
-    else if (their_strength <= 200) their_score = army_list[their_battle_army].morale * 80;
-    else                            their_score = army_list[their_battle_army].morale * 100;
-    their_score += army_list[their_battle_army].num_regulars * 4;
-    their_score += army_list[their_battle_army].num_irregulars * 3;
-    their_score += army_list[their_battle_army].num_auxillaries;
-    their_score += army_list[their_battle_army].num_horse * 4;
-    their_score += army_list[their_battle_army].num_specials * 10;
-    their_score += rand128;
+    if      (barb_force < 50)   barb_score = army_list[their_battle_army].morale * 20;
+    else if (barb_force <= 100) barb_score = army_list[their_battle_army].morale * 50;
+    else if (barb_force <= 200) barb_score = army_list[their_battle_army].morale * 80;
+    else                        barb_score = army_list[their_battle_army].morale * 100;
+    barb_score += army_list[their_battle_army].num_regulars * 4;
+    barb_score += army_list[their_battle_army].num_irregulars * 3;
+    barb_score += army_list[their_battle_army].num_auxillaries;
+    barb_score += army_list[their_battle_army].num_horse * 4;
+    barb_score += army_list[their_battle_army].num_specials * 10;
+    barb_score += rand128;
 
-    if      (their_strength < 50)   their_score += (aggression - 1) * 10;
-    else if (their_strength <= 100) their_score += (aggression - 1) * 20;
-    else if (their_strength <= 200) their_score += (aggression - 1) * 30;
-    else if (their_strength <= 400) their_score += (aggression - 1) * 40;
-    else if (their_strength <= 600) their_score += (aggression - 1) * 50;
-    else                            their_score += (aggression - 1) * 60;
+    if      (barb_force < 50)   barb_score += (aggression - 1) * 10;
+    else if (barb_force <= 100) barb_score += (aggression - 1) * 20;
+    else if (barb_force <= 200) barb_score += (aggression - 1) * 30;
+    else if (barb_force <= 400) barb_score += (aggression - 1) * 40;
+    else if (barb_force <= 600) barb_score += (aggression - 1) * 50;
+    else                        barb_score += (aggression - 1) * 60;
 
     random();   /* discarded */
 
-    if (our_score >= their_score) {
+    if (us_score >= barb_score) {
         /* We won. */
         battle_victor = 0;
         tune_mood     = 0x11;
 
-        if      (our_strength >= their_strength * 10) loss_base = our_strength / 20;
-        else if (our_strength >= their_strength *  5) loss_base = our_strength / 10;
-        else if (our_strength >= their_strength *  3) loss_base = our_strength /  5;
-        else if (our_strength >= their_strength *  2) loss_base = our_strength /  4;
-        else if (our_strength >= their_strength + their_strength / 2) loss_base = our_strength /  3;
-        else if (our_strength >= their_strength)      loss_base = our_strength /  2;
-        else                                          loss_base = (our_strength * 3) / 4;
+        if      (our_str >= barb_force * 10) losses = our_str / 20;
+        else if (our_str >= barb_force *  5) losses = our_str / 10;
+        else if (our_str >= barb_force *  3) losses = our_str /  5;
+        else if (our_str >= barb_force *  2) losses = our_str /  4;
+        else if (our_str >= barb_force + barb_force / 2) losses = our_str /  3;
+        else if (our_str >= barb_force)      losses = our_str /  2;
+        else                                 losses = (our_str * 3) / 4;
 
-        if      (our_score > their_score * 5) loss_base /= 5;
-        else if (our_score > their_score * 4) loss_base /= 4;
-        else if (our_score > their_score * 3) loss_base /= 3;
-        else if (our_score > their_score * 2) loss_base /= 2;
+        if      (us_score > barb_score * 5) losses /= 5;
+        else if (us_score > barb_score * 4) losses /= 4;
+        else if (us_score > barb_score * 3) losses /= 3;
+        else if (us_score > barb_score * 2) losses /= 2;
 
-        loss_base += rand128 & 7;
-        loss_percent = valueDIVtotal(loss_base, our_strength);
-        loss_percent += aggression;
-        if (their_strength <= 0) loss_percent = 0;
-        if (loss_percent      <  0) loss_percent = 0;
-        if (loss_percent      >= 90) loss_percent = 90;
-        survivor_percent = 100 - loss_percent;
+        losses += rand128 & 7;
+        lose = valueDIVtotal(losses, our_str);
+        lose += aggression;
+        if (barb_force <= 0) lose = 0;
+        if (lose       <  0) lose = 0;
+        if (lose       >= 90) lose = 90;
+        pct = 100 - lose;
 
-        army_list[our_battle_army].num_regulars = totalXpercent(army_list[our_battle_army].num_regulars, survivor_percent);
-        army_list[our_battle_army].num_irregulars = totalXpercent(army_list[our_battle_army].num_irregulars, survivor_percent);
-        army_list[our_battle_army].num_auxillaries = totalXpercent(army_list[our_battle_army].num_auxillaries, survivor_percent);
-        army_list[our_battle_army].num_specials = totalXpercent(army_list[our_battle_army].num_specials, survivor_percent);
+        army_list[our_battle_army].num_regulars = totalXpercent(army_list[our_battle_army].num_regulars, pct);
+        army_list[our_battle_army].num_irregulars = totalXpercent(army_list[our_battle_army].num_irregulars, pct);
+        army_list[our_battle_army].num_auxillaries = totalXpercent(army_list[our_battle_army].num_auxillaries, pct);
+        army_list[our_battle_army].num_specials = totalXpercent(army_list[our_battle_army].num_specials, pct);
 
         army_list[their_battle_army].num_regulars = 0; army_list[their_battle_army].num_irregulars = 0; army_list[their_battle_army].num_auxillaries = 0; army_list[their_battle_army].num_horse = 0; army_list[their_battle_army].num_specials = 0;
     } else {
@@ -1107,31 +1107,31 @@ void battle_auto_resolve(void)
         battle_victor = 1;
         tune_mood     = 0x12;
 
-        if      (their_strength >= our_strength * 10) loss_base = their_strength / 20;
-        else if (their_strength >= our_strength *  5) loss_base = their_strength / 10;
-        else if (their_strength >= our_strength *  3) loss_base = their_strength /  5;
-        else if (their_strength >= our_strength *  2) loss_base = their_strength /  4;
-        else if (their_strength >= our_strength + our_strength / 2) loss_base = their_strength /  3;
-        else if (their_strength >= our_strength)      loss_base = their_strength /  2;
-        else                                          loss_base = (their_strength * 3) / 4;
+        if      (barb_force >= our_str * 10) losses = barb_force / 20;
+        else if (barb_force >= our_str *  5) losses = barb_force / 10;
+        else if (barb_force >= our_str *  3) losses = barb_force /  5;
+        else if (barb_force >= our_str *  2) losses = barb_force /  4;
+        else if (barb_force >= our_str + our_str / 2) losses = barb_force /  3;
+        else if (barb_force >= our_str)      losses = barb_force /  2;
+        else                                 losses = (barb_force * 3) / 4;
 
-        if      (their_score > our_score * 5) loss_base /= 5;
-        else if (their_score > our_score * 4) loss_base /= 4;
-        else if (their_score > our_score * 3) loss_base /= 3;
-        else if (their_score > our_score * 2) loss_base /= 2;
+        if      (barb_score > us_score * 5) losses /= 5;
+        else if (barb_score > us_score * 4) losses /= 4;
+        else if (barb_score > us_score * 3) losses /= 3;
+        else if (barb_score > us_score * 2) losses /= 2;
 
-        loss_base += rand128 & 7;
-        loss_percent = valueDIVtotal(loss_base, their_strength);
-        if (our_strength <= 0) loss_percent = 0;
-        if (loss_percent      <  0) loss_percent = 0;
-        if (loss_percent      >= 90) loss_percent = 90;
-        survivor_percent = 100 - loss_percent;
+        losses += rand128 & 7;
+        lose = valueDIVtotal(losses, barb_force);
+        if (our_str <= 0) lose = 0;
+        if (lose    <  0) lose = 0;
+        if (lose    >= 90) lose = 90;
+        pct = 100 - lose;
 
-        army_list[their_battle_army].num_regulars = totalXpercent(army_list[their_battle_army].num_regulars, survivor_percent);
-        army_list[their_battle_army].num_irregulars = totalXpercent(army_list[their_battle_army].num_irregulars, survivor_percent);
-        army_list[their_battle_army].num_auxillaries = totalXpercent(army_list[their_battle_army].num_auxillaries, survivor_percent);
-        army_list[their_battle_army].num_horse = totalXpercent(army_list[their_battle_army].num_horse, survivor_percent);
-        army_list[their_battle_army].num_specials = totalXpercent(army_list[their_battle_army].num_specials, survivor_percent);
+        army_list[their_battle_army].num_regulars = totalXpercent(army_list[their_battle_army].num_regulars, pct);
+        army_list[their_battle_army].num_irregulars = totalXpercent(army_list[their_battle_army].num_irregulars, pct);
+        army_list[their_battle_army].num_auxillaries = totalXpercent(army_list[their_battle_army].num_auxillaries, pct);
+        army_list[their_battle_army].num_horse = totalXpercent(army_list[their_battle_army].num_horse, pct);
+        army_list[their_battle_army].num_specials = totalXpercent(army_list[their_battle_army].num_specials, pct);
 
         army_list[our_battle_army].num_regulars = 0; army_list[our_battle_army].num_irregulars = 0; army_list[our_battle_army].num_auxillaries = 0; army_list[our_battle_army].num_horse = 0; army_list[our_battle_army].num_specials = 0;
     }
