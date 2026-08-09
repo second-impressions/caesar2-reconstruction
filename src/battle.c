@@ -27,10 +27,8 @@ extern void update_mouse_window(void *point, int mode);
 extern void set_battle_tune(int tune);
 extern void start_battle_tune(void);
 extern void show_native_battle_setup(void *window);
-#define BATTLE_MAP_MODE screen_mode
 #define BATTLE_PAUSED game_paused
 #else
-#define BATTLE_MAP_MODE map_mode
 #define BATTLE_PAUSED c2inf.paused
 #endif
 
@@ -164,9 +162,9 @@ void do_fight_battle(int continuing)
 #endif
 
     if (continuing == 0) {
-        return_map_mode   = BATTLE_MAP_MODE;
+        return_map_mode   = map_mode;
         return_zoom_level = zoom_level;
-        if (BATTLE_MAP_MODE == 0) {
+        if (map_mode == 0) {
             city_pm_x       = pm_x;
             city_pm_y       = pm_y;
             city_direction  = map_direction;
@@ -179,7 +177,7 @@ void do_fight_battle(int continuing)
         map_direction = 0;
         pm_x          = 0x1c;
         pm_y          = 0x38;
-        BATTLE_MAP_MODE = 2;
+        map_mode = 2;
         load_battle_graphics(zoom_level);
         refresh_battle_zoom_mode(zoom_level);
         get_pseudo_map(map_direction);
@@ -246,8 +244,8 @@ void do_fight_battle(int continuing)
     if (battle_state == 0xa) {
     } else {
         zoom_level = return_zoom_level;
-        BATTLE_MAP_MODE = return_map_mode;
-        if (BATTLE_MAP_MODE == 0) {
+        map_mode = return_map_mode;
+        if (map_mode == 0) {
             pm_x          = city_pm_x;
             pm_y          = city_pm_y;
             map_direction = city_direction;
