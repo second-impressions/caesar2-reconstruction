@@ -801,8 +801,8 @@ void place_a_building_base(int edge_style)
     unsigned char *sprite_bank_ptr;
 
 #if PLATFORM_WINDOWS
-    if (screen_mode > 1) mode_no = 0;
-    else mode_no = screen_mode;
+    if (map_mode > 1) mode_no = 0;
+    else mode_no = map_mode;
 #endif
 
     sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
@@ -921,8 +921,8 @@ void place_a_building_top(int edge_style)
 #endif
 
 #if PLATFORM_WINDOWS
-    if (screen_mode > 1) mode_no = 0;
-    else mode_no = screen_mode;
+    if (map_mode > 1) mode_no = 0;
+    else mode_no = map_mode;
 #endif
 
     sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
@@ -1054,8 +1054,8 @@ void place_a_building_roof(int edge_style)
     unsigned char height;
 
 #if PLATFORM_WINDOWS
-    if (screen_mode > 1) mode = 0;
-    else mode = screen_mode;
+    if (map_mode > 1) mode = 0;
+    else mode = map_mode;
 #endif
 
     sprite_image_no = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
@@ -1227,7 +1227,7 @@ void top_it(int edge_side)
 
     ambient = 0;
 #if PLATFORM_WINDOWS
-    mode = screen_mode;
+    mode = map_mode;
     if (mode > 1) mode = 0;
     direction_index = map_direction / 2;
 #endif
@@ -1485,7 +1485,7 @@ void place_sprite(int edge_side)
 #endif
 
 #if PLATFORM_WINDOWS
-    mode = screen_mode;
+    mode = map_mode;
     if (mode > 1) mode = 0;
     if (pm_shown_y >= 0xa1) return;
 #endif
