@@ -3,6 +3,14 @@
 #include "c2_types.h"
 
 #if PLATFORM_WINDOWS
+#define CITIZEN_MAP_DIRECTION city_rotation
+#define ARMY_MAP_DIRECTION prov_rotation
+#else
+#define CITIZEN_MAP_DIRECTION map_direction
+#define ARMY_MAP_DIRECTION map_direction
+#endif
+
+#if PLATFORM_WINDOWS
 /* Window state exported by the native user-interface layer. */
 extern int selection_menu;
 extern void *main_window;
@@ -1251,7 +1259,7 @@ void get_movement_image(int image_base)
 {
     int screen_dir;
 
-    screen_dir = citizen_list[citizen_no].world_dir - map_direction;
+    screen_dir = citizen_list[citizen_no].world_dir - CITIZEN_MAP_DIRECTION;
     if (screen_dir < 0) screen_dir += 8;
     switch (screen_dir) {
     case 0: break;
@@ -1279,7 +1287,7 @@ void get_movement_image(int image_base)
 void get_army_ship_image(int image_base)
 {
     int screen_dir;
-    screen_dir = army_list[army_no].world_dir - map_direction + 1;
+    screen_dir = army_list[army_no].world_dir - ARMY_MAP_DIRECTION + 1;
     if (screen_dir < 0)  screen_dir += 8;
     if (screen_dir >= 8) screen_dir %= 8;
     image_base += screen_dir;
@@ -1324,7 +1332,7 @@ void get_barbarian_image(void)
     int i;
 
     army_list[army_no].sprite_dir = 0;
-    dir = army_list[army_no].world_dir - map_direction + 1;
+    dir = army_list[army_no].world_dir - ARMY_MAP_DIRECTION + 1;
     if (dir < 0)  dir += 8;
     if (dir >= 8) dir %= 8;
 
@@ -1349,7 +1357,7 @@ void get_enemy_image(void)
     int dir;
     int i;
 
-    dir = army_list[army_no].world_dir - map_direction + 1;
+    dir = army_list[army_no].world_dir - ARMY_MAP_DIRECTION + 1;
     if (dir < 0)  dir += 8;
     if (dir >= 8) dir %= 8;
 
@@ -1374,7 +1382,7 @@ void get_cohort_image(void)
     int dir;
     int i;
 
-    dir = army_list[army_no].world_dir - map_direction + 1;
+    dir = army_list[army_no].world_dir - ARMY_MAP_DIRECTION + 1;
     if (dir < 0)  dir += 8;
     if (dir >= 8) dir %= 8;
 
@@ -3210,11 +3218,7 @@ int get_nearest_reg_building(void)
     int best_y;
 
     min_dist = 0x3e8; best_x = best_y = 0;
-#if PLATFORM_WINDOWS
-    gmn_sptr = 0; gmn_y = 0;
-#else
     gmn_y = 0; gmn_sptr = 0;
-#endif
     for ( ; gmn_y < 0x3c; gmn_y++) {
     for (gmn_x = 0; gmn_x < 0x3c; gmn_x++, gmn_sptr += 8) {
     building_type = (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind;
