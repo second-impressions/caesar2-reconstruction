@@ -2,10 +2,30 @@
 #include "c2_data.h"
 
 #if PLATFORM_WINDOWS
-extern void *main_window;
+#include <windows.h>
+
 extern unsigned char battle_intro_result;
+extern unsigned char game_window_visible;
+extern unsigned char map_window_expanded;
+extern unsigned char window_status[];
+extern int saved_game_window_status;
+extern HWND game_window[];
+extern HWND main_window;
+extern RECT game_window_rect;
+extern RECT map_window_rect;
 extern int show_native_battle_intro(void *window);
 extern void show_native_battle_outtro(void *window);
+extern void prepare_battle_windows(void);
+extern void size_map_window(int mode);
+extern void refresh_map_window(void *window);
+extern void update_map_window_title(void);
+extern void show_game_window(int mode);
+extern void update_window_menu(int mode);
+extern void show_pointer_help();
+extern void play_windows_smacked_anim(char *filename);
+extern void load_map_window_image(unsigned char mode);
+extern void start_cityprov_tune(void);
+extern void redraw_game_windows(void);
 #endif
 
 /* File-local state. */
@@ -864,10 +884,19 @@ int do_sea_trade(int compass_side, int cargo,
 // FUNCTION: C2WIN 0x004712b4
 void continue_battle(int pre_loaded)
 {
+#if PLATFORM_WINDOWS
+    int saved_map_mode;
+    RECT game_rect;
+    POINT window_pos;
+#else
     unsigned char saved_map_mode;
+#endif
 
     battle_setup_count = 0;
     if (pre_loaded == 0) {
+#if PLATFORM_WINDOWS
+        prepare_battle_windows();
+#endif
         battle_setup_count = 0x64;
         battle_intro();
         get_battle_men();
@@ -878,6 +907,10 @@ void continue_battle(int pre_loaded)
 
     stop_db();
     act_exit_turbo_mode();
+#if PLATFORM_WINDOWS
+    GetWindowRect(game_window[2], &map_window_rect);
+    GetWindowRect(game_window[1], &game_rect);
+#endif
 
     if (decision == 1) {
         do_fight_battle(pre_loaded);
@@ -905,11 +938,72 @@ void continue_battle(int pre_loaded)
     } else if (battle_state == 5) {
         battle_auto_resolve();
     } else if (battle_state == 0xa) {
+#if PLATFORM_WINDOWS
+        clear_battle_gfx_buffers(map_mode);
+        load_map_graphics(0, city_zoom_level);
+#endif
         return;
     } else {
         battle_victor = 0;
     }
 
+#if PLATFORM_WINDOWS
+    saved_map_mode = map_mode;
+    map_mode = 2;
+    if (battle_victor == 0) {
+        play_windows_smacked_anim("battwon.smk");
+    } else {
+        play_windows_smacked_anim("battlost.smk");
+    }
+    battle_outtro();
+    map_mode = saved_map_mode;
+
+    clear_battle_gfx_buffers(map_mode);
+    load_map_graphics(0, city_zoom_level);
+    refresh_zoom_mode(zoom_level);
+    act_correct_map();
+    do_battle_victory();
+
+    load_map_window_image(map_mode);
+    size_map_window(map_mode);
+    show_pointer_help();
+    update_map_window_title();
+
+    window_pos.x = game_rect.left;
+    window_pos.y = game_rect.top;
+    ScreenToClient(main_window, &window_pos);
+    if (window_pos.x < 0) window_pos.x = 0;
+    if (window_pos.y < 0) window_pos.y = 0;
+    SetWindowPos(game_window[1], 0, window_pos.x, window_pos.y, 0, 0,
+                 SWP_NOSIZE | SWP_NOACTIVATE);
+
+    if (map_mode == 0) city_map_screen(0);
+    else if (map_mode == 1) region_map_screen(0);
+
+    SetWindowPos(game_window[2], 0,
+                 map_window_rect.left, map_window_rect.top,
+                 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+    refresh_map_window(game_window[2]);
+    start_cityprov_tune();
+    city_tune_playing = 1;
+    update_map = 1;
+
+    if (saved_game_window_status != 0 && game_window_visible != 0) {
+        window_pos.x = game_window_rect.left;
+        window_pos.y = game_window_rect.top;
+        ScreenToClient(main_window, &window_pos);
+        if (window_pos.x < 0) window_pos.x = 0;
+        if (window_pos.y < 0) window_pos.y = 0;
+        SetWindowPos(game_window[0], 0, window_pos.x, window_pos.y,
+                     game_window_rect.right - game_window_rect.left,
+                     game_window_rect.bottom - game_window_rect.top,
+                     SWP_NOACTIVATE);
+        show_game_window(0);
+        update_window_menu(0);
+        BringWindowToTop(game_window[1]);
+    }
+    if (map_window_expanded == 1) redraw_game_windows();
+#else
     if (battle_victor == 0) {
         do_vga_smacked_anim("battwon.smk");
     } else {
@@ -929,6 +1023,7 @@ void continue_battle(int pre_loaded)
     city_tune_playing = 1;
     update_map        = 1;
     setup_map_screen_long_refresh(8);
+#endif
 }
 
 // Displays the pre-battle sequence and waits for it to finish.
