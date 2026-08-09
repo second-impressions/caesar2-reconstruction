@@ -1158,8 +1158,6 @@ void get_contenders(void)
 // FUNCTION: C2WIN 0x0047255b
 void get_villagers(int village_level)
 {
-    int   tribe_idx;
-
     if (game_state == 4) return;
 
     our_battle_army     = army_no;
@@ -1173,13 +1171,12 @@ void get_villagers(int village_level)
     army_list[army_a].total_troops = village_level * 200;
 
     army_list[army_a].tribe_id = (unsigned char)tribe_type[province_is];
-    tribe_idx = army_list[army_a].tribe_id;
 
-    if (tribe_battle_setup[tribe_idx].u.f.middle_kind != 0) {
+    if (tribe_battle_setup[army_list[army_a].tribe_id].u.f.middle_kind != 0) {
         army_list[army_a].num_irregulars = village_level * 150;
-    } else if (tribe_battle_setup[tribe_idx].u.f.rear_kind != 0) {
+    } else if (tribe_battle_setup[army_list[army_a].tribe_id].u.f.rear_kind != 0) {
         army_list[army_a].num_auxillaries = village_level * 150;
-    } else if (tribe_battle_setup[tribe_idx].u.f.front_kind != 0) {
+    } else if (tribe_battle_setup[army_list[army_a].tribe_id].u.f.front_kind != 0) {
         army_list[army_a].num_regulars = village_level * 150;
     }
 
