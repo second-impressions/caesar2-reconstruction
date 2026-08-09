@@ -43,9 +43,13 @@ int game_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 int scroll_speed_delays[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 #define GAME_SPEED_DELAY(delay) game_speed_delays[delay]
 #define SCROLL_SPEED_DELAY(delay) scroll_speed_delays[delay]
+#define GAME_SPEED_COUNT game_speed_count
+#define SCROLL_SPEED_COUNT scroll_speed_count
 #else
 #define GAME_SPEED_DELAY(delay) ((delay) * 50 + 50)
 #define SCROLL_SPEED_DELAY(delay) ((delay) * 50 + 20)
+#define GAME_SPEED_COUNT cmu_count[1]
+#define SCROLL_SPEED_COUNT cmu_count[2]
 #endif
 
 #if PLATFORM_WINDOWS
@@ -1234,6 +1238,11 @@ void promotion_game_loop(void)
     control_buttons(0x80, 0x70, promotion_buttons, 3);
 }
 
+#if PLATFORM_WINDOWS
+int game_speed_count;
+int scroll_speed_count;
+#endif
+
 // Returns whether enough unpaused, non-scrolling input time has elapsed to advance the simulation.
 // FUNCTION: C2 0x3e8e9
 // FUNCTION: C2WIN 0x00411562
@@ -1241,7 +1250,7 @@ int game_speed(void)
 {
     int speed_delay;
 
-    cmu_count[1] += button_time_flag;
+    GAME_SPEED_COUNT += button_time_flag;
     if (turbo_mode > 1) return 1;
 
     speed_delay = (100 - c2inf.game_speed) / 10;
@@ -1258,8 +1267,8 @@ int game_speed(void)
         return 0;
     if (mouse_left_button)
         return 0;
-    if (GAME_SPEED_DELAY(speed_delay) <= cmu_count[1]) {
-        cmu_count[1] = 0;
+    if (GAME_SPEED_DELAY(speed_delay) <= GAME_SPEED_COUNT) {
+        GAME_SPEED_COUNT = 0;
         return 1;
     }
     return 0;
@@ -1270,8 +1279,8 @@ int game_speed(void)
                 if (flag_mode == 0) {
                     if (pointer_mode < 5) {
                         if (!mouse_left_button) {
-                            if (GAME_SPEED_DELAY(speed_delay) <= cmu_count[1]) {
-                                cmu_count[1] = flag_mode;
+                            if (GAME_SPEED_DELAY(speed_delay) <= GAME_SPEED_COUNT) {
+                                GAME_SPEED_COUNT = flag_mode;
                                 return 1;
                             }
                         }
@@ -1291,20 +1300,20 @@ int scroll_speed(void)
 {
     int scroll_delay;
 
-    cmu_count[2] += button_time_flag;
+    SCROLL_SPEED_COUNT += button_time_flag;
     scroll_delay = (100 - c2inf.scroll_speed) / 10;
 #if PLATFORM_WINDOWS
     if (scroll_delay >= 10)
         return 0;
-    if (SCROLL_SPEED_DELAY(scroll_delay) <= cmu_count[2]) {
-        cmu_count[2] = 0;
+    if (SCROLL_SPEED_DELAY(scroll_delay) <= SCROLL_SPEED_COUNT) {
+        SCROLL_SPEED_COUNT = 0;
         return 1;
     }
     return 0;
 #else
     if (scroll_delay < 10) {
-        if (SCROLL_SPEED_DELAY(scroll_delay) <= cmu_count[2]) {
-            cmu_count[2] = 0;
+        if (SCROLL_SPEED_DELAY(scroll_delay) <= SCROLL_SPEED_COUNT) {
+            SCROLL_SPEED_COUNT = 0;
             return 1;
         }
     }
@@ -1314,3 +1323,5 @@ int scroll_speed(void)
 
 #undef SCROLL_SPEED_DELAY
 #undef GAME_SPEED_DELAY
+#undef SCROLL_SPEED_COUNT
+#undef GAME_SPEED_COUNT
