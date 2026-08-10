@@ -3551,6 +3551,8 @@ int get_shortest_distance(int, int, int, int);
 void start_game(void);
 void exit_game(void);
 
+int totalXpercent(int total, int percent); int get_rand_max(int max);
+
 // Vertical / horizontal dotted line: plots one dot every two pixels along the major axis. Diagonal
 // lines are silently dropped.
 // FUNCTION: C2 0x27923
@@ -3617,6 +3619,8 @@ void draw_a_diamond(int x, int y, int width, int height, int colour)
 }
 
 void xor_a_diamond_lhs_top(int x, int y, int width, int height, int color);
+
+void draw_a_rect(int x, int y, int w, int h, int colour); void write_image(unsigned char *sprite_data, int image_idx, int x, int y); void yclip(int clip_top, int clip_bottom); void xclip(int clip_left, int clip_right); int get_rand_max(int max);
 
 // XOR-plot the top half of a tile diamond (both quadrants). Like draw_a_diamond but routes through
 // xor_internal_2point and stops at the equator (height/2).
