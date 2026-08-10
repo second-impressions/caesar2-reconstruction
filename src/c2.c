@@ -224,6 +224,9 @@ extern int   _getdrive(void);
 extern int   getch(void);
 extern void  demo_lead_in_slideshow(void);
 extern void  free_tune_buffer(void);
+#if PLATFORM_WINDOWS
+extern void  close_windows(void);
+#endif
 void *load_a_battle_gfx_file(int battle_zoom, int troop_gfx_idx, int use_aux);
 extern void get_pseudo_map(int n);
 extern unsigned _dos_setdrive(unsigned drive, unsigned *total);
@@ -776,41 +779,54 @@ int load_battle_graphics(int battle_zoom)
 void *load_a_battle_gfx_file(int battle_zoom, int troop_gfx_idx, int use_aux)
 {
     int    gfx_idx;
-    int    file_size;
+    int    size;
     char  *filename;
-    void  *buffer;
+    void  *data;
 
-    battle_zoom--;
-    gfx_idx = battle_zoom * 34 + troop_gfx_idx;
+#if PLATFORM_WINDOWS
+    gfx_idx = (battle_zoom - 1) * 34;
     if (use_aux) {
-        file_size = c2_battle_aux_gfx[gfx_idx].size;
+        size = c2_battle_aux_gfx[gfx_idx + troop_gfx_idx].size;
+        filename = c2_battle_aux_gfx[gfx_idx + troop_gfx_idx].filename;
+    } else {
+        size = c2_battle_gfx[gfx_idx + troop_gfx_idx].size;
+        filename = c2_battle_gfx[gfx_idx + troop_gfx_idx].filename;
+    }
+#else
+    battle_zoom--; gfx_idx = battle_zoom * 34 + troop_gfx_idx;
+    if (use_aux) {
+        size = c2_battle_aux_gfx[gfx_idx].size;
         filename = c2_battle_aux_gfx[gfx_idx].filename;
     } else {
-        file_size = c2_battle_gfx[gfx_idx].size;
+        size = c2_battle_gfx[gfx_idx].size;
         filename = c2_battle_gfx[gfx_idx].filename;
     }
+#endif
 
-    if (file_size == 0) return NULL;
+    if (size == 0) return NULL;
 
-    buffer = malloc((unsigned)file_size);
-    if (!buffer) {
+    data = malloc((unsigned)size);
+    if (!data) {
         stop_system();
         printf("\nError loading battle data - code %d - cannot allocate memory.\n",
                troop_gfx_idx);
+#if PLATFORM_WINDOWS
+        close_windows();
+#endif
         exit(100);
     }
 
-    if (!readfile(filename, buffer, file_size, 0)) {
+    if (!readfile(filename, data, size, 0)) {
         stop_system();
-        if (file_size == 0) {
-            printf("\nError loading battle data - 0 sized file.\n");
-        } else {
-            printf("\nError loading battle data - %s not found.\n", filename);
-        }
+        if (size == 0) printf("\nError loading battle data - 0 sized file.\n");
+        else printf("\nError loading battle data - %s not found.\n", filename);
+#if PLATFORM_WINDOWS
+        close_windows();
+#endif
         exit(100);
     }
 
-    return buffer;
+    return data;
 }
 
 // Marks all map graphics buffers as empty.
