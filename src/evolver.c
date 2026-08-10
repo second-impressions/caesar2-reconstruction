@@ -2083,14 +2083,12 @@ void clear_fire_zones(void)
 {
     int zone_x;
     int zone_y;
-    int zone_idx;
 
     for (zone_x = 0; zone_x < 10; zone_x++) {
         for (zone_y = 0; zone_y < 10; zone_y++) {
-            zone_idx = zone_x * 10 + zone_y;
-            if (fire_zones[zone_idx] > 2)        fire_zones[zone_idx] = 2;
-            else if (fire_zones[zone_idx] > 1)   fire_zones[zone_idx] = 1;
-            else if (fire_zones[zone_idx] <= 1)  fire_zones[zone_idx] = 0;
+            if (fire_zones[zone_x * 10 + zone_y] > 2)        fire_zones[zone_x * 10 + zone_y] = 2;
+            else if (fire_zones[zone_x * 10 + zone_y] > 1)   fire_zones[zone_x * 10 + zone_y] = 1;
+            else if (fire_zones[zone_x * 10 + zone_y] <= 1)  fire_zones[zone_x * 10 + zone_y] = 0;
         }
     }
 }
