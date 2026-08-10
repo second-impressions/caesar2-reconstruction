@@ -1948,36 +1948,33 @@ int stretch_to_3x3_house(int tier_idx, int unused, int orientation)
 // FUNCTION: C2WIN 0x00467804
 void change_house(int tier_idx, int footprint_size, int orientation)
 {
-    int base_gfx_idx = (unsigned char)house_gfxdat[tier_idx * 4];
-    int row_skip = (80 - footprint_size) * 20;
-    unsigned char *cell_ptr = city_qptr;
-    int row_idx;
-    int col_idx;
-    int footprint_idx;
-    unsigned char gfx_offset;
+    int gfx = (unsigned char)house_gfxdat[tier_idx * 4];
+    int rowadd = (80 - footprint_size) * 20;
+    unsigned char *cm_ptr = city_qptr;
+    int x;
+    int i;
+    int y;
 
-    if (orientation != 0) {
-        if (orientation == 1) cell_ptr -= 20;
-        else if (orientation == 2) cell_ptr -= 0x654;
-        else if (orientation == 3) cell_ptr -= 0x640;
-    }
+    if (orientation == 0) {
+    } else if (orientation == 1) cm_ptr -= 20;
+    else if (orientation == 2) cm_ptr -= 0x654;
+    else if (orientation == 3) cm_ptr -= 0x640;
 
-    for (row_idx = 0, footprint_idx = 0; row_idx < footprint_size; row_idx++, cell_ptr += row_skip) {
-        for (col_idx = 0; col_idx < footprint_size; col_idx++, cell_ptr += 20, footprint_idx++) {
-            if ((unsigned char)cell_ptr[0] < 0x82) cell_ptr[3] &= 0x7f;
-            cell_ptr[0] = (char)(tier_idx + 0x82);
-            cell_ptr[1] |= 1;
-            cell_ptr[3] |= 1;
-            cell_ptr[3] &= 0xc3;
-            cell_ptr[5] = footprint_idx;
+    for (y = 0, i = 0; y < footprint_size; y++, cm_ptr += rowadd) {
+        for (x = 0; x < footprint_size; x++, cm_ptr += 20, i++) {
+            if ((unsigned char)cm_ptr[0] < 0x82) cm_ptr[3] &= 0x7f;
+            cm_ptr[0] = (char)(tier_idx + 0x82);
+            cm_ptr[1] |= 1;
+            cm_ptr[3] &= 0xe3;
+            cm_ptr[3] |= 1;
+            cm_ptr[3] &= 0xdf;
+            cm_ptr[5] = i;
             if (footprint_size == 1) {
-                cell_ptr[4] = base_gfx_idx;
+                cm_ptr[4] = gfx;
             } else if (footprint_size == 2) {
-                gfx_offset = diamond_ofsets_2x[footprint_idx];
-                cell_ptr[4] = (char)(base_gfx_idx + gfx_offset);
+                cm_ptr[4] = (char)(gfx + diamond_ofsets_2x[i]);
             } else if (footprint_size == 3) {
-                gfx_offset = diamond_ofsets_3x[footprint_idx];
-                cell_ptr[4] = (char)(base_gfx_idx + gfx_offset);
+                cm_ptr[4] = (char)(gfx + diamond_ofsets_3x[i]);
             }
         }
     }
