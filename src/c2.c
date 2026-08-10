@@ -969,6 +969,57 @@ void init_battle_gfx_buffers(void)
 // Releases all allocated battle graphics buffers.
 // FUNCTION: C2 0x10dc7
 // FUNCTION: C2WIN 0x0044536f
+#if PLATFORM_WINDOWS
+void clear_battle_gfx_buffers(void)
+{
+    if (fixt_data) {
+        free(fixt_data);
+        fixt_data = 0;
+    }
+    if (figure1_data) {
+        free(figure1_data);
+        figure1_data = 0;
+    }
+    if (figure2_data) {
+        free(figure2_data);
+        figure2_data = 0;
+    }
+    if (figure3_data) {
+        free(figure3_data);
+        figure3_data = 0;
+    }
+    if (figure4_data) {
+        free(figure4_data);
+        figure4_data = 0;
+    }
+    if (figure5_data) {
+        free(figure5_data);
+        figure5_data = 0;
+    }
+    if (figure6_data) {
+        free(figure6_data);
+        figure6_data = 0;
+    }
+    if (figure7_data) {
+        free(figure7_data);
+        figure7_data = 0;
+    }
+    if (figure8_data) {
+        free(figure8_data);
+        figure8_data = 0;
+    }
+    if (figure9_data) {
+        free(figure9_data);
+        figure9_data = 0;
+    }
+    if (figure10_data) {
+        free(figure10_data);
+        figure10_data = 0;
+    }
+    city_gfx_loaded = 0;
+    city_gfx_zoom = 0xff;
+}
+#else
 void clear_battle_gfx_buffers(void)
 {
     if (fixt_data)     free(fixt_data);
@@ -983,6 +1034,7 @@ void clear_battle_gfx_buffers(void)
     if (figure9_data)  free(figure9_data);
     if (figure10_data) free(figure10_data);
 }
+#endif
 
 // Loads boot-time graphics, text, palettes, and interface data into their fixed buffers.
 // Returns zero on success or the one-based index of the first file that failed.
