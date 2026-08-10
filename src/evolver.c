@@ -4,6 +4,21 @@
 extern int affected_by_cover1(unsigned char *cell_ptr, int range, char mask);
 extern int affected_by_cover2(unsigned char *cell_ptr, int range, char mask);
 extern unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size);
+void flag_range(int, int, int, int, unsigned char, unsigned char);
+void change_sized(int, int, int, int);
+void flag_range3(int, int, int, int, int, unsigned char, unsigned char, unsigned char);
+void change_lv(int, int, int, int, int);
+void destroy_an_atom(int, int);
+void put_message(int, int, int);
+void spread_fire_atom(int, int);
+void spread_plague_atom(int, int);
+void fill_warehouses_with(int, int, int, int, int);
+void change_reg_sized(int, int, int, int);
+int get_best_lv(unsigned char *, int);
+void get_population_growth_factor(void);
+int get_range1(unsigned char *, int, unsigned char);
+int get_range3(unsigned char *, int, unsigned char);
+int test_area_for_population(int, int, int, int);
 
 int stretch_ofsets_2x2[4][3] = {
     { 20, 1620, 1600 },
@@ -331,28 +346,28 @@ void yearly_update(void)
 // Stamp water, industry, and bath-service coverage around reservoirs, markets, and businesses.
 // FUNCTION: C2 0x40200
 // FUNCTION: C2WIN 0x004625a8
-void evolve_water_supply_baths_industry(int row_count)
+void evolve_water_supply_baths_industry(int rows)
 {
-    int row_idx;
-    int col_idx;
-    unsigned char building_kind;
-    unsigned char supply_level;
+    int count;
+    int x;
+    unsigned char kind;
+    unsigned char bits;
 
     cm_sptr = evolve_row * 1600;
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
-            building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-            if (building_kind == 0xbe) {
-                supply_level = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 3;
-                if      (supply_level == 3) flag_range(0, col_idx, evolve_row + row_idx, 6, 0x0d, 4);
-                else if (supply_level == 2) flag_range(0, col_idx, evolve_row + row_idx, 5, 0x0d, 4);
-                else if (supply_level == 1) flag_range(0, col_idx, evolve_row + row_idx, 4, 0x0d, 4);
-            } else if (building_kind >= 0xfc && building_kind <= 0xff) {
-                flag_range(0, col_idx, evolve_row + row_idx, 2, 0x0d, 0x40);
-            } else if (building_kind == 0xfa) {
-                flag_range(0, col_idx, evolve_row + row_idx, 4, 0x0e, 0x20);
-                flag_range(0, col_idx, evolve_row + row_idx, 2, 0x0e, 0x10);
-                flag_range(0, col_idx, evolve_row + row_idx, 1, 0x0d, 0x80);
+    for (count = 0; count < rows; count++) {
+        for (x = 0; x < 80; x++, cm_sptr += 20) {
+            kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+            if (kind == 0xbe) {
+                bits = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 3;
+                if      (bits == 3) flag_range(0, x, evolve_row + count, 6, 0x0d, 4);
+                else if (bits == 2) flag_range(0, x, evolve_row + count, 5, 0x0d, 4);
+                else if (bits == 1) flag_range(0, x, evolve_row + count, 4, 0x0d, 4);
+            } else if (kind >= 0xfc && kind <= 0xff) {
+                flag_range(0, x, evolve_row + count, 2, 0x0d, 0x40);
+            } else if (kind == 0xfa) {
+                flag_range(0, x, evolve_row + count, 4, 0x0e, 0x20);
+                flag_range(0, x, evolve_row + count, 2, 0x0e, 0x10);
+                flag_range(0, x, evolve_row + count, 1, 0x0d, 0x80);
             }
         }
     }
@@ -440,6 +455,8 @@ void evolve_water_table(int row_count)
             }
         }
 }
+
+int create_citizen(int, int, int, unsigned char);
 
 // Stamp security and administrative coverage around patrol buildings, forts, and forums.
 // FUNCTION: C2 0x40617
