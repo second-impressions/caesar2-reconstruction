@@ -414,9 +414,12 @@ void restore_picture_part(unsigned char *sprite_data_ptr, int sprite_idx)
 void draw_city_map_part(int part_idx)
 {
     int file_offset;
+    int file_offset_hi;
 
     file_offset = int_city_header[part_idx * 8 + 6];
-    file_offset += (int_city_header[part_idx * 8 + 7]) << 16;
+    file_offset_hi = int_city_header[part_idx * 8 + 7];
+    file_offset_hi <<= 16;
+    file_offset += file_offset_hi;
     sprite_start  = 0;
     sprite_width  = int_city_header[part_idx * 8 + 4];
     sprite_height = int_city_header[part_idx * 8 + 5];
@@ -425,7 +428,7 @@ void draw_city_map_part(int part_idx)
         sprite_x += 0xee;
     }
     sprite_y      = int_city_header[part_idx * 8 + 9];
-    readfile("int_city.pl8", ((void *)scratch_buffer), sprite_width * sprite_height, file_offset);
+    readfile("int_city.pl8", ((void *)scratch_buffer), sprite_height * sprite_width, file_offset);
     x_wrap = 0x280 - sprite_width;
     place_i_sprite(scratch_buffer);
 }
