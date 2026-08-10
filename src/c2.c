@@ -631,8 +631,8 @@ void setup_game(void)
 {
     pm_y       = 0x50;
     pm_x       = 0x28;
-    city_pm_x  = 0x28;
-    city_pm_y  = 0x50;
+    city_pm_x  = pm_x;
+    city_pm_y  = pm_y;
     zoom_level = 0;
 
     city_rotation   = 0;
@@ -642,21 +642,23 @@ void setup_game(void)
     map_mode        = 0;
     in_the_forum    = 0;
 
-    com_x = 0x1e0;
-    com_y = 0x30;
-    com_w = 0xa0;
-    com_h = 0xa0;
+    com_x = 0x1e0; com_y = 0x30;
+    com_w = 0xa0; com_h = 0xa0;
 
     map_actual_width     = 0x50;
     map_actual_height    = 0x50;
     map_actual_atom      = 0x14;
-    map_height_reduction = 0;
-    map_width_reduction  = 0;
+    map_width_reduction = map_height_reduction = 0;
 
     get_pseudo_map(0);
     refresh_zoom_mode(zoom_level);
+#if PLATFORM_WINDOWS
+    load_map_graphics(1, prov_zoom_level);
+    load_map_graphics(0, city_zoom_level);
+#else
     load_map_graphics(map_mode,
                       zoom_level);
+#endif
 
     ov_map_mode      = 0;
     ov2_map_mode     = 1;
@@ -665,10 +667,8 @@ void setup_game(void)
     housing_cheat    = 0;
     slave_warning    = 0;
     clear_highlight_goods_list();
-    reg_placing_type  = 0;
-    reg_placing_flags = 0;
-    placing_type      = 0;
-    placing_flags     = 0;
+    reg_placing_type = 0; reg_placing_flags = 0;
+    placing_type = 0; placing_flags = 0;
     pm_build_shape    = 0;
 }
 
