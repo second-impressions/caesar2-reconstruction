@@ -703,6 +703,38 @@ done:
 // Reloads circus sprites for a populous city, alternating the graphics by year.
 // FUNCTION: C2 0x10944
 // FUNCTION: C2WIN 0x0044474a
+#if PLATFORM_WINDOWS
+void swap_circus_gfx(void)
+{
+    int map_kind;
+
+    map_kind = map_mode;
+    if (map_kind > 1) map_kind = 0;
+
+    if (population < 2000) return;
+    if (map_mode != 0)     return;
+    if (game_state == 3)   return;
+    if (game_state == 1)   return;
+    if (game_state == 2)   return;
+
+    if (zoom_level == 0) {
+        if (start_year & 1)
+            readfile("build1f.pl8", (&building_data4)[map_kind], 0x1ad20, 0);
+        else
+            readfile("build1d.pl8", (&building_data4)[map_kind], 0x1ad20, 0);
+    } else if (zoom_level == 1) {
+        if (start_year & 1)
+            readfile("build2f.pl8", (&building_data4)[map_kind], 0x6590, 0);
+        else
+            readfile("build2d.pl8", (&building_data4)[map_kind], 0x6590, 0);
+    } else if (zoom_level == 2) {
+        if (start_year & 1)
+            readfile("build3f.pl8", (&building_data4)[map_kind], 0x171e, 0);
+        else
+            readfile("build3d.pl8", (&building_data4)[map_kind], 0x171e, 0);
+    }
+}
+#else
 void swap_circus_gfx(void)
 {
     if (population < 2000) return;
@@ -712,22 +744,17 @@ void swap_circus_gfx(void)
     if (game_state == 2)   return;
 
     if (zoom_level == 0) {
-        if (year & 1)
-            readfile("build1f.pl8", building_data4, 0x1ad20, 0);
-        else
-            readfile("build1d.pl8", building_data4, 0x1ad20, 0);
+        if (year & 1) readfile("build1f.pl8", building_data4, 0x1ad20, 0);
+        else readfile("build1d.pl8", building_data4, 0x1ad20, 0);
     } else if (zoom_level == 1) {
-        if (year & 1)
-            readfile("build2f.pl8", building_data4, 0x6590, 0);
-        else
-            readfile("build2d.pl8", building_data4, 0x6590, 0);
+        if (year & 1) readfile("build2f.pl8", building_data4, 0x6590, 0);
+        else readfile("build2d.pl8", building_data4, 0x6590, 0);
     } else if (zoom_level == 2) {
-        if (year & 1)
-            readfile("build3f.pl8", building_data4, 0x171e, 0);
-        else
-            readfile("build3d.pl8", building_data4, 0x171e, 0);
+        if (year & 1) readfile("build3f.pl8", building_data4, 0x171e, 0);
+        else readfile("build3d.pl8", building_data4, 0x171e, 0);
     }
 }
+#endif
 
 // Loads the people or overlay graphics for the current zoom level into people_data.
 // FUNCTION: C2 0x10a40
