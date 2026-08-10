@@ -293,16 +293,15 @@ void get_general_sprite_sizes(int sprite_index)
 // FUNCTION: C2WIN 0x00460180
 void general_sprite(int sprite_idx, int sprite_x_pos, int sprite_y_pos)
 {
-    unsigned char *sprite_data_ptr;
-    unsigned char *header_ptr;
-
     data_ptr = sprite_idx * 16 + 8;
     sprite_image_no = sprite_idx;
-    sprite_data_ptr = (scratch_buffer);
-    header_ptr = sprite_data_ptr + data_ptr;
-    sprite_width  = header_ptr[0] + (header_ptr[1] << 8);
-    sprite_height = header_ptr[2] + (header_ptr[3] << 8);
-    sprite_start  = header_ptr[4] + (header_ptr[5] << 8) + (header_ptr[6] << 16);
+    sprite_width = *(scratch_buffer + data_ptr) +
+                   *(scratch_buffer + 1 + data_ptr) * 0x100;
+    sprite_height = *(scratch_buffer + 2 + data_ptr) +
+                    *(scratch_buffer + 3 + data_ptr) * 0x100;
+    sprite_start = *(scratch_buffer + 4 + data_ptr) +
+                   *(scratch_buffer + 5 + data_ptr) * 0x100 +
+                   *(scratch_buffer + 6 + data_ptr) * 0x10000;
     if (sprite_start > 0x4baf0) return;
     if (sprite_width <= 0)      return;
     if (sprite_width > 0x280)   return;
@@ -311,7 +310,7 @@ void general_sprite(int sprite_idx, int sprite_x_pos, int sprite_y_pos)
     sprite_x = sprite_x_pos;
     sprite_y = sprite_y_pos;
     x_wrap = 0x280 - sprite_width;
-    place_i_sprite(sprite_data_ptr);
+    place_i_sprite(scratch_buffer);
 }
 
 // Validate, clip, and draw a sprite from the scratch buffer.
