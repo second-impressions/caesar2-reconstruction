@@ -606,18 +606,34 @@ finish_smacking:
 void do_svga_smacked_anim(char *filename)
 {
     int saved_anims_on;
+#if PLATFORM_WINDOWS
+    int smk_height;
+#endif
 
     saved_anims_on = c2inf.anims_on;
     c2inf.anims_on = 1;
+#if PLATFORM_WINDOWS
+    clear_map_gfx_buffers(map_mode);
+    clear_battle_gfx_buffers(map_mode);
+#else
     clear_map_gfx_buffers();
     clear_battle_gfx_buffers();
+#endif
     start_smacking(filename, 0, 0, 0);
-    out2 = 0;
-    out1 = 0;
+    out1 = out2 = 0;
+#if PLATFORM_WINDOWS
+    smk_height = 0xc8;
+#endif
     while (out1 != 1) {
         hold_hot_keys = 1;
         get_mouse();
+#if PLATFORM_WINDOWS
+        if (continue_smacking(0, 0, 0)) {
+        }
+        refresh_svga_screen();
+#else
         if (continue_smacking(0, 0, 0)) refresh_svga_screen();
+#endif
         if (mouse_right_preclick) {
             out1 = 1;
             out2 = 1;
@@ -633,6 +649,10 @@ void do_svga_smacked_anim(char *filename)
     clear_all_screens();
     clear_a_screen();
     c2inf.anims_on = saved_anims_on;
+#if PLATFORM_WINDOWS
+    init_map_gfx_buffers(map_mode);
+#else
     init_map_gfx_buffers();
+#endif
     init_battle_gfx_buffers();
 }
