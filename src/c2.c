@@ -239,6 +239,10 @@ extern unsigned _dos_getdrive(unsigned *drive);
 extern int      chdir(const char *path);
 extern int      open(const char *path, int flags, ...);
 extern int      close(int fd);
+#if PLATFORM_WINDOWS
+extern int      _chdrive(int drive);
+extern int      _getdrive(void);
+#endif
 /* Forward declarations (functions defined later in this file). */
 void deal_with_battles(void);
 void start_a_new_game(void);
@@ -1129,6 +1133,49 @@ void do_neg(void)
 // Returns zero on success or an error code identifying the failed step.
 // FUNCTION: C2 0x11095
 // FUNCTION: C2WIN 0x004457c4
+#if PLATFORM_WINDOWS
+int test_cd_drive(void)
+{
+    char  cdrive;
+    int   drive;
+    int   no_of_drives;
+    int   file;
+    int   result;
+    int   error;
+    char *root_path = "c:\\";
+    int   current_drive;
+
+    error = 0;
+    if (c2inf.cd_letter < 'A') {
+        error = 1;
+    } else {
+        drive = c2inf.cd_letter - 0x40;
+        _chdrive(drive);
+        current_drive = _getdrive();
+        if (current_drive != drive) {
+            error = 2;
+        } else {
+            cdrive = c2inf.cd_letter;
+            root_path[0] = cdrive;
+            result = chdir(root_path);
+            if (result != 0) error = 3;
+
+            getcwd(path_name, 0x50);
+            file = open("cd.dat", O_BINARY);
+            if (file >= 0) close(file);
+            else error = 4;
+
+            drive = drive_name - 0x40;
+            _chdrive(drive);
+            current_drive = _getdrive();
+            if (current_drive != drive) error = 5;
+            result = chdir(path_name);
+            if (result != 0) error = 6;
+        }
+    }
+    return error;
+}
+#else
 int test_cd_drive(void)
 {
     int            error_code;
@@ -1136,45 +1183,42 @@ int test_cd_drive(void)
     int            drive_count;
     int            current_drive;
     int            cd_fd;
+    int            result;
+    char           cdrive;
     char          *cd_root = "c:\\";
 
     error_code = 0;
 
-    if (c2inf.cd_letter < 'A') {
-        return 1;
+    if (c2inf.cd_letter < 'A') { error_code = 1;
+        goto end;
     }
 
     drive = c2inf.cd_letter - 0x40;
     _dos_setdrive((unsigned)drive, (unsigned *)&drive_count);
     _dos_getdrive((unsigned *)&current_drive);
-    if (drive != current_drive) {
-        return 2;
+    if (drive != current_drive) { error_code = 2;
+        goto end;
     }
 
-    cd_root[0] = c2inf.cd_letter;
-    if (chdir(cd_root) != 0) {
-        error_code = 3;
-    }
+    cdrive = c2inf.cd_letter;
+    cd_root[0] = cdrive;
+    result = chdir(cd_root);
+    if (result != 0) error_code = 3;
 
     getcwd(path_name, 0x50);
 
-    cd_fd = open("cd.dat", O_BINARY);
-    if (cd_fd >= 0) {
-        close(cd_fd);
-    } else {
-        error_code = 4;
-    }
+    cd_fd = open("cd.dat", O_BINARY); if (cd_fd >= 0) close(cd_fd);
+    else error_code = 4;
 
     drive = drive_name - 0x40;
     _dos_setdrive((unsigned)drive, (unsigned *)&drive_count);
     _dos_getdrive((unsigned *)&current_drive);
-    if (drive != current_drive) {
-        error_code = 5;
-    }
+    if (drive != current_drive) error_code = 5;
 
-    if (chdir(path_name) != 0) {
-        error_code = 6;
-    }
+    result = chdir(path_name);
+    if (result != 0) error_code = 6;
 
+end:
     return error_code;
 }
+#endif
