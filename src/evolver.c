@@ -1187,10 +1187,11 @@ void evolve_industrial_activity(int row_count)
 void remove_envoy(void)
 {
     citizen_a = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).industrial;
-    if (citizen_list[(*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).industrial].exists) {
-        if (citizen_list[citizen_a].target_ref == cm_sptr)
-            citizen_list[citizen_a].state_idx = 2;
-    }
+    if (citizen_list[citizen_a].exists == 0)
+        return;
+    if (citizen_list[citizen_a].target_ref != cm_sptr)
+        return;
+    citizen_list[citizen_a].state_idx = 2;
 }
 
 // Select a market's sprite from its activity state and gradually decay both activity counters.
