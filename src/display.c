@@ -15,6 +15,18 @@ extern void write_i_sprite(unsigned char *sprite_data_ptr);   /* sprites.asm */
 extern void write_i_left_sprite(unsigned char *sprite_data_ptr);
 extern void write_i_right_sprite(unsigned char *sprite_data_ptr);
 extern int get_letter_width(signed char letter, unsigned char *font_ptr);
+#if PLATFORM_WINDOWS
+extern void *smacker_window;
+extern unsigned char smacker_screen[];
+extern void stretch_window_buffer(void *window, int dest_x, int dest_y,
+                                  int dest_width, int dest_height, void *buffer,
+                                  int source_x, int source_y, int source_width,
+                                  int source_height);
+extern void clear_map_gfx_buffers();
+extern void clear_battle_gfx_buffers();
+extern void init_map_gfx_buffers();
+extern void init_battle_gfx_buffers(void);
+#endif
 
 /* Forward declarations (functions defined later in this file). */
 void show_a_mosaic_frame(int window_x, int window_y, int column_count, int row_count);
@@ -517,11 +529,20 @@ void show_cursor(unsigned char *font_ptr)
 // FUNCTION: C2WIN 0x00460c28
 void do_vga_smacked_anim(char *filename)
 {
+#if PLATFORM_WINDOWS
+    int smk_height;
+#endif
+
     if (check_file_exists(filename) == 0) return;
     black_out();
     wvbl2();
     clear_a_screen();
     clear_all_screens();
+#if PLATFORM_WINDOWS
+    refresh_svga_screen();
+    clear_map_gfx_buffers(map_mode);
+    clear_battle_gfx_buffers(map_mode);
+#else
     setup_whole_screen_refresh();
     refresh_svga_screen();
     set_bank(0);
@@ -532,34 +553,51 @@ void do_vga_smacked_anim(char *filename)
     screen_size   = 0xfa00;
     clear_map_gfx_buffers();
     clear_battle_gfx_buffers();
+#endif
     start_smacking(filename, 0, 0x18, 2);
-    if (are_smacking()) {
-        out2 = 0;
-        out1 = 0;
-        while (out1 != 1) {
-            hold_hot_keys = 1;
-            get_mouse();
-            continue_smacking(0, 0x18, 2);
-            if (mouse_right_click) {
-                out1 = 1;
-                out2 = 1;
-            }
-            if (mouse_left_click) {
-                out1 = 1;
-                out2 = 1;
-            }
-            if (!are_smacking()) out1 = 1;
+    if (are_smacking() == 0) goto finish_smacking;
+    out1 = out2 = 0;
+#if PLATFORM_WINDOWS
+    smk_height = 0xc8;
+#endif
+    while (out1 != 1) {
+        hold_hot_keys = 1;
+        get_mouse();
+#if PLATFORM_WINDOWS
+        if (continue_smacking(0, 0x18, 2)) {
         }
-        stop_smacking();
+        stretch_window_buffer(smacker_window, 0, 0, 0x280, 0x1e0,
+                              smacker_screen, 0, 0, 0x140, 0xc8);
+#else
+        continue_smacking(0, 0x18, 2);
+#endif
+        if (mouse_right_click) {
+            out1 = 1;
+            out2 = 1;
+        }
+        if (mouse_left_click) {
+            out1 = 1;
+            out2 = 1;
+        }
+        if (!are_smacking()) out1 = 1;
     }
+    stop_smacking();
+finish_smacking:
     black_out();
     clear_all_screens();
+#if PLATFORM_WINDOWS
+    clear_a_screen();
+    set_mouse_limits();
+    init_map_gfx_buffers(map_mode);
+    init_battle_gfx_buffers();
+#else
     screen_mode = 2;
     set_svga_640_480(0);
     clear_a_screen();
     set_mouse_limits();
     init_map_gfx_buffers();
     init_battle_gfx_buffers();
+#endif
 }
 
 // Play a mouse-skippable Smacker animation in SVGA mode and restore the graphics buffers.
