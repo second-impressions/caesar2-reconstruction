@@ -1,8 +1,8 @@
 #include "c2_data.h"
 #include "c2_types.h"
 
-extern int affected_by_cover1(unsigned char *cell_ptr, int range, char mask);
-extern int affected_by_cover2(unsigned char *cell_ptr, int range, char mask);
+extern int affected_by_cover1(unsigned char *cell_ptr, int range, unsigned char mask);
+extern int affected_by_cover2(unsigned char *cell_ptr, int range, unsigned char mask);
 extern unsigned char *get_ptr_to_corner(unsigned char *base_ptr, int size);
 void flag_range(int, int, int, int, unsigned char, unsigned char);
 void change_sized(int, int, int, int);
@@ -771,176 +771,190 @@ void evolve_land_value(int rows)
 // Cap each cell's land value according to its water, services, security, health, and education.
 // FUNCTION: C2 0x41138
 // FUNCTION: C2WIN 0x00463f66
-void cap_land_value(int row_count)
+void cap_land_value(int rows)
 {
-    unsigned char coverage_hit;
-    int col_idx;
-    signed char land_value_cap;
-    int row_idx;
-    unsigned char building_kind;
-    int sub_aqueduct_cover;
-    unsigned char activity_state;
-    unsigned int footprint_size;
-    unsigned char security_score;
-    signed char security;
-    char entertainment_high;
-    char entertainment_mid;
-    unsigned char *cell_ptr;
-    int range_value;
-    char entertainment_low;
-    unsigned char entertainment_rank;
-    signed char current_land_value;
-    signed char aqueduct_cover;
+    signed char map_land_value;
+    unsigned char *this_cell_ptr;
+    unsigned char bath_coverage;
+    unsigned char prefecture_check;
+    int x;
+    unsigned char industry;
+    unsigned char nearby_market;
+    unsigned char admin;
+    signed char capped_value;
+    unsigned char market_cover;
+    unsigned char business_vlow;
+    unsigned char hospital_size;
+    unsigned char sub_aqueduct_flag;
+    unsigned char has_business;
+    unsigned char has_barracks;
+    unsigned char building_number;
+    unsigned char activity;
+    unsigned char low_business_flag;
+    unsigned char entertainment;
+    unsigned char police;
+    int y_index;
+    unsigned char security;
+    unsigned char health;
+    signed char security_value;
+    unsigned char wall;
+    unsigned char aqua;
+    unsigned char gate;
+    unsigned char theatre;
+    unsigned char colosseum;
+    unsigned char circus;
+    unsigned char water_supply_flag;
+    unsigned char grammaticus;
+    unsigned char rhetor;
+    unsigned int size;
 
     cm_sptr = evolve_row * 1600;
-    for (row_idx = 0; row_idx < row_count; row_idx++)
+    for (y_index = 0; y_index < rows; y_index++)
     {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20)
+        for (x = 0; x < 80; x++, cm_sptr += 20)
         {
-            building_kind = ((unsigned char *)city_map)[cm_sptr];
-            if (building_kind >= 0x82) footprint_size = reg_aquaduct_gfxdat[building_kind + 8];
-            else footprint_size = 1;
+            building_number = ((unsigned char *)city_map)[cm_sptr];
+            if (building_number >= 0x82) size = (unsigned char)reg_aquaduct_gfxdat[building_number + 8];
+            else size = 1;
 
-            activity_state = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
+            activity = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
 
-            cell_ptr = (unsigned char *)city_map + cm_sptr;
-            if (activity_state) cell_ptr = get_ptr_to_corner(cell_ptr, footprint_size);
+            this_cell_ptr = (unsigned char *)city_map + cm_sptr;
+            if (activity) this_cell_ptr = get_ptr_to_corner((unsigned char *)city_map + cm_sptr, size);
 
-            if ((building_kind < 0x82) || (building_kind > 0xa1))
-                goto non_housing;
+            if (building_number >= 0x82 && building_number <= 0xa1) {
+            sub_aqueduct_flag = affected_by_cover1(this_cell_ptr, size, 2);
+            aqua = affected_by_cover1(this_cell_ptr, size, 1);
+            if (aqua == 0 && sub_aqueduct_flag == 0) { capped_value = 0x02; goto emit; }
 
-            sub_aqueduct_cover = affected_by_cover1(cell_ptr, footprint_size, 2);
-            aqueduct_cover = affected_by_cover1(cell_ptr, footprint_size, 1);
-            if (aqueduct_cover == 0 && (char)sub_aqueduct_cover == 0) { land_value_cap = 0x02; goto emit; }
+            admin = get_range1(this_cell_ptr, size, 0x0c);
+            if (admin == 0) { capped_value = 0x06; goto emit; }
 
-            coverage_hit = get_range1(cell_ptr, footprint_size, 0x0c);
-            if (coverage_hit == 0) { land_value_cap = 0x06; goto emit; }
+            has_business = affected_by_cover1(this_cell_ptr, size, 0x80);
+            if (has_business != 0) { capped_value = 0x0a; goto emit; }
 
-            coverage_hit = affected_by_cover1(cell_ptr, footprint_size, 0x80);
-            if (coverage_hit != 0) { land_value_cap = 0x0a; goto emit; }
+            market_cover = get_range1(this_cell_ptr, size, 0xc0);
+            if (market_cover == 0) { capped_value = 0x0c; goto emit; }
 
-            coverage_hit = get_range1(cell_ptr, footprint_size, 0xc0);
-            if (coverage_hit == 0) { land_value_cap = 0x0c; goto emit; }
+            if (aqua == 0) { capped_value = 0x0e; goto emit; }
 
-            if (aqueduct_cover == 0) { land_value_cap = 0x0e; goto emit; }
+            health = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).health;
+            low_business_flag = affected_by_cover2(this_cell_ptr, size, 0x10);
+            if (low_business_flag != 0) { capped_value = 0x10; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x10);
-            if (coverage_hit != 0) { land_value_cap = 0x10; goto emit; }
+            bath_coverage = affected_by_cover1(this_cell_ptr, size, 0x08);
+            if (bath_coverage == 0) { capped_value = 0x12; goto emit; }
 
-            coverage_hit = affected_by_cover1(cell_ptr, footprint_size, 0x08);
-            if (coverage_hit == 0) { land_value_cap = 0x12; goto emit; }
+            theatre = get_range3(this_cell_ptr, size, 0x03);
+            colosseum = get_range3(this_cell_ptr, size, 0x0c);
+            colosseum = colosseum >> 2;
+            circus = get_range3(this_cell_ptr, size, 0x30);
+            circus = circus >> 4;
+            entertainment = theatre + colosseum + circus;
+            if (entertainment == 0) { capped_value = 0x14; goto emit; }
 
-            entertainment_low = get_range3(cell_ptr, footprint_size, 0x03);
-            range_value = get_range3(cell_ptr, footprint_size, 0x0c);
-            entertainment_mid = (range_value & 0xff) >> 2;
-            range_value = get_range3(cell_ptr, footprint_size, 0x30);
-            entertainment_high = (range_value & 0xff) >> 4;
-            entertainment_rank = entertainment_low + entertainment_mid + entertainment_high;
-            if (entertainment_rank == 0) { land_value_cap = 0x14; goto emit; }
+            has_barracks = affected_by_cover2(this_cell_ptr, size, 0x01);
+            if (has_barracks != 0) { capped_value = 0x18; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x01);
-            if (coverage_hit != 0) { land_value_cap = 0x18; goto emit; }
+            security_value = ((unsigned char *)city_map)[cm_sptr + 0x11];
+            police = get_range1(this_cell_ptr, size, 0x30);
+            if (security_value < 0x10) security = 0;
+            else security = 1;
 
-            security = ((unsigned char *)city_map)[cm_sptr + 0x11];
-            coverage_hit = get_range1(cell_ptr, footprint_size, 0x30);
-            security_score = (security >= 0x10);
+            if (police) security = security + 1;
+            if (security == 0) { capped_value = 0x18; goto emit; }
 
-            if (coverage_hit) { security_score &= 0xff; security_score++; }
-            if (security_score == 0) { land_value_cap = 0x18; goto emit; }
+            business_vlow = affected_by_cover2(this_cell_ptr, size, 0x20);
+            if (business_vlow != 0) { capped_value = 0x1a; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x20);
-            if (coverage_hit != 0) { land_value_cap = 0x1a; goto emit; }
+            if (entertainment <= 1) { capped_value = 0x1a; goto emit; }
 
-            if (entertainment_rank <= 1) { land_value_cap = 0x1a; goto emit; }
+            wall = affected_by_cover2(this_cell_ptr, size, 0x08);
+            if (wall != 0) { capped_value = 0x1a; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x08);
-            if (coverage_hit != 0) { land_value_cap = 0x1a; goto emit; }
+            if (entertainment <= 2) { capped_value = 0x1c; goto emit; }
 
-            if (entertainment_rank <= 2) { land_value_cap = 0x1c; goto emit; }
+            gate = affected_by_cover2(this_cell_ptr, size, 0x04);
+            if (gate != 0) { capped_value = 0x1e; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x04);
-            if (coverage_hit != 0) { land_value_cap = 0x1e; goto emit; }
+            if (hospital_cover < 0x14) { capped_value = 0x1e; goto emit; }
 
-            if (hospital_cover < 0x14) { land_value_cap = 0x1e; goto emit; }
+            if (entertainment <= 3) { capped_value = 0x20; goto emit; }
 
-            if (entertainment_rank <= 3) { land_value_cap = 0x20; goto emit; }
+            grammaticus = affected_by_cover1(this_cell_ptr, size, 0x10);
+            if (grammaticus == 0) { capped_value = 0x22; goto emit; }
 
-            coverage_hit = affected_by_cover1(cell_ptr, footprint_size, 0x10);
-            if (coverage_hit == 0) { land_value_cap = 0x22; goto emit; }
+            prefecture_check = affected_by_cover2(this_cell_ptr, size, 0x02);
+            if (prefecture_check != 0) { capped_value = 0x22; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x02);
-            if (coverage_hit != 0) { land_value_cap = 0x22; goto emit; }
+            if (hospital_cover < 0x28) { capped_value = 0x24; goto emit; }
 
-            if (hospital_cover < 0x28) { land_value_cap = 0x24; goto emit; }
+            if (entertainment <= 4) { capped_value = 0x26; goto emit; }
 
-            if (entertainment_rank <= 4) { land_value_cap = 0x26; goto emit; }
+            nearby_market = affected_by_cover1(this_cell_ptr, size, 0x40);
+            if (nearby_market != 0) { capped_value = 0x28; goto emit; }
 
-            coverage_hit = affected_by_cover1(cell_ptr, footprint_size, 0x40);
-            if (coverage_hit != 0) { land_value_cap = 0x28; goto emit; }
+            if (security <= 1) { capped_value = 0x2a; goto emit; }
 
-            if (security_score <= 1) { land_value_cap = 0x2a; goto emit; }
+            if (hospital_cover < 0x3c) { capped_value = 0x2c; goto emit; }
 
-            if (hospital_cover < 0x3c) { land_value_cap = 0x2c; goto emit; }
+            if (entertainment <= 5) { capped_value = 0x2c; goto emit; }
 
-            if (entertainment_rank <= 5) { land_value_cap = 0x2c; goto emit; }
+            rhetor = affected_by_cover1(this_cell_ptr, size, 0x20);
+            if (rhetor == 0) { capped_value = 0x2e; goto emit; }
 
-            coverage_hit = affected_by_cover1(cell_ptr, footprint_size, 0x20);
-            if (coverage_hit == 0) { land_value_cap = 0x2e; goto emit; }
+            if (library_cover < 0x14) { capped_value = 0x2e; goto emit; }
 
-            if (library_cover < 0x14) { land_value_cap = 0x2e; goto emit; }
+            if (entertainment <= 6) { capped_value = 0x30; goto emit; }
 
-            if (entertainment_rank <= 6) { land_value_cap = 0x30; goto emit; }
+            if (library_cover < 0x28) { capped_value = 0x32; goto emit; }
 
-            if (library_cover < 0x28) { land_value_cap = 0x32; goto emit; }
+            if (hospital_cover < 0x50) { capped_value = 0x34; goto emit; }
 
-            if (hospital_cover < 0x50) { land_value_cap = 0x34; goto emit; }
+            if (library_cover < 0x3c) { capped_value = 0x36; goto emit; }
 
-            if (library_cover < 0x3c) { land_value_cap = 0x36; goto emit; }
+            if (entertainment <= 7) { capped_value = 0x38; goto emit; }
 
-            if (entertainment_rank <= 7) { land_value_cap = 0x38; goto emit; }
+            if (hospital_cover < 0x64) { capped_value = 0x3a; goto emit; }
 
-            if (hospital_cover < 0x64) { land_value_cap = 0x3a; goto emit; }
+            if (library_cover < 0x50) { capped_value = 0x3a; goto emit; }
 
-            if (library_cover < 0x50) { land_value_cap = 0x3a; goto emit; }
+            if (entertainment <= 8) { capped_value = 0x3c; goto emit; }
 
-            if (entertainment_rank <= 8) { land_value_cap = 0x3c; goto emit; }
+            if (library_cover < 0x64) { capped_value = 0x3e; goto emit; }
 
-            if (library_cover < 0x64) { land_value_cap = 0x3e; goto emit; }
+            capped_value = 0x40;
+            } else {
+            has_business = affected_by_cover1(this_cell_ptr, size, 0x80);
+            if (has_business != 0) { capped_value = 0x0a; goto emit; }
 
-            land_value_cap = 0x40;
-            goto emit;
+            low_business_flag = affected_by_cover2(this_cell_ptr, size, 0x10);
+            if (low_business_flag != 0) { capped_value = 0x10; goto emit; }
 
-        non_housing:
-            coverage_hit = affected_by_cover1(cell_ptr, footprint_size, 0x80);
-            if (coverage_hit != 0) { land_value_cap = 0x0a; goto emit; }
+            has_barracks = affected_by_cover2(this_cell_ptr, size, 0x01);
+            if (has_barracks != 0) { capped_value = 0x18; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x10);
-            if (coverage_hit != 0) { land_value_cap = 0x10; goto emit; }
+            business_vlow = affected_by_cover2(this_cell_ptr, size, 0x20);
+            if (business_vlow != 0) { capped_value = 0x1a; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x01);
-            if (coverage_hit != 0) { land_value_cap = 0x18; goto emit; }
+            wall = affected_by_cover2(this_cell_ptr, size, 0x08);
+            if (wall != 0) { capped_value = 0x1a; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x20);
-            if (coverage_hit != 0) { land_value_cap = 0x1a; goto emit; }
+            gate = affected_by_cover2(this_cell_ptr, size, 0x04);
+            if (gate != 0) { capped_value = 0x1e; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x08);
-            if (coverage_hit != 0) { land_value_cap = 0x1a; goto emit; }
+            prefecture_check = affected_by_cover2(this_cell_ptr, size, 0x02);
+            if (prefecture_check != 0) { capped_value = 0x22; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x04);
-            if (coverage_hit != 0) { land_value_cap = 0x1e; goto emit; }
+            nearby_market = affected_by_cover1(this_cell_ptr, size, 0x40);
+            if (nearby_market != 0) { capped_value = 0x28; goto emit; }
 
-            coverage_hit = affected_by_cover2(cell_ptr, footprint_size, 0x02);
-            if (coverage_hit != 0) { land_value_cap = 0x22; goto emit; }
-
-            coverage_hit = affected_by_cover1(cell_ptr, footprint_size, 0x40);
-            if (coverage_hit != 0) { land_value_cap = 0x28; goto emit; }
-
-            land_value_cap = 0x40;
+            capped_value = 0x40;
+            }
         emit:
-            current_land_value = ((signed char *)city_map)[cm_sptr + 0xf];
-            if (land_value_cap < current_land_value) ((unsigned char *)city_map)[cm_sptr + 0xf] = land_value_cap;
-        }
-    }
+            map_land_value = ((signed char *)city_map)[cm_sptr + 0xf];
+            if (capped_value < map_land_value) ((unsigned char *)city_map)[cm_sptr + 0xf] = capped_value;
+        } }
 }
 
 // Update forum activity and periodically send citizens from occupied forum buildings.
