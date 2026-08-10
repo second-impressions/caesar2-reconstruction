@@ -279,14 +279,13 @@ void show_a_32_block(int sprite_x_pos, int sprite_y_pos, int sprite_idx)
 // Read a sprite's dimensions from its header in the scratch buffer.
 // FUNCTION: C2 0x5a812
 // FUNCTION: C2WIN 0x0046010e
-void get_general_sprite_sizes(int sprite_idx)
+void get_general_sprite_sizes(int sprite_index)
 {
-    unsigned char *header_ptr;
-
-    data_ptr = sprite_idx * 16 + 8;
-    header_ptr = (scratch_buffer) + data_ptr;
-    sprite_width  = header_ptr[0] + (header_ptr[1] << 8);
-    sprite_height = header_ptr[2] + (header_ptr[3] << 8);
+    data_ptr = sprite_index * 16 + 8;
+    sprite_width = *(scratch_buffer + data_ptr) +
+                   *(scratch_buffer + 1 + data_ptr) * 0x100;
+    sprite_height = *(scratch_buffer + 2 + data_ptr) +
+                    *(scratch_buffer + 3 + data_ptr) * 0x100;
 }
 
 // Validate and draw an unclipped sprite from the scratch buffer.
