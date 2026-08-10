@@ -1160,7 +1160,7 @@ extern int total_no_of_regulars;
 extern int total_no_of_soldiers;
 extern short tracking_army;
 extern unsigned char tribe_to_standard[];
-extern char tribe_to_troops[];
+extern unsigned char tribe_to_troops[];
 extern char tribe_type[];
 extern int tribute;
 extern int tribute_adjust[];

@@ -211,6 +211,8 @@ static unsigned char city_gfx_loaded;
 static unsigned char city_gfx_zoom;
 static unsigned char province_gfx_loaded;
 static unsigned char province_gfx_zoom;
+static unsigned char battle_gfx_loaded;
+static unsigned char battle_gfx_zoom;
 static unsigned char windows_game_active;
 #endif
 
@@ -252,7 +254,11 @@ void setup_game(void);
 void init_map_gfx_buffers();
 void clear_map_gfx_buffers();
 void init_battle_gfx_buffers(void);
+#if PLATFORM_WINDOWS
+void clear_battle_gfx_buffers(unsigned char);
+#else
 void clear_battle_gfx_buffers(void);
+#endif
 void flush_sb_buffer(void);
 
 
@@ -411,7 +417,11 @@ void main(int argc, char *argv[])
     free_tune_buffer();
     free_sample_buffer(10);
     clear_map_gfx_buffers();
+#if PLATFORM_WINDOWS
+    clear_battle_gfx_buffers(map_mode);
+#else
     clear_battle_gfx_buffers();
+#endif
     exit_game();
 
 end:;
@@ -479,14 +489,7 @@ void start_a_promotion(void)
     update_sound_menu();
 #endif
     setup_game();
-#if PLATFORM_WINDOWS
-    if (month) {
-        month = 0;
-        start_year++;
-    }
-#else
     if (month) { month = 0; year++; }
-#endif
     imperial_tax = 0;
     new_province();
 #if PLATFORM_WINDOWS
@@ -816,17 +819,17 @@ void swap_circus_gfx(void)
     if (game_state == 2)   return;
 
     if (zoom_level == 0) {
-        if (start_year & 1)
+        if (year & 1)
             readfile("build1f.pl8", (&building_data4)[map_kind], 0x1ad20, 0);
         else
             readfile("build1d.pl8", (&building_data4)[map_kind], 0x1ad20, 0);
     } else if (zoom_level == 1) {
-        if (start_year & 1)
+        if (year & 1)
             readfile("build2f.pl8", (&building_data4)[map_kind], 0x6590, 0);
         else
             readfile("build2d.pl8", (&building_data4)[map_kind], 0x6590, 0);
     } else if (zoom_level == 2) {
-        if (start_year & 1)
+        if (year & 1)
             readfile("build3f.pl8", (&building_data4)[map_kind], 0x171e, 0);
         else
             readfile("build3d.pl8", (&building_data4)[map_kind], 0x171e, 0);
@@ -917,6 +920,81 @@ int load_overlay_graphics(int use_overlay)
 // Reloads terrain, troop, and optional mercenary graphics for the active battle.
 // FUNCTION: C2 0x10ac9
 // FUNCTION: C2WIN 0x004449df
+#if PLATFORM_WINDOWS
+int load_battle_graphics(int battle_zoom)
+{
+    unsigned int troop_gfx_idx;
+
+    clear_map_gfx_buffers(0);
+    clear_battle_gfx_buffers(map_mode);
+
+    troop_gfx_idx = tribe_to_troops[
+        army_list[their_battle_army].tribe_id];
+
+    if (fixt_data) {
+        free(fixt_data);
+        fixt_data = 0;
+    }
+    fixt_data = load_a_battle_gfx_file(battle_zoom, 0, 0);
+    if (figure1_data) {
+        free(figure1_data);
+        figure1_data = 0;
+    }
+    figure1_data = load_a_battle_gfx_file(battle_zoom, 1, 0);
+    if (figure2_data) {
+        free(figure2_data);
+        figure2_data = 0;
+    }
+    figure2_data = load_a_battle_gfx_file(battle_zoom, 2, 0);
+    if (figure3_data) {
+        free(figure3_data);
+        figure3_data = 0;
+    }
+    figure3_data = load_a_battle_gfx_file(battle_zoom, 3, 0);
+    if (figure4_data) {
+        free(figure4_data);
+        figure4_data = 0;
+    }
+    figure4_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx, 0);
+    if (figure5_data) {
+        free(figure5_data);
+        figure5_data = 0;
+    }
+    figure5_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx + 1, 0);
+    if (figure6_data) {
+        free(figure6_data);
+        figure6_data = 0;
+    }
+    figure6_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx + 2, 0);
+    if (figure7_data) {
+        free(figure7_data);
+        figure7_data = 0;
+    }
+    if (figure8_data) {
+        free(figure8_data);
+        figure8_data = 0;
+    }
+
+    if (max_mercs_allowed != 0) {
+        int mercenary_gfx_idx;
+
+        troop_gfx_idx = tribe_to_troops[mercs_tribe];
+
+        if (mercs_catagory == 0) {
+            figure7_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx, 1);
+            figure8_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx + 1, 1);
+        } else if (mercs_catagory == 1) {
+            figure7_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx, 1);
+        } else if (mercs_catagory == 2) {
+            figure7_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx + 1, 1);
+        } else if (mercs_catagory == 3) {
+            figure7_data = load_a_battle_gfx_file(battle_zoom, troop_gfx_idx + 2, 1);
+        }
+    }
+
+    return 1;
+}
+#else
 int load_battle_graphics(int battle_zoom)
 {
     int troop_gfx_idx;
@@ -956,6 +1034,7 @@ int load_battle_graphics(int battle_zoom)
 
     return 1;
 }
+#endif
 
 // Allocates and loads one troop graphics file from the primary or auxiliary battle table.
 // FUNCTION: C2 0x10c03
@@ -1146,8 +1225,8 @@ void init_battle_gfx_buffers(void)
     figure9_data = 0;
     if (figure10_data) free(figure10_data);
     figure10_data = 0;
-    city_gfx_loaded = 0;
-    city_gfx_zoom = 0xff;
+    battle_gfx_loaded = 0;
+    battle_gfx_zoom = 0xff;
 }
 #else
 void init_battle_gfx_buffers(void)
@@ -1170,7 +1249,7 @@ void init_battle_gfx_buffers(void)
 // FUNCTION: C2 0x10dc7
 // FUNCTION: C2WIN 0x0044536f
 #if PLATFORM_WINDOWS
-void clear_battle_gfx_buffers(void)
+void clear_battle_gfx_buffers(unsigned char mode)
 {
     if (fixt_data) {
         free(fixt_data);
@@ -1216,8 +1295,8 @@ void clear_battle_gfx_buffers(void)
         free(figure10_data);
         figure10_data = 0;
     }
-    city_gfx_loaded = 0;
-    city_gfx_zoom = 0xff;
+    battle_gfx_loaded = 0;
+    battle_gfx_zoom = 0xff;
 }
 #else
 void clear_battle_gfx_buffers(void)
