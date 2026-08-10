@@ -230,7 +230,7 @@ void start_a_new_game(void);
 void start_a_promotion(void);
 void new_province(void);
 void setup_game(void);
-void init_map_gfx_buffers(void);
+void init_map_gfx_buffers();
 void clear_map_gfx_buffers(void);
 void init_battle_gfx_buffers(void);
 void clear_battle_gfx_buffers(void);
@@ -809,6 +809,29 @@ void *load_a_battle_gfx_file(int battle_zoom, int troop_gfx_idx, int use_aux)
 // Marks all map graphics buffers as empty.
 // FUNCTION: C2 0x10cb9
 // FUNCTION: C2WIN 0x00444e27
+#if PLATFORM_WINDOWS
+void init_map_gfx_buffers(int mode)
+{
+    if (mode > 1) mode = 0;
+
+    if ((&people_data)[mode]) free((&people_data)[mode]);
+    (&people_data)[mode] = 0;
+    if ((&fixt_data)[mode]) free((&fixt_data)[mode]);
+    (&fixt_data)[mode] = 0;
+    if ((&house_data)[mode]) free((&house_data)[mode]);
+    (&house_data)[mode] = 0;
+    if ((&building_data1)[mode]) free((&building_data1)[mode]);
+    (&building_data1)[mode] = 0;
+    if ((&building_data2)[mode]) free((&building_data2)[mode]);
+    (&building_data2)[mode] = 0;
+    if ((&building_data3)[mode]) free((&building_data3)[mode]);
+    (&building_data3)[mode] = 0;
+    if ((&building_data4)[mode]) free((&building_data4)[mode]);
+    (&building_data4)[mode] = 0;
+    if ((&tops_data)[mode]) free((&tops_data)[mode]);
+    (&tops_data)[mode] = 0;
+}
+#else
 void init_map_gfx_buffers(void)
 {
     people_data    = 0;
@@ -820,6 +843,7 @@ void init_map_gfx_buffers(void)
     building_data4 = 0;
     tops_data      = 0;
 }
+#endif
 
 // Releases all allocated map graphics buffers.
 // FUNCTION: C2 0x10cee
