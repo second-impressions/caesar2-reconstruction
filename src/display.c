@@ -318,14 +318,15 @@ void general_sprite(int sprite_idx, int sprite_x_pos, int sprite_y_pos)
 // FUNCTION: C2WIN 0x004602ce
 void write_general_sprite(int sprite_idx, int sprite_x_pos, int sprite_y_pos)
 {
-    unsigned char *header_ptr;
-
     data_ptr = sprite_idx * 16 + 8;
     sprite_image_no = sprite_idx;
-    header_ptr = (scratch_buffer) + data_ptr;
-    sprite_width  = header_ptr[0] + (header_ptr[1] << 8);
-    sprite_height = header_ptr[2] + (header_ptr[3] << 8);
-    sprite_start  = header_ptr[4] + (header_ptr[5] << 8) + (header_ptr[6] << 16);
+    sprite_width = *(scratch_buffer + data_ptr) +
+                   *(scratch_buffer + 1 + data_ptr) * 0x100;
+    sprite_height = *(scratch_buffer + 2 + data_ptr) +
+                    *(scratch_buffer + 3 + data_ptr) * 0x100;
+    sprite_start = *(scratch_buffer + 4 + data_ptr) +
+                   *(scratch_buffer + 5 + data_ptr) * 0x100 +
+                   *(scratch_buffer + 6 + data_ptr) * 0x10000;
     if (sprite_start > 0x4baf0) return;
     if (sprite_width <= 0)      return;
     if (sprite_width > 0x280)   return;
@@ -334,18 +335,18 @@ void write_general_sprite(int sprite_idx, int sprite_x_pos, int sprite_y_pos)
     sprite_x = sprite_x_pos;
     sprite_y = sprite_y_pos;
     x_wrap = 0x280 - sprite_width;
+#if PLATFORM_WINDOWS
+    xclip(0, 0x280);
+#else
     xclip(0, screen_width);
+#endif
     yclip(0, screen_height);
     if (yclipped == 5) return;
-    if (xclipped == 1) {
-        write_i_left_sprite(scratch_buffer);
-        return;
+    else {
+        if (xclipped == 1) write_i_left_sprite(scratch_buffer);
+        else if (xclipped == 2) write_i_right_sprite(scratch_buffer);
+        else write_i_sprite(scratch_buffer);
     }
-    if (xclipped == 2) {
-        write_i_right_sprite(scratch_buffer);
-        return;
-    }
-    write_i_sprite(scratch_buffer);
 }
 
 // Draw a clipped sprite after omitting the requested number of top rows.
