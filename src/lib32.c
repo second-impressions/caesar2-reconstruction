@@ -3399,6 +3399,23 @@ void vhigh_beep(void)
 }
 #endif /* PLATFORM_DOS */
 
+void draw_a_line(int, int, int, int, int);
+void draw_a_dotted_line(int, int, int, int, int);
+void draw_a_box(int, int, int, int, int);
+void draw_a_dias(int, int, int, int);
+void draw_a_diamond(int, int, int, int, int);
+void xor_a_diamond_top(int, int, int, int, int);
+void xor_a_diamond_lhs_top(int, int, int, int, int);
+void xor_a_diamond_rhs_top(int, int, int, int, int);
+void draw_a_rect(int, int, int, int, int);
+void write_image(unsigned char *, int, int, int);
+void write_clipped_image(unsigned char *, int, int, int, int, int, int, int);
+void do_32_count(void);
+int totalXpercent(int, int);
+int totalXpercentX100(int, int);
+int valueDIVtotal(int, int);
+int big_random(void);
+
 // Sets up Bresenham state for the line from (x1, y1) to (x2, y2). dx / dy hold the absolute
 // extents along each axis; the longer of the two becomes the major axis (so the line loop in
 // draw_a_line steps along it).
@@ -3525,6 +3542,15 @@ void draw_a_line(int x1, int y1, int x2, int y2, int colour)
         }
     }
 }
+
+void random(void);
+void scatter(void);
+int get_rand_max(int);
+int get_distance(int, int, int, int);
+int get_longest_distance(int, int, int, int);
+int get_shortest_distance(int, int, int, int);
+void start_game(void);
+void exit_game(void);
 
 // Vertical / horizontal dotted line: plots one dot every two pixels along the major axis. Diagonal
 // lines are silently dropped.
