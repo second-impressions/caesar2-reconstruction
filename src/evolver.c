@@ -1871,29 +1871,27 @@ int stretch_house(int tier_idx, int footprint_size)
 // FUNCTION: C2WIN 0x004674b5
 int stretch_to_2x2_house(int tier_idx, int unused, int orientation)
 {
-    unsigned char *cell_ptr;
-    int offset_idx;
-    int cell_offset;
-    unsigned char cell_flags;
+    int count;
+    int cell_ofset;
+    unsigned char bits;
     unsigned char cell_kind;
-    unsigned char cell_fire;
-    unsigned char cell_plague;
+    unsigned char fire_status;
+    unsigned char plague_count;
 
     (void)unused;
-    if (evolve_col == 0x4f) { fail: return 0; }
-    if (evolve_row == 0x4f) goto fail;
-    if (evolve_col == 0) goto fail;
-    if (evolve_row == 0) goto fail;
-    for (offset_idx = 0; offset_idx < 3; offset_idx++) {
-        cell_offset = stretch_ofsets_2x2[orientation][offset_idx];
-        cell_ptr = city_qptr + cell_offset;
-        cell_flags = (unsigned char)cell_ptr[1];
-        cell_kind = (unsigned char)cell_ptr[0];
-        cell_fire = (unsigned char)cell_ptr[7];
-        cell_plague = (unsigned char)cell_ptr[8];
-        if (cell_fire != 0 || cell_plague != 0) goto fail;
-        if ((cell_flags & 0xfe) != 0) goto fail;
-        if ((cell_flags & 1) != 0 && cell_kind >= tier_idx + 0x82) goto fail;
+    if (evolve_col == 0x4f) return 0;
+    if (evolve_row == 0x4f) return 0;
+    if (evolve_col == 0) return 0;
+    if (evolve_row == 0) return 0;
+    for (count = 0; count < 3; count++) {
+        cell_ofset = stretch_ofsets_2x2[orientation][count];
+        bits = city_qptr[cell_ofset + 1];
+        cell_kind = city_qptr[cell_ofset];
+        fire_status = city_qptr[cell_ofset + 7];
+        plague_count = city_qptr[cell_ofset + 8];
+        if (fire_status != 0 || plague_count != 0) return 0;
+        if ((bits & 0xfe) != 0) return 0;
+        if ((bits & 1) != 0 && cell_kind >= tier_idx + 0x82) return 0;
     }
     return 1;
 }
