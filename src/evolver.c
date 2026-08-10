@@ -2375,37 +2375,37 @@ int get_pop_level(void)
 // FUNCTION: C2WIN 0x00468e5d
 void check_goods_in_region_warehouses(void)
 {
-    int i;
-    int col_idx;
+    int count;
+    int column_no;
     unsigned char delivered_now;
-    int supply_capacity;
+    int supplied;
     unsigned char goods_idx;
-    unsigned char building_kind;
-    unsigned char remaining_unit;
-    unsigned char warehouse_gfx_idx;
-    int delivered_count;
+    unsigned char type;
+    unsigned char remaining;
+    unsigned char sprite;
+    int delivered;
 
     if (c2inf.peace_mode) {
-        for (i = 0; i < 16; i++) {
-            industry[i].city_supply = city_level_good_supply[i];
-            industry[i].status = 0;
-            industry[i].status = i & 1;
-            if (industry[i].status) industry[i].status++;
+        for (count = 0; count < 16; count++) {
+            industry[count].city_supply = city_level_good_supply[count];
+            industry[count].status = 0;
+            industry[count].status = count & 1;
+            if (industry[count].status) industry[count].status++;
         }
         return;
     }
 
-    for (i = 0; i < 16; i++) {
-        industry[i].count     = 0;
-        industry[i].supply    = 0;
-        industry[i].delivered = 0;
+    for (count = 0; count < 16; count++) {
+        industry[count].count     = 0;
+        industry[count].supply    = 0;
+        industry[count].delivered = 0;
     }
 
-    i = 0; cm_sptr = 0;
-    for (; i < 60; i++) {
-        for (col_idx = 0; col_idx < 60; col_idx++, cm_sptr += 8) {
-            building_kind = ((unsigned char *)region_map)[cm_sptr];
-            if (building_kind == 0xd4) {
+    count = 0; cm_sptr = 0;
+    for (; count < 60; count++) {
+        for (column_no = 0; column_no < 60; column_no++, cm_sptr += 8) {
+            type = ((unsigned char *)region_map)[cm_sptr];
+            if (type == 0xd4) {
                 delivered_now = ((unsigned char *)region_map)[cm_sptr + 7] & 0x0f;
                 goods_idx = ((unsigned char *)region_map)[cm_sptr + 7] & 0xf0;
                 goods_idx >>= 4;
@@ -2413,30 +2413,30 @@ void check_goods_in_region_warehouses(void)
                 industry[goods_idx].count++;
                 if (delivered_now != 0) {
                     industry[goods_idx].status = 2;
-                    remaining_unit = industry[goods_idx].unit_size;
-                    if (delivered_now <= remaining_unit) {
-                        remaining_unit -= delivered_now;
+                    remaining = industry[goods_idx].unit_size;
+                    if (delivered_now <= remaining) {
+                        remaining -= delivered_now;
                         industry[goods_idx].delivered += delivered_now;
                         delivered_now = 0;
                     } else {
-                        delivered_now -= remaining_unit;
-                        industry[goods_idx].delivered += remaining_unit;
+                        delivered_now -= remaining;
+                        industry[goods_idx].delivered += remaining;
                         industry[goods_idx].supply += delivered_now;
-                        remaining_unit = 0;
+                        remaining = 0;
                     }
-                    industry[goods_idx].unit_size = remaining_unit;
+                    industry[goods_idx].unit_size = remaining;
                     ((unsigned char *)region_map)[cm_sptr + 7] &= 0xf0;
                     ((unsigned char *)region_map)[cm_sptr + 7] |= delivered_now;
-                    if (delivered_now < 0xf) warehouse_gfx_idx = delivered_now + 11;
-                    else warehouse_gfx_idx = 0x24;
-                    change_reg_sized(building_kind, warehouse_gfx_idx, 1, cm_sptr);
+                    if (delivered_now < 0xf) sprite = delivered_now + 11;
+                    else sprite = 0x24;
+                    change_reg_sized(type, sprite, 1, cm_sptr);
                 }
             } } }
 
-    for (i = 0; i < 16; i++) {
-        delivered_count = industry[i].delivered;
-        supply_capacity = industry[i].has_supply;
-        if (supply_capacity) industry[i].city_supply = valueDIVtotal(delivered_count, supply_capacity);
-        else industry[i].city_supply = 0;
+    for (count = 0; count < 16; count++) {
+        delivered = industry[count].delivered;
+        supplied = industry[count].has_supply;
+        if (supplied) industry[count].city_supply = valueDIVtotal(delivered, supplied);
+        else industry[count].city_supply = 0;
     }
 }
