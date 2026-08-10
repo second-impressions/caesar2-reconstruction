@@ -497,52 +497,56 @@ void evolve_security_cover(int row_count)
     }
 }
 
+int put_out_a();
+int find_enemy();
+int get_reg_buildings_in_radius();
+
 // Stamp health, education, and entertainment coverage around active amenity buildings.
 // FUNCTION: C2 0x4077b
 // FUNCTION: C2WIN 0x00462e70
-void evolve_amenity_cover(int row_count)
+void evolve_amenity_cover(int rows)
 {
-    int row_idx;
-    int col_idx;
-    unsigned char building_kind;
-    unsigned char activity_state;
+    int count;
+    int x;
+    unsigned char activity;
+    unsigned char kind;
 
     cm_sptr = evolve_row * 1600;
 
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
-            building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-            activity_state = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
-            if (activity_state != 0) continue;
+    for (count = 0; count < rows; count++) {
+        for (x = 0; x < 80; x++, cm_sptr += 20) {
+            kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+            activity = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
+            if (activity != 0) continue;
 
-            if (building_kind == 0xf3) {
-                flag_range(1, col_idx, evolve_row + row_idx, 6, 0xd, 0x10);
-            } else if (building_kind == 0xf4) {
-                flag_range(2, col_idx, evolve_row + row_idx, 8, 0xd, 0x20);
-            } else if (building_kind == 0xe5) {
-                flag_range3(1, col_idx, evolve_row + row_idx, 9, 0xc, 1, 3, 0xfc);
-                flag_range3(1, col_idx, evolve_row + row_idx, 7, 0xc, 2, 3, 0xfc);
-                flag_range3(1, col_idx, evolve_row + row_idx, 5, 0xc, 3, 3, 0xfc);
-            } else if (building_kind == 0xe6) {
-                flag_range3(1, col_idx, evolve_row + row_idx, 11, 0xc, 1, 3, 0xfc);
-                flag_range3(1, col_idx, evolve_row + row_idx,  9, 0xc, 2, 3, 0xfc);
-                flag_range3(1, col_idx, evolve_row + row_idx,  7, 0xc, 3, 3, 0xfc);
-            } else if (building_kind == 0xe7) {
-                flag_range3(2, col_idx, evolve_row + row_idx, 9, 0xc, 4, 0xc, 0xf3);
-                flag_range3(2, col_idx, evolve_row + row_idx, 7, 0xc, 8, 0xc, 0xf3);
-                flag_range3(2, col_idx, evolve_row + row_idx, 5, 0xc, 0xc, 0xc, 0xf3);
-            } else if (building_kind == 0xe8) {
-                flag_range3(2, col_idx, evolve_row + row_idx, 11, 0xc, 4, 0xc, 0xf3);
-                flag_range3(2, col_idx, evolve_row + row_idx,  9, 0xc, 8, 0xc, 0xf3);
-                flag_range3(2, col_idx, evolve_row + row_idx,  7, 0xc, 0xc, 0xc, 0xf3);
-            } else if (building_kind == 0xe9 || building_kind == 0xea || building_kind == 0xeb || building_kind == 0xec) {
-                flag_range3(2, col_idx, evolve_row + row_idx, 10, 0xc, 0x10, 0x30, 0xcf);
-                flag_range3(2, col_idx, evolve_row + row_idx,  8, 0xc, 0x20, 0x30, 0xcf);
-                flag_range3(2, col_idx, evolve_row + row_idx,  6, 0xc, 0x30, 0x30, 0xcf);
-            } else if (building_kind == 0xed || building_kind == 0xee || building_kind == 0xef || building_kind == 0xf0) {
-                flag_range3(3, col_idx, evolve_row + row_idx, 12, 0xc, 0x10, 0x30, 0xcf);
-                flag_range3(3, col_idx, evolve_row + row_idx, 10, 0xc, 0x20, 0x30, 0xcf);
-                flag_range3(3, col_idx, evolve_row + row_idx,  8, 0xc, 0x30, 0x30, 0xcf);
+            if (kind == 0xf3) {
+                flag_range(1, x, evolve_row + count, 6, 0xd, 0x10);
+            } else if (kind == 0xf4) {
+                flag_range(2, x, evolve_row + count, 8, 0xd, 0x20);
+            } else if (kind == 0xe5) {
+                flag_range3(1, x, evolve_row + count, 9, 0xc, 1, 3, 0xfc);
+                flag_range3(1, x, evolve_row + count, 7, 0xc, 2, 3, 0xfc);
+                flag_range3(1, x, evolve_row + count, 5, 0xc, 3, 3, 0xfc);
+            } else if (kind == 0xe6) {
+                flag_range3(1, x, evolve_row + count, 11, 0xc, 1, 3, 0xfc);
+                flag_range3(1, x, evolve_row + count,  9, 0xc, 2, 3, 0xfc);
+                flag_range3(1, x, evolve_row + count,  7, 0xc, 3, 3, 0xfc);
+            } else if (kind == 0xe7) {
+                flag_range3(2, x, evolve_row + count, 9, 0xc, 4, 0xc, 0xf3);
+                flag_range3(2, x, evolve_row + count, 7, 0xc, 8, 0xc, 0xf3);
+                flag_range3(2, x, evolve_row + count, 5, 0xc, 0xc, 0xc, 0xf3);
+            } else if (kind == 0xe8) {
+                flag_range3(2, x, evolve_row + count, 11, 0xc, 4, 0xc, 0xf3);
+                flag_range3(2, x, evolve_row + count,  9, 0xc, 8, 0xc, 0xf3);
+                flag_range3(2, x, evolve_row + count,  7, 0xc, 0xc, 0xc, 0xf3);
+            } else if (kind == 0xe9 || kind == 0xea || kind == 0xeb || kind == 0xec) {
+                flag_range3(2, x, evolve_row + count, 10, 0xc, 0x10, 0x30, 0xcf);
+                flag_range3(2, x, evolve_row + count,  8, 0xc, 0x20, 0x30, 0xcf);
+                flag_range3(2, x, evolve_row + count,  6, 0xc, 0x30, 0x30, 0xcf);
+            } else if (kind == 0xed || kind == 0xee || kind == 0xef || kind == 0xf0) {
+                flag_range3(3, x, evolve_row + count, 12, 0xc, 0x10, 0x30, 0xcf);
+                flag_range3(3, x, evolve_row + count, 10, 0xc, 0x20, 0x30, 0xcf);
+                flag_range3(3, x, evolve_row + count,  8, 0xc, 0x30, 0x30, 0xcf);
             }
         }
     }
