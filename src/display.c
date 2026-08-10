@@ -439,9 +439,12 @@ void draw_city_map_part(int part_idx)
 void draw_region_map_part(int part_idx)
 {
     int file_offset;
+    int file_offset_hi;
 
     file_offset = int_region_header[part_idx * 8 + 6];
-    file_offset += (int_region_header[part_idx * 8 + 7]) << 16;
+    file_offset_hi = int_region_header[part_idx * 8 + 7];
+    file_offset_hi <<= 16;
+    file_offset += file_offset_hi;
     sprite_start  = 0;
     sprite_width  = int_region_header[part_idx * 8 + 4];
     sprite_height = int_region_header[part_idx * 8 + 5];
@@ -450,7 +453,7 @@ void draw_region_map_part(int part_idx)
         sprite_x += 0xee;
     }
     sprite_y      = int_region_header[part_idx * 8 + 9];
-    readfile("int_prov.pl8", ((void *)scratch_buffer), sprite_width * sprite_height, file_offset);
+    readfile("int_prov.pl8", ((void *)scratch_buffer), sprite_height * sprite_width, file_offset);
     x_wrap = 0x280 - sprite_width;
     place_i_sprite(scratch_buffer);
 }
