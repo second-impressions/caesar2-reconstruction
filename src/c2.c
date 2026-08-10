@@ -206,6 +206,13 @@ struct gfx_entry c2_battle_aux_gfx[68] = {
 /* Persistent game settings and player information. */
 struct c2inf_rec c2inf;
 
+#if PLATFORM_WINDOWS
+static unsigned char city_gfx_loaded;
+static unsigned char city_gfx_zoom;
+static unsigned char province_gfx_loaded;
+static unsigned char province_gfx_zoom;
+#endif
+
 extern void *malloc(unsigned int size);
 extern void  printf(const char *fmt, ...);
 extern void  exit(int status);
@@ -231,7 +238,7 @@ void start_a_promotion(void);
 void new_province(void);
 void setup_game(void);
 void init_map_gfx_buffers();
-void clear_map_gfx_buffers(void);
+void clear_map_gfx_buffers();
 void init_battle_gfx_buffers(void);
 void clear_battle_gfx_buffers(void);
 void flush_sb_buffer(void);
@@ -848,6 +855,56 @@ void init_map_gfx_buffers(void)
 // Releases all allocated map graphics buffers.
 // FUNCTION: C2 0x10cee
 // FUNCTION: C2WIN 0x00444fd3
+#if PLATFORM_WINDOWS
+void clear_map_gfx_buffers(unsigned char mode)
+{
+    int map_kind;
+
+    map_kind = mode;
+    if (map_kind > 1) map_kind = 0;
+
+    if (map_kind == 0) {
+        city_gfx_loaded = 0;
+        city_gfx_zoom = 0xff;
+    } else if (map_kind == 1) {
+        province_gfx_loaded = 0;
+        province_gfx_zoom = 0xff;
+    }
+
+    if ((&people_data)[map_kind]) {
+        free((&people_data)[map_kind]);
+        (&people_data)[map_kind] = 0;
+    }
+    if ((&fixt_data)[map_kind]) {
+        free((&fixt_data)[map_kind]);
+        (&fixt_data)[map_kind] = 0;
+    }
+    if ((&house_data)[map_kind]) {
+        free((&house_data)[map_kind]);
+        (&house_data)[map_kind] = 0;
+    }
+    if ((&building_data1)[map_kind]) {
+        free((&building_data1)[map_kind]);
+        (&building_data1)[map_kind] = 0;
+    }
+    if ((&building_data2)[map_kind]) {
+        free((&building_data2)[map_kind]);
+        (&building_data2)[map_kind] = 0;
+    }
+    if ((&building_data3)[map_kind]) {
+        free((&building_data3)[map_kind]);
+        (&building_data3)[map_kind] = 0;
+    }
+    if ((&building_data4)[map_kind]) {
+        free((&building_data4)[map_kind]);
+        (&building_data4)[map_kind] = 0;
+    }
+    if ((&tops_data)[map_kind]) {
+        free((&tops_data)[map_kind]);
+        (&tops_data)[map_kind] = 0;
+    }
+}
+#else
 void clear_map_gfx_buffers(void)
 {
     if (people_data)    free(people_data);
@@ -859,6 +916,7 @@ void clear_map_gfx_buffers(void)
     if (building_data4) free(building_data4);
     if (tops_data)      free(tops_data);
 }
+#endif
 
 // Marks all battle graphics buffers as empty.
 // FUNCTION: C2 0x10d80
