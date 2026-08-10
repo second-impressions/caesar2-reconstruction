@@ -338,7 +338,6 @@ void string_to_upper(unsigned char *s);
 int my_strcmp(unsigned char *s1, unsigned char *s2, int n);
 void my_strcpy(char *src, char *dst, int n);
 void xclip(int clip_left, int clip_right);
-int totalXpercent(int total, int percent);
 void yclip(int clip_top, int clip_bottom);
 void setup_scratch_buffer(void);
 void stop_system(void);
@@ -3661,6 +3660,8 @@ void draw_a_rect(int x, int y, int w, int h, int colour);
 void write_image(unsigned char *sprite_data, int image_idx, int x, int y);
 void yclip(int clip_top, int clip_bottom);
 void do_32_count(void);
+void xclip(int clip_left, int clip_right);
+int totalXpercent(int total, int percent);
 
 // Draw the top-right half of an XOR diamond outline.
 // FUNCTION: C2 0x27c1b
@@ -3676,8 +3677,6 @@ void xor_a_diamond_rhs_top(int x, int y, int width, int height, int color)
     for ( ; i < width - 2; i += 2, j--, k++) {
         xor_internal_2point(x + i, y + k, color); }
 }
-
-void xclip(int clip_left, int clip_right);
 
 // Filled (solid) rectangle by stacking horizontal draw_a_line calls from y to y + h - 1. Returns
 // early if w or h is non-positive.
