@@ -557,199 +557,200 @@ void evolve_amenity_cover(int rows)
 // FUNCTION: C2WIN 0x004632ce
 void evolve_land_value(int rows)
 {
-    int row;
-    int col;
+    int count;
+    int x;
     unsigned char kind;
-    unsigned char flags;
-    unsigned char bkind;
-    unsigned char idx;
-    unsigned char cooldown;
+    unsigned char map_flags;
+    unsigned char building_type;
+    unsigned char index;
+    unsigned char activity_count;
     int radius;
-    int delta;
-    int growth;
+    int value_change;
+    int growth_factor;
     int size;
     signed char curr_lv;
+    int value;
 
     if (evolve_row == 0) top_lv = 0;
     cm_sptr = evolve_row * 1600;
 
-    for (row = 0; row < rows; row++) {
-        for (col = 0; col < 80; col++, cm_sptr += 20) {
-            flags = ((unsigned char *)city_map)[cm_sptr + 1];
+    for (count = 0; count < rows; count++) {
+        for (x = 0; x < 80; x++, cm_sptr += 20) {
+            map_flags = ((unsigned char *)city_map)[cm_sptr + 1];
             kind  = ((unsigned char *)city_map)[cm_sptr];
 
-            if ((flags & 0x20) != 0) {
-                if ((flags & 0x04) != 0) {
-                    change_lv(col, row + evolve_row, 1, 1, 2);
-                } else if ((flags & 0x10) != 0) {
-                    change_lv(col, row + evolve_row, 2, 1, 1);
+            if ((map_flags & 0x20) != 0) {
+                if ((map_flags & 0x04) != 0) {
+                    change_lv(x, count + evolve_row, 1, 1, 2);
+                } else if ((map_flags & 0x10) != 0) {
+                    change_lv(x, count + evolve_row, 2, 1, 1);
                 } else if (kind == 0x5c) {
-                    change_lv(col, row + evolve_row, 1, 1, 2);
+                    change_lv(x, count + evolve_row, 1, 1, 2);
                 } else if (kind >= 0x58 && kind <= 0x5b) {
-                    change_lv(col, row + evolve_row, 1, 1, 1);
+                    change_lv(x, count + evolve_row, 1, 1, 1);
                 }
             } else {
-                if ((flags & 0x01) != 0) {
-                bkind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-                cooldown = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
-                if (cooldown != 0) continue;
-                if (bkind >= 0x82 && bkind <= 0xa1) {
-                        bkind -= 0x82;
-                        radius = house_lv_effect[bkind].radius;
-                        delta  = house_lv_effect[bkind].delta;
-                        size   = house_gfxdat[bkind*4 + 1];
-                        delta += pop_growth_factor;
-                        if      (bkind < 0x1a) growth = 0;
-                        else if (bkind < 0x1e) growth = pop_growth_factor * 2;
-                        else                 growth = pop_growth_factor * 4;
-                        if (growth < 0) growth = 0;
-                        (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).land_value += growth;
-                        change_lv(col, row + evolve_row, radius, size, delta);
-                    } else if (bkind >= 0xdb && bkind <= 0xde) {
-                        delta  = buildings_lv_effect[0];
+                if ((map_flags & 0x01) != 0) {
+                building_type = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+                activity_count = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
+                if (activity_count != 0) continue;
+                if (building_type >= 0x82 && building_type <= 0xa1) {
+                        building_type -= 0x82;
+                        radius = house_lv_effect[building_type].radius;
+                        value_change  = house_lv_effect[building_type].delta;
+                        size   = house_gfxdat[building_type*4 + 1];
+                        value_change += pop_growth_factor;
+                        if      (building_type < 0x1a) growth_factor = 0;
+                        else if (building_type < 0x1e) growth_factor = pop_growth_factor * 2;
+                        else                 growth_factor = pop_growth_factor * 4;
+                        if (growth_factor < 0) growth_factor = 0;
+                        (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).land_value += growth_factor;
+                        change_lv(x, count + evolve_row, radius, size, value_change);
+                    } else if (building_type >= 0xdb && building_type <= 0xde) {
+                        value_change  = buildings_lv_effect[0];
                         radius = buildings_lv_effect[1];
                         if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4) != 0)
-                            change_lv(col, row + evolve_row, radius, 1, delta);
-                    } else if (bkind == 0xe3) {
-                        delta  = buildings_lv_effect[2];
+                            change_lv(x, count + evolve_row, radius, 1, value_change);
+                    } else if (building_type == 0xe3) {
+                        value_change  = buildings_lv_effect[2];
                         radius = buildings_lv_effect[3];
-                        change_lv(col, row + evolve_row, radius, 1, delta);
-                    } else if (bkind == 0xe4) {
-                        delta  = buildings_lv_effect[4];
+                        change_lv(x, count + evolve_row, radius, 1, value_change);
+                    } else if (building_type == 0xe4) {
+                        value_change  = buildings_lv_effect[4];
                         radius = buildings_lv_effect[5];
-                        change_lv(col, row + evolve_row, radius, 3, delta);
-                    } else if (bkind >= 0xae && bkind <= 0xb9) {
-                        bkind -= 0xae;
-                        radius = forum_lv_effect[bkind].radius;
-                        delta  = forum_lv_effect[bkind].delta;
-                        size   = forum_gfxdat[bkind*4 + 1];
-                        change_lv(col, row + evolve_row, radius, size, delta);
-                    } else if (bkind == 0xe5) {
-                        delta  = buildings_lv_effect[6];
+                        change_lv(x, count + evolve_row, radius, 3, value_change);
+                    } else if (building_type >= 0xae && building_type <= 0xb9) {
+                        building_type -= 0xae;
+                        radius = forum_lv_effect[building_type].radius;
+                        value_change  = forum_lv_effect[building_type].delta;
+                        size   = forum_gfxdat[building_type*4 + 1];
+                        change_lv(x, count + evolve_row, radius, size, value_change);
+                    } else if (building_type == 0xe5) {
+                        value_change  = buildings_lv_effect[6];
                         radius = buildings_lv_effect[7];
-                        change_lv(col, row + evolve_row, radius, 2, delta);
-                    } else if (bkind == 0xe6) {
-                        delta  = buildings_lv_effect[8];
+                        change_lv(x, count + evolve_row, radius, 2, value_change);
+                    } else if (building_type == 0xe6) {
+                        value_change  = buildings_lv_effect[8];
                         radius = buildings_lv_effect[9];
-                        change_lv(col, row + evolve_row, radius, 2, delta);
-                    } else if (bkind == 0xe7) {
-                        delta  = buildings_lv_effect[10];
+                        change_lv(x, count + evolve_row, radius, 2, value_change);
+                    } else if (building_type == 0xe7) {
+                        value_change  = buildings_lv_effect[10];
                         radius = buildings_lv_effect[11];
-                        change_lv(col, row + evolve_row, radius, 3, delta);
-                    } else if (bkind == 0xe8) {
-                        delta  = buildings_lv_effect[12];
+                        change_lv(x, count + evolve_row, radius, 3, value_change);
+                    } else if (building_type == 0xe8) {
+                        value_change  = buildings_lv_effect[12];
                         radius = buildings_lv_effect[13];
-                        change_lv(col, row + evolve_row, radius, 3, delta);
-                    } else if (bkind >= 0xe9 && bkind <= 0xec) {
-                        delta  = buildings_lv_effect[14];
+                        change_lv(x, count + evolve_row, radius, 3, value_change);
+                    } else if (building_type >= 0xe9 && building_type <= 0xec) {
+                        value_change  = buildings_lv_effect[14];
                         radius = buildings_lv_effect[15];
-                        change_lv(col, row + evolve_row, radius, 3, delta);
-                    } else if (bkind >= 0xed && bkind <= 0xf0) {
-                        delta  = buildings_lv_effect[16];
+                        change_lv(x, count + evolve_row, radius, 3, value_change);
+                    } else if (building_type >= 0xed && building_type <= 0xf0) {
+                        value_change  = buildings_lv_effect[16];
                         radius = buildings_lv_effect[17];
-                        change_lv(col, row + evolve_row, radius, 4, delta);
-                    } else if (bkind == 0xf3) {
-                        delta  = buildings_lv_effect[18];
+                        change_lv(x, count + evolve_row, radius, 4, value_change);
+                    } else if (building_type == 0xf3) {
+                        value_change  = buildings_lv_effect[18];
                         radius = buildings_lv_effect[19];
-                        change_lv(col, row + evolve_row, radius, 2, delta);
-                    } else if (bkind == 0xf4) {
-                        delta  = buildings_lv_effect[20];
+                        change_lv(x, count + evolve_row, radius, 2, value_change);
+                    } else if (building_type == 0xf4) {
+                        value_change  = buildings_lv_effect[20];
                         radius = buildings_lv_effect[21];
-                        change_lv(col, row + evolve_row, radius, 3, delta);
-                    } else if (bkind == 0xf5) {
-                        delta  = buildings_lv_effect[22];
+                        change_lv(x, count + evolve_row, radius, 3, value_change);
+                    } else if (building_type == 0xf5) {
+                        value_change  = buildings_lv_effect[22];
                         radius = buildings_lv_effect[23];
-                        change_lv(col, row + evolve_row, radius, 3, delta);
-                    } else if (bkind >= 0xa2 && bkind <= 0xad) {
-                        bkind -= 0xa2;
-                        radius = temple_lv_effect[bkind].radius;
-                        delta  = temple_lv_effect[bkind].delta;
-                        if      (bkind < 4) size = 1;
-                        else if (bkind < 8) size = 2;
+                        change_lv(x, count + evolve_row, radius, 3, value_change);
+                    } else if (building_type >= 0xa2 && building_type <= 0xad) {
+                        building_type -= 0xa2;
+                        radius = temple_lv_effect[building_type].radius;
+                        value_change  = temple_lv_effect[building_type].delta;
+                        if      (building_type < 4) size = 1;
+                        else if (building_type < 8) size = 2;
                         else              size = 3;
-                        change_lv(col, row + evolve_row, radius, size, delta);
-                    } else if (bkind == 0xfa) {
-                        idx = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building & 0xf0;
-                        idx >>= 4;
-                        if (idx <= 4) {
-                            delta  = buildings_lv_effect[24];
+                        change_lv(x, count + evolve_row, radius, size, value_change);
+                    } else if (building_type == 0xfa) {
+                        index = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building & 0xf0;
+                        index >>= 4;
+                        if (index <= 4) {
+                            value_change  = buildings_lv_effect[24];
                             radius = buildings_lv_effect[25];
                         } else {
-                            delta  = buildings_lv_effect[26];
+                            value_change  = buildings_lv_effect[26];
                             radius = buildings_lv_effect[27];
                         }
-                        change_lv(col, row + evolve_row, radius, 3, delta);
-                    } else if (bkind == 0xfc) {
-                        delta  = buildings_lv_effect[28];
+                        change_lv(x, count + evolve_row, radius, 3, value_change);
+                    } else if (building_type == 0xfc) {
+                        value_change  = buildings_lv_effect[28];
                         radius = buildings_lv_effect[29];
-                        change_lv(col, row + evolve_row, radius, 2, delta);
-                    } else if (bkind == 0xfd) {
-                        delta  = buildings_lv_effect[30];
+                        change_lv(x, count + evolve_row, radius, 2, value_change);
+                    } else if (building_type == 0xfd) {
+                        value_change  = buildings_lv_effect[30];
                         radius = buildings_lv_effect[31];
-                        change_lv(col, row + evolve_row, radius, 2, delta);
-                    } else if (bkind == 0xfe) {
-                        delta  = buildings_lv_effect[32];
+                        change_lv(x, count + evolve_row, radius, 2, value_change);
+                    } else if (building_type == 0xfe) {
+                        value_change  = buildings_lv_effect[32];
                         radius = buildings_lv_effect[33];
-                        change_lv(col, row + evolve_row, radius, 2, delta);
-                    } else if (bkind == 0xff) {
-                        delta  = buildings_lv_effect[34];
+                        change_lv(x, count + evolve_row, radius, 2, value_change);
+                    } else if (building_type == 0xff) {
+                        value_change  = buildings_lv_effect[34];
                         radius = buildings_lv_effect[35];
-                        change_lv(col, row + evolve_row, radius, 2, delta);
-                    } else if (bkind == 0xdf) {
+                        change_lv(x, count + evolve_row, radius, 2, value_change);
+                    } else if (building_type == 0xdf) {
                         if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4) != 0) {
-                            delta  = buildings_lv_effect[36];
+                            value_change  = buildings_lv_effect[36];
                             radius = buildings_lv_effect[37];
-                            change_lv(col, row + evolve_row, radius, 2, delta);
+                            change_lv(x, count + evolve_row, radius, 2, value_change);
                         }
-                    } else if (bkind == 0xe0) {
+                    } else if (building_type == 0xe0) {
                         if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4) != 0) {
-                            delta  = buildings_lv_effect[38];
+                            value_change  = buildings_lv_effect[38];
                             radius = buildings_lv_effect[39];
-                            change_lv(col, row + evolve_row, radius, 2, delta);
+                            change_lv(x, count + evolve_row, radius, 2, value_change);
                         }
-                    } else if (bkind == 0xe1) {
+                    } else if (building_type == 0xe1) {
                         if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4) != 0) {
-                            delta  = buildings_lv_effect[40];
+                            value_change  = buildings_lv_effect[40];
                             radius = buildings_lv_effect[41];
-                            change_lv(col, row + evolve_row, radius, 2, delta);
+                            change_lv(x, count + evolve_row, radius, 2, value_change);
                         }
-                    } else if (bkind == 0xe2) {
+                    } else if (building_type == 0xe2) {
                         if (((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education & 4) != 0) {
-                            delta  = buildings_lv_effect[42];
+                            value_change  = buildings_lv_effect[42];
                             radius = buildings_lv_effect[43];
-                            change_lv(col, row + evolve_row, radius, 2, delta);
+                            change_lv(x, count + evolve_row, radius, 2, value_change);
                         }
-                } else if (bkind == 0xfb) {
-                    delta  = buildings_lv_effect[44];
+                } else if (building_type == 0xfb) {
+                    value_change  = buildings_lv_effect[44];
                     radius = buildings_lv_effect[45];
-                    change_lv(col, row + evolve_row, radius, 3, delta);
+                    change_lv(x, count + evolve_row, radius, 3, value_change);
                 }
-                } else if ((flags & 0x18) != 0) {
+                } else if ((map_flags & 0x18) != 0) {
                     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).land_value = 0;
                 }
             }
 
             if (kind >= 0 && kind < 8) {
                 if ((((unsigned char *)city_map)[cm_sptr + 3] & 0x80) != 0) {
-                    delta  = buildings_lv_effect[46];
+                    value_change  = buildings_lv_effect[46];
                     radius = buildings_lv_effect[47];
-                    change_lv(col, row + evolve_row, radius, 1, delta);
+                    change_lv(x, count + evolve_row, radius, 1, value_change);
                 } else {
-                    delta  = buildings_lv_effect[48];
+                    value_change  = buildings_lv_effect[48];
                     radius = buildings_lv_effect[49];
-                    change_lv(col, row + evolve_row, radius, 1, delta);
+                    change_lv(x, count + evolve_row, radius, 1, value_change);
                 }
-                delta  = buildings_lv_effect[50];
+                value_change  = buildings_lv_effect[50];
                 radius = buildings_lv_effect[51];
-                change_lv(col, row + evolve_row, radius, 1, delta);
+                change_lv(x, count + evolve_row, radius, 1, value_change);
             } else if (kind >= 0x7c && kind <= 0x7e) {
-                delta  = buildings_lv_effect[52];
+                value_change  = buildings_lv_effect[52];
                 radius = buildings_lv_effect[53];
-                change_lv(col, row + evolve_row, radius, 1, delta);
+                change_lv(x, count + evolve_row, radius, 1, value_change);
             } else if (kind >= 0x78 && kind <= 0x7b) {
-                delta  = buildings_lv_effect[54];
+                value_change  = buildings_lv_effect[54];
                 radius = buildings_lv_effect[55];
-                change_lv(col, row + evolve_row, radius, 1, delta);
+                change_lv(x, count + evolve_row, radius, 1, value_change);
             }
 
             curr_lv = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).land_value;
@@ -760,7 +761,7 @@ void evolve_land_value(int rows)
         }
     }
 
-    if (row + evolve_row >= 0x50) {
+    if (count + evolve_row >= 0x50) {
         top_lv_ptr = top_lv_spot / 20;
         top_lv_x   = top_lv_ptr  % 80;
         top_lv_y   = top_lv_ptr  / 80;
