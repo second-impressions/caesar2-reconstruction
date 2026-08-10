@@ -3261,7 +3261,7 @@ char colour_cycle_delay2(int delay_ms)
     static short last_cycle_ms2;
     struct timeb tb;
     short ms;
-    short delta;
+    short elapsed;
 
     ftime(&tb);
     ms = tb.millitm;

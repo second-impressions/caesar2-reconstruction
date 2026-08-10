@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import bisect
 import json
+import os
 import re
 import shutil
 import time
@@ -881,6 +882,9 @@ def rebuild(
     header_files = sorted(include_dir.glob("*.h"))
     for h in header_files:
         _write_if_changed(work / h.name, h.read_bytes())
+    staged_data_header = work / "c2_data.h"
+    canonical_data_header = staged_data_header.read_bytes()
+    canonical_data_times = staged_data_header.stat()
 
     c_files = sorted(f for f in src_dir.glob("*.c")
                      if f.name not in _EXCLUDED_TUS)
@@ -999,33 +1003,58 @@ def rebuild(
         except OSError:
             return -1
 
-    hdr_deps = [work / h.name for h in header_files]
+    def _is_data_header(path: Path) -> bool:
+        return path.name == "c2_data.h" or path.name.startswith("c2_data_")
+
+    shared_hdr_deps = [
+        work / h.name for h in header_files
+        if not _is_data_header(h)
+    ]
 
     def _stale(obj: str, deps: list[Path]) -> bool:
         ot = _mtime(work / obj)
         return (cfg_changed or ot < 0
                 or any(_mtime(d) >= ot for d in deps))
 
-    steps: list[tuple[str, list[Path], str]] = []
+    steps: list[tuple[str, list[Path], str, Path | None]] = []
     for cf in c_files:
-        steps.append((f"{cf.stem}.obj", [work / cf.name, *hdr_deps, cfg],
-                      f"wcc386 {compile_cflags} -fo={cf.stem}.obj {cf.name}"))
+        owned_data = work / f"c2_data_{cf.stem}.h"
+        data_dep = owned_data if owned_data.exists() else staged_data_header
+        steps.append((
+            f"{cf.stem}.obj",
+            [work / cf.name, data_dep, *shared_hdr_deps, cfg],
+            f"wcc386 {compile_cflags} -fo={cf.stem}.obj {cf.name}",
+            owned_data if owned_data.exists() else None,
+        ))
     for af in asm_files:
         steps.append((f"{af.stem}.obj", [work / af.name, cfg],
-                      f"wasm -fo={af.stem}.obj {af.name}"))
+                      f"wasm -fo={af.stem}.obj {af.name}", None))
 
     built_any = False
     n_compiled = 0
-    for obj, deps, cmd in steps:
-        if not _stale(obj, deps):
-            continue
-        built_any = True
-        n_compiled += 1
-        ok, out = _run_in_container(work, image, cmd, timeout=300)
-        if not ok or "Error!" in out:
-            (work / obj).unlink(missing_ok=True)
-            typer.echo(f"COMPILE FAILED: {cmd}\n{out}")
-            raise typer.Exit(1)
+    try:
+        for obj, deps, cmd, data_overlay in steps:
+            if not _stale(obj, deps):
+                continue
+            data = (data_overlay.read_bytes() if data_overlay is not None
+                    else canonical_data_header)
+            if staged_data_header.read_bytes() != data:
+                staged_data_header.write_bytes(data)
+            built_any = True
+            n_compiled += 1
+            ok, out = _run_in_container(work, image, cmd, timeout=300)
+            if not ok or "Error!" in out:
+                (work / obj).unlink(missing_ok=True)
+                typer.echo(f"COMPILE FAILED: {cmd}\n{out}")
+                raise typer.Exit(1)
+    finally:
+        if staged_data_header.read_bytes() != canonical_data_header:
+            staged_data_header.write_bytes(canonical_data_header)
+        os.utime(
+            staged_data_header,
+            ns=(canonical_data_times.st_atime_ns,
+                canonical_data_times.st_mtime_ns),
+        )
     typer.echo(f"  compiled {n_compiled} stale TU(s)")
 
     # pack the reconstructed vendor archives (member-stale check)
