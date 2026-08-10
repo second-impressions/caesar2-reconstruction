@@ -14,6 +14,7 @@ extern void place_i_sprite(unsigned char *sprite_data_ptr);  /* sprites.asm */
 extern void write_i_sprite(unsigned char *sprite_data_ptr);   /* sprites.asm */
 extern void write_i_left_sprite(unsigned char *sprite_data_ptr);
 extern void write_i_right_sprite(unsigned char *sprite_data_ptr);
+extern int get_letter_width(signed char letter, unsigned char *font_ptr);
 
 /* Forward declarations (functions defined later in this file). */
 void show_a_mosaic_frame(int window_x, int window_y, int column_count, int row_count);
@@ -487,20 +488,27 @@ void draw_battle_part(int header_idx)
 void show_cursor(unsigned char *font_ptr)
 {
     int letter_width;
+    int colour;
 
     request_message.caret_count++;
     if (request_message.caret_count > 0x10) request_message.caret_count = 0;
     if (cursor_y == 0) return;
     letter_width = get_letter_width((signed char)format_buffer[this_letter], font_ptr);
-    if (request_message.caret_count <= 8) return;
-    if (insert_cursor != 0) {
-        draw_a_rect(cursor_x - 2, cursor_y - 2, 1, 0xf, 3);
-        draw_a_rect(cursor_x - 4, cursor_y - 3, 2, 1, 3);
-        draw_a_rect(cursor_x - 4, cursor_y + 0xe, 2, 1, 3);
-        draw_a_rect(cursor_x - 1, cursor_y - 3, 2, 1, 3);
-        draw_a_rect(cursor_x - 1, cursor_y + 0xe, 2, 1, 3);
-    } else {
-        draw_a_rect(cursor_x - 1, cursor_y + 0xe, letter_width + 2, 2, 3);
+    if (request_message.caret_count > 8) {
+#if PLATFORM_WINDOWS
+        colour = 0xf9;
+#else
+        colour = 3;
+#endif
+        if (insert_cursor != 0) {
+            draw_a_rect(cursor_x - 2, cursor_y - 2, 1, 0xf, colour);
+            draw_a_rect(cursor_x - 4, cursor_y - 3, 2, 1, colour);
+            draw_a_rect(cursor_x - 4, cursor_y + 0xe, 2, 1, colour);
+            draw_a_rect(cursor_x - 1, cursor_y - 3, 2, 1, colour);
+            draw_a_rect(cursor_x - 1, cursor_y + 0xe, 2, 1, colour);
+        } else {
+            draw_a_rect(cursor_x - 1, cursor_y + 0xe, letter_width + 2, 2, colour);
+        }
     }
 }
 
