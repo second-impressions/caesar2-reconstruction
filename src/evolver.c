@@ -1854,14 +1854,14 @@ int stretch_house(int tier_idx, int footprint_size)
 {
     if (footprint_size == 2) {
         if (stretch_to_2x2_house(tier_idx, footprint_size, 0)) return 1;
-        if (stretch_to_2x2_house(tier_idx, footprint_size, 1)) return footprint_size;
-        if (stretch_to_2x2_house(tier_idx, footprint_size, footprint_size)) return 3;
+        if (stretch_to_2x2_house(tier_idx, footprint_size, 1)) return 2;
+        if (stretch_to_2x2_house(tier_idx, footprint_size, 2)) return 3;
         if (stretch_to_2x2_house(tier_idx, footprint_size, 3)) return 4;
     } else if (footprint_size == 3) {
         if (stretch_to_3x3_house(tier_idx, footprint_size, 0)) return 1;
         if (stretch_to_3x3_house(tier_idx, footprint_size, 1)) return 2;
-        if (stretch_to_3x3_house(tier_idx, footprint_size, 2)) return footprint_size;
-        if (stretch_to_3x3_house(tier_idx, footprint_size, footprint_size)) return 4;
+        if (stretch_to_3x3_house(tier_idx, footprint_size, 2)) return 3;
+        if (stretch_to_3x3_house(tier_idx, footprint_size, 3)) return 4;
     }
     return 0;
 }
