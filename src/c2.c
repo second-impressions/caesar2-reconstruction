@@ -617,6 +617,103 @@ void setup_game(void)
 // Reloads the eight map graphics buffers for the selected map mode and zoom level.
 // FUNCTION: C2 0x107db
 // FUNCTION: C2WIN 0x0044421c
+#if PLATFORM_WINDOWS
+int load_map_graphics(int gfx_mode, int gfx_level)
+{
+    int   gfx_idx;
+    int   i;
+    char *filename;
+    int   size;
+
+    if (gfx_mode > 1) return;
+
+    if (gfx_mode == 0) {
+        if (city_gfx_loaded == 1 && city_gfx_zoom == gfx_level) return;
+    } else if (gfx_mode == 1) {
+        if (province_gfx_loaded == 1 && province_gfx_zoom == gfx_level) return;
+    }
+
+    clear_map_gfx_buffers(gfx_mode);
+    gfx_idx = gfx_mode * 24 + gfx_level * 8;
+
+    for (i = 0; i < 8; i++) {
+        size = c2_map_gfx[i + gfx_idx].size;
+        filename = c2_map_gfx[i + gfx_idx].filename;
+
+        if (size == 0) continue;
+
+        if (i == 0) {
+            if ((&people_data)[gfx_mode] == 0)
+                (&people_data)[gfx_mode] = malloc((unsigned)size);
+            if ((&people_data)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&people_data)[gfx_mode], size, 0)) goto file_fail;
+        }
+        else if (i == 1) {
+            if ((&fixt_data)[gfx_mode] == 0)
+                (&fixt_data)[gfx_mode] = malloc((unsigned)size);
+            if ((&fixt_data)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&fixt_data)[gfx_mode], size, 0)) goto file_fail;
+        }
+        else if (i == 2) {
+            if ((&house_data)[gfx_mode] == 0)
+                (&house_data)[gfx_mode] = malloc((unsigned)size);
+            if ((&house_data)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&house_data)[gfx_mode], size, 0)) goto file_fail;
+        }
+        else if (i == 3) {
+            if ((&building_data1)[gfx_mode] == 0)
+                (&building_data1)[gfx_mode] = malloc((unsigned)size);
+            if ((&building_data1)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&building_data1)[gfx_mode], size, 0)) goto file_fail;
+        }
+        else if (i == 4) {
+            if ((&building_data2)[gfx_mode] == 0)
+                (&building_data2)[gfx_mode] = malloc((unsigned)size);
+            if ((&building_data2)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&building_data2)[gfx_mode], size, 0)) goto file_fail;
+        }
+        else if (i == 5) {
+            if ((&building_data3)[gfx_mode] == 0)
+                (&building_data3)[gfx_mode] = malloc((unsigned)size);
+            if ((&building_data3)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&building_data3)[gfx_mode], size, 0)) goto file_fail;
+        }
+        else if (i == 6) {
+            if ((&building_data4)[gfx_mode] == 0)
+                (&building_data4)[gfx_mode] = malloc((unsigned)size);
+            if ((&building_data4)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&building_data4)[gfx_mode], size, 0)) goto file_fail;
+        }
+        else if (i == 7) {
+            if ((&tops_data)[gfx_mode] == 0)
+                (&tops_data)[gfx_mode] = malloc((unsigned)size);
+            if ((&tops_data)[gfx_mode] == 0) goto alloc_fail;
+            if (!readfile(filename, (&tops_data)[gfx_mode], size, 0)) goto file_fail;
+        }
+    }
+
+    if (gfx_mode == 0) {
+        city_gfx_loaded = 1;
+        city_gfx_zoom = gfx_level;
+    } else if (gfx_mode == 1) {
+        province_gfx_loaded = 1;
+        province_gfx_zoom = gfx_level;
+    }
+    return 1;
+
+file_fail:
+    stop_system();
+    printf("\nError loading graphics data - code %d - file not found.\n", i + gfx_idx);
+    close_windows();
+    exit(100);
+
+alloc_fail:
+    stop_system();
+    printf("\nError loading graphics data - code %d  - cannot allocate memory.\n", i + gfx_idx);
+    close_windows();
+    exit(100);
+}
+#else
 int load_map_graphics(int gfx_mode, int gfx_level)
 {
     int   gfx_base_idx;
@@ -699,6 +796,7 @@ alloc_fail:
 done:
     return result;
 }
+#endif
 
 // Reloads circus sprites for a populous city, alternating the graphics by year.
 // FUNCTION: C2 0x10944
