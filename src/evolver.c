@@ -1903,42 +1903,42 @@ int stretch_to_2x2_house(int tier_idx, int unused, int orientation)
 // FUNCTION: C2WIN 0x004675ef
 int stretch_to_3x3_house(int tier_idx, int unused, int orientation)
 {
-    int cell_offset;
-    unsigned char cell_plague;
-    unsigned char cell_flags;
-    unsigned char cell_fire;
-    int villa_y;
-    int villa_x;
-    int offset_idx;
+    int cell_ofset;
+    unsigned char plague_count;
+    unsigned char bits;
+    unsigned char fire_status;
+    int villa_row_no;
+    int villa_col_no;
+    int count;
     unsigned char cell_kind;
-    unsigned char *cell_ptr;
+    unsigned char *qptr;
 
     if (evolve_col >= 0x4e) return 0;
     if (evolve_row >= 0x4e) return 0;
     if (evolve_col <= 0) return 0;
     if (evolve_row <= 0) return 0;
-    for (offset_idx = 0; offset_idx < 5; offset_idx++) {
-        cell_offset = *((int *)stretch_ofsets_3x3 + (unsigned int)(orientation * 5) + offset_idx);
-        cell_flags = city_qptr[cell_offset + 1];
-        cell_kind = city_qptr[cell_offset];
-        cell_fire = city_qptr[cell_offset + 7];
-        cell_plague = city_qptr[cell_offset + 8];
-        if (cell_fire != 0 || cell_plague != 0) return 0;
-        if ((cell_flags & 0xfe) != 0) return 0;
-        if ((cell_flags & 1) != 0 && cell_kind >= tier_idx + 0x82) return 0;
+    for (count = 0; count < 5; count++) {
+        cell_ofset = stretch_ofsets_3x3[orientation][count];
+        bits = city_qptr[cell_ofset + 1];
+        cell_kind = city_qptr[cell_ofset];
+        fire_status = city_qptr[cell_ofset + 7];
+        plague_count = city_qptr[cell_ofset + 8];
+        if (fire_status != 0 || plague_count != 0) return 0;
+        if ((bits & 0xfe) != 0) return 0;
+        if ((bits & 1) != 0 && cell_kind >= tier_idx + 0x82) return 0;
     }
-    for (offset_idx = 0; offset_idx < 5; offset_idx++) {
-        cell_offset = stretch_ofsets_3x3[orientation][offset_idx];
-        cell_kind = city_qptr[cell_offset];
+    for (count = 0; count < 5; count++) {
+        cell_ofset = stretch_ofsets_3x3[orientation][count];
+        cell_kind = city_qptr[cell_ofset];
         if (cell_kind >= 0x9c && cell_kind <= 0x9f) {
-            villa_y = city_qptr[cell_offset + 5] & 0xf;
-            villa_x = villa_y;
-            villa_x %= 2;
-            villa_y /= 2;
-            cell_ptr = city_qptr + cell_offset;
-            cell_ptr -= villa_x * 20;
-            cell_ptr -= villa_y * 1600;
-            reduce_villa_to_domus(cell_ptr);
+            villa_row_no = city_qptr[cell_ofset + 5] & 0xf;
+            villa_col_no = villa_row_no;
+            villa_col_no %= 2;
+            villa_row_no /= 2;
+            qptr = city_qptr + cell_ofset;
+            qptr -= villa_col_no * 20;
+            qptr -= villa_row_no * 1600;
+            reduce_villa_to_domus(qptr);
         }
     }
     return 1;
