@@ -48,14 +48,10 @@ void show_a_mosaic_blank(int window_x, int window_y, int column_count, int row_c
 // Load rows of PL8 pixels into the internal screen, skipping the file header.
 // FUNCTION: C2 0x5a25c
 // FUNCTION: C2WIN 0x0045f920
-void show_pl8file(const char *filename, int row_count)
+void show_pl8file(char *fname, int rows)
 {
-    if (readfile(filename, internal_screen,
-                 screen_width * row_count, 0x18) == 0) {
-        test_beeps();
-        return;
-    }
-    flush_sb_buffer();
+    if (readfile(fname, internal_screen, screen_width * rows, 0x18) == 0) test_beeps();
+    else flush_sb_buffer();
 }
 
 // Load a full-screen PL8 image and palette, display it, and fade the palette in.
