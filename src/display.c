@@ -15,6 +15,18 @@ extern void write_i_sprite(unsigned char *sprite_data_ptr);   /* sprites.asm */
 extern void write_i_left_sprite(unsigned char *sprite_data_ptr);
 extern void write_i_right_sprite(unsigned char *sprite_data_ptr);
 extern int get_letter_width(signed char letter, unsigned char *font_ptr);
+extern int readfile(const char *, void *, int, int);
+extern void test_beeps(void);
+extern void flush_sb_buffer(void);
+extern void fade_to_palette(char *);
+extern int evacuate(unsigned char *, unsigned char *);
+extern void set_palette(char *);
+extern void no_high_beeps(int);
+extern void stop_system(void);
+#if PLATFORM_WINDOWS
+extern void close_windows(void);
+#endif
+extern void refresh_svga_screen(void);
 #if PLATFORM_WINDOWS
 extern void *smacker_window;
 extern unsigned char smacker_screen[];
@@ -62,6 +74,19 @@ int display_pl8file(char *pl8_filename, char *palette_filename)
     fade_to_palette(temp_palette);
     return 1;
 }
+
+extern void setup_whole_screen_refresh(void);
+extern void set_bank(int);
+extern void set_vga_mode(int);
+extern void start_smacking(char *, int, int, int);
+extern int are_smacking(void);
+extern void get_mouse(void);
+extern int continue_smacking(int, int, int);
+extern void stop_smacking(void);
+extern void set_mouse_limits(void);
+extern int set_svga_640_480(int);
+extern void setup_refresh_area(int, int, int, int, int);
+extern void clear_mouse(void);
 
 // Load and decode an LBM image into the internal screen.
 // FUNCTION: C2 0x5a2dd
@@ -157,6 +182,7 @@ draw_system_tile:
 void show_a_mosaic_window(int, int, int, int);
 void mosaic_frame_divider(int, int, int, int);
 void show_a_32_block(int, int, int);
+extern void yclip(int, int);
 
 // Fill a rectangular area with the system window's interior tile.
 // FUNCTION: C2 0x5a4cf
@@ -233,6 +259,7 @@ void get_general_sprite_sizes(int);
 void general_sprite(int, int, int);
 void write_general_sprite(int, int, int);
 void write_general_sprite_with_front_ofset(int, int, int, int);
+extern void xclip(int, int);
 
 // Draw a horizontal stone divider with capped ends.
 // FUNCTION: C2 0x5a6d5
@@ -400,6 +427,13 @@ void write_general_sprite_with_front_ofset(int sprite_idx, int sprite_x_pos, int
         else write_i_sprite(scratch_buffer);
     }
 }
+
+extern int check_file_exists(char *);
+extern void black_out(void);
+extern void wvbl2(void);
+extern void clear_a_screen(void);
+extern void clear_all_screens(void);
+extern void draw_a_rect(int, int, int, int, int);
 
 // Restore a saved screen region using the position stored in its sprite header.
 // FUNCTION: C2 0x5ab70
