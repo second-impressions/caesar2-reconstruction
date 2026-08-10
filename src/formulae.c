@@ -1240,7 +1240,7 @@ void get_estimates(void) {
     estimate_total              = (estimate_pop_tax + estimate_ind_tax)
                                 - estimate_construction_cost
                                 - estimate_operating_cost
-                                - tribute;
+                                - estimate_tribute;
 }
 
 // Estimates annual population-tax income using collected and projected monthly receipts.
