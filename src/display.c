@@ -463,19 +463,20 @@ void draw_region_map_part(int part_idx)
 // FUNCTION: C2WIN 0x004609e7
 void draw_battle_part(int header_idx)
 {
-    int part_idx = header_idx;
     int file_offset;
+    int file_offset_hi;
 
-    header_idx *= 8;
-    file_offset = int_battle_header[header_idx + 6];
-    file_offset += (int_battle_header[header_idx + 7]) << 16;
+    file_offset = int_battle_header[header_idx * 8 + 6];
+    file_offset_hi = int_battle_header[header_idx * 8 + 7];
+    file_offset_hi <<= 16;
+    file_offset += file_offset_hi;
     sprite_start  = 0;
-    sprite_width  = int_battle_header[header_idx + 4];
-    sprite_height = int_battle_header[header_idx + 5];
-    sprite_x      = int_battle_header[header_idx + 8];
-    sprite_y      = int_battle_header[header_idx + 9];
-    if (part_idx >= 4) sprite_y += 0xc8;
-    readfile("int_batl.pl8", ((void *)scratch_buffer), sprite_width * sprite_height, file_offset);
+    sprite_width  = int_battle_header[header_idx * 8 + 4];
+    sprite_height = int_battle_header[header_idx * 8 + 5];
+    sprite_x      = int_battle_header[header_idx * 8 + 8];
+    sprite_y      = int_battle_header[header_idx * 8 + 9];
+    if (header_idx >= 4) sprite_y += 0xc8;
+    readfile("int_batl.pl8", ((void *)scratch_buffer), sprite_height * sprite_width, file_offset);
     x_wrap = 0x280 - sprite_width;
     place_i_sprite(scratch_buffer);
 }
