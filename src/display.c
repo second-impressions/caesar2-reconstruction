@@ -59,15 +59,12 @@ void show_lbm(const char *filename)
 
     file_size = readfile(filename, ((void *)scratch_buffer),
                   scratch_buffer_size, 0);
-    if (file_size >= scratch_buffer_size) {
-        no_high_beeps(1);
-        stop_system();
-        printf("Exit from c2 tutorial mode .lbm file too large.\n");
-        exit(100);
-    }
-    if (file_size != 0) {
-        convert_lbm_file(scratch_buffer, internal_screen, temp_palette, file_size);
-    }
+    if (file_size >= scratch_buffer_size) { no_high_beeps(1); stop_system(); printf("Exit from c2 tutorial mode .lbm file too large.\n");
+#if PLATFORM_WINDOWS
+        close_windows();
+#endif
+        exit(100); }
+    if (file_size != 0) convert_lbm_file(scratch_buffer, internal_screen, temp_palette, file_size);
     flush_sb_buffer();
 }
 
