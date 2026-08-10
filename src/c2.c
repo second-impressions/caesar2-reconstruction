@@ -732,6 +732,37 @@ void swap_circus_gfx(void)
 // Loads the people or overlay graphics for the current zoom level into people_data.
 // FUNCTION: C2 0x10a40
 // FUNCTION: C2WIN 0x004448fb
+#if PLATFORM_WINDOWS
+int load_overlay_graphics(int use_overlay)
+{
+    int   gfx_idx;
+    int   result;
+    int   map_kind;
+    char *filename;
+    int   size;
+
+    map_kind = map_mode;
+    if (map_kind > 1) map_kind = 0;
+
+    if (use_overlay == 0) {
+        gfx_idx = zoom_level * 8;
+        size = c2_map_gfx[gfx_idx].size;
+        filename = c2_map_gfx[gfx_idx].filename;
+    } else {
+        size = c2_overlay_gfx[zoom_level].size;
+        filename = c2_overlay_gfx[zoom_level].filename;
+    }
+
+    if (!readfile(filename, (&people_data)[map_kind], size, 0)) goto file_error;
+    return 1;
+
+file_error:
+    stop_system();
+    printf("\nError loading overlay data - file not found.\n");
+    close_windows();
+    exit(100);
+}
+#else
 int load_overlay_graphics(int use_overlay)
 {
     int   file_size;
@@ -744,20 +775,19 @@ int load_overlay_graphics(int use_overlay)
         file_size = c2_map_gfx[gfx_idx].size;
         filename = c2_map_gfx[gfx_idx].filename;
     } else {
-        gfx_idx = zoom_level;
-        file_size = c2_overlay_gfx[gfx_idx].size;
+        gfx_idx = zoom_level; file_size = c2_overlay_gfx[gfx_idx].size;
         filename = c2_overlay_gfx[gfx_idx].filename;
     }
 
     if (readfile(filename, people_data, file_size, 0)) {
-        result = 1;
-    } else {
+        result = 1; } else {
         stop_system();
         printf("\nError loading overlay data - file not found.\n");
         exit(100);
     }
     return result;
 }
+#endif
 
 // Reloads terrain, troop, and optional mercenary graphics for the active battle.
 // FUNCTION: C2 0x10ac9
