@@ -497,7 +497,7 @@ void evolve_security_cover(int row_count)
     }
 }
 
-int put_out_a();
+int devolve_a_house();
 int find_enemy();
 int get_reg_buildings_in_radius();
 
