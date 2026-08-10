@@ -211,6 +211,7 @@ static unsigned char city_gfx_loaded;
 static unsigned char city_gfx_zoom;
 static unsigned char province_gfx_loaded;
 static unsigned char province_gfx_zoom;
+static unsigned char windows_game_active;
 #endif
 
 extern void *malloc(unsigned int size);
@@ -226,6 +227,10 @@ extern void  demo_lead_in_slideshow(void);
 extern void  free_tune_buffer(void);
 #if PLATFORM_WINDOWS
 extern void  close_windows(void);
+extern void  show_map_window(int mode);
+extern void  update_window_menu(int mode);
+extern void  update_sound_menu(void);
+extern void  start_windows_game(void);
 #endif
 void *load_a_battle_gfx_file(int battle_zoom, int troop_gfx_idx, int use_aux);
 extern void get_pseudo_map(int n);
@@ -460,14 +465,34 @@ void start_a_new_game(void)
 // FUNCTION: C2WIN 0x00443e35
 void start_a_promotion(void)
 {
+#if PLATFORM_WINDOWS
+    windows_game_active = 0;
+    show_map_window(0);
+    show_map_window(1);
+    show_map_window(2);
+    update_window_menu(0);
+    update_window_menu(1);
+    update_sound_menu();
+#endif
     setup_game();
+#if PLATFORM_WINDOWS
     if (month) {
         month = 0;
-        year++;
+        start_year++;
     }
+#else
+    if (month) { month = 0; year++; }
+#endif
     imperial_tax = 0;
     new_province();
+#if PLATFORM_WINDOWS
+    if (restart_flag) {
+        windows_game_active = 1;
+        start_windows_game();
+    }
+#else
     if (restart_flag) start_a_new_game();
+#endif
 }
 
 // Initializes a province's map, population, armies, economy, ratings, and regional systems.
