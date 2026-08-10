@@ -2361,12 +2361,12 @@ void evolve_region(int row_count)
 int get_pop_level(void)
 {
     if (population > 12000) return 7;
-    if (population >  8000) return 6;
-    if (population >  4000) return 5;
-    if (population >  2000) return 4;
-    if (population >  1000) return 3;
-    if (population >   500) return 2;
-    if (population >   250) return 1;
+    else if (population > 8000) return 6;
+    else if (population > 4000) return 5;
+    else if (population > 2000) return 4;
+    else if (population > 1000) return 3;
+    else if (population > 500) return 2;
+    else if (population > 250) return 1;
     return 0;
 }
 
