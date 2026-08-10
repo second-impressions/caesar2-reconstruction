@@ -19,6 +19,9 @@ void get_population_growth_factor(void);
 int get_range1(unsigned char *, int, unsigned char);
 int get_range3(unsigned char *, int, unsigned char);
 int test_area_for_population(int, int, int, int);
+#if !PLATFORM_WINDOWS
+int put_out_a(char, char, char, char, char, char, char);
+#endif
 
 int stretch_ofsets_2x2[4][3] = {
     { 20, 1620, 1600 },
@@ -957,60 +960,68 @@ void cap_land_value(int rows)
         } }
 }
 
+#if PLATFORM_WINDOWS
+int put_out_a(char, char, char, char, char, char, char);
+int evolve_a_house();
+int stretch_house();
+int stretch_to_2x2_house();
+int stretch_to_3x3_house();
+int get_pop_level();
+#endif
+
 // Update forum activity and periodically send citizens from occupied forum buildings.
 // FUNCTION: C2 0x415bb
 // FUNCTION: C2WIN 0x004647a0
-void evolve_forum_activity(int row_count)
+void evolve_forum_activity(int rows)
 {
-    unsigned char flags;
-    int row_idx;
-    unsigned char building_kind;
-    unsigned char activity_state;
-    int col_idx;
-    unsigned char gfx_template;
-    unsigned char cooldown;
-    unsigned char shoppers;
-    int spawn_result;
+    unsigned char status;
+    int row;
+    unsigned char kind;
+    unsigned char occupancy;
+    int x;
+    unsigned char gfx_value;
+    unsigned char counter;
+    unsigned char buyers;
+    int people;
 
     cm_sptr = evolve_row * 1600;
 
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
-            building_kind = ((unsigned char *)city_map)[cm_sptr];
-            if (building_kind < 0xae) continue; if (building_kind > 0xb9) continue;
+    for (row = 0; row < rows; row++) {
+        for (x = 0; x < 80; x++, cm_sptr += 20) {
+            kind = ((unsigned char *)city_map)[cm_sptr];
+            if (kind >= 0xae && kind <= 0xb9) {
+                gfx_value = forum_gfxdat[kind + 0x26];
+                if (gfx_value == 0) continue;
+                occupancy = ((unsigned char *)city_map)[cm_sptr + 5] & 0x0f;
+                if (occupancy == 0) {
+                    counter = ((unsigned char *)city_map)[cm_sptr + 6] & 0x0f;
+                    status = ((unsigned char *)city_map)[cm_sptr + 6] & 0x10;
+                    buyers = (((unsigned char *)city_map)[cm_sptr + 5] & 0xf0) >> 4;
 
-            gfx_template = forum_gfxdat[building_kind + 0x26];
-            if (gfx_template == 0) continue;
-            activity_state = ((unsigned char *)city_map)[cm_sptr + 5] & 0x0f;
-            if (activity_state != 0) continue;
+                    if (counter == 0) {
+                        if (population < 2) continue;
+                        people = put_out_a(1, (unsigned char)x, (unsigned char)(evolve_row + row), status,
+                                           buyers, gfx_value, 0x20);
+                        if (people != 0) {
+                            buyers = people & 0xff;
+                            counter = 3;
+                            if (gfx_value == 9) counter -= 1;
+                            else if (gfx_value == 0x10) counter -= 2;
+                            citizen_list[created_citizen_no].state_idx = 1; citizen_list[created_citizen_no].wait_count = 0x14;
+                            citizen_list[created_citizen_no].saved_state_idx = 3;
+                        }
+                        if (buyers >= gfx_value) buyers = 0;
+                    } else {
+                        counter--;
+                    }
 
-            cooldown = ((unsigned char *)city_map)[cm_sptr + 6] & 0x0f;
-            flags = ((unsigned char *)city_map)[cm_sptr + 6] & 0x10;
-            shoppers = (((unsigned char *)city_map)[cm_sptr + 5] & 0xf0) >> 4;
-
-            if (cooldown == 0) {
-                if (population < 2) continue;
-                spawn_result = put_out_a(1, (unsigned char)col_idx, (unsigned char)(evolve_row + row_idx), flags,
-                                   shoppers, gfx_template, 0x20);
-                if (spawn_result != 0) {
-                    shoppers = spawn_result & 0xff;
-                    cooldown = 3;
-                    if (gfx_template == 9) cooldown -= 1;
-                    else if (gfx_template == 0x10) cooldown -= 2;
-                    citizen_list[created_citizen_no].state_idx = 1; citizen_list[created_citizen_no].wait_count = 0x14;
-                    citizen_list[created_citizen_no].saved_state_idx = 3;
+                    ((unsigned char *)city_map)[cm_sptr + 6] &= 0xf0;
+                    ((unsigned char *)city_map)[cm_sptr + 6] |= counter;
+                    ((unsigned char *)city_map)[cm_sptr + 5] &= 0x0f;
+                    ((unsigned char *)city_map)[cm_sptr + 5] |= buyers << 4;
                 }
-                if (shoppers >= gfx_template) shoppers = 0;
-            } else {
-                cooldown--;
             }
-
-            ((unsigned char *)city_map)[cm_sptr + 6] &= 0xf0;
-            ((unsigned char *)city_map)[cm_sptr + 6] |= cooldown;
-            ((unsigned char *)city_map)[cm_sptr + 5] &= 0x0f;
-            ((unsigned char *)city_map)[cm_sptr + 5] |= shoppers << 4;
-        }
-    }
+        } }
 }
 
 // Dispatch soldiers from forts to engage nearby enemy citizens.
@@ -1548,7 +1559,7 @@ next:
 // Create a citizen at the requested cell or at the first usable perimeter position.
 // FUNCTION: C2 0x42666
 // FUNCTION: C2WIN 0x00466232
-int put_out_a(char citizen_kind, char cell_x, char cell_y, int unused, char start_idx,
+int put_out_a(char citizen_kind, char cell_x, char cell_y, char unused, char start_idx,
               char perimeter_size, char barbarian_flag)
 {
   int attempt_idx;
