@@ -240,6 +240,9 @@ extern void  show_map_window(int mode);
 extern void  update_window_menu(int mode);
 extern void  update_sound_menu(void);
 extern void  start_windows_game(void);
+extern void  update_map_window_title(void);
+extern void  update_city_window_title(void);
+extern int   choose_init_region(void);
 #endif
 void *load_a_battle_gfx_file(int battle_zoom, int troop_gfx_idx, int use_aux);
 extern void get_pseudo_map(int n);
@@ -256,7 +259,11 @@ extern int      _getdrive(void);
 void deal_with_battles(void);
 void start_a_new_game(void);
 void start_a_promotion(void);
+#if PLATFORM_WINDOWS
+int new_province(void);
+#else
 void new_province(void);
+#endif
 void setup_game(void);
 void init_map_gfx_buffers();
 void clear_map_gfx_buffers();
@@ -547,9 +554,12 @@ void start_a_promotion(void)
 // Initializes a province's map, population, armies, economy, ratings, and regional systems.
 // FUNCTION: C2 0x10565
 // FUNCTION: C2WIN 0x00443eca
+#if PLATFORM_WINDOWS
+int new_province(void)
+#else
 void new_province(void)
+#endif
 {
-    int skill;
     int denarii_reduction;
 
     setup_game();
@@ -558,24 +568,19 @@ void new_province(void)
     clear_citizen_list();
     clear_army_list();
 
-    skill = c2inf.skill_level;
-    auto_conquered = pompous_conquests[skill];
+    auto_conquered = pompous_conquests[c2inf.skill_level];
     auto_conquered_months = 0;
-    if (skill <= 4) {
+    if (c2inf.skill_level <= 4) {
         pop_growth_future = 0x1c;
     }
     pop_growth_factor = pop_growth_future / 8;
 
-    ind_growth_future   = 0;
-    ind_growth_factor   = 0;
-    insurrection_future = 0;
-    insurrection_factor = 0;
-    employment_rate     = 0;
-    population          = 0;
+    ind_growth_factor = ind_growth_future = 0;
+    insurrection_factor = insurrection_future = 0;
+    population = employment_rate = 0;
 
-    skill = c2inf.skill_level;
-    denarii  = skill_to_starting_denarii[skill];
-    denarii_reduction = skill_to_denarii_reduction[skill];
+    denarii  = skill_to_starting_denarii[c2inf.skill_level];
+    denarii_reduction = skill_to_denarii_reduction[c2inf.skill_level];
     denarii -= denarii_reduction * completed_provinces;
 
     income_multiple = 0x258;
@@ -584,12 +589,20 @@ void new_province(void)
 
     init_messages();
     init_flag_markers();
+#if PLATFORM_WINDOWS
+    if (choose_init_region() == 1) return 1;
+    if (restart_flag != 0) return 1;
+#else
     act_choose_init_region();
-
     if (restart_flag != 0) return;
+#endif
 
     clear_region_map();
     load_region_map(province_is);
+#if PLATFORM_WINDOWS
+    update_map_window_title();
+    update_city_window_title();
+#endif
     adjust_sailable_area();
     generate_city_map_geography();
     initiate_evolution();
@@ -604,11 +617,11 @@ void new_province(void)
     set_new_province();
 
     years_elapsed_in_region = 0;
-    culture_rating          = 0;
-    prosperity_rating       = 0;
-    peace_rating            = 0;
-    empire_rating           = 0;
-    pax_romanum             = 0;
+    empire_rating = peace_rating = prosperity_rating = culture_rating = 0;
+    pax_romanum = 0;
+#if PLATFORM_WINDOWS
+    return 0;
+#endif
 }
 
 // Resets map, camera, command-window, placement, and cheat state for a game session.
