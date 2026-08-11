@@ -59,7 +59,6 @@ void init_ss_entires(void);
 
 void free(void *p);
 
-extern void _pos_ret3(void);
 extern void *malloc(unsigned int size);
 /* Forward declarations (functions defined later in this file). */
 void stop_samples(void);
@@ -319,21 +318,19 @@ void stop_all_sounds(void)
     }
 }
 
-#pragma aux _pos_ret3 = "xor edx,edx" "mov eax,3" modify exact [eax edx]
-
 // Play the preloaded positive-feedback sound on the dedicated feedback voice.
 // FUNCTION: C2 0x11e92
 // FUNCTION: C2WIN 0x00401a69
 void pos_sound(void)
 {
-    if (c2inf.samples_on != 0 && samples_running != 0) {
-        ds = 4;
-        dig_status = AIL_sample_status(S_dig[4]);
-        if (dig_status == 4) AIL_end_sample(S_dig[ds]);
-        AIL_init_sample(S_dig[ds]);
-        if (AIL_set_sample_file(S_dig[ds], positive_buffer, -1) == 0) _pos_ret3();
-        AIL_start_sample(S_dig[ds]);
-    }
+    if (c2inf.samples_on == 0) return;
+    if (samples_running == 0) return;
+    ds = 4;
+    dig_status = AIL_sample_status(S_dig[ds]);
+    if (dig_status == 4) AIL_end_sample(S_dig[ds]);
+    AIL_init_sample(S_dig[ds]);
+    if (AIL_set_sample_file(S_dig[ds], positive_buffer, -1) == 0) MK_FP(3, 0);
+    AIL_start_sample(S_dig[ds]);
 }
 
 // Play the negative feedback sample when digital audio is available.
@@ -341,14 +338,14 @@ void pos_sound(void)
 // FUNCTION: C2WIN 0x00401b30
 void neg_sound(void)
 {
-    if (c2inf.samples_on != 0 && samples_running != 0) {
-        ds = 4;
-        dig_status = AIL_sample_status(S_dig[4]);
-        if (dig_status == 4) AIL_end_sample(S_dig[ds]);
-        AIL_init_sample(S_dig[ds]);
-        if (AIL_set_sample_file(S_dig[ds], negative_buffer, -1) == 0) _pos_ret3();
-        AIL_start_sample(S_dig[ds]);
-    }
+    if (c2inf.samples_on == 0) return;
+    if (samples_running == 0) return;
+    ds = 4;
+    dig_status = AIL_sample_status(S_dig[ds]);
+    if (dig_status == 4) AIL_end_sample(S_dig[ds]);
+    AIL_init_sample(S_dig[ds]);
+    if (AIL_set_sample_file(S_dig[ds], negative_buffer, -1) == 0) MK_FP(3, 0);
+    AIL_start_sample(S_dig[ds]);
 }
 
 // Refill the next available half of an AIL double-buffered sample stream.
