@@ -279,6 +279,7 @@ void get_census(int quiet)
 
 int test_perimeter_for_road_and_forum(int cell_x, int cell_y, int footprint_size, int road_only);
 int test_for_any_admin(int, int);
+void destroy_an_atom(int, int);
 
 // Scan city-map rows, accumulating population, income, service, and accident census data.
 // FUNCTION: C2 0x44a94
