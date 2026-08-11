@@ -339,62 +339,62 @@ void show_landfill(int x_start, int y_start)
 // FUNCTION: C2WIN 0x0049e068
 void show_city_landfill(int x_start, int y_start)
 {
-    unsigned char building_kind;
-    int block_idx;
+    unsigned char building;
+    int size;
     unsigned char activity_flag;
-    unsigned char overlay_flag;
-    unsigned char terrain_flag;
-    int pool_idx;
-    unsigned char in_range;
+    unsigned char overlay;
+    unsigned char terrain_flags;
+    int landfill_idx;
+    unsigned char is_building;
 #if PLATFORM_WINDOWS
-    int image_idx;
+    int addr;
 #endif
 
     sprite_y = y_start * screen_width;
     cm_y = 0;
-    pool_idx = 0;
+    landfill_idx = 0;
     cm_sptr = 0;
     for ( ; cm_y < 80; cm_y++, sprite_y += 0x500) {
         sprite_x = x_start;
-        for (cm_x = 0; cm_x < 80; cm_x++, pool_idx++, cm_sptr += 20, sprite_x += 2) {
-        building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+        for (cm_x = 0; cm_x < 80; cm_x++, landfill_idx++, cm_sptr += 20, sprite_x += 2) {
+        building = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
         activity_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
-        terrain_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 1;
-        if (building_kind >= 0x82 && building_kind <= 0xa1) in_range = 1;
-        else in_range = 0;
-        overlay_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 2;
+        terrain_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 1;
+        if (building >= 0x82 && building <= 0xa1) is_building = 1;
+        else is_building = 0;
+        overlay = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 2;
         (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0xfd;
-        block_idx = 0;
-        if (overlay_flag != 0) {
+        size = 0;
+        if (overlay != 0) {
             sprite_image_no = 0x93;
-        } else if (landfill_pool[pool_idx] != 0) {
-            sprite_image_no = (unsigned char)landfill_pool[pool_idx];
-            if (in_range) {
+        } else if (landfill_pool[landfill_idx] != 0) {
+            sprite_image_no = (unsigned char)landfill_pool[landfill_idx];
+            if (is_building) {
                 if (sprite_image_no >= 0x7e) sprite_image_no += 2;
-            } else if (terrain_flag != 0) {
+            } else if (terrain_flags != 0) {
                 sprite_image_no++;
             }
         } else {
-                if (activity_flag != 0 && terrain_flag != 0) continue;
-                sprite_image_no = lf_tiles[building_kind];
-                if (building_kind >= 0xe9 && building_kind <= 0xf0) get_circus_bodge(building_kind);
-                if (sprite_image_no < 0x5a) block_idx = 0;
-                else if (sprite_image_no < 0x63) block_idx = 1;
-                else if (sprite_image_no < 0x71) block_idx = 2;
-                else block_idx = 3;
+                if (activity_flag != 0 && terrain_flags != 0) continue;
+                sprite_image_no = lf_tiles[building];
+                if (building >= 0xe9 && building <= 0xf0) get_circus_bodge(building);
+                if (sprite_image_no < 0x5a) size = 0;
+                else if (sprite_image_no < 0x63) size = 1;
+                else if (sprite_image_no < 0x71) size = 2;
+                else size = 3;
             }
 #if PLATFORM_WINDOWS
-            image_idx = sprite_image_no * 16;
-            sprite_start = landfill[image_idx + 0xc]
-                       + (landfill[image_idx + 0xd] << 8);
+            addr = sprite_image_no * 16;
+            sprite_start = landfill[addr + 0xc]
+                       + (landfill[addr + 0xd] << 8);
 #else
             sprite_start = landfill[sprite_image_no * 16 + 0xc]
                        + (landfill[sprite_image_no * 16 + 0xd] << 8);
 #endif
-            if (block_idx == 0) place_2x2_block(landfill + sprite_start, sprite_x + sprite_y);
-            else if (block_idx == 1) place_4x4_block(landfill + sprite_start, sprite_x + sprite_y);
-            else if (block_idx == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
-            else if (block_idx == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
+            if (size == 0) place_2x2_block(landfill + sprite_start, sprite_x + sprite_y);
+            else if (size == 1) place_4x4_block(landfill + sprite_start, sprite_x + sprite_y);
+            else if (size == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
+            else if (size == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
         }
     }
     write_image(misc, 4, x_start + 2, y_start + 2);
