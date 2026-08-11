@@ -465,37 +465,43 @@ reg_next:
 // FUNCTION: C2WIN 0x0049ef17
 void show_battle_landfill(int start_row, int row_count, int screen_x, int screen_y)
 {
-    int col_idx;
-    int battle_offset;
-    int row_idx;
-    unsigned char terrain_kind;
+    int x;
+    int offset;
+    int y;
+    unsigned char kind;
+#if PLATFORM_WINDOWS
+    int image_idx;
+#endif
 
-    battle_offset = start_row * BATTLE_ROW;
+    offset = start_row * BATTLE_ROW;
     sprite_y = (screen_y + start_row * 2) * screen_width;
-    row_idx = start_row;
-    for ( ; row_idx < (start_row + row_count); row_idx++, sprite_y += 0x500) {
-    sprite_x = screen_x;
-    col_idx = 0;
-    do {
-        terrain_kind = ((unsigned char *)battle_map)[battle_offset];
-        temp_figure = ((unsigned char *)battle_map)[battle_offset + 1];
-        sprite_image_no = (terrain_kind & 7) + 0x10;
+    y = start_row;
+    for ( ; y < (start_row + row_count); y++, sprite_y += 0x500) {
+        sprite_x = screen_x;
+        for (x = 0; x < BATTLE_W; x++, offset += BATTLE_CELL_BYTES, sprite_x += 2) {
+        kind = ((unsigned char *)battle_map)[offset];
+        temp_figure = ((unsigned char *)battle_map)[offset + 1];
+        sprite_image_no = (kind & 7) + 0x10;
         if (temp_figure != 0) {
-            if (figure_list[temp_figure].state_idx == 2) goto battle_next;
+            if (figure_list[temp_figure].state_idx == 2) continue;
             if (figure_list[temp_figure].owner != 0) sprite_image_no = 0x8a;
             else sprite_image_no = 0x93;
         }
+#if PLATFORM_WINDOWS
+        image_idx = sprite_image_no * 16;
+        sprite_start = landfill[image_idx + 0xc]
+                     + (landfill[image_idx + 0xd] << 8);
+#else
         sprite_start = landfill[sprite_image_no * 16 + 0xc]
                      + (landfill[sprite_image_no * 16 + 0xd] << 8);
+#endif
         place_2x2_block(landfill + sprite_start, sprite_x + sprite_y);
-battle_next:
-        col_idx++;
-        battle_offset += BATTLE_CELL_BYTES;
-        sprite_x += 2;
-    } while (col_idx < BATTLE_W);
+        }
     }
 
+#if !PLATFORM_WINDOWS
     setup_refresh_area(screen_x, screen_y + (start_row * 2), 8, ((start_row * 2) / 16) + 2, 1);
+#endif
 }
 
 
