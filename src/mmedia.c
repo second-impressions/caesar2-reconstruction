@@ -505,10 +505,9 @@ void push_forward_help_history(void)
 // FUNCTION: C2WIN 0x004530b7
 void rewind_help_history(void)
 {
-    if (this_help_action > 0) {
-        this_help_action--;
-        this_help_page = help_history[this_help_action];
-    }
+    if (this_help_action <= 0) return;
+    this_help_action--;
+    this_help_page = help_history[this_help_action];
 }
 
 // Reset help navigation to the first page and clear its history.
