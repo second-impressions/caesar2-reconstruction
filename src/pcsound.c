@@ -482,7 +482,11 @@ char __far *start_tune(unsigned char *sequence_data, int sequence_num, int seque
     if (result < 0) return (char __far *)MK_FP(3, 1);
     if (result == 0) return (char __far *)MK_FP(4, 1);
     fade_sequence_in(sequence_idx);
+#if PLATFORM_WINDOWS
+    AIL_start_sequence(S_mdi[sequence_idx]);
+#else
     return AIL_start_sequence(S_mdi[sequence_idx]);
+#endif
 }
 
 // Stop the primary tune and end the secondary tune when they are playing.
