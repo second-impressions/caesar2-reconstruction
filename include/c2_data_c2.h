@@ -32,7 +32,7 @@ extern int act_start_ptr;
 extern int act_start_x;
 extern int act_start_y;
 extern int action_sound;
-extern char active_tutorial_pages[];
+extern unsigned char active_tutorial_pages[];
 extern int adjust_max;
 extern int adjust_min;
 extern int adjust_step;
