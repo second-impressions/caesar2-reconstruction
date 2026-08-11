@@ -10,6 +10,14 @@ extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsign
 extern int  get_next_word_length(char *src, unsigned char *font);
 void media_text_place(int x, int y, int width, int line_count, int alt_x, int alt_width, unsigned char *font);
 
+#if PLATFORM_WINDOWS
+extern char file_buffer[80];
+extern char cd_drive[4];
+extern void *main_window;
+extern int sprintf(char *buffer, const char *format, ...);
+extern int (__stdcall *WinHelpA)(void *window, char *help_file,
+                                unsigned int command, unsigned long data);
+#endif
 
 #include "c2_types.h"
 
@@ -123,7 +131,13 @@ void act_forward_tutorial_page(void);
 void launch_help(int page)
 {
     int old_pointer_mode;
+    int old_screen;
 
+#if PLATFORM_WINDOWS
+    sprintf(file_buffer, "%s%s\\data\\C2.hlp", cd_drive, "C2Win95");
+    WinHelpA(main_window, file_buffer, 1, page);
+    return;
+#endif
     if (page <= 0) return;
     if (page >= 0x7d0) return;
 
@@ -144,10 +158,12 @@ void launch_help(int page)
         while (out2 != 1) {
             help_game_loop();
             if (exit_screen() != 0) {
-                out3 = out2 = 1;
+                out2 = 1;
+                out3 = 1;
             }
             if (mouse_right_click != 0) {
-                out3 = out2 = 1;
+                out2 = 1;
+                out3 = 1;
             }
             if (out2 > 1) {
                 out2 = out2 - 1;
