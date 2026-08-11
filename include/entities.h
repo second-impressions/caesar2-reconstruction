@@ -1292,6 +1292,10 @@ extern struct population_threshold_rec temple_populations1[];
 extern struct population_threshold_rec temple_populations2[];
 extern struct population_threshold_rec temple_populations3[];
 
+struct house_unrest_rec {
+    unsigned char unrest_delta;
+    char _reserved01[3];
+};
 extern int house_type_to_unrest[];
 
 extern int stretch_ofsets_2x2[][3];
