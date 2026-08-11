@@ -613,19 +613,19 @@ void init_ss_entires(void)
 // FUNCTION: C2WIN 0x00402959
 void get_new_sslot(char *filename)
 {
-    int highest_hit_count = 0;
-    int replacement_idx  = 0;
-    int i;
-    for (i = 0; i < 10; i++) {
-        ++ss_entries[i].hits;
-        if (highest_hit_count <= ss_entries[i].hits) {
-            replacement_idx  = i;
-            highest_hit_count = ss_entries[i].hits;
+    int highest_hit_count;
+    int slot;
+    int count;
+    slot = highest_hit_count = 0;
+    for (count = 0; count < 10; count++) {
+        ++ss_entries[count].hits;
+        if (highest_hit_count <= ss_entries[count].hits) {
+            slot = count; highest_hit_count = ss_entries[count].hits;
         }
     }
-    sslot = replacement_idx;
-    ss_entries[replacement_idx].hits = 0;
-    strcpy(ss_entries[replacement_idx].name, filename);
+    sslot = slot;
+    ss_entries[sslot].hits = 0;
+    strcpy(ss_entries[sslot].name, filename);
 }
 
 // Mark a cached-sample slot unused so it will be replaced next.
