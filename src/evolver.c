@@ -1283,148 +1283,150 @@ void market_image(void)
 // FUNCTION: C2WIN 0x004656e6
 void business_output(int cell_x, int cell_y)
 {
-  unsigned char building_state = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building;
-  unsigned char good_idx = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).business & 0xf;
-  unsigned char production_level = building_state & 3;
-  unsigned char staged_level = building_state & 0xc;
-  int city_supply = industry[good_idx].city_supply;
-  int pipeline = industry[good_idx].supply_pipeline[0];
-  int growth = ind_growth_factor;
-  int nearby_population = test_area_for_population(2, cell_x, cell_y, 2);
-  int supply;
-  if (nearby_population > 0x82)
-    production_level += 4;
-  else if (nearby_population > 0x5a)
-    production_level += 3;
-  else if (nearby_population > 0x32)
-    production_level += 2;
-  else if (nearby_population > 10)
-    production_level += 1;
-  if (production_level <= 0)
-    supply = 0;
+  unsigned char building = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building;
+  unsigned char good = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).business & 0xf;
+  unsigned char low_half = building & 3;
+  unsigned char upper_level = building & 0xc;
+  int city_stock = industry[good].city_supply;
+  int supply_pipeline = industry[good].supply_pipeline[0];
+  int factor = ind_growth_factor;
+  int num_people = test_area_for_population(2, cell_x, cell_y, 2);
+  int max_supply;
+  if (num_people > 0x82)
+    low_half += 4;
+  else if (num_people > 0x5a)
+    low_half += 3;
+  else if (num_people > 0x32)
+    low_half += 2;
+  else if (num_people > 10)
+    low_half += 1;
+  if (low_half <= 0)
+    max_supply = 0;
   else
-    if (production_level <= 1)
-    supply = 3;
+    if (low_half <= 1)
+    max_supply = 3;
   else
-    if (production_level <= 2)
-    supply = 5;
+    if (low_half <= 2)
+    max_supply = 5;
   else
-    if (production_level <= 3)
-    supply = 7;
+    if (low_half <= 3)
+    max_supply = 7;
   else
-    supply = 7;
-  if (staged_level == 0)
+    max_supply = 7;
+  if (upper_level == 0)
   {
-    growth -= 2;
-    if (supply > 4)
-      supply = 4;
+    factor -= 2;
+    if (max_supply > 4)
+      max_supply = 4;
   }
-  if (pipeline <= 0)
-    supply = 0;
+  if (supply_pipeline <= 0)
+    max_supply = 0;
   else
-    if (pipeline <= 0x32)
+    if (supply_pipeline <= 0x32)
   {
-    growth -= 3;
-    if (supply > 1)
-      supply = 1;
-  }
-  else
-    if (pipeline <= 0xc8)
-  {
-    growth -= 2;
-    if (supply > 3)
-      supply = 3;
+    factor -= 3;
+    if (max_supply > 1)
+      max_supply = 1;
   }
   else
-    if (pipeline <= 0x190)
+    if (supply_pipeline <= 0xc8)
   {
-    growth -= 1;
-    if (supply > 5)
-      supply = 5;
+    factor -= 2;
+    if (max_supply > 3)
+      max_supply = 3;
   }
   else
-    if (pipeline > 600)
+    if (supply_pipeline <= 0x190)
   {
-    if (pipeline <= 0x320)
-      growth += 1;
+    factor -= 1;
+    if (max_supply > 5)
+      max_supply = 5;
+  }
+  else
+  {
+    if (supply_pipeline <= 600)
+      goto pipeline_done;
+    if (supply_pipeline <= 0x320)
+      factor += 1;
     else
-      if (pipeline <= 0x3e8)
-      growth += 2;
+      if (supply_pipeline <= 0x3e8)
+      factor += 2;
     else
-      if (pipeline > 1000)
-      growth += 3;
+      if (supply_pipeline > 1000)
+      factor += 3;
   }
+pipeline_done:
   if (no_of_empire_connections <= 0)
   {
-    if (supply > 4)
-      supply = 4;
+    if (max_supply > 4)
+      max_supply = 4;
   }
   else
     if (no_of_empire_connections <= 1)
-    growth += 1;
+    factor += 1;
   else
     if (no_of_empire_connections > 1)
-    growth += 2;
-  if (city_supply <= 0)
-    supply = 0;
+    factor += 2;
+  if (city_stock <= 0)
+    max_supply = 0;
   else
-    if (city_supply <= 0x14)
+    if (city_stock <= 0x14)
   {
-    if (supply > 1)
-      supply = 1;
+    if (max_supply > 1)
+      max_supply = 1;
   }
   else
-    if (city_supply <= 0x22)
+    if (city_stock <= 0x22)
   {
-    if (supply > 2)
-      supply = 2;
+    if (max_supply > 2)
+      max_supply = 2;
   }
   else
-    if (city_supply <= 0x32)
+    if (city_stock <= 0x32)
   {
-    if (supply > 3)
-      supply = 3;
+    if (max_supply > 3)
+      max_supply = 3;
   }
   else
-    if (city_supply <= 0x43)
+    if (city_stock <= 0x43)
   {
-    if (supply > 4)
-      supply = 4;
+    if (max_supply > 4)
+      max_supply = 4;
   }
   else
-    if (city_supply <= 0x4b)
+    if (city_stock <= 0x4b)
   {
-    if (supply > 5)
-      supply = 5;
+    if (max_supply > 5)
+      max_supply = 5;
   }
   else
-    if ((city_supply <= 99) && (supply > 6))
-    supply = 6;
-  if (supply < growth)
-    growth = supply;
-  if (growth < 0)
-    growth = 0;
-  if (growth > 7)
-    growth = 7;
+    if ((city_stock <= 99) && (max_supply > 6))
+    max_supply = 6;
+  if (max_supply < factor)
+    factor = max_supply;
+  if (factor < 0)
+    factor = 0;
+  if (factor > 7)
+    factor = 7;
   (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building &= 0xf;
-  growth <<= 4;
-  (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= growth;
-  if (production_level != 0)
+  factor <<= 4;
+  (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= factor;
+  if (low_half != 0)
   {
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building &= 0xfc;
-    if (production_level == 2)
+    if (low_half == 2)
       (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 1;
     else
-      if (production_level == 3)
+      if (low_half == 3)
       (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 2;
   }
-  if (staged_level != 0)
+  if (upper_level != 0)
   {
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building &= 0xf3;
-    if (staged_level == 8)
+    if (upper_level == 8)
       (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 4;
     else
-      if (staged_level == 0xc)
+      if (upper_level == 0xc)
       (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 8;
   }
 }
