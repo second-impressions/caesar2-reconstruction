@@ -2140,71 +2140,71 @@ void clear_fire_zones(void)
 // FUNCTION: C2WIN 0x00467d9c
 void push_shell(int row_count)
 {
-    int cell_stride;
+    int addx;
     char neighbour_found;
-    int row_idx;
-    int row_stride;
-    int cell_idx;
-    char neighbour_security;
-    char neighbour_wall;
-    int start_offset;
-    char new_security;
-    char propagated_security;
-    char wall_flags;
+    int map_row;
+    int ymul;
+    int cell_no;
+    char nsecurity;
+    char neighbour_w;
+    int origin_offset;
+    char new_sec;
+    char running_security;
+    char wall;
 
     if (evolve_row == 0) {
         shell_push_direction++;
         if (shell_push_direction >= 4) shell_push_direction = 0;
     }
-    if (shell_push_direction == 0)      { row_stride = 20;   cell_stride =  1600; start_offset = 0;       }
-    else if (shell_push_direction == 1) { row_stride = 1600; cell_stride =   -20; start_offset = 0x62c;   }
-    else if (shell_push_direction == 2) { row_stride = 20;   cell_stride = -1600; start_offset = 0x1edc0; }
-    else if (shell_push_direction == 3) { row_stride = 1600; cell_stride =    20; start_offset = 0;       }
+    if (shell_push_direction == 0)      { ymul = 20;   addx =  1600; origin_offset = 0;       }
+    else if (shell_push_direction == 1) { ymul = 1600; addx =   -20; origin_offset = 0x62c;   }
+    else if (shell_push_direction == 2) { ymul = 20;   addx = -1600; origin_offset = 0x1edc0; }
+    else if (shell_push_direction == 3) { ymul = 1600; addx =    20; origin_offset = 0;       }
 
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        cm_sptr = start_offset + (evolve_row + row_idx) * row_stride;
-        propagated_security      = 0xf8;
+    for (map_row = 0; map_row < row_count; map_row++) {
+        cm_sptr = origin_offset + (evolve_row + map_row) * ymul;
+        running_security = 0xf8;
         neighbour_found  = 0;
-        for (cell_idx = 0; cell_idx < 80; cell_idx++, cm_sptr += cell_stride) {
-            wall_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0x1e;
-            if (wall_flags != 0) {
-                neighbour_wall   = 1;
+        for (cell_no = 0; cell_no < 80; cell_no++, cm_sptr += addx) {
+            wall = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 0x1e;
+            if (wall != 0) {
+                neighbour_w = 1;
                 (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security    = 100;
                 if (shell_push_direction == 0) {
-                    if (cell_idx > 0) {
-                        neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 20))).terrain & 0x1e;
-                        neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 20))).security;
+                    if (cell_no > 0) {
+                        neighbour_w = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 20))).terrain & 0x1e;
+                        nsecurity = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 20))).security;
                     }
                 } else if (shell_push_direction == 1) {
-                    if (cell_idx > 0) {
-                        neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 1600))).terrain & 0x1e;
-                        neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 1600))).security;
+                    if (cell_no > 0) {
+                        neighbour_w = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 1600))).terrain & 0x1e;
+                        nsecurity = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 1600))).security;
                     }
                 } else if (shell_push_direction == 2) {
-                    if (cell_idx < 0x4f) {
-                        neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 20))).terrain & 0x1e;
-                        neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 20))).security;
+                    if (cell_no < 0x4f) {
+                        neighbour_w = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 20))).terrain & 0x1e;
+                        nsecurity = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 20))).security;
                     }
                 } else if (shell_push_direction == 3) {
-                    if (cell_idx < 0x4f) {
-                        neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 1600))).terrain & 0x1e;
-                        neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 1600))).security;
+                    if (cell_no < 0x4f) {
+                        neighbour_w = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 1600))).terrain & 0x1e;
+                        nsecurity = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 1600))).security;
                     }
                 }
-                if (neighbour_wall == 0) {
-                    propagated_security = neighbour_security;
+                if (neighbour_w == 0) {
+                    running_security = nsecurity;
                 } else {
                     neighbour_found = 1;
-                    propagated_security = 100;
+                    running_security = 100;
                 }
             } else if (neighbour_found) {
-                new_security = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security;
-                if ((signed char)new_security < 100) new_security++;
-                if ((signed char)new_security > (signed char)propagated_security) new_security = propagated_security;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security = new_security;
-                propagated_security  = new_security;
+                new_sec = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security;
+                if ((signed char)new_sec < 100) new_sec++;
+                if ((signed char)new_sec > (signed char)running_security) new_sec = running_security;
+                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security = new_sec;
+                running_security = new_sec;
             } else {
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security = propagated_security;
+                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security = running_security;
             }
         }
     }
