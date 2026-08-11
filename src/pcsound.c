@@ -14,6 +14,9 @@ extern int  open(const char *path, int flags, ...);
 extern int sprintf(char *buffer, const char *format, ...);
 extern char file_buffer[80];
 extern char cd_drive[4];
+#if PLATFORM_WINDOWS
+extern int open_midi_driver(void);
+#endif
 
 /* Sound module globals. */
 extern int _ds;
@@ -129,26 +132,42 @@ char __far *start_samples(void)
 // FUNCTION: C2WIN 0x00401250
 char __far *start_sequences(void)
 {
+#if PLATFORM_WINDOWS
+    if (sequences_running != 0) goto done;
+    if (c2inf.tunes_on == 0) goto done;
+#else
     char __far *result;
 
-    if (!sequences_running && c2inf.tunes_on) {
-        AIL_set_GTL_filename_prefix("CAESAR");
-        if (AIL_install_MDI_INI(&mdi) != 0) return (char __far *)1;
-        for (ms = 0; ms < 2; ms++) {
-            S_mdi[ms] = AIL_allocate_sequence_handle(mdi);
-        }
-        for (ms = 0; ms < 2; ms++) {
-            if (S_mdi[ms] == 0) return (char __far *)MK_FP(2, 1);
-        }
-        tune1 = 0;
-        tune2 = 1;
-        tune_mood = 0;
-        tune_branch_count = 0;
-        last_battle_mood = 0;
-        last_city_mood = 0;
-        sequences_running = 1;
+    if (!sequences_running)
+    if (c2inf.tunes_on) {
+#endif
+#if PLATFORM_WINDOWS
+    mdi = 0;
+    mdi = open_midi_driver();
+    if (mdi == 0) return MK_FP(1, 0);
+#else
+    AIL_set_GTL_filename_prefix("CAESAR");
+    if (AIL_install_MDI_INI(&mdi) != 0) return (char __far *)1;
+#endif
+    for (ms = 0; ms < 2; ms++) {
+        S_mdi[ms] = AIL_allocate_sequence_handle(mdi);
+    }
+    for (ms = 0; ms < 2; ms++) {
+        if (S_mdi[ms] == 0) return (char __far *)MK_FP(2, 1);
+    }
+    tune1 = 0;
+    tune2 = 1;
+    tune_mood = 0;
+    tune_branch_count = 0;
+    last_city_mood = last_battle_mood = 0;
+    sequences_running = 1;
+#if PLATFORM_WINDOWS
+done:
+    ;
+#else
     }
     return result;
+#endif
 }
 
 // Stop all active digital samples and clear streaming playback state.
