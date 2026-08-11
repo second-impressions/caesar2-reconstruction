@@ -403,14 +403,18 @@ void continue_db(void)
     if (c2inf.samples_on == 0) return;
     if (samples_running == 0) return;
     if (db_playing == 0) return;
+#if !PLATFORM_WINDOWS
     cd_path(db_file);
+#endif
     ds = 5;
-    serve_sample(S_dig[5], db_buf, db_buffer_size);
+    serve_sample(S_dig[ds], db_buf, db_buffer_size);
     if (AIL_sample_status(S_dig[ds]) == 2) {
         db_playing = 0;
         close(db_handle);
     }
+#if !PLATFORM_WINDOWS
     main_path();
+#endif
 }
 
 // Stop the active speech stream and close its file.
