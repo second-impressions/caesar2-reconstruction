@@ -209,21 +209,27 @@ void get_education_ov_image(void)
 void get_entertainment_ov_image(void)
 {
     unsigned char theatre;
-    unsigned char arena;
     unsigned char colosseum;
-    unsigned char total;
+    unsigned char circus;
+    unsigned char entertainment;
+#if PLATFORM_WINDOWS
+    unsigned char terrain_flag;
+#endif
     unsigned char building_kind;
-    unsigned char entertainment_flags;
+    unsigned char range;
 
+#if PLATFORM_WINDOWS
+    terrain_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain;
+#endif
     building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-    entertainment_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).entertainment;
-    theatre = entertainment_flags & 3;
-    arena = (entertainment_flags & 0xc) >> 2;
-    colosseum = (entertainment_flags & 0x30) >> 4;
-    total = theatre + arena + colosseum;
+    range = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).entertainment;
+    theatre = range & 3;
+    colosseum = (range & 0xc) >> 2;
+    circus = (range & 0x30) >> 4;
+    entertainment = theatre + colosseum + circus;
     if (building_kind >= 0xe5 && building_kind <= 0xf0) { landfill_pool[cm_dptr] = 0x96; return; }
-    if (total == 0) landfill_pool[cm_dptr] = 0;
-    else landfill_pool[cm_dptr] = (total - 1) * 3 + 0x7e;
+    if (entertainment == 0) landfill_pool[cm_dptr] = 0;
+    else landfill_pool[cm_dptr] = (entertainment - 1) * 3 + 0x7e;
 }
 
 // Overlay routine for the industry/market view: 0x96 for market and large-industry footprints
