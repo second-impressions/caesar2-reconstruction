@@ -1034,80 +1034,72 @@ void fix_plyr_name(unsigned char *name_buf)
 // FUNCTION: C2WIN 0x0048393f
 void load_region_map(int province_idx)
 {
-    int file_offset;
+    int size;
     int map_y;
-    int map_x;
-    unsigned char tile_kind;
-    int border_direction;
+    int x;
+    int i;
+    int j;
+    unsigned char image;
 
     map_direction = 0;
 
-    file_offset = province_idx;
-    file_offset <<= 3;
-    file_offset -= province_idx;
-    file_offset <<= 5;
-    file_offset += province_idx;
-    file_offset <<= 4;
-    readfile("regions.dat", ((void *)scratch_buffer), 0xe10, file_offset);
+    size = 0xe10;
+    readfile("regions.dat", ((void *)scratch_buffer), size, province_idx * size);
     clear_huts();
     cm_dptr = 0;
 
     for (map_y = 0; map_y < 60; map_y++) {
-        for (map_x = 0; map_x < 60; map_x++, cm_dptr++) {
-            tile_kind = *(((char *)scratch_buffer) + cm_dptr);
+        for (x = 0; x < 60; x++, cm_dptr++) {
+            image = *(((char *)scratch_buffer) + cm_dptr);
 
-            if (tile_kind >= 0x7d && tile_kind < 0x85) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 4, tile_kind - 0x7d, 0x10);
-            } else if (tile_kind >= 0x85 && tile_kind < 0x8d) {
-                put_rm_area(map_x, map_y, 2, tile_kind, 4, tile_kind * 4 - 0x20c, 0x10);
-            } else if (tile_kind >= 0x8d && tile_kind < 0x91) {
-                put_rm_area(map_x, map_y, 3, tile_kind, 4,
-                            (tile_kind - 0x8d) * 9 + 0x28, 0x10);
-            } else if (tile_kind == 0x91) {
-                put_rm_area(map_x, map_y, 4, tile_kind, 4, 0x4c, 0x10);
-            } else if (tile_kind >= 0x20 && tile_kind < 0x7c) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, tile_kind, 0x18);
-            } else if (tile_kind == 0x92) {
-                put_rm_area(map_x, map_y, 2, tile_kind, 8, 0, 1);
-                reg_city_x = map_x;
+            if (image >= 0x7d && image < 0x85) {
+                put_rm_area(x, map_y, 1, image, 4, image - 0x7d, 0x10);
+            } else if (image >= 0x85 && image < 0x8d) {
+                put_rm_area(x, map_y, 2, image, 4, (image - 0x85) * 4 + 8, 0x10);
+            } else if (image >= 0x8d && image < 0x91) {
+                put_rm_area(x, map_y, 3, image, 4,
+                            (image - 0x8d) * 9 + 0x28, 0x10);
+            } else if (image == 0x91) {
+                put_rm_area(x, map_y, 4, image, 4, 0x4c, 0x10);
+            } else if (image >= 0x20 && image < 0x7c) {
+                put_rm_area(x, map_y, 1, image, 0, image, 0x18);
+            } else if (image == 0x92) {
+                put_rm_area(x, map_y, 2, image, 8, 0, 1);
+                reg_city_x = x;
                 reg_city_y = map_y;
-                reg_city_ptr = (map_y * REGION_W + map_x) * REGION_CELL_BYTES;
-                region_pm_y = -1;
-                region_pm_x = -1;
-            } else if (tile_kind == 0x93) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, 0x2e, 1);
-                put_a_hut(map_x, map_y, 2);
-            } else if (tile_kind == 0x94) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, 0x2f, 1);
-                put_a_hut(map_x, map_y, 3);
-            } else if (tile_kind == 0x95) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, 0x30, 1);
-                put_a_hut(map_x, map_y, 4);
-            } else if (tile_kind == 0x96) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, 0x31, 1);
-                put_a_hut(map_x, map_y, 5);
-            } else if (tile_kind == 0x97) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, 0x32, 1);
-                put_a_hut(map_x, map_y, 1);
-            } else if (tile_kind == 0x98) {
-                border_direction = get_border_position(map_x, map_y, 0);
-                tile_kind += (char)border_direction;
-                put_rm_area(map_x, map_y, 1, (unsigned char)tile_kind, 0, 0x50, 1);
-            } else if (tile_kind == 0x9c) {
-                border_direction = get_border_position(map_x, map_y, 1);
-                tile_kind += (char)border_direction;
-                put_rm_area(map_x, map_y, 1, (unsigned char)tile_kind, 0,
-                            (unsigned char)tile_kind - 0x72, 0x18);
-            } else if (tile_kind >= 0x18 && tile_kind <= 0x1b) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, tile_kind, 0x40);
-            } else if (tile_kind >= 0x1c && tile_kind <= 0x1f) {
-                put_rm_area(map_x, map_y, 1, tile_kind, 0, tile_kind, 0x80);
+                reg_city_ptr = (map_y * REGION_W + x) * REGION_CELL_BYTES;
+                region_pm_x = region_pm_y = -1;
+            } else if (image == 0x93) {
+                put_rm_area(x, map_y, 1, image, 0, 0x2e, 1);
+                put_a_hut(x, map_y, 2);
+            } else if (image == 0x94) {
+                put_rm_area(x, map_y, 1, image, 0, 0x2f, 1);
+                put_a_hut(x, map_y, 3);
+            } else if (image == 0x95) {
+                put_rm_area(x, map_y, 1, image, 0, 0x30, 1);
+                put_a_hut(x, map_y, 4);
+            } else if (image == 0x96) {
+                put_rm_area(x, map_y, 1, image, 0, 0x31, 1);
+                put_a_hut(x, map_y, 5);
+            } else if (image == 0x97) {
+                put_rm_area(x, map_y, 1, image, 0, 0x32, 1);
+                put_a_hut(x, map_y, 1);
+            } else if (image == 0x98) {
+                image += get_border_position(x, map_y, 0);
+                put_rm_area(x, map_y, 1, image, 0, 0x50, 1);
+            } else if (image == 0x9c) {
+                image += get_border_position(x, map_y, 1);
+                put_rm_area(x, map_y, 1, image, 0,
+                            image - 0x72, 0x18);
+            } else if (image >= 0x18 && image <= 0x1b) {
+                put_rm_area(x, map_y, 1, image, 0, image, 0x40);
+            } else if (image >= 0x1c && image <= 0x1f) {
+                put_rm_area(x, map_y, 1, image, 0, image, 0x80);
             } else {
-                put_rm_area(map_x, map_y, 1, (unsigned char)tile_kind, 0, (unsigned char)tile_kind, 0);
+                put_rm_area(x, map_y, 1, image, 0, image, 0);
             }
         }
     }
-    return;
 }
 
 // Clear the 4-entry hut list (3 bytes per entry).
