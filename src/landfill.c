@@ -252,7 +252,13 @@ void get_entertainment_ov_image(void)
 void get_industry_ov_image(void)
 {
     unsigned char industry;
+#if PLATFORM_WINDOWS
+    unsigned char terrain_flag;
+#endif
     unsigned char building_kind;
+#if PLATFORM_WINDOWS
+    terrain_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain;
+#endif
     building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
     industry = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0xc0;
     if (building_kind >= 0xfc && building_kind <= 0xff) landfill_pool[cm_dptr] = 0x96;
