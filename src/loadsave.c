@@ -964,6 +964,13 @@ void basic_inf_settings(void)
     c2inf.skill_level = 0;
     c2inf.peace_mode = 1;
     c2inf.config37 = 1;
+#if PLATFORM_WINDOWS
+    c2inf.restore_window_positions = 1;
+    c2inf.invalidate_background = 0;
+    c2inf.wallpaper = 0;
+    c2inf.mouse_window_on = 1;
+    c2inf.dual_window_mode = 1;
+#endif
 }
 
 // Load registered model blocks until the first zero-size entry.

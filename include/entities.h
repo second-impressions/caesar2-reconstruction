@@ -236,11 +236,16 @@ struct c2inf_rec {
     unsigned char autosave_on;/* +0x3B  bool; act_tog_autosave          */
     int   max_samples;        /* +0x3C  default 4 (concurrent voices);  */
                               /*        act_nof_samples                 */
-    /* DOS struct ENDS at 0x40 (negative_buffer follows at c2inf+0x40).   */
-    /* The Mac PPC build (same source) has an extra dual-window-mode flag */
-    /* at its c2inf+0x45 (set_window_mode/select_window) -- a Mac-only UI */
-    /* feature #ifdef'd out of the full-screen DOS build, so absent here. */
-};                            /* total 0x40 = 64 bytes                  */
+#if PLATFORM_WINDOWS
+    unsigned char restore_window_positions; /* +0x40 */
+    unsigned char _win_unused41;             /* +0x41 */
+    unsigned char invalidate_background;    /* +0x42 */
+    unsigned char wallpaper;                /* +0x43 */
+    unsigned char mouse_window_on;           /* +0x44 */
+    unsigned char dual_window_mode;          /* +0x45 */
+#endif
+    /* The DOS struct ends at 0x40; the Windows window-manager tail ends at 0x46. */
+};                            /* 0x40 bytes on DOS, 0x46 on Windows    */
 extern struct c2inf_rec c2inf;
 
 /* Forum department ids used by forum_dept / forum_dept_over /
