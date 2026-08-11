@@ -712,11 +712,11 @@ void set_ambient_minimum(int ambient_idx, int minimum_delay)
 // FUNCTION: C2WIN 0x00402b8b
 void set_city_ambient(int building_kind)
 {
-    int ambient_idx;
-    unsigned char building_variant;
+    int ambient_idx = 0;
+    unsigned char building_type;
 
     if (building_kind < 0x78) return;
-    if      (building_kind < 0x7c) ambient_idx = 1;
+    else if (building_kind < 0x7c) ambient_idx = 1;
     else if (building_kind < 0x82) ambient_idx = 0xe;
     else if (building_kind < 0xa2) return;
     else if (building_kind < 0xae) ambient_idx = 0x12;
@@ -737,11 +737,10 @@ void set_city_ambient(int building_kind)
     else if (building_kind < 0xf5) ambient_idx = 0xb;
     else if (building_kind < 0xfa) return;
     else if (building_kind < 0xfb) {
-        building_variant = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).building & 0xf0;
-        building_variant >>= 4;
-        ambient_idx = building_variant;
-        if (ambient_idx > 3) ambient_idx = 0x14;
-        else          ambient_idx = 0x15;
+        building_type = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).building & 0xf0;
+        building_type >>= 4;
+        if (building_type > 3) ambient_idx = 0x14;
+        else                   ambient_idx = 0x15;
     } else if (building_kind < 0xfc) ambient_idx = 0x16;
     else if (building_kind < 0xfe) ambient_idx = 0xd;
     else ambient_idx = 0xc;
