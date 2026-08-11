@@ -1085,10 +1085,10 @@ void init_battle_ambients(void)
 int init_sample_buffer(int sample_count)
 {
     sample_buffer = 0;
-    if (samples_running != 0 && c2inf.samples_on != 0) {
-        sample_buffer = malloc(sample_count * 20000);
-        if (sample_buffer == 0) return 0;
-    }
+    if (samples_running == 0) return 1;
+    if (c2inf.samples_on == 0) return 1;
+    sample_buffer = malloc(sample_count * 20000);
+    if (sample_buffer == 0) return 0;
     return 1;
 }
 
