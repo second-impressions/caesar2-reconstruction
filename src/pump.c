@@ -211,7 +211,8 @@ int GetByte(void)
 void Putcode(short l, unsigned short c)
 {
     putbuf |= c >> putlen;
-    if ((putlen += (unsigned char)l) >= 8) {
+    putlen = (unsigned char)l + putlen;
+    if (putlen >= 8) {
         pmp_outbuff[pmp_optr++] = putbuf >> 8;
         if ((putlen -= 8) >= 8) {
             pmp_outbuff[pmp_optr++] = putbuf;
