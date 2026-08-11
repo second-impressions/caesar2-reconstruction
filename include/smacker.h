@@ -89,6 +89,7 @@ extern void     __pascal SmackToScreen (struct smk_handle *smk, unsigned left, u
 #if PLATFORM_WINDOWS
 extern void     __pascal SmackBufferNewPalette(void *buffer, const void *palette,
                                                unsigned paltype);
+extern unsigned char __cdecl SmackSoundUseMSS(int dig_driver);
 #endif
 
 /* Internal RAD helpers — __cdecl (leading underscore, caller-pop). */

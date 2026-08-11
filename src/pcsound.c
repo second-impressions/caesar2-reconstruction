@@ -665,10 +665,16 @@ int check_old_sslots(char *filename)
 // FUNCTION: C2WIN 0x00402abd
 int link_to_smacker(void)
 {
+#if !PLATFORM_WINDOWS
     int driver_flag;
+#endif
     if (smacker_open) return 1;
+#if PLATFORM_WINDOWS
+    SmackSoundUseMSS(dig);
+#else
     driver_flag = smacker_open;
     SetSmackAILDigDriver(dig, driver_flag);
+#endif
     smacker_open = 1;
     return 1;
 }
