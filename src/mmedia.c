@@ -858,23 +858,25 @@ void grey_city_map_parts(void)
 // FUNCTION: C2WIN 0x00453c56
 void grey_region_map_parts(void)
 {
-    int icon_idx;
-    int header_offset;
-
-    unsigned short icon_width;
-    unsigned short icon_height;
-    unsigned short icon_x;
-    unsigned short icon_y;
+    int icon_no;
+    unsigned short w;
+    unsigned short h;
+    unsigned short x;
+    unsigned short y;
 
     if (tutorial_mode == 0) return;
-    for (icon_idx = 4; icon_idx < 0x17; icon_idx++) {
-        if (region_icon_allowed(icon_idx - 4) == 0) {
-            header_offset = icon_idx * 8;
-            icon_width = int_region_header[header_offset + 4];
-            icon_height = int_region_header[header_offset + 5];
-            icon_x = int_region_header[header_offset + 8] + 0xee;
-            icon_y = int_region_header[header_offset + 9];
-            draw_a_rect(icon_x, icon_y, icon_width, icon_height, 0x1a);
+    for (icon_no = 4; icon_no < 0x17; icon_no++) {
+#if PLATFORM_WINDOWS
+        if (region_icon_allowed(icon_no - 4) != 0) continue;
+        grey_map_icon(icon_no, 2);
+#else
+        if (region_icon_allowed(icon_no - 4) == 0) {
+            w = int_region_header[icon_no * 8 + 4];
+            h = int_region_header[icon_no * 8 + 5];
+            x = int_region_header[icon_no * 8 + 8] + 0xee;
+            y = int_region_header[icon_no * 8 + 9];
+            draw_a_rect(x, y, w, h, 0x1a);
         }
+#endif
     }
 }
