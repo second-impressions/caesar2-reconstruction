@@ -2141,17 +2141,16 @@ void clear_fire_zones(void)
 void push_shell(int row_count)
 {
     int cell_stride;
-    unsigned char neighbour_found;
-    int direction;
+    char neighbour_found;
     int row_idx;
     int row_stride;
     int cell_idx;
-    unsigned char neighbour_security;
-    unsigned char neighbour_wall;
+    char neighbour_security;
+    char neighbour_wall;
     int start_offset;
     char new_security;
-    unsigned char propagated_security;
-    unsigned char wall_flags;
+    char propagated_security;
+    char wall_flags;
 
     if (evolve_row == 0) {
         shell_push_direction++;
@@ -2171,23 +2170,22 @@ void push_shell(int row_count)
             if (wall_flags != 0) {
                 neighbour_wall   = 1;
                 (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security    = 100;
-                direction = shell_push_direction;
-                if (direction == 0) {
+                if (shell_push_direction == 0) {
                     if (cell_idx > 0) {
                         neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 20))).terrain & 0x1e;
                         neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 20))).security;
                     }
-                } else if (direction == 1) {
+                } else if (shell_push_direction == 1) {
                     if (cell_idx > 0) {
                         neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 1600))).terrain & 0x1e;
                         neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) - 1600))).security;
                     }
-                } else if (direction == 2) {
+                } else if (shell_push_direction == 2) {
                     if (cell_idx < 0x4f) {
                         neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 20))).terrain & 0x1e;
                         neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 20))).security;
                     }
-                } else if (direction == 3) {
+                } else if (shell_push_direction == 3) {
                     if (cell_idx < 0x4f) {
                         neighbour_wall = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 1600))).terrain & 0x1e;
                         neighbour_security = (*(struct city_cell *)((unsigned char *)city_map + ((cm_sptr) + 1600))).security;
