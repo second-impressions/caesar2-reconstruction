@@ -16,6 +16,8 @@ extern char cd_drive[4];
 extern void *main_window;
 extern void *tutorial_window;
 extern void *active_window;
+extern unsigned char *window_buffer;
+extern unsigned char main_window_bitmap[];
 extern int sprintf(char *buffer, const char *format, ...);
 extern int (__stdcall *WinHelpA)(void *window, char *help_file,
                                 unsigned int command, unsigned long data);
@@ -28,6 +30,9 @@ extern void restore_game_windows(void);
 extern void tile_main_window(int tile);
 extern void update_window_titles(void);
 extern void grey_map_icon(int icon_no, int mode);
+extern void draw_window_buffer(void *window, void *buffer, int source_x,
+                               int source_y, int width, int height,
+                               int dest_x, int dest_y);
 #endif
 
 #include "c2_types.h"
@@ -752,13 +757,33 @@ void show_please_wait(void)
 // Update the visible tutorial countdown while tutorial mode is active.
 // FUNCTION: C2 0x58f16
 // FUNCTION: C2WIN 0x00453a1a
+#if PLATFORM_WINDOWS
+void show_tutorial_timer(unsigned char refresh)
+#else
 void show_tutorial_timer(void)
+#endif
 {
+#if PLATFORM_WINDOWS
+    unsigned char *old_screen;
+
+    if (tutorial_mode == 0) return;
+    if (pointer_mode == 4) return;
+    old_screen = internal_screen;
+    internal_screen = window_buffer;
+    show_a_system_blank(2, 0x17d, 6, 2);
+    font_no(tutorial_timer, ' ', " ", 0x12, 0x186, font2, 0x10);
+    internal_screen = old_screen;
+    if (refresh != 0) {
+        draw_window_buffer(main_window, main_window_bitmap,
+                           2, 0x17d, 0x60, 0x20, 2, 0x17d);
+    }
+#else
     if (tutorial_mode != 0) {
         show_a_system_blank(0x1f4, 0x1b3, 6, 2);
         font_no(tutorial_timer / 50, ' ', " ", 0x206, 0x1bc, font2, 0x10);
         setup_refresh_area(0x1f4, 0x1b3, 6, 3, 1);
     }
+#endif
 }
 
 // Navigate to the preceding available tutorial page.
