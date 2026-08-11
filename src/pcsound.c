@@ -766,18 +766,20 @@ void set_city_ambient(int building_kind)
 // FUNCTION: C2WIN 0x00402e37
 void set_prov_ambient(int event)
 {
-    if (event <  0xd2) return;
-    if (event <  0xd3) return;
-    if      (event <  0xd4) event = 0xc;
-    else if (event <  0xd5) event = 5;
-    else if (event <  0xdc) event = 4;
-    else if (event <  0xe0) event = 0xb;
-    else if (event <  0xe4) event = 2;
-    else if (event <  0xe8) event = 6;
-    else if (event <  0xec) event = 7;
-    else                    event = 3;
+    int ambient_idx = 0;
 
-    ambient_list[event].active = 1;
+    if (event <  0xd2) return;
+    else if (event <  0xd3) return;
+    else if (event <  0xd4) ambient_idx = 0xc;
+    else if (event <  0xd5) ambient_idx = 5;
+    else if (event <  0xdc) ambient_idx = 4;
+    else if (event <  0xe0) ambient_idx = 0xb;
+    else if (event <  0xe4) ambient_idx = 2;
+    else if (event <  0xe8) ambient_idx = 6;
+    else if (event <  0xec) ambient_idx = 7;
+    else                    ambient_idx = 3;
+
+    ambient_list[ambient_idx].active = 1;
 }
 
 // Schedule the death sound associated with a battle unit type.
