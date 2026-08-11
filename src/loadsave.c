@@ -642,7 +642,9 @@ void save_a_game(void)
                 setup_whole_screen_refresh();
                 refresh_svga_screen();
                 savegame(filename);
+#if !PLATFORM_WINDOWS
                 for (i = 0; i < 1000; i++) just_idle_game_loop();
+#endif
                 decision = 1;
             }
         } else {
