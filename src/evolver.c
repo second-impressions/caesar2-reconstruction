@@ -19,6 +19,7 @@ void get_population_growth_factor(void);
 int get_range1(unsigned char *, int, unsigned char);
 int get_range3(unsigned char *, int, unsigned char);
 int test_area_for_population(int, int, int, int);
+void setup_map_screen_refresh(void);
 #if !PLATFORM_WINDOWS
 int put_out_a(char, char, char, char, char, char, char);
 #endif
