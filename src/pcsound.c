@@ -445,8 +445,11 @@ int pause_db(void)
 
 // Load and start an XMI tune unless music or the sequence engine is disabled.
 // FUNCTION: C2 0x12279
-void play_tune(char *filename, int loop_count)
+void play_tune(unsigned char *filename, int loop_count)
 {
+#if PLATFORM_WINDOWS
+    return;
+#endif
     if (c2inf.tunes_on == 0) return;
     if (sequences_running == 0) return;
     if (*filename == 0) return;
