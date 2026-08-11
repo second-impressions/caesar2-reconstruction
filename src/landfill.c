@@ -113,9 +113,15 @@ void get_water_ov_image(void)
 // FUNCTION: C2WIN 0x0049d5d3
 void get_admin_ov_image(void)
 {
+#if PLATFORM_WINDOWS
+    unsigned char terrain_flag;
+#endif
     unsigned char building_kind;
     unsigned char admin;
 
+#if PLATFORM_WINDOWS
+    terrain_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain;
+#endif
     building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
     admin = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0xc;
     if (building_kind >= 0xae && building_kind <= 0xb9) {
