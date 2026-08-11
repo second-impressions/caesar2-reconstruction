@@ -427,9 +427,8 @@ void show_region_landfill(int x_start, int y_start)
     sprite_y = y_start * screen_width;
     cm_y = 0; cm_sptr = 0;
     for ( ; cm_y < 60; cm_y++, sprite_y += 0x500) {
-    sprite_x = x_start;
-    cm_x = 0;
-    do {
+        sprite_x = x_start;
+        for (cm_x = 0; cm_x < 60; cm_x++, cm_sptr += 8, sprite_x += 2) {
         corner_flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 3;
         region_kind = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
         region_gfx_idx = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx;
@@ -453,12 +452,12 @@ void show_region_landfill(int x_start, int y_start)
         else if (block_idx == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
         else if (block_idx == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
 reg_next:
-        cm_x++;
-        cm_sptr += 8;
-        sprite_x += 2;
-    } while (cm_x < 60);
+            ;
+        }
     }
+#if !PLATFORM_WINDOWS
     write_image(misc, 4, x_start + 2, y_start + 2);
+#endif
 }
 
 // Draw a row range of the battle terrain overlay, including occupied-cell highlights.
