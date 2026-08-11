@@ -859,21 +859,22 @@ void play_ambient_fx(void)
         if (ambient_list[i].active == 0) continue;
         ambient_list[i].active = 0;
         (ambient_list[i].delay_counter)++;
-        if (ambient_list[i].delay_counter < 0xc8) continue;
-        ambient_list[i].delay_counter = rand128;
-        if (c2inf.ambients_on == 0) break;
-        if (ambient_list[i].name_idx == 0) {
-            set_sound(ambient_list[i].names[0], ambient_list[i].volume);
-        } else if (ambient_list[i].name_idx == 1) {
-            set_sound(ambient_list[i].names[1], ambient_list[i].volume);
-        } else if (ambient_list[i].name_idx == 2) {
-            set_sound(ambient_list[i].names[2], ambient_list[i].volume);
-        } else if (ambient_list[i].name_idx == 3) {
-            set_sound(ambient_list[i].names[3], ambient_list[i].volume);
-        }
-        ambient_list[i].name_idx++;
-        if (ambient_list[i].name_idx >= ambient_list[i].name_count) {
-            ambient_list[i].name_idx = 0;
+        if (ambient_list[i].delay_counter >= 0xc8) {
+            ambient_list[i].delay_counter = rand128;
+            if (c2inf.ambients_on == 0) break;
+            if (ambient_list[i].name_idx == 0) {
+                set_sound(ambient_list[i].names[0], ambient_list[i].volume);
+            } else if (ambient_list[i].name_idx == 1) {
+                set_sound(ambient_list[i].names[1], ambient_list[i].volume);
+            } else if (ambient_list[i].name_idx == 2) {
+                set_sound(ambient_list[i].names[2], ambient_list[i].volume);
+            } else if (ambient_list[i].name_idx == 3) {
+                set_sound(ambient_list[i].names[3], ambient_list[i].volume);
+            }
+            ambient_list[i].name_idx++;
+            if (ambient_list[i].name_idx >= ambient_list[i].name_count) {
+                ambient_list[i].name_idx = 0;
+            }
         }
     }
 }
