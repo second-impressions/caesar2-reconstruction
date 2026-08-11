@@ -50,6 +50,7 @@ unsigned char svga_refresh_table[1364];
 /* Copies part of a 16×16 tile into the active SVGA bank. */
 extern void refresh_16x16_partblock(int screen_off, unsigned short bank_off,
                                     int width);
+extern void refresh_16x16_block(int, unsigned short);
 #if PLATFORM_WINDOWS
 extern int pm_diamond_full_height;
 extern void resize_pm_screen(void);
