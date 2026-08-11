@@ -14,6 +14,7 @@ void media_text_place(int x, int y, int width, int line_count, int alt_x, int al
 extern char file_buffer[80];
 extern char cd_drive[4];
 extern void *main_window;
+extern void *game_window;
 extern void *tutorial_window;
 extern void *active_window;
 extern unsigned char *window_buffer;
@@ -26,9 +27,16 @@ extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
                                     unsigned int flags);
 extern void setup_window(void *parent, void *window, int x, int y);
 extern void show_game_window(int mode);
+extern void hide_game_window(int mode);
 extern void restore_game_windows(void);
 extern void tile_main_window(int tile);
 extern void update_window_titles(void);
+extern void reset_getmeoutofhere_buttons(void);
+extern void gloop_start(void);
+extern void gloop_end(void);
+extern unsigned char game_paused;
+extern unsigned long tutorial_start_time;
+extern unsigned long (*GetTickCount)(void);
 extern void grey_map_icon(int icon_no, int mode);
 extern void draw_window_buffer(void *window, void *buffer, int source_x,
                                int source_y, int width, int height,
@@ -39,7 +47,7 @@ extern void draw_window_buffer(void *window, void *buffer, int source_x,
 
 char help_palname[14] = "xxxxxxxx.256";
 
-char active_tutorial_pages[34] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 3, 0, 4, 0, 0, 0, 6, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+unsigned char active_tutorial_pages[34] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 3, 0, 4, 0, 0, 0, 6, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 unsigned char city_tutorial_icons[30] = { 1, 1, 1, 1, 1, 1, 9, 6, 9, 1, 1, 1, 3, 3, 1, 2, 4, 7, 7, 1, 7, 7, 7, 7, 99, 99, 99, 99, 99, 99 };
 
@@ -557,23 +565,32 @@ void do_tutorial(void)
 // FUNCTION: C2WIN 0x004532dc
 void do_a_tutorial_page(void)
 {
-    char *image_path;
-    char *pal_path;
+    char *picname;
+    char *palname;
     int text_x;
     int text_y;
-    int text_width;
+    int width;
 
-    image_path = tut_files[tutorial_page].name;
-    pal_path   = tut_palfiles[tutorial_page].name;
+    picname = tut_files[tutorial_page].name;
+    palname = tut_palfiles[tutorial_page].name;
 
-    if (!check_file_exists(image_path)) { out4 = 0;
-        tutorial_page++;
+#if PLATFORM_WINDOWS
+    if (!check_file_exists(picname)) { tutorial_page++;
+        out4 = 0;
+#else
+    if (!check_file_exists(picname)) { out4 = 0;
+        tutorial_page++; } else {
+#endif
+#if PLATFORM_WINDOWS
     } else {
+#endif
 
     last_tutorial_page = tutorial_page;
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
-    show_pl8file(image_path, 0x1e0);
-    readfile(pal_path, temp_palette, 0x300, 0);
+#endif
+    show_pl8file(picname, 0x1e0);
+    readfile(palname, temp_palette, 0x300, 0);
 
     this_help_page = tutorial_page + 0x3c;
     load_media_entry();
@@ -581,9 +598,9 @@ void do_a_tutorial_page(void)
 
     text_x = this_media_entry.left_sprite;
     text_y = this_media_entry.right_sprite;
-    text_width = this_media_entry.width;
+    width = this_media_entry.width;
     put_a_font_string(text_pointer, text_x, text_y, font2, 0x10);
-    media_text_place(text_x, text_y + 0x1e, text_width, 1, text_x, text_width, font1);
+    media_text_place(text_x, text_y + 0x1e, width, 1, text_x, width, font1);
 
     /* Bottom-row navigation arrows */
     font_list(0x31, 1, 0xa0, 0x1a0, font1, 0x10);
@@ -598,52 +615,97 @@ void do_a_tutorial_page(void)
 
     if (media_voc) set_db_sound(this_media_entry.voc_file);
 
-    out1 = 0;
-    out4 = 0;
+    out1 = 0; out4 = 0;
+#if PLATFORM_WINDOWS
+    while (out1 == 0) {
+#else
   out1_loop:
     if (out1 != 0) goto out1_done;
+#endif
+#if PLATFORM_WINDOWS
+    gloop_start();
+    gloop_end();
+#else
     just_idle_game_loop();
-    if (exit_screen()) {
-        out1          = 1;
-        tutorial_page = 0x20;
-        do_pos();
-    }
+#endif
+    if (exit_screen()) { out1 = 1; tutorial_page = 0x20; do_pos(); }
+#if PLATFORM_WINDOWS
+    if (mouse_left_preclick == 0) continue;
+#else
     if (mouse_left_preclick) {
+#endif
         if (mouse_in_area(0x18, 0x1a8, 0x20, 0x20)) act_back_tutorial_page();
         if (mouse_in_area(0x40, 0x1a8, 0x20, 0x20)) act_middle_tutorial_page();
         if (mouse_in_area(0x68, 0x1a8, 0x20, 0x20)) act_forward_tutorial_page();
+#if !PLATFORM_WINDOWS
     }
+#endif
+#if PLATFORM_WINDOWS
+    }
+#else
     goto out1_loop;
   out1_done: ;
+#endif
 
     }
 
     /* Run the interactive challenge associated with this page. */
     tutorial_level = active_tutorial_pages[tutorial_page] & 0xff;
     if (tutorial_level != 0 && out4 == 0) {
+#if PLATFORM_WINDOWS
+        reset_getmeoutofhere_buttons();
+        hide_game_window(5);
+        tile_main_window(c2inf.wallpaper);
+        setup_window(0, game_window, 0, 0);
+        active_window = game_window;
+        show_game_window(0);
+        update_window_menu(0);
+        tutorial_start_time = GetTickCount();
+        tutorial_timer = 100;
+#else
         tutorial_timer         = 0x13b9;
-        tutorial_correct       = 0;
-        tutorial_correct_timer = 0;
+#endif
+        tutorial_correct_timer = tutorial_correct = 0;
         if (tutorial_level == 5)      act_goto_prov_map();
         else if (tutorial_level == 8) act_goto_prov_map();
         else                          act_goto_city_map();
 
+#if PLATFORM_WINDOWS
+        if (screen_mode == 0)      city_map_screen(0);
+        else if (screen_mode == 1) region_map_screen(0);
+        show_game_window(2);
+        selected_icon_text = last_icon_used = selected_icon_no = 0;
+#else
         if (map_mode == 0)      city_map_screen(0);
         else if (map_mode == 1) region_map_screen(0);
+#endif
 
         while (out4 == 0) {
             main_game_loop();
+#if PLATFORM_WINDOWS
+            if (game_paused == 0)
+                tutorial_timer = 100 - (GetTickCount() - tutorial_start_time) / 1000;
+#else
             if (c2inf.paused == 0) tutorial_timer--;
+#endif
             if (tutorial_timer < 0) out4 = 1;
             if (tutorial_correct) {
-                tutorial_correct_timer++;
-                if (tutorial_correct_timer > 0x64) {
+                tutorial_correct_timer++; if (tutorial_correct_timer > 0x64) {
                     show_please_wait();
                     wait_click();
                     out4 = 1;
                 }
             }
         }
+#if PLATFORM_WINDOWS
+        hide_game_window(2);
+        hide_game_window(0);
+        update_window_menu(0);
+        tile_main_window(c2inf.wallpaper);
+        active_window = tutorial_window;
+        show_game_window(5);
+        if (pointer_mode == 4) pointer_mode = 0;
+#endif
     }
 
     stop_db();
