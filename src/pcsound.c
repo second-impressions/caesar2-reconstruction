@@ -257,7 +257,7 @@ void set_sound(unsigned char *filename, int loop_count)
 // Load or reuse a cached sample and request playback without checking for a free voice first.
 // FUNCTION: C2 0x11c35
 // FUNCTION: C2WIN 0x00401734
-void set_pri_sound(char *filename, int loop_count)
+void set_pri_sound(unsigned char *filename, int loop_count)
 {
     if (c2inf.samples_on == 0) return;
     if (samples_running == 0) return;
