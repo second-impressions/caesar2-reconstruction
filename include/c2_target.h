@@ -79,7 +79,6 @@
 /* The Windows audio port applies the configured effects volume to each
  * allocated sample handle; DOS sets the digital driver's master volume
  * (verified at C2WIN 0x40149b vs C2 0x11a53). */
-#define C2_FEAT_PER_SAMPLE_VOLUME PLATFORM_WINDOWS
 
 /* The DOS mouse poll consumes mse_button after updating the engine state.
  * The Windows port preserves the sampled byte for its Windows input path

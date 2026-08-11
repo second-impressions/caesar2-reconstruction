@@ -201,14 +201,14 @@ void stop_sequences(void)
 void set_samples_volume(void)
 {
     int volume;
-#if C2_FEAT_PER_SAMPLE_VOLUME
+#if PLATFORM_WINDOWS
     int ds;
 #endif
 
     if (c2inf.samples_on == 0)   return;
     if (samples_running == 0)    return;
     volume = totalXpercent(0x7f, c2inf.samples_level);
-#if C2_FEAT_PER_SAMPLE_VOLUME
+#if PLATFORM_WINDOWS
     for (ds = 0; ds < 6; ds++) {
         AIL_set_sample_volume(S_dig[ds], volume);
     }
@@ -299,6 +299,10 @@ void set_pri_sound(unsigned char *filename, int loop_count)
 // FUNCTION: C2WIN 0x00401809
 char __far *start_sound(char *sample_data, int loop_count)
 {
+#if PLATFORM_WINDOWS
+    int volume;
+#endif
+
     for (ds = 0; ds < c2inf.max_samples; ds++) {
         dig_status = AIL_sample_status(S_dig[ds]);
         if (dig_status == 2) { next_sample = ds; break; }
@@ -312,9 +316,19 @@ char __far *start_sound(char *sample_data, int loop_count)
     dig_status = AIL_sample_status(S_dig[ds]);
     if (dig_status == 4) AIL_end_sample(S_dig[ds]);
     AIL_init_sample(S_dig[ds]);
+#if PLATFORM_WINDOWS
+    if (AIL_set_sample_file(S_dig[ds], sample_data, -1) == 0) return MK_FP(3, 0);
+#else
     if (AIL_set_sample_file(S_dig[ds], sample_data, -1) == 0) return (char __far *)3;
+#endif
     AIL_set_sample_loop_count(S_dig[ds], loop_count);
+#if PLATFORM_WINDOWS
+    volume = totalXpercent(0x7f, c2inf.samples_level);
+    AIL_set_sample_volume(S_dig[ds], volume);
+    AIL_start_sample(S_dig[ds]);
+#else
     return AIL_start_sample(S_dig[ds]);
+#endif
 }
 
 // Returns nonzero if a sample slot is available.
