@@ -1245,10 +1245,9 @@ void get_history_in_buffer(int *history_buf)
     int history_fd;
 
     history_fd = open("history.dat", O_BINARY);
-    if (history_fd != -1) {
-        read(history_fd, history_buf, 0xfa0);
-        close(history_fd);
-    }
+    if (history_fd == -1) return;
+    read(history_fd, history_buf, 0xfa0);
+    close(history_fd);
 }
 
 // Return one value from a buffered five-column history entry.
