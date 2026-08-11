@@ -375,7 +375,7 @@ void show_city_landfill(int x_start, int y_start)
                 sprite_image_no++;
             }
         } else {
-                if (activity_flag != 0 && terrain_flag != 0) goto next_cell;
+                if (activity_flag != 0 && terrain_flag != 0) continue;
                 sprite_image_no = lf_tiles[building_kind];
                 if (building_kind >= 0xe9 && building_kind <= 0xf0) get_circus_bodge(building_kind);
                 if (sprite_image_no < 0x5a) block_idx = 0;
@@ -395,8 +395,6 @@ void show_city_landfill(int x_start, int y_start)
             else if (block_idx == 1) place_4x4_block(landfill + sprite_start, sprite_x + sprite_y);
             else if (block_idx == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
             else if (block_idx == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
-next_cell:
-            ;
         }
     }
     write_image(misc, 4, x_start + 2, y_start + 2);
