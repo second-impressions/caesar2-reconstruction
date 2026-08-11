@@ -20,9 +20,6 @@ int get_range1(unsigned char *, int, unsigned char);
 int get_range3(unsigned char *, int, unsigned char);
 int test_area_for_population(int, int, int, int);
 void setup_map_screen_refresh(void);
-#if !PLATFORM_WINDOWS
-int put_out_a(char, char, char, char, char, char, char);
-#endif
 
 int stretch_ofsets_2x2[4][3] = {
     { 20, 1620, 1600 },
@@ -963,14 +960,8 @@ void cap_land_value(int rows)
         } }
 }
 
-#if PLATFORM_WINDOWS
-int put_out_a(char, char, char, char, char, char, char);
-int evolve_a_house();
-int stretch_house();
-int stretch_to_2x2_house();
-int stretch_to_3x3_house();
-int get_pop_level();
-#endif
+int put_out_a(char citizen_kind, char cell_x, char cell_y, char,
+              char start_idx, char perimeter_size, char barbarian_flag);
 
 // Update forum activity and periodically send citizens from occupied forum buildings.
 // FUNCTION: C2 0x415bb
@@ -1026,6 +1017,8 @@ void evolve_forum_activity(int rows)
             }
         } }
 }
+
+int get_pop_level(void);
 
 // Dispatch soldiers from forts to engage nearby enemy citizens.
 // FUNCTION: C2 0x4176e
@@ -1882,8 +1875,8 @@ int devolve_a_house(int tier_idx)
 // FUNCTION: C2WIN 0x004672d2
 int evolve_a_house(int tier_idx)
 {
-    unsigned int curr;
     unsigned int next;
+    unsigned int curr;
     int delta;
 
     curr = house_gfxdat[tier_idx*4 + 1];
