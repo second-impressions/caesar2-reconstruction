@@ -421,12 +421,16 @@ void stop_db(void)
     if (c2inf.samples_on == 0) return;
     if (samples_running == 0) return;
     if (db_playing == 0) return;
+#if !PLATFORM_WINDOWS
     cd_path(db_file);
+#endif
     ds = 5;
-    AIL_end_sample(S_dig[5]);
+    AIL_end_sample(S_dig[ds]);
     db_playing = 0;
     close(db_handle);
+#if !PLATFORM_WINDOWS
     main_path();
+#endif
 }
 
 // Toggle pause state for the active speech stream.
