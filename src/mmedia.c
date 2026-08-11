@@ -775,14 +775,12 @@ void show_tutorial_timer(void)
 // FUNCTION: C2WIN 0x00453ad1
 void act_back_tutorial_page(void)
 {
+    char *filename;
+
     while (tutorial_page > 0) {
         tutorial_page--;
-        if (check_file_exists(tut_files[tutorial_page].name)) {
-            out1 = 1;
-            out4 = 1;
-            do_pos();
-            return;
-        }
+        filename = tut_files[tutorial_page].name;
+        if (check_file_exists(filename)) { out1 = 1; out4 = 1; do_pos(); return; }
     }
     do_neg();
 }
