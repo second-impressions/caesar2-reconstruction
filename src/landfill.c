@@ -136,28 +136,28 @@ void get_security_ov_image(void)
     unsigned char terrain;
     unsigned char security;
     signed char crime;
-    unsigned char building_kind;
+    unsigned char building;
     unsigned char level;
 
     terrain = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain;
-    building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+    building = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
     crime = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).security;
     security = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag & 0x30;
 
     if (crime < 0x10) level = 0;
     else if (crime >= 0x10) level = 1;
-    if (security != 0) level++;
+    if (security != 0) level = level + 1;
 
     if ((terrain & 6) != 0) { landfill_pool[cm_dptr] = 0x96; return; }
-    if (building_kind >= 0x1e && building_kind <= 0x51) { landfill_pool[cm_dptr] = 0x96; return; }
-    if (building_kind == 0xe3) { landfill_pool[cm_dptr] = 0x96; return; }
-    if (building_kind == 0xe4) { landfill_pool[cm_dptr] = 0x96; return; }
+    if (building >= 0x1e && building <= 0x51) { landfill_pool[cm_dptr] = 0x96; return; }
+    if (building == 0xe3) { landfill_pool[cm_dptr] = 0x96; return; }
+    if (building == 0xe4) { landfill_pool[cm_dptr] = 0x96; return; }
     if (level != 0) {
-        if (level == 2) { landfill_pool[cm_dptr] = 0x8d; return; }
-        if (security != 0) { landfill_pool[cm_dptr] = 0x93; return; }
-        if (level == 1) { landfill_pool[cm_dptr] = 0x90; return; }
+        if (level == 2) landfill_pool[cm_dptr] = 0x8d;
+        else if (security != 0) landfill_pool[cm_dptr] = 0x93;
+        else if (level == 1) landfill_pool[cm_dptr] = 0x90;
     } else {
-        landfill_pool[cm_dptr] = level;
+        landfill_pool[cm_dptr] = 0;
     }
 }
 
