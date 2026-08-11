@@ -4,7 +4,7 @@
 
 
 extern void put_a_font_string(char *str, int x, int y, unsigned char *font, int color);
-extern int  one_letter(unsigned char *font, unsigned char letter);
+extern int  one_letter(unsigned char *font, int letter);
 extern void font_list(int idx, int word_count, int x, int y, unsigned char *font, int color);
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
 extern int  get_next_word_length(char *src, unsigned char *font);
@@ -372,66 +372,55 @@ void media_text_place(int x, int y, int width, int line_count,
 // FUNCTION: C2WIN 0x00452c66
 void put_a_media_string(char *text, int x, int y)
 {
-    char character;
+    unsigned char this_char;
     int  character_width;
 
     sprite_x   = x;
     font_style = 0;
-    character = *text;
-    if (linked_text_flag)
-        help_page_hot_spots[this_spot].x3 = sprite_x;
-    while (character != 0) {
+    this_char = *text;
+    if (linked_text_flag) help_page_hot_spots[this_spot].x3 = sprite_x;
+    while (this_char != 0) {
         sprite_y = y;
-        if (character == '#') {
+        if (this_char == '#') {
             if (linked_text_flag) {
                 /* Closing tag: write the right edge into either
                  * the primary or the continuation slot, depending
                  * on whether this spot has already wrapped. */
                 linked_text_flag = 0;
-                if (help_page_hot_spots[this_spot].x2 == 0)
-                    help_page_hot_spots[this_spot].x2 = sprite_x;
-                else
-                    help_page_hot_spots[this_spot].x4 = sprite_x;
-            } else {
-                /* Opening tag.  Allocate a fresh hotspot, parse
-                 * the id digits, and stamp the rectangle origin. */
-                text++;
-                this_spot = nof_hot_spots;
-                help_page_hot_spots[this_spot].page = get_number_from_text(text);
-                help_page_hot_spots[this_spot].x1 = sprite_x;
-                help_page_hot_spots[this_spot].y = sprite_y - 2;
-                nof_hot_spots++;
-                linked_text_flag = 1;
-                /* Skip the remaining page-number digits. */
-                if (help_page_hot_spots[this_spot].page > 9) {
-                    if (help_page_hot_spots[this_spot].page <= 99)
-                        text += 1;
-                    else if (help_page_hot_spots[this_spot].page <= 999)
-                        text += 2;
-                    else
-                        text += 3;
-                }
+                if (help_page_hot_spots[this_spot].x2 == 0) help_page_hot_spots[this_spot].x2 = sprite_x;
+                else help_page_hot_spots[this_spot].x4 = sprite_x;
+                goto hash_done;
             }
-            character = 1;
+            /* Opening tag.  Allocate a fresh hotspot, parse
+             * the id digits, and stamp the rectangle origin. */
+            text++;
+            this_spot = nof_hot_spots;
+            help_page_hot_spots[this_spot].page = get_number_from_text(text);
+            help_page_hot_spots[this_spot].x1 = sprite_x;
+            help_page_hot_spots[this_spot].y = sprite_y - 2;
+            nof_hot_spots++;
+            linked_text_flag = 1;
+            /* Skip the remaining page-number digits. */
+            if (help_page_hot_spots[this_spot].page <= 9) goto hash_done;
+            if (help_page_hot_spots[this_spot].page <= 99) text += 1;
+            else if (help_page_hot_spots[this_spot].page <= 999) text += 2;
+            else text += 3;
+hash_done:
+            this_char = 1;
         }
-        if (character >= 0x20) {
-            if (linked_text_flag)
-                sprite_colour = 0x0d;
-            else
-                sprite_colour = 0x10;
-            character -= 0x20;
-            if (letter_table[character] > 0)
-                character_width = one_letter(font1, character);
-            else
-                character_width = 4;
-            sprite_x += character_width;
-            x_is     += character_width;
-        }
+        if (this_char < 0x20) goto next_character;
+        if (linked_text_flag) sprite_colour = 0x0d;
+        else sprite_colour = 0x10;
+        this_char -= 0x20;
+        if (letter_table[this_char] > 0) character_width = one_letter(font1, this_char);
+        else character_width = 4;
+        sprite_x += character_width;
+        x_is     += character_width;
+next_character:
         text++;
-        character = *text;
+        this_char = *text;
     }
-    if (linked_text_flag)
-        help_page_hot_spots[this_spot].x2 = sprite_x;
+    if (linked_text_flag) help_page_hot_spots[this_spot].x2 = sprite_x;
     x_is += 4;
 }
 
