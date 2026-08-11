@@ -426,41 +426,56 @@ void show_region_landfill(int x_start, int y_start)
     unsigned char region_kind;
     unsigned char region_gfx_idx;
     int block_idx;
+#if PLATFORM_WINDOWS
+    int landfill_idx;
+    unsigned char terrain_flags;
+    int addr;
+#endif
 
     sprite_y = y_start * screen_width;
     cm_y = 0; cm_sptr = 0;
+#if PLATFORM_WINDOWS
+    landfill_idx = 0;
+#endif
     for ( ; cm_y < 60; cm_y++, sprite_y += 0x500) {
         sprite_x = x_start;
+#if PLATFORM_WINDOWS
+        for (cm_x = 0; cm_x < 60; cm_x++, landfill_idx++, cm_sptr += 8, sprite_x += 2) {
+        terrain_flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & 0x17;
+#else
         for (cm_x = 0; cm_x < 60; cm_x++, cm_sptr += 8, sprite_x += 2) {
+#endif
         corner_flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 3;
         region_kind = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
         region_gfx_idx = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx;
-        if (region_kind == 0x92 && (region_gfx_idx & 3) != 0) goto reg_next;
-        if (region_kind >= 0x85 && region_kind < 0x8d && (region_gfx_idx & 3) != 0) goto reg_next;
-        if (region_kind == 0x8d && region_gfx_idx != 0x28) goto reg_next;
-        if (region_kind == 0x8e && region_gfx_idx != 0x31) goto reg_next;
-        if (region_kind == 0x8f && region_gfx_idx != 0x3a) goto reg_next;
-        if (region_kind == 0x90 && region_gfx_idx != 0x43) goto reg_next;
-        if (region_kind == 0x91 && region_gfx_idx != 0x4c) goto reg_next;
+        if (region_kind == 0x92 && (region_gfx_idx & 3) != 0) continue;
+        if (region_kind >= 0x85 && region_kind < 0x8d && (region_gfx_idx & 3) != 0) continue;
+        if (region_kind == 0x8d && region_gfx_idx != 0x28) continue;
+        if (region_kind == 0x8e && region_gfx_idx != 0x31) continue;
+        if (region_kind == 0x8f && region_gfx_idx != 0x3a) continue;
+        if (region_kind == 0x90 && region_gfx_idx != 0x43) continue;
+        if (region_kind == 0x91 && region_gfx_idx != 0x4c) continue;
         get_reg_geog_ov_image();
         if (sprite_image_no < 0xc8) block_idx = 0;
         else if (sprite_image_no < 0xd1) block_idx = 1;
         else if (sprite_image_no < 0xd5) block_idx = 2;
         else block_idx = 3;
-        if (block_idx > 0 && corner_flags != 0) goto reg_next;
+        if (block_idx > 0 && corner_flags != 0) continue;
+#if PLATFORM_WINDOWS
+        addr = sprite_image_no * 16;
+        sprite_start = landfill[addr + 0xc]
+                     + (landfill[addr + 0xd] << 8);
+#else
         sprite_start = landfill[sprite_image_no * 16 + 0xc]
                      + (landfill[sprite_image_no * 16 + 0xd] << 8);
+#endif
         if (block_idx == 0) place_2x2_block(landfill + sprite_start, sprite_x + sprite_y);
         else if (block_idx == 1) place_4x4_block(landfill + sprite_start, sprite_x + sprite_y);
         else if (block_idx == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
         else if (block_idx == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
-reg_next:
-            ;
         }
     }
-#if !PLATFORM_WINDOWS
     write_image(misc, 4, x_start + 2, y_start + 2);
-#endif
 }
 
 // Draw a row range of the battle terrain overlay, including occupied-cell highlights.
