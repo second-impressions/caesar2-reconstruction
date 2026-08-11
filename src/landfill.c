@@ -346,15 +346,17 @@ void show_city_landfill(int x_start, int y_start)
     unsigned char terrain_flag;
     int pool_idx;
     unsigned char in_range;
+#if PLATFORM_WINDOWS
+    int image_idx;
+#endif
 
     sprite_y = y_start * screen_width;
     cm_y = 0;
     pool_idx = 0;
     cm_sptr = 0;
     for ( ; cm_y < 80; cm_y++, sprite_y += 0x500) {
-    sprite_x = x_start;
-    cm_x = 0;
-    do {
+        sprite_x = x_start;
+        for (cm_x = 0; cm_x < 80; cm_x++, pool_idx++, cm_sptr += 20, sprite_x += 2) {
         building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
         activity_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
         terrain_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain & 1;
@@ -381,18 +383,21 @@ void show_city_landfill(int x_start, int y_start)
                 else if (sprite_image_no < 0x71) block_idx = 2;
                 else block_idx = 3;
             }
+#if PLATFORM_WINDOWS
+            image_idx = sprite_image_no * 16;
+            sprite_start = landfill[image_idx + 0xc]
+                       + (landfill[image_idx + 0xd] << 8);
+#else
             sprite_start = landfill[sprite_image_no * 16 + 0xc]
                        + (landfill[sprite_image_no * 16 + 0xd] << 8);
+#endif
             if (block_idx == 0) place_2x2_block(landfill + sprite_start, sprite_x + sprite_y);
             else if (block_idx == 1) place_4x4_block(landfill + sprite_start, sprite_x + sprite_y);
             else if (block_idx == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
             else if (block_idx == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
 next_cell:
-            cm_x++;
-            pool_idx++;
-            cm_sptr += 20;
-        sprite_x += 2;
-    } while (cm_x < 80);
+            ;
+        }
     }
     write_image(misc, 4, x_start + 2, y_start + 2);
 }
