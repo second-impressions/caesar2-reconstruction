@@ -96,7 +96,11 @@ extern void set_mode3(void);
 /* Symbol page 3 (PS emission page 8). */
 extern int first_entry;
 extern int cscreen;
+#if PLATFORM_WINDOWS
+extern char lang_file[12];
+#else
 extern char *lang_file;
+#endif
 extern char directory[][13];
 extern int gamesource;
 extern int granularity;
@@ -107,7 +111,11 @@ extern unsigned char * internal_screen;
 extern char extension[4];
 extern int file_no;
 extern int screen_height;
+#if PLATFORM_WINDOWS
+extern char media_file[12];
+#else
 extern char *media_file;
+#endif
 extern int drive_name;
 extern int file_string;
 extern char screen_refresh_flag;

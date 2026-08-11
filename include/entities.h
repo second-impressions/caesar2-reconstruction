@@ -1561,8 +1561,13 @@ struct slider_rec {
 
 /* Runtime pointer globals (stored as 32-bit data symbols in PS.EXE). */
 extern char *speech_filaname;
+#if PLATFORM_WINDOWS
+extern char lang_file[12];
+extern char media_file[12];
+#else
 extern char *lang_file;
 extern char *media_file;
+#endif
 
 /* LHARC workspace pointers owned by pump.c. */
 extern unsigned char *text_buf;

@@ -930,6 +930,7 @@ void load_inf(void)
 void set_language(int language)
 {
     my_strcpy("c2.eng", lang_file, 0xc);
+#if !PLATFORM_WINDOWS
     if (language == 2) {
         my_strcpy("c2.ger", lang_file, 0xc);
     } else if (language == 3) {
@@ -937,8 +938,10 @@ void set_language(int language)
     } else if (language == 4) {
         my_strcpy("c2.spa", lang_file, 0xc);
     }
+#endif
 
     my_strcpy("help.eng", media_file, 0xc);
+#if !PLATFORM_WINDOWS
     if (language == 2) {
         my_strcpy("help.ger", media_file, 0xc);
     } else if (language == 3) {
@@ -946,6 +949,7 @@ void set_language(int language)
     } else if (language == 4) {
         my_strcpy("help.spa", media_file, 0xc);
     }
+#endif
 }
 
 // Validate the persistent settings and restore defaults when their year marker is invalid.

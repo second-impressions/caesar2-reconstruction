@@ -177,7 +177,11 @@ int fb_count;
 int first_entry;
 int cscreen;
 int screen_width;
+#if PLATFORM_WINDOWS
+char lang_file[12];
+#else
 char *lang_file;
+#endif
 char directory[100][13];
 int gamesource;
 int granularity;
@@ -187,7 +191,11 @@ int screen_size;
 unsigned char * internal_screen;
 char extension[4];
 int file_no;
+#if PLATFORM_WINDOWS
+char media_file[12];
+#else
 char *media_file;
+#endif
 int screen_height;
 int drive_name;
 int file_string;
