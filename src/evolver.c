@@ -1074,70 +1074,70 @@ void evolve_fort_activity(int rows)
 // Update prefecture and watchtower cooldowns and dispatch their next patrol citizens.
 // FUNCTION: C2 0x418d9
 // FUNCTION: C2WIN 0x00464c75
-void evolve_security_activity(int row_count)
+void evolve_security_activity(int rows)
 {
-    int row_idx;
-    unsigned char activity_state;
-    unsigned char building_kind;
-    int col_idx;
-    unsigned char flags;
-    unsigned char cooldown;
-    unsigned char patrol_count;
-    int spawn_result;
+    int row;
+    unsigned char occupancy;
+    unsigned char kind;
+    int x;
+    unsigned char status;
+    unsigned char counter;
+    unsigned char patrols;
+    int people;
 
     cm_sptr = evolve_row * 1600;
 
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
-            building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-            if (building_kind == 0xe3) {
-                activity_state = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
-                if (activity_state != 0) continue;
-                cooldown     = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x0f;
-                flags        = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x10;
-                patrol_count = ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf0) >> 4;
-                if (cooldown == 0) {
+    for (row = 0; row < rows; row++) {
+        for (x = 0; x < 80; x++, cm_sptr += 20) {
+            kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+            if (kind == 0xe3) {
+                occupancy = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
+                if (occupancy != 0) continue;
+                counter = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x0f;
+                status = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x10;
+                patrols = ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf0) >> 4;
+                if (counter == 0) {
                     if (population < 2) continue;
-                    spawn_result = put_out_a(5, (unsigned char)col_idx, (unsigned char)(evolve_row + row_idx), flags,
-                                       patrol_count, 1, 0x20);
-                    if (spawn_result != 0) {
-                        patrol_count = (unsigned char)spawn_result;
-                        cooldown = 3;
+                    people = put_out_a(5, (unsigned char)x, (unsigned char)(evolve_row + row), status,
+                                       patrols, 1, 0x20);
+                    if (people != 0) {
+                        patrols = (unsigned char)people;
+                        counter = 3;
                         citizen_list[created_citizen_no].state_idx = 1; citizen_list[created_citizen_no].wait_count = 0x14;
                         citizen_list[created_citizen_no].saved_state_idx = 8;
                     }
-                    patrol_count++; if (patrol_count >= 4) patrol_count = 0;
+                    patrols++; if (patrols >= 4) patrols = 0;
                 } else {
-                    cooldown--;
+                    counter--;
                 }
                 (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b &= 0xf0;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b |= cooldown;
+                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b |= counter;
                 (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a &= 0x0f;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a |= patrol_count << 4;
-            } else if (building_kind == 0xe4) {
-                activity_state = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
-                if (activity_state != 0) continue;
-                cooldown     = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x0f;
-                flags        = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x10;
-                patrol_count = ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf0) >> 4;
-                if (cooldown == 0) {
+                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a |= patrols << 4;
+            } else if (kind == 0xe4) {
+                occupancy = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0x0f;
+                if (occupancy != 0) continue;
+                counter = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x0f;
+                status = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b & 0x10;
+                patrols = ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf0) >> 4;
+                if (counter == 0) {
                     if (population < 2) continue;
-                    spawn_result = put_out_a(4, (unsigned char)col_idx, (unsigned char)(evolve_row + row_idx), flags,
-                                       patrol_count, 9, 0x20);
-                    if (spawn_result != 0) {
-                        patrol_count = (unsigned char)spawn_result;
-                        cooldown = 3;
+                    people = put_out_a(4, (unsigned char)x, (unsigned char)(evolve_row + row), status,
+                                       patrols, 9, 0x20);
+                    if (people != 0) {
+                        patrols = (unsigned char)people;
+                        counter = 3;
                         citizen_list[created_citizen_no].state_idx = 1; citizen_list[created_citizen_no].wait_count = 0x14;
                         citizen_list[created_citizen_no].saved_state_idx = 7;
                     }
-                    patrol_count++; if (patrol_count >= 9) patrol_count = 0;
+                    patrols++; if (patrols >= 9) patrols = 0;
                 } else {
-                    cooldown--;
+                    counter--;
                 }
                 (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b &= 0xf0;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b |= cooldown;
+                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_b |= counter;
                 (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a &= 0x0f;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a |= patrol_count << 4;
+                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a |= patrols << 4;
             }
         }
     }
