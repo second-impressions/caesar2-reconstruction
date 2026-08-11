@@ -8,7 +8,7 @@
 char __far *MK_FP(int off, int seg);
 #pragma aux MK_FP = parm [eax] [edx] value [dx eax];
 #elif PLATFORM_WINDOWS
-static char __far *MK_FP(unsigned off, unsigned seg) { return 0; }
+static char __far *MK_FP(unsigned off, unsigned seg);
 #endif
 extern int  open(const char *path, int flags, ...);
 extern int sprintf(char *buffer, const char *format, ...);
@@ -16,6 +16,8 @@ extern char file_buffer[80];
 extern char cd_drive[4];
 #if PLATFORM_WINDOWS
 extern int open_midi_driver(void);
+extern int open_digital_driver(int rate, int bits, int channels, int fallback);
+extern void init_streamed_tune(int rate, int format, int driver);
 #endif
 
 /* Sound module globals. */
@@ -112,19 +114,44 @@ void stop_sounds(void)
 // FUNCTION: C2WIN 0x00401085
 char __far *start_samples(void)
 {
+#if PLATFORM_WINDOWS
+    if (samples_running != 0) goto done;
+    if (c2inf.samples_on == 0) goto done;
+#else
     char __far *result;
 
     if (!samples_running)
     if (c2inf.samples_on) {
+#endif
         if (readfile("poscl.wav",  positive_buffer, 0x214, 0) == 0) return MK_FP(4, 0);
         if (readfile("negcl2.wav", negative_buffer, 0x270, 0) == 0) return MK_FP(4, 0);
+#if PLATFORM_WINDOWS
+        dig = 0;
+        if (dig == 0) {
+            dig = open_digital_driver(22050, 8, 1, 0);
+            init_streamed_tune(22050, 0, dig);
+        }
+        if (dig == 0) {
+            dig = open_digital_driver(11025, 8, 1, 1);
+            init_streamed_tune(11025, 0, dig);
+        }
+        if (dig == 0) return MK_FP(1, 0);
+#else
         if (AIL_install_DIG_INI(&dig)) return MK_FP(1, 0);
+#endif
         for (ds = 0; ds < 6; ds++) S_dig[ds] = AIL_allocate_sample_handle(dig);
-        ds = 0; do { if (S_dig[ds] == 0) return MK_FP(2, 0); ds++; } while (ds < 6);
+        for (ds = 0; ds < 6; ds++) {
+            if (S_dig[ds] == 0) return MK_FP(2, 0);
+        }
         samples_running = 1;
         init_ss_entires();
+#if PLATFORM_WINDOWS
+done:
+        ;
+#else
     }
     return result;
+#endif
 }
 
 // Install the MIDI driver, allocate sequence handles, and reset music mood state.
@@ -169,6 +196,12 @@ done:
     return result;
 #endif
 }
+
+#if PLATFORM_WINDOWS
+static char __far *MK_FP(unsigned off, unsigned seg)
+{
+}
+#endif
 
 // Stop all active digital samples and clear streaming playback state.
 // FUNCTION: C2 0x1197b
