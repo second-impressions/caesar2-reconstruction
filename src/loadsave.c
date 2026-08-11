@@ -2,9 +2,31 @@
 #include <fcntl.h>       /* O_BINARY: 0x200 under Watcom, 0x8000 under MSVC */
 #if PLATFORM_WINDOWS
 #include <sys/stat.h>
+#include <windows.h>
 #endif
 #include "c2_data.h"
 #include "c2_types.h"
+
+#if PLATFORM_WINDOWS
+extern int savegame_version;
+extern unsigned char window_status[];
+extern int saved_window_status[];
+extern int saved_game_window_status;
+extern RECT game_window_rect;
+extern HWND game_window;
+extern HWND status_window;
+extern HWND map_window;
+extern int game_window_x;
+extern int game_window_y;
+extern int game_window_width;
+extern int game_window_height;
+extern int status_window_x;
+extern int status_window_y;
+extern int status_window_width;
+extern int status_window_height;
+extern int map_window_x;
+extern int map_window_y;
+#endif
 
 struct save_entry model_entries[40] = {
     { skill_to_imperial_request, 20 },
@@ -781,14 +803,46 @@ void act_cancel_file_op(void) { out1 = 1; }
 int savegame(char *save_filename)
 {
     int save_fd;
-    int history_fd;
+    int history_file;
     int i;
+#if PLATFORM_WINDOWS
+    RECT window_rect;
 
-    save_fd = open(save_filename, 0x261, 0x180);
+    c2inf.restore_window_positions = 1;
+    savegame_version = 999;
+    saved_window_status[0] = window_status[0];
+    saved_window_status[1] = window_status[1];
+    saved_window_status[2] = window_status[2];
+
+    GetWindowRect(game_window, &window_rect);
+    game_window_x = window_rect.left;
+    game_window_y = window_rect.top;
+    game_window_width = window_rect.right - window_rect.left;
+    game_window_height = window_rect.bottom - window_rect.top;
+
+    GetWindowRect(status_window, &window_rect);
+    status_window_x = window_rect.left;
+    status_window_y = window_rect.top;
+    status_window_width = window_rect.right - window_rect.left;
+    status_window_height = window_rect.bottom - window_rect.top;
+
+    GetWindowRect(map_window, &window_rect);
+    map_window_x = window_rect.left;
+    map_window_y = window_rect.top;
+
+    if (map_mode == 2 && saved_game_window_status != 0) {
+        game_window_x = game_window_rect.left;
+        game_window_y = game_window_rect.top;
+        game_window_width = game_window_rect.right - game_window_rect.left;
+        game_window_height = game_window_rect.bottom - game_window_rect.top;
+    }
+#endif
+
+    save_fd = open(save_filename, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0x180);
     if (save_fd == -1) return 0;
 
-    history_fd = open("history.dat", O_BINARY);
-    if (history_fd == -1) {
+    history_file = open("history.dat", O_BINARY);
+    if (history_file == -1) {
         close(save_fd);
         return 0;
     }
@@ -798,10 +852,10 @@ int savegame(char *save_filename)
         write(save_fd, savegame_entries[i].buf, savegame_entries[i].size);
     }
 
-    read(history_fd, ((void *)scratch_buffer), 0xfa0);
+    read(history_file, ((void *)scratch_buffer), 0xfa0);
     write(save_fd, ((void *)scratch_buffer), 0xfa0);
     close(save_fd);
-    close(history_fd);
+    close(history_file);
 
     map_gfx_loaded = 0;
     setup_map_screen_refresh();
