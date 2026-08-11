@@ -859,11 +859,13 @@ void save_inf(void)
 {
     int inf_fd;
 
-    inf_fd = open("caesar2.inf", 0x261, 0x180);
-    if (inf_fd != -1) {
-        write(inf_fd, &c2inf, 0x40);
-        close(inf_fd);
-    }
+#if PLATFORM_WINDOWS
+    c2inf.restore_window_positions = 1;
+#endif
+    inf_fd = open("caesar2.inf", O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0x180);
+    if (inf_fd == -1) return;
+    write(inf_fd, &c2inf, sizeof(c2inf));
+    close(inf_fd);
 }
 
 // Load caesar2.inf while preserving the runtime drive settings initialized before the read.
