@@ -522,31 +522,51 @@ void update_battle_landfill(void)
 void show_cohort_landfill(int army_idx, int x_start, int y_start)
 {
     int terrain_colour;
-    unsigned char terrain_kind;
+    unsigned char map_kind;
 
     cm_y = 0;
     cm_sptr = 0;
     for ( ; cm_y < 60; cm_y++) {
-    cm_x = 0;
-    do {
-        terrain_kind = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
-            if (terrain_kind < 0x20) terrain_colour = 2;
-            else if (terrain_kind < 0x7c) terrain_colour = 1;
-            else if (terrain_kind >= 0x7d && terrain_kind < 0x85) terrain_colour = 0x30;
-            else if (terrain_kind >= 0x85 && terrain_kind < 0x8d) terrain_colour = 0x2a;
-            else if (terrain_kind >= 0x8d && terrain_kind < 0x91) terrain_colour = 0x24;
-            else if (terrain_kind == 0x91) terrain_colour = 0x20;
-            else terrain_colour = 2;
+        for (cm_x = 0; cm_x < 60; cm_x++, cm_sptr += 8) {
+            map_kind = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
+            if (map_kind < 0x20) {
+#if PLATFORM_WINDOWS
+                terrain_colour = 0xfa;
+#else
+                terrain_colour = 2;
+#endif
+            } else if (map_kind < 0x7c) {
+#if PLATFORM_WINDOWS
+                terrain_colour = 0xfc;
+#else
+                terrain_colour = 1;
+#endif
+            }
+            else if (map_kind >= 0x7d && map_kind < 0x85) terrain_colour = 0x30;
+            else if (map_kind >= 0x85 && map_kind < 0x8d) terrain_colour = 0x2a;
+            else if (map_kind >= 0x8d && map_kind < 0x91) terrain_colour = 0x24;
+            else if (map_kind == 0x91) terrain_colour = 0x20;
+            else {
+#if PLATFORM_WINDOWS
+                terrain_colour = 0xfa;
+#else
+                terrain_colour = 2;
+#endif
+            }
             draw_a_point(x_start + cm_x, y_start + cm_y, terrain_colour);
-            cm_x++;
-        cm_sptr += 8;
-    } while (cm_x < 60);
+        }
     }
     draw_a_rect(x_start + army_list[army_idx].x - 1, y_start + army_list[army_idx].y - 2, 3, 1, 0x3f);
     draw_a_rect(x_start + army_list[army_idx].x - 1, y_start + army_list[army_idx].y + 2, 3, 1, 0x3f);
     draw_a_rect(x_start + army_list[army_idx].x - 2, y_start + army_list[army_idx].y - 1, 1, 3, 0x3f);
     draw_a_rect(x_start + army_list[army_idx].x + 2, y_start + army_list[army_idx].y - 1, 1, 3, 0x3f);
-    draw_a_rect(x_start + army_list[army_idx].x - 1, y_start + army_list[army_idx].y - 1, 3, 3, 3);
+    draw_a_rect(x_start + army_list[army_idx].x - 1, y_start + army_list[army_idx].y - 1, 3, 3,
+#if PLATFORM_WINDOWS
+                0xf9
+#else
+                3
+#endif
+    );
 }
 
 extern void get_no_ov_image(void);
