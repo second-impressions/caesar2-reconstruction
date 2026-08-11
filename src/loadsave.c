@@ -1255,7 +1255,12 @@ void get_history_in_buffer(int *history_buf)
 // FUNCTION: C2WIN 0x004841a0
 int get_history_from_buffer(int *history_buf, int row_idx, int col_idx)
 {
-    return history_buf[row_idx * 5 + col_idx];
+    int ptr;
+    int result;
+
+    ptr = row_idx * 5 + col_idx;
+    result = history_buf[ptr];
+    return result;
 }
 
 // No-op hook for stopping mouse recording.
