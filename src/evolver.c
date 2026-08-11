@@ -220,15 +220,17 @@ void citymap_evolution(void)
                                          update_landfill = 1; }
 
     evolve_clock++;
-    if (evolve_clock <= 0xd6) return;
-
-    evolve_tick4++; if (evolve_tick4 >= 4) evolve_tick4 = 0;
-    evolve_tick3++; if (evolve_tick3 >= 3) evolve_tick3 = 0;
-    evolve_clock = 0;
-    evolve_count++;
-    update_time();
-    update_map = 1;
-    setup_map_screen_refresh();
+    if (evolve_clock > 0xd6) {
+        evolve_tick4++; if (evolve_tick4 >= 4) evolve_tick4 = 0;
+        evolve_tick3++; if (evolve_tick3 >= 3) evolve_tick3 = 0;
+        evolve_clock = 0;
+        evolve_count++;
+        update_time();
+        update_map = 1;
+#if !PLATFORM_WINDOWS
+        setup_map_screen_refresh();
+#endif
+    }
 }
 
 // Recompute city-wide service coverage and land values while preserving the current evolution
