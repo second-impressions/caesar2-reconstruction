@@ -11,14 +11,26 @@ extern int  get_next_word_length(char *src, unsigned char *font);
 void media_text_place(int x, int y, int width, int line_count, int alt_x, int alt_width, unsigned char *font);
 
 #if PLATFORM_WINDOWS
+struct mmedia_rect {
+    int left;
+    int top;
+    int right;
+    int bottom;
+};
+
 extern char file_buffer[80];
 extern char cd_drive[4];
 extern void *main_window;
 extern void *game_window;
+extern void *map_window;
 extern void *tutorial_window;
 extern void *active_window;
 extern unsigned char *window_buffer;
+extern unsigned char *screen_buffer;
+extern unsigned char *game_screen;
 extern unsigned char main_window_bitmap[];
+extern unsigned char map_window_bitmap[];
+extern unsigned char window_status[];
 extern int sprintf(char *buffer, const char *format, ...);
 extern int (__stdcall *WinHelpA)(void *window, char *help_file,
                                 unsigned int command, unsigned long data);
@@ -41,6 +53,12 @@ extern void grey_map_icon(int icon_no, int mode);
 extern void draw_window_buffer(void *window, void *buffer, int source_x,
                                int source_y, int width, int height,
                                int dest_x, int dest_y);
+extern void grey_screen_area(unsigned char *buffer, int x, int y,
+                             int width, int height, int pitch);
+extern int (__stdcall *GetClientRect)(void *window, struct mmedia_rect *rect);
+extern void win_bitblt(void *window, unsigned char *bitmap, int dest_x,
+                       int dest_y, int width, int height, int source_x,
+                       int source_y);
 #endif
 
 #include "c2_types.h"
@@ -226,67 +244,127 @@ void load_media_entry(void)
 // FUNCTION: C2WIN 0x0045241f
 void show_help_page(void)
 {
-    int  text_lines;
-    int  text_x;
-    int  text_width;
+    int  sprite_lines;
+    int  display_x;
+    int  width_left;
+#if PLATFORM_WINDOWS
+    int  size_read;
+#else
     int  left_loaded;
     int  right_loaded;
+#endif
+#if PLATFORM_WINDOWS
+    struct mmedia_rect window_rect;
+    int client_width;
+    int client_y_size;
+#endif
 
     /* Use each illustration's matching .256 palette file. */
     my_strcpy("256", extension, 4);
     my_strcpy(city_palette, temp_palette, 0x300);
 
     cover_mouse_droppings();
+#if PLATFORM_WINDOWS
     if (!greyed_out) {
-        grey_a_screen();
+        grey_screen_area(internal_screen, 0, 0, 0x280, 0x1e0, 0x280);
+        if (map_mode == 0 || map_mode == 1) {
+            if (map_mode == 1 && window_status[0] != 0) {
+                grey_screen_area(screen_buffer, 0, 0, 0x280, 0x1e0, 0x280);
+                GetClientRect(game_window, &window_rect);
+                client_width = window_rect.right - window_rect.left;
+                client_y_size = window_rect.bottom - window_rect.top;
+                win_bitblt(game_window, map_window_bitmap, 0, 0,
+                           client_width, client_y_size, 0, 0);
+            }
+            if (map_mode == 0 && window_status[1] != 0) {
+                grey_screen_area(screen_buffer, 0, 0, 0x280, 0x1e0, 0x280);
+                GetClientRect(map_window, &window_rect);
+                client_width = window_rect.right - window_rect.left;
+                client_y_size = window_rect.bottom - window_rect.top;
+                win_bitblt(map_window, map_window_bitmap, 0, 0,
+                           client_width, client_y_size, 0, 0);
+            }
+            grey_screen_area(window_buffer, 0, 0, 0xa2, 0x1a2, 0x280);
+        } else if (map_mode == 2) {
+            grey_screen_area(game_screen, 0, 0, 0x280, 0x1e0, 0x280);
+            grey_screen_area(window_buffer, 0, 0, 0x130, 0x78, 0x280);
+        }
         greyed_out = 1;
     }
+#else
+    if (!greyed_out) { grey_a_screen(); greyed_out = 1; }
+#endif
 
     stone_random_count = 0x11;
     show_a_mosaic_frame(8, 0x20, 0x1d, 0x1b);
+#if !PLATFORM_WINDOWS
     setup_whole_screen_refresh();
+#endif
     show_a_mosaic_blank(0x18, 0x30, 0x1b, 0x19);
     show_an_exit_button(0x1a8, 0x1a0);
     show_buttons(0x168, 0x1a0, help_buttons, 2);
 
     text_pointer = format_buffer;
 
-    text_x     = 0x28;
-    text_width     = 0x190;
-    text_lines = 1;
+    display_x = 0x28; width_left = 0x190; sprite_lines = 1;
 
     /* Optional left illustration ---------------------------------- */
+#if !PLATFORM_WINDOWS
     left_loaded = 0;
+#endif
     if (media_left_image) {
+#if PLATFORM_WINDOWS
+        size_read = readfile(this_media_entry.left_file,
+#else
         left_loaded = readfile(this_media_entry.left_file,
+#endif
                            ((void *)scratch_buffer), 0x186a0, 0);
         my_strcpy(this_media_entry.left_file, help_palname, 0xd);
         my_strcpy("256", extension, 4);
         put_filename_extension(help_palname);
         readfile(help_palname, temp_palette, 0x300, 0);
+#if PLATFORM_WINDOWS
+        if (size_read) {
+#else
         if (left_loaded) {
             int line_capacity;
+#endif
             general_sprite(this_media_entry.left_sprite, 0x1e, 0x38);
             draw_a_dias(0x1d, 0x37, sprite_width + 2, sprite_height + 2);
             draw_a_dias(0x1c, 0x36, sprite_width + 4, sprite_height + 4);
-            text_width -= sprite_width + 8;
-            text_x  = sprite_width + 0x28;
-            line_capacity     = (sprite_height - 0x18) / 0x10;
-            if (line_capacity > text_lines) text_lines = line_capacity;
+            width_left -= sprite_width + 8;
+#if PLATFORM_WINDOWS
+            display_x += sprite_width;
+            if ((sprite_height - 0x18) / 0x10 > sprite_lines)
+                sprite_lines = (sprite_height - 0x18) / 0x10;
+#else
+            display_x = sprite_width + 0x28;
+            line_capacity = (sprite_height - 0x18) / 0x10; if (line_capacity > sprite_lines) sprite_lines = line_capacity;
+#endif
         }
     }
 
     /* Optional right illustration --------------------------------- */
+#if !PLATFORM_WINDOWS
     right_loaded = 0;
+#endif
     if (media_right_image) {
+#if PLATFORM_WINDOWS
+        size_read = readfile(this_media_entry.right_file,
+#else
         right_loaded = readfile(this_media_entry.right_file,
+#endif
                             ((void *)scratch_buffer), 0x186a0, 0);
         my_strcpy(this_media_entry.right_file, help_palname, 0xd);
         my_strcpy("256", extension, 4);
         put_filename_extension(help_palname);
         readfile(help_palname, temp_palette, 0x300, 0);
+#if PLATFORM_WINDOWS
+        if (size_read) {
+#else
         if (right_loaded) {
             int line_capacity;
+#endif
             get_general_sprite_sizes(this_media_entry.right_sprite);
             general_sprite(this_media_entry.right_sprite,
                            0x1b8 - sprite_width + 6, 0x38);
@@ -294,14 +372,18 @@ void show_help_page(void)
                         sprite_width + 2, sprite_height + 2);
             draw_a_dias(0x1b8 - sprite_width + 4, 0x36,
                         sprite_width + 4, sprite_height + 4);
-            text_width -= sprite_width + 8;
-            line_capacity     = (sprite_height - 0x18) / 0x10;
-            if (line_capacity > text_lines) text_lines = line_capacity;
+            width_left -= sprite_width + 8;
+#if PLATFORM_WINDOWS
+            if ((sprite_height - 0x18) / 0x10 > sprite_lines)
+                sprite_lines = (sprite_height - 0x18) / 0x10;
+#else
+            line_capacity = (sprite_height - 0x18) / 0x10; if (line_capacity > sprite_lines) sprite_lines = line_capacity;
+#endif
         }
     }
 
-    put_a_font_string(text_pointer, text_x, 0x38, font2, 0x10);
-    media_text_place(text_x, 0x5a, text_width, text_lines,
+    put_a_font_string(text_pointer, display_x, 0x38, font2, 0x10);
+    media_text_place(display_x, 0x5a, width_left, sprite_lines,
                      0x28, 0x190, font1);
 
     refresh_svga_screen();
