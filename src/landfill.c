@@ -193,19 +193,25 @@ void get_health_ov_image(void)
 // FUNCTION: C2WIN 0x0049d8bc
 void get_education_ov_image(void)
 {
-    unsigned char education_flags;
-    unsigned char school;
-    unsigned char academy;
+    unsigned char range;
+    unsigned char grammaticus;
+    unsigned char rhetor;
+#if PLATFORM_WINDOWS
+    unsigned char terrain_flag;
+#endif
     unsigned char building_kind;
 
+#if PLATFORM_WINDOWS
+    terrain_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).terrain;
+#endif
     building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-    education_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education;
-    school = education_flags & 0x10;
-    academy = education_flags & 0x20;
+    range = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).education;
+    grammaticus = range & 0x10;
+    rhetor = range & 0x20;
     if (building_kind >= 0xf3 && building_kind <= 0xf5) { landfill_pool[cm_dptr] = 0x96; return; }
-    if (school != 0 && academy != 0) { landfill_pool[cm_dptr] = 0x87; return; }
-    if (school != 0) { landfill_pool[cm_dptr] = 0x8d; return; }
-    if (academy != 0) { landfill_pool[cm_dptr] = 0x84; return; }
+    if (grammaticus != 0 && rhetor != 0) { landfill_pool[cm_dptr] = 0x87; return; }
+    if (grammaticus != 0) { landfill_pool[cm_dptr] = 0x8d; return; }
+    if (rhetor != 0) { landfill_pool[cm_dptr] = 0x84; return; }
     landfill_pool[cm_dptr] = 0;
 }
 
