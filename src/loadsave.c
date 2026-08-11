@@ -569,10 +569,16 @@ void put_a_hut(int hut_x, int hut_y, int hut_kind);
 void load_a_game(void)
 {
     int done;
+#if PLATFORM_WINDOWS
+    int oldmode;
+#endif
     int i;
 
     file_loaded_status = 0;
     done = 0;
+#if PLATFORM_WINDOWS
+    oldmode = map_mode;
+#endif
     get_directory("*.sav");
     show_loadsave_box(0x28);
     in_format_buffer(filename, 0xc, 0xa0, 1);
@@ -594,7 +600,9 @@ void load_a_game(void)
                 setup_whole_screen_refresh();
                 refresh_svga_screen();
                 loadgame(filename);
+#if !PLATFORM_WINDOWS
                 for (i = 0; i < 200; i++) just_idle_game_loop();
+#endif
                 pre_loaded_status = 2;
                 restart_flag = 1;
             }
