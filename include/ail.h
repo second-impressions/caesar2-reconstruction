@@ -59,10 +59,14 @@
 #if PLATFORM_WINDOWS
 #define AILIMPORT __declspec(dllimport)
 #define AILCALL __stdcall
+#define AILCALLBACK __stdcall
 #else
 #define AILIMPORT
 #define AILCALL
+#define AILCALLBACK __cdecl
 #endif
+
+typedef void (AILCALLBACK *AILTRIGGERCB)(int seq, int log, int data);
 
 AILIMPORT void AILCALL AIL_shutdown(void);
 AILIMPORT int  AILCALL AIL_sample_status  (int handle);
@@ -93,7 +97,7 @@ AILIMPORT int  AILCALL AIL_install_DIG_INI(int *dig_handle_out);
 AILIMPORT int  AILCALL AIL_init_sequence(int seq, void *bytes, int sequence_num);
 AILIMPORT char __far *AILCALL AIL_start_sequence(int seq);
 AILIMPORT char __far *AILCALL AIL_resume_sequence(int seq);
-AILIMPORT void AILCALL AIL_register_trigger_callback(int seq, void (*cb)());
+AILIMPORT AILTRIGGERCB AILCALL AIL_register_trigger_callback(int seq, AILTRIGGERCB cb);
 AILIMPORT int  AILCALL AIL_allocate_sample_handle(int dig);
 
 #endif /* AIL_H */

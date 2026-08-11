@@ -11,12 +11,13 @@ char __far *MK_FP(int off, int seg);
 static char __far *MK_FP(unsigned off, unsigned seg) { return 0; }
 #endif
 extern int  open(const char *path, int flags, ...);
-void __cdecl mood_modfication(int seq);
 
 /* Sound module globals. */
 extern int _ds;
 
 #include "ail.h"
+
+void AILCALLBACK mood_modfication(int sequence_handle, int log, int data);
 
 char negative_buffer[624];
 unsigned char * db_buf[2];
@@ -462,7 +463,7 @@ char __far *start_tune(unsigned char *sequence_data, int sequence_num, int seque
     }
 
     result = AIL_init_sequence(S_mdi[sequence_idx], sequence_data, sequence_num);
-    AIL_register_trigger_callback(S_mdi[sequence_idx], (void (*)())mood_modfication);
+    AIL_register_trigger_callback(S_mdi[sequence_idx], mood_modfication);
     if (result < 0) return (char __far *)MK_FP(3, 1);
     if (result == 0) return (char __far *)MK_FP(4, 1);
     fade_sequence_in(sequence_idx);
@@ -489,10 +490,10 @@ void stop_tune0(void)
 
 // Recalculate the current music mood and branch the active sequence.
 // FUNCTION: C2 0x12424
-void __cdecl mood_modfication(int sequence_handle)
+void AILCALLBACK mood_modfication(int sequence_handle, int log, int data)
 {
-    tune_mood_hold = 0;
     tune_branch_count++;
+    tune_mood_hold = 0;
     if (map_mode == 2) get_battle_mood();
     else               get_city_mood();
     AIL_branch_index(sequence_handle, tune_branch);
