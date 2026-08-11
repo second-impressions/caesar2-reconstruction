@@ -27,6 +27,7 @@ extern void show_game_window(int mode);
 extern void restore_game_windows(void);
 extern void tile_main_window(int tile);
 extern void update_window_titles(void);
+extern void grey_map_icon(int icon_no, int mode);
 #endif
 
 #include "c2_types.h"
@@ -829,23 +830,26 @@ int region_icon_allowed(int icon_idx)
 // FUNCTION: C2WIN 0x00453bee
 void grey_city_map_parts(void)
 {
-    int icon_idx;
-    int header_offset;
-    unsigned short icon_width;
-    unsigned short icon_height;
-    unsigned short icon_x;
-    unsigned short icon_y;
+    int icon_no;
+    unsigned short w;
+    unsigned short h;
+    unsigned short x;
+    unsigned short y;
 
     if (tutorial_mode == 0) return;
-    for (icon_idx = 4; icon_idx < 0x1c; icon_idx++) {
-        if (city_icon_allowed(icon_idx - 4) == 0) {
-            header_offset = icon_idx * 8;
-            icon_width = int_city_header[header_offset + 4];
-            icon_height = int_city_header[header_offset + 5];
-            icon_x = int_city_header[header_offset + 8] + 0xee;
-            icon_y = int_city_header[header_offset + 9];
-            draw_a_rect(icon_x, icon_y, icon_width, icon_height, 0x1a);
+    for (icon_no = 4; icon_no < 0x1c; icon_no++) {
+#if PLATFORM_WINDOWS
+        if (city_icon_allowed(icon_no - 4) != 0) continue;
+        grey_map_icon(icon_no, 2);
+#else
+        if (city_icon_allowed(icon_no - 4) == 0) {
+            w = int_city_header[icon_no * 8 + 4];
+            h = int_city_header[icon_no * 8 + 5];
+            x = int_city_header[icon_no * 8 + 8] + 0xee;
+            y = int_city_header[icon_no * 8 + 9];
+            draw_a_rect(x, y, w, h, 0x1a);
         }
+#endif
     }
 }
 
