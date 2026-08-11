@@ -69,6 +69,9 @@ void get_battle_mood(void);
 void choose_odd_tune(int branch_base);
 void get_new_sslot(char *filename);
 void free_up_sslot(int slot_idx);
+#if PLATFORM_WINDOWS
+void stop_tune_thread(void);
+#endif
 
 
 // Initialize AIL and enable digital samples and MIDI sequences.
@@ -92,6 +95,9 @@ void start_sounds(void)
 // FUNCTION: C2 0x117a2
 void stop_sounds(void)
 {
+#if PLATFORM_WINDOWS
+    stop_tune_thread();
+#endif
     stop_samples();
     stop_sequences();
     AIL_shutdown();
