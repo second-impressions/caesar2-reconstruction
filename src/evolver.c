@@ -1150,82 +1150,82 @@ void evolve_security_activity(int rows)
 // Update markets and businesses, refresh their output, and dispatch shopper or trader citizens.
 // FUNCTION: C2 0x41b49
 // FUNCTION: C2WIN 0x0046503e
-void evolve_industrial_activity(int row_count)
+void evolve_industrial_activity(int rows)
 {
-    unsigned char building_kind;
-    int row_idx;
-    unsigned char activity_state;
-    unsigned char flags;
-    unsigned char patrons;
-    unsigned char cooldown;
-    int col_idx;
-    int spawn_result;
+    unsigned char kind;
+    int row;
+    unsigned char occupancy;
+    unsigned char status;
+    unsigned char buyers;
+    unsigned char counter;
+    int x;
+    int people;
 
     cm_sptr = evolve_row * 1600;
 
-    for (row_idx = 0; row_count > row_idx; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
-            building_kind = ((unsigned char *)city_map)[cm_sptr];
-            if (building_kind >= 0xfc && building_kind <= 0xff) {
-                activity_state = ((unsigned char *)city_map)[cm_sptr + 5] & 0xf;
-                if (activity_state == 0) {
+    for (row = 0; rows > row; row++) {
+        for (x = 0; x < 80; x++, cm_sptr += 20) {
+            kind = ((unsigned char *)city_map)[cm_sptr];
+            if (kind >= 0xfc && kind <= 0xff) {
+                occupancy = ((unsigned char *)city_map)[cm_sptr + 5] & 0xf;
+                if (occupancy == 0) {
                     market_image();
 
-                    cooldown = ((unsigned char *)city_map)[cm_sptr + 6] & 0xf;
-                    flags = ((unsigned char *)city_map)[cm_sptr + 6] & 0x10;
-                    patrons  = (((unsigned char *)city_map)[cm_sptr + 5] & 0xf0) >> 4;
-                    if (cooldown == 0) {
+                    counter = ((unsigned char *)city_map)[cm_sptr + 6] & 0xf;
+                    status = ((unsigned char *)city_map)[cm_sptr + 6] & 0x10;
+                    buyers  = (((unsigned char *)city_map)[cm_sptr + 5] & 0xf0) >> 4;
+                    if (counter == 0) {
                         if (population < 2) goto next;
-                        spawn_result = put_out_a(2, (char)col_idx, (char)(evolve_row + row_idx), flags,
-                                           (char)patrons, 4, 0x20);
-                        if (spawn_result != 0) {
-                            patrons = (unsigned char)spawn_result;
-                            cooldown = 3;
+                        people = put_out_a(2, (char)x, (char)(evolve_row + row), status,
+                                           (char)buyers, 4, 0x20);
+                        if (people != 0) {
+                            buyers = (unsigned char)people;
+                            counter = 3;
                             citizen_list[created_citizen_no].state_idx = 1; citizen_list[created_citizen_no].wait_count = 0x14;
                             citizen_list[created_citizen_no].saved_state_idx = 4;
                             citizen_list[created_citizen_no].target_ref = cm_sptr;
                             remove_envoy();
                             ((unsigned char *)city_map)[cm_sptr + 0x12] = (unsigned char)created_citizen_no;
                         }
-                        patrons++; if (patrons >= 4) patrons = 0;
+                        buyers++; if (buyers >= 4) buyers = 0;
                     } else {
-                        cooldown--;
+                        counter--;
                     }
                     ((unsigned char *)city_map)[cm_sptr + 6] &= 0xf0;
-                    ((unsigned char *)city_map)[cm_sptr + 6] |= cooldown;
+                    ((unsigned char *)city_map)[cm_sptr + 6] |= counter;
                     ((unsigned char *)city_map)[cm_sptr + 5] &= 0x0f;
-                    ((unsigned char *)city_map)[cm_sptr + 5] |= patrons << 4;
+                    ((unsigned char *)city_map)[cm_sptr + 5] |= buyers << 4;
                 }
-            } else if (building_kind == 0xfa) {
-                activity_state = ((unsigned char *)city_map)[cm_sptr + 5] & 0xf;
+            } else if (kind == 0xfa) {
+                occupancy = ((unsigned char *)city_map)[cm_sptr + 5] & 0xf;
                 ((unsigned char *)city_map)[cm_sptr + 3] |= 1;
-                if (activity_state == 0) {
-                    business_output(col_idx, evolve_row + row_idx);
+                if (occupancy == 0) {
+                    business_output(x, evolve_row + row);
 
-                    cooldown = ((unsigned char *)city_map)[cm_sptr + 6] & 0xf;
-                    flags = ((unsigned char *)city_map)[cm_sptr + 6] & 0x10;
-                    patrons  = (((unsigned char *)city_map)[cm_sptr + 5] & 0xf0) >> 4;
-                    if (cooldown == 0) {
+                    counter = ((unsigned char *)city_map)[cm_sptr + 6] & 0xf;
+                    status = ((unsigned char *)city_map)[cm_sptr + 6] & 0x10;
+                    buyers  = (((unsigned char *)city_map)[cm_sptr + 5] & 0xf0) >> 4;
+                    if (counter == 0) {
                         if (population < 2) goto next;
-                        spawn_result = put_out_a(6, (char)col_idx, (char)(evolve_row + row_idx), flags,
-                                           (char)patrons, 9, 0x20);
-                        if (spawn_result != 0) {
-                            patrons = (unsigned char)spawn_result;
-                            cooldown = 3;
+                        people = put_out_a(6, (char)x, (char)(evolve_row + row), status,
+                                           (char)buyers, 9, 0x20);
+                        if (people != 0) {
+                            buyers = (unsigned char)people;
+                            counter = 3;
                             citizen_list[created_citizen_no].state_idx = 1; citizen_list[created_citizen_no].wait_count = 0x14;
                             citizen_list[created_citizen_no].saved_state_idx = 0xa;
                             citizen_list[created_citizen_no].target_ref = cm_sptr;
                             remove_envoy();
                             ((unsigned char *)city_map)[cm_sptr + 0x12] = (unsigned char)created_citizen_no;
                         }
-                        patrons++; if (patrons >= 9) patrons = 0;
+                        buyers++; if (buyers >= 9) buyers = 0;
                     } else {
-                        cooldown--;
+                        counter--;
                     }
                     ((unsigned char *)city_map)[cm_sptr + 6] &= 0xf0;
-                    ((unsigned char *)city_map)[cm_sptr + 6] |= cooldown;
+                    ((unsigned char *)city_map)[cm_sptr + 6] |= counter;
                     ((unsigned char *)city_map)[cm_sptr + 5] &= 0x0f;
-                    ((unsigned char *)city_map)[cm_sptr + 5] |= patrons << 4;
+                    ((unsigned char *)city_map)[cm_sptr + 5] |= buyers << 4;
                 }
             }
         next:
