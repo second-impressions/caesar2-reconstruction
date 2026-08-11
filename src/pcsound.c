@@ -777,7 +777,6 @@ void set_battle_death_fx(int unit_type)
 void set_battle_march_fx(int unit_type)
 {
     int ambient_idx = 0;
-    int minimum_delay;
 
     if      (unit_type <=  3) ambient_idx = 15;
     else if (unit_type <= 10) ambient_idx = 15;
@@ -785,9 +784,8 @@ void set_battle_march_fx(int unit_type)
     else if (unit_type <= 17) ambient_idx = 15;
 
     ambient_list[ambient_idx].active = 1;
-    if (marching_fx == 0) minimum_delay = 0xc7;
-    else                  minimum_delay = 0xb9;
-    set_ambient_minimum(ambient_idx, minimum_delay);
+    if (marching_fx == 0) set_ambient_minimum(ambient_idx, 0xc7);
+    else                  set_ambient_minimum(ambient_idx, 0xb9);
     marching_fx = 10;
 }
 
