@@ -10,6 +10,12 @@ extern void place_8x8_block(unsigned char *src, int screen_off);
 void show_city_landfill(int x_start, int y_start);
 void get_circus_bodge(unsigned char building_kind);
 void show_region_landfill(int x_start, int y_start);
+#if PLATFORM_WINDOWS
+extern unsigned char *screen_buffer;
+void show_battle_landfill_to_screen(int start_row, int row_count,
+                                    int screen_x, int screen_y,
+                                    unsigned char *screen);
+#endif
 
 
 // Clear the city map's per-cell overlay sprite pool.
@@ -536,9 +542,17 @@ void update_battle_landfill(void)
         cmu_count[3] = 0;
     }
     if (cmu_count[3] < 10) {
+#if PLATFORM_WINDOWS
+        show_battle_landfill_to_screen(cmu_count[3] * 5, 5, 6, 9, screen_buffer);
+#else
         show_battle_landfill(cmu_count[3] * 5, 5, 0xb1, 0x170);
+#endif
     } else {
+#if PLATFORM_WINDOWS
+        show_battle_landfill_to_screen(50, 2, 6, 9, screen_buffer);
+#else
         show_battle_landfill(50, 2, 0xb1, 0x170);
+#endif
     }
 }
 
