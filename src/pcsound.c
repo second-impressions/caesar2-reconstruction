@@ -499,16 +499,13 @@ void AILCALLBACK mood_modfication(int sequence_handle, int log, int data)
     AIL_branch_index(sequence_handle, tune_branch);
 }
 
-// Restore and return the last music mood for the current map mode.
+// Restore the last music mood for the current map mode.
 // FUNCTION: C2 0x12461
 // FUNCTION: C2WIN 0x004021fd
-int get_old_mood(void)
+void get_old_mood(void)
 {
-    int mood;
-    if (map_mode == 2) mood = last_battle_mood;
-    else               mood = last_city_mood;
-    tune_mood = mood;
-    return mood;
+    if (map_mode == 2) tune_mood = last_battle_mood;
+    else               tune_mood = last_city_mood;
 }
 
 // Choose the music branch from the current mood, including temporary threat and emergency states.
