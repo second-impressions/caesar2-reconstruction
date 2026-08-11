@@ -502,6 +502,7 @@ int do_sea_trade();
 void continue_battle();
 void get_contenders();
 void get_villagers();
+void stop_db(void);
 
 // Drops a requested number of barbarian citizens along a city-map edge.
 // FUNCTION: C2 0x53c43
