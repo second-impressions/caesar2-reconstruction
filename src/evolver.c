@@ -1631,166 +1631,167 @@ int put_out_a(char citizen_kind, char cell_x, char cell_y, char unused, char sta
 // FUNCTION: C2WIN 0x0046640d
 void evolve_a_cm_row(void)
 {
-    unsigned char fire_zone_row;
-    signed char tier_idx;
-    int odd_tick_flag;
-    signed char land_value_rank;
-    int fourth_tick_flag;
-    unsigned char amenity_low_mask;
-    unsigned char building_state;
-    unsigned char amenity_high_mask;
-    int random_flag;
-    int third_tick_flag;
-    unsigned char amenity_flags;
-    unsigned char amenity_mid_mask;
-    unsigned char building_kind;
-    signed char health_score;
-    unsigned char health_flags;
+    unsigned char zone_row_offset;
+    signed char index;
+    int odd_tick_value;
+    signed char lv;
+    int tick4_ok;
+    unsigned char m0c_mask;
+    unsigned char cell_state;
+    unsigned char amenity_c0_flag;
+    int random_ok;
+    int tick3_ok;
+    unsigned char amenity_byte;
+    unsigned char mid_bits;
+    unsigned char type;
+    signed char health;
+    unsigned char extra_data;
     unsigned char range_flags;
-    unsigned char health_flag8;
-    unsigned char health_flag1;
-    unsigned char health_flag2;
-    unsigned char fire_zone_col;
+    unsigned char bit8;
+    unsigned char flag1;
+    unsigned char mask2;
+    unsigned char zone_col;
+    int j;
 
-    odd_tick_flag = third_tick_flag = fourth_tick_flag = random_flag = 0;
-    if (evolve_tick4 & 1) odd_tick_flag = 1;
-    if (evolve_tick3 == 0) third_tick_flag = 1;
-    if (evolve_tick4 == 0) fourth_tick_flag = 1;
-    if (rand8 >= 6) random_flag = 1;
-    fire_zone_row = evolve_row / 8;
+    odd_tick_value = tick3_ok = tick4_ok = random_ok = 0;
+    if (evolve_tick4 & 1) odd_tick_value = 1;
+    if (evolve_tick3 == 0) tick3_ok = 1;
+    if (evolve_tick4 == 0) tick4_ok = 1;
+    if (rand8 >= 6) random_ok = 1;
+    zone_row_offset = evolve_row / 8;
 
     city_qptr = (unsigned char *)city_map;
     city_qptr += evolve_row * 1600;
     city_ptr  = evolve_row * 1600;
 
     for (evolve_col = 0; evolve_col < 80; evolve_col++, city_qptr += 20) {
-        building_state = city_qptr[5] & 0xf;
-        building_kind = city_qptr[0];
-        land_value_rank = city_qptr[0xf];
+        cell_state = city_qptr[5] & 0xf;
+        type = city_qptr[0];
+        lv = city_qptr[0xf];
 
-        if (third_tick_flag) {
-            amenity_flags = city_qptr[0xa];
-            amenity_low_mask = amenity_flags & 0xc;
-            amenity_mid_mask = amenity_flags & 0x30;
-            amenity_high_mask = amenity_flags & 0xc0;
-            if (amenity_mid_mask) {
+        if (tick3_ok) {
+            amenity_byte = city_qptr[0xa];
+            m0c_mask = amenity_byte & 0xc;
+            mid_bits = amenity_byte & 0x30;
+            amenity_c0_flag = amenity_byte & 0xc0;
+            if (mid_bits) {
                 city_qptr[0xa] &= 0xcf;
-                if (amenity_mid_mask == 0x30) city_qptr[0xa] |= 0x20;
-                else if (amenity_mid_mask == 0x20) city_qptr[0xa] |= 0x10;
+                if (mid_bits == 0x30) city_qptr[0xa] |= 0x20;
+                else if (mid_bits == 0x20) city_qptr[0xa] |= 0x10;
             }
-            if (amenity_high_mask) {
+            if (amenity_c0_flag) {
                 city_qptr[0xa] &= 0x3f;
-                if (amenity_high_mask == 0xc0) city_qptr[0xa] |= 0x80;
-                else if (amenity_high_mask == 0x80) city_qptr[0xa] |= 0x40;
+                if (amenity_c0_flag == 0xc0) city_qptr[0xa] |= 0x80;
+                else if (amenity_c0_flag == 0x80) city_qptr[0xa] |= 0x40;
             }
-            if (amenity_low_mask) {
+            if (m0c_mask) {
                 city_qptr[0xa] &= 0xf3;
-                if (amenity_low_mask == 0xc) city_qptr[0xa] |= 8;
-                else if (amenity_low_mask == 8) city_qptr[0xa] |= 4;
+                if (m0c_mask == 0xc) city_qptr[0xa] |= 8;
+                else if (m0c_mask == 8) city_qptr[0xa] |= 4;
             }
         }
 
-        if (fourth_tick_flag) {
-            if (building_kind >= 0x82 && building_kind <= 0xa1) {
-                health_flags  = city_qptr[0xd];
+        if (tick4_ok) {
+            if (type >= 0x82 && type <= 0xa1) {
+                extra_data  = city_qptr[0xd];
                 range_flags = city_qptr[0xb];
-                health_score = range_flags & 0x30;
-                health_score >>= 4;
-                health_flag8 = health_flags & 8;
-                health_flag1 = health_flags & 1;
-                health_flag2 = health_flags & 2;
-                health_score += random_flag;
-                if (health_flag8 && health_flag1) health_score -= 3;
-                else if (health_flag8 && health_flag2) health_score -= 2;
-                else if (health_flag1 || health_flag8) health_score -= 1;
-                else if (!health_flag2) health_score += 1;
-                if (hospital_cover <= 0) health_score += 1;
-                else if (hospital_cover >= 0x64) health_score -= 2;
-                else if (hospital_cover >= 0x4b) { if (evolve_count & 1) health_score -= 2; else health_score -= 1; }
-                else if (hospital_cover >= 0x32) health_score -= 1;
-                else if (hospital_cover >= 0x19 && (evolve_count & 1)) health_score -= 1;
-                if (health_score <= 0) health_score = 0;
-                else if (health_score == 1) health_score = 0x10;
-                else if (health_score == 2) health_score = 0x20;
-                else health_score = 0x30;
+                health = range_flags & 0x30;
+                health >>= 4;
+                bit8 = extra_data & 8;
+                flag1 = extra_data & 1;
+                mask2 = extra_data & 2;
+                health += random_ok;
+                if (bit8 && flag1) health -= 3;
+                else if (bit8 && mask2) health -= 2;
+                else if (flag1 || bit8) health -= 1;
+                else if (!mask2) health += 1;
+                if (hospital_cover <= 0) health += 1;
+                else if (hospital_cover >= 0x64) health -= 2;
+                else if (hospital_cover >= 0x4b) { if (evolve_count & 1) health -= 2; else health -= 1; }
+                else if (hospital_cover >= 0x32) health -= 1;
+                else if (hospital_cover >= 0x19 && (evolve_count & 1)) health -= 1;
+                if (health <= 0) health = 0;
+                else if (health == 1) health = 0x10;
+                else if (health == 2) health = 0x20;
+                else health = 0x30;
                 city_qptr[0xb] &= 0xcf;
-                city_qptr[0xb] |= health_score;
+                city_qptr[0xb] |= health;
             }
         }
 
-        if (building_kind < 8) {
+        if (type < 8) {
             if (city_qptr[3] & 0x80) {
-                fire_zone_col = evolve_col / 8;
-                fire_zones[fire_zone_row * 10 + fire_zone_col] += 2;
+                zone_col = evolve_col / 8;
+                fire_zones[zone_row_offset * 10 + zone_col] += 2;
             }
         }
 
-        if (building_state == 0) {
-            if (building_kind >= 0x82 && building_kind <= 0xa1) {
-                tier_idx  = building_kind - 0x82;
-                if (tier_idx >= 0x1e) land_value_rank = get_best_lv(city_qptr, 3);
-                else if (tier_idx >= 0x1a) land_value_rank = get_best_lv(city_qptr, 2);
-                if      (land_value_rank <  house_evolution[tier_idx].devolve_below) devolve_a_house(tier_idx);
-                else if (land_value_rank >  house_evolution[tier_idx].evolve_above)  evolve_a_house(tier_idx);
-            } else if (building_kind >= 0xd7 && building_kind <= 0xda) {
-                tier_idx  = building_kind - 0xd7;
-                if      (land_value_rank <  well_evolution[tier_idx].devolve_below) devolve_a_building(tier_idx, 1, 0xd7, 0x10, 1);
-                else if (land_value_rank >  well_evolution[tier_idx].evolve_above)  evolve_a_building(tier_idx, 1, 0xd7, 0x10, 1);
-            } else if (building_kind >= 0xdb && building_kind <= 0xde) {
-                tier_idx  = building_kind - 0xdb;
-                if      (land_value_rank <  fountain_evolution[tier_idx].devolve_below) devolve_a_building(tier_idx, 1, 0xdb, 0, 0);
-                else if (land_value_rank >  fountain_evolution[tier_idx].evolve_above)  evolve_a_building(tier_idx, 1, 0xdb, 0, 0);
-            } else if (building_kind >= 0xdf && building_kind <= 0xe2) {
-                tier_idx  = building_kind - 0xdf;
-                land_value_rank = get_best_lv(city_qptr, 2);
-                if      (land_value_rank <  baths_evolution[tier_idx].devolve_below) devolve_a_building(tier_idx, 2, 0xdf, 0, 0);
-                else if (land_value_rank >  baths_evolution[tier_idx].evolve_above)  evolve_a_building(tier_idx, 2, 0xdf, 0, 0);
-            } else if (building_kind >= 0xae && building_kind <= 0xb1) {
-                tier_idx  = building_kind - 0xae;
-                land_value_rank = get_best_lv(city_qptr, 2);
-                if      (land_value_rank <  forum_evolution[tier_idx].devolve_below) devolve_a_building(tier_idx, 2, 0xae, forum_gfxdat[0], 4);
-                else if (land_value_rank >  forum_evolution[tier_idx].evolve_above)  evolve_a_building(tier_idx, 2, 0xae, forum_gfxdat[0], 4);
-            } else if (building_kind >= 0xb2 && building_kind <= 0xb5) {
-                tier_idx  = building_kind - 0xb2;
-                land_value_rank = get_best_lv(city_qptr, 3);
-                if      (land_value_rank <  forum_evolution[tier_idx].devolve_below) devolve_a_building(tier_idx, 3, 0xb2, forum_gfxdat[0x10], 9);
-                else if (land_value_rank >  forum_evolution[tier_idx].evolve_above)  evolve_a_building(tier_idx, 3, 0xb2, forum_gfxdat[0x10], 9);
-            } else if (building_kind >= 0xb6 && building_kind <= 0xb9) {
-                tier_idx  = building_kind - 0xb6;
-                land_value_rank = get_best_lv(city_qptr, 4);
-                if      (land_value_rank <  forum_evolution[tier_idx].devolve_below) devolve_a_building(tier_idx, 4, 0xb6, forum_gfxdat[0x20], 0x10);
-                else if (land_value_rank >  forum_evolution[tier_idx].evolve_above)  evolve_a_building(tier_idx, 4, 0xb6, forum_gfxdat[0x20], 0x10);
-            } else if (building_kind >= 0xa2 && building_kind <= 0xa5) {
-                tier_idx  = building_kind - 0xa2;
-                if (land_value_rank <  temple_evolution[tier_idx].devolve_below ||
-                    population <  temple_populations1[tier_idx].devolve_below) {
-                    devolve_a_building(tier_idx, 1, 0xa2, 0x3c, 1);
-                } else if (land_value_rank >  temple_evolution[tier_idx].evolve_above &&
-                           population > temple_populations1[tier_idx].evolve_above) {
-                    evolve_a_building(tier_idx, 1, 0xa2, 0x3c, 1);
-                }
-            } else if (building_kind >= 0xa6 && building_kind <= 0xa9) {
-                tier_idx  = building_kind - 0xa6;
-                land_value_rank = get_best_lv(city_qptr, 2);
-                if (land_value_rank <  temple_evolution[tier_idx].devolve_below ||
-                    population <  temple_populations2[tier_idx].devolve_below) {
-                    devolve_a_building(tier_idx, 2, 0xa6, 0x40, 4);
-                } else if (land_value_rank >  temple_evolution[tier_idx].evolve_above &&
-                           population > temple_populations2[tier_idx].evolve_above) {
-                    evolve_a_building(tier_idx, 2, 0xa6, 0x40, 4);
-                }
-            } else if (building_kind >= 0xaa && building_kind <= 0xad) {
-                tier_idx  = building_kind - 0xaa;
-                land_value_rank = get_best_lv(city_qptr, 3);
-                if ((temple_evolution[tier_idx].devolve_below) > (land_value_rank) ||
-                    population <  temple_populations3[tier_idx].devolve_below) {
-                    devolve_a_building(tier_idx, 3, 0xaa, 0, 9);
-                } else if ((temple_evolution[tier_idx].evolve_above) < (land_value_rank) &&
-                           population > temple_populations3[tier_idx].evolve_above) {
-                    evolve_a_building(tier_idx, 3, 0xaa, 0, 9);
-                }
-            } else if (building_kind >= 0x7c && building_kind <= 0x7e) evolve_a_plaza(land_value_rank, building_kind, evolve_col);
-        }
+        if (cell_state)
+            continue;
+        if (type >= 0x82 && type <= 0xa1) {
+            index  = type - 0x82;
+            if (index >= 0x1e) lv = get_best_lv(city_qptr, 3);
+            else if (index >= 0x1a) lv = get_best_lv(city_qptr, 2);
+            if      (lv <  house_evolution[index].devolve_below) devolve_a_house(index);
+            else if (lv >  house_evolution[index].evolve_above)  evolve_a_house(index);
+        } else if (type >= 0xd7 && type <= 0xda) {
+            index  = type - 0xd7;
+            if      (lv <  well_evolution[index].devolve_below) devolve_a_building(index, 1, 0xd7, 0x10, 1);
+            else if (lv >  well_evolution[index].evolve_above)  evolve_a_building(index, 1, 0xd7, 0x10, 1);
+        } else if (type >= 0xdb && type <= 0xde) {
+            index  = type - 0xdb;
+            if      (lv <  fountain_evolution[index].devolve_below) devolve_a_building(index, 1, 0xdb, 0, 0);
+            else if (lv >  fountain_evolution[index].evolve_above)  evolve_a_building(index, 1, 0xdb, 0, 0);
+        } else if (type >= 0xdf && type <= 0xe2) {
+            index  = type - 0xdf;
+            lv = get_best_lv(city_qptr, 2);
+            if      (lv <  baths_evolution[index].devolve_below) devolve_a_building(index, 2, 0xdf, 0, 0);
+            else if (lv >  baths_evolution[index].evolve_above)  evolve_a_building(index, 2, 0xdf, 0, 0);
+        } else if (type >= 0xae && type <= 0xb1) {
+            index  = type - 0xae;
+            lv = get_best_lv(city_qptr, 2);
+            if      (lv <  forum_evolution[index].devolve_below) devolve_a_building(index, 2, 0xae, forum_gfxdat[0], 4);
+            else if (lv >  forum_evolution[index].evolve_above)  evolve_a_building(index, 2, 0xae, forum_gfxdat[0], 4);
+        } else if (type >= 0xb2 && type <= 0xb5) {
+            index  = type - 0xb2;
+            lv = get_best_lv(city_qptr, 3);
+            if      (lv <  forum_evolution[index].devolve_below) devolve_a_building(index, 3, 0xb2, forum_gfxdat[0x10], 9);
+            else if (lv >  forum_evolution[index].evolve_above)  evolve_a_building(index, 3, 0xb2, forum_gfxdat[0x10], 9);
+        } else if (type >= 0xb6 && type <= 0xb9) {
+            index  = type - 0xb6;
+            lv = get_best_lv(city_qptr, 4);
+            if      (lv <  forum_evolution[index].devolve_below) devolve_a_building(index, 4, 0xb6, forum_gfxdat[0x20], 0x10);
+            else if (lv >  forum_evolution[index].evolve_above)  evolve_a_building(index, 4, 0xb6, forum_gfxdat[0x20], 0x10);
+        } else if (type >= 0xa2 && type <= 0xa5) {
+            index  = type - 0xa2;
+            if (lv <  temple_evolution[index].devolve_below ||
+                population <  temple_populations1[index].devolve_below) {
+                devolve_a_building(index, 1, 0xa2, 0x3c, 1);
+            } else if (lv >  temple_evolution[index].evolve_above &&
+                       population > temple_populations1[index].evolve_above) {
+                evolve_a_building(index, 1, 0xa2, 0x3c, 1);
+            }
+        } else if (type >= 0xa6 && type <= 0xa9) {
+            index  = type - 0xa6;
+            lv = get_best_lv(city_qptr, 2);
+            if (lv <  temple_evolution[index].devolve_below ||
+                population <  temple_populations2[index].devolve_below) {
+                devolve_a_building(index, 2, 0xa6, 0x40, 4);
+            } else if (lv >  temple_evolution[index].evolve_above &&
+                       population > temple_populations2[index].evolve_above) {
+                evolve_a_building(index, 2, 0xa6, 0x40, 4);
+            }
+        } else if (type >= 0xaa && type <= 0xad) {
+            index  = type - 0xaa;
+            lv = get_best_lv(city_qptr, 3);
+            if ((temple_evolution[index].devolve_below) > (lv) ||
+                population <  temple_populations3[index].devolve_below) {
+                devolve_a_building(index, 3, 0xaa, 0, 9);
+            } else if ((temple_evolution[index].evolve_above) < (lv) &&
+                       population > temple_populations3[index].evolve_above) {
+                evolve_a_building(index, 3, 0xaa, 0, 9);
+            }
+        } else if (type >= 0x7c && type <= 0x7e) evolve_a_plaza(lv, type, evolve_col);
 
     }
 }
