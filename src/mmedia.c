@@ -14,9 +14,19 @@ void media_text_place(int x, int y, int width, int line_count, int alt_x, int al
 extern char file_buffer[80];
 extern char cd_drive[4];
 extern void *main_window;
+extern void *tutorial_window;
+extern void *active_window;
 extern int sprintf(char *buffer, const char *format, ...);
 extern int (__stdcall *WinHelpA)(void *window, char *help_file,
                                 unsigned int command, unsigned long data);
+extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
+                                    int x, int y, int width, int height,
+                                    unsigned int flags);
+extern void setup_window(void *parent, void *window, int x, int y);
+extern void show_game_window(int mode);
+extern void restore_game_windows(void);
+extern void tile_main_window(int tile);
+extern void update_window_titles(void);
 #endif
 
 #include "c2_types.h"
@@ -526,16 +536,15 @@ void init_help_history(void)
 // FUNCTION: C2WIN 0x0045313c
 void do_tutorial(void)
 {
-    int saved_skill = c2inf.skill_level;
-    int saved_peace = (signed char)c2inf.peace_mode;
+    int skill = c2inf.skill_level;
+    int peace = (signed char)c2inf.peace_mode;
 
     c2inf.skill_level   = 0;
     c2inf.peace_mode    = 1;
     tutorial_page       = 0;
     tutorial_mode       = 1;
     province_difficulty = 1;
-    year                = -200;
-    start_year          = -200;
+    start_year = year = -200;
     month               = 0;
     week                = 0;
     players_denarii     = 0;
@@ -550,13 +559,20 @@ void do_tutorial(void)
     new_province();
     black_out();
 
+#if PLATFORM_WINDOWS
+    SetWindowPos(tutorial_window, 0, 0, 0, 0x280, 0x1e0, 0x80);
+    setup_window(0, tutorial_window, 0, 0);
+    active_window = tutorial_window;
+    show_game_window(5);
+#endif
+
     while (tutorial_page < 0x20) {
         do_a_tutorial_page();
     }
 
     tutorial_mode = 0;
-    c2inf.skill_level = (signed char)saved_skill;
-    c2inf.peace_mode  = saved_peace;
+    c2inf.skill_level = (signed char)skill;
+    c2inf.peace_mode  = peace;
 
     confirm(0xe, 0xa0, 0xa0);
     if (decision == 1) {
@@ -567,6 +583,12 @@ void do_tutorial(void)
     cover_mouse_droppings();
     clear_a_screen();
     hold_mouse_replace = 1;
+#if PLATFORM_WINDOWS
+    restore_game_windows();
+    show_game_window(5);
+    tile_main_window(c2inf.wallpaper);
+    update_window_titles();
+#endif
 }
 
 // Display the current tutorial page, handle navigation, and run its interactive objective.
