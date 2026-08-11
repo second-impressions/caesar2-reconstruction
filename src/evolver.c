@@ -462,7 +462,7 @@ void evolve_water_table(int row_count)
         }
 }
 
-int create_citizen(int, int, int, unsigned char);
+int create_citizen();
 
 // Stamp security and administrative coverage around patrol buildings, forts, and forums.
 // FUNCTION: C2 0x40617
@@ -1564,60 +1564,62 @@ void spread_fire_and_plague_and_unrest(int row_count)
 int put_out_a(char citizen_kind, char cell_x, char cell_y, char unused, char start_idx,
               char perimeter_size, char barbarian_flag)
 {
-  int attempt_idx;
+  int idx;
   int position_count;
-  int position_idx;
-  int offset_x;
-  int offset_y;
+  int counter;
+  int offx;
+  int offy;
   (void) unused;
-  position_idx = start_idx;
-  if (perimeter_size == 1)
+  idx = (unsigned char)start_idx;
+  if ((unsigned char)perimeter_size == 1)
     position_count = 4;
   else
-    if (perimeter_size == 4)
+    if ((unsigned char)perimeter_size == 4)
     position_count = 8;
   else
-    if (perimeter_size == 9)
+    if ((unsigned char)perimeter_size == 9)
     position_count = 12;
   else
-    if (perimeter_size == 0x10)
+    if ((unsigned char)perimeter_size == 0x10)
     position_count = 0x10;
   else
   {
-    if (create_citizen(citizen_kind, cell_x, cell_y, 0) == 0)
+    if (create_citizen((unsigned char)citizen_kind, (unsigned char)cell_x,
+                       (unsigned char)cell_y, 0) != 0)
+      return 1;
+    else
       return 0;
-    return 1;
   }
-  for (attempt_idx = 0; attempt_idx < position_count; attempt_idx++)
+  for (counter = 0; counter < position_count; counter++, idx++)
   {
-    if (position_count <= position_idx)
-      position_idx = 0;
-    if (perimeter_size == 1)
+    if (position_count <= idx)
+      idx = 0;
+    if ((unsigned char)perimeter_size == 1)
     {
-      offset_x = putouts1[position_idx].dx;
-      offset_y = putouts1[position_idx].dy;
+      offx = putouts1[idx].dx;
+      offy = putouts1[idx].dy;
     }
     else
-      if (perimeter_size == 4)
+      if ((unsigned char)perimeter_size == 4)
     {
-      offset_x = putouts2[position_idx].dx;
-      offset_y = putouts2[position_idx].dy;
+      offx = putouts2[idx].dx;
+      offy = putouts2[idx].dy;
     }
     else
-      if (perimeter_size == 9)
+      if ((unsigned char)perimeter_size == 9)
     {
-      offset_x = putouts3[position_idx].dx;
-      offset_y = putouts3[position_idx].dy;
+      offx = putouts3[idx].dx;
+      offy = putouts3[idx].dy;
     }
     else
-      if (perimeter_size == 0x10)
+      if ((unsigned char)perimeter_size == 0x10)
     {
-      offset_x = putouts4[position_idx].dx;
-      offset_y = putouts4[position_idx].dy;
+      offx = putouts4[idx].dx;
+      offy = putouts4[idx].dy;
     }
-    if (create_citizen(citizen_kind, cell_x + offset_x, cell_y + offset_y, barbarian_flag) != 0)
-      return position_idx + 1;
-    position_idx++;
+    if (create_citizen((unsigned char)citizen_kind, (unsigned char)cell_x + offx,
+                       (unsigned char)cell_y + offy, (unsigned char)barbarian_flag) != 0)
+      return idx + 1;
   }
 
   return 0;
