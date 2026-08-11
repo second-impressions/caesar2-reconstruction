@@ -307,88 +307,63 @@ void show_help_page(void)
 void media_text_place(int x, int y, int width, int line_count,
                       int alt_x, int alt_width, unsigned char *font)
 {
-    int    i;
-    int    escape_flag;
-    int    line_idx;
-    int    current_y;
-    int    alt_offset;
-    int    loop_active;
-    int    line_width;
-    int    buffer_pos;
+    int    hotspot_idx;
+    int    escape_next;
+    int    line_nr;
+    int    y_current;
+    int    alt_off;
+    int    loop;
+    int    used_width;
+    int    buf_idx;
     int    skip_leading;
-    signed char character;
-    int    character_idx;
+    signed char ascii;
+    int    index;
 
     this_spot        = 0;
     linked_text_flag = 0;
     nof_hot_spots    = 0;
-    for (i = 0; i < 20; i++) {
-        help_page_hot_spots[i].page = 0;
-        help_page_hot_spots[i].x1 = help_page_hot_spots[i].x2 = 0;
-        help_page_hot_spots[i].x3 = help_page_hot_spots[i].x4 = 0;
-        help_page_hot_spots[i].y  = help_page_hot_spots[i].unused = 0;
+    for (hotspot_idx = 0; hotspot_idx < 20; hotspot_idx++) {
+        help_page_hot_spots[hotspot_idx].page = 0;
+        help_page_hot_spots[hotspot_idx].x1 = help_page_hot_spots[hotspot_idx].x2 = 0;
+        help_page_hot_spots[hotspot_idx].x3 = help_page_hot_spots[hotspot_idx].x4 = 0;
+        help_page_hot_spots[hotspot_idx].y  = help_page_hot_spots[hotspot_idx].unused = 0;
     }
 
     /* Skip the entry heading and start at the paragraph text. */
     text_pointer = format_buffer;
-    while (*text_pointer > 0) text_pointer++;
+    while ((unsigned char)*text_pointer > 0) text_pointer++;
     text_pointer++;
 
-    font_screen_limit = 0;
-    loop_active = 1;
-    line_idx    = 0;
-    current_y       = y;
-    escape_flag = 0;
+    font_screen_limit = 0; loop = 1; line_nr = 0; y_current = y; escape_next = 0;
 
-    while (loop_active) {
-        for (i = 0; i < 200; i++) media_line_buffer[i] = 0;
-        line_width  = 0;
-        buffer_pos     = 0;
+    while (loop) {
+        for (index = 0; index < 200; index++) media_line_buffer[index] = 0;
+        used_width = 0; buf_idx = 0;
         skip_leading = 1;
 
-        if (escape_flag) {
-            alt_offset     = 0;
-            escape_flag = 0;
-        } else {
-            alt_offset = 0;
-        }
+        if (escape_next) { alt_off = 0; escape_next = 0;
+        } else { alt_off = 0; }
 
-        while (loop_active && line_width < width - alt_offset) {
-            line_width += get_next_word_length(text_pointer, font);
-            if (line_width >= width - alt_offset) continue;
-
-            for (character_idx = 0; character_idx < char_count; ) {
-                character = *text_pointer++;
-                if (skip_leading && character == ' ') {
-                    /* drop */
-                } else if (character == '$') {
-                    escape_flag = 1;
-                    line_width  = width;
-                    break;
-                } else {
-                    media_line_buffer[buffer_pos++] = character;
+        while (loop && used_width < width - alt_off) {
+            used_width += get_next_word_length(text_pointer, font);
+            if (used_width < width - alt_off) {
+                for (index = 0; index < char_count; index++) {
+                    ascii = *text_pointer++;
+                    if (skip_leading && ascii == ' ') continue;
+                    if (ascii == '$') { escape_next = 1; used_width = width; break; }
+                    media_line_buffer[buf_idx++] = ascii;
                     skip_leading = 0;
                 }
-                character_idx++;
-            }
-            if (*text_pointer == 0) {
-                loop_active = 0;
-                continue;
+                if ((unsigned char)*text_pointer == 0) { loop = 0; }
             }
         }
 
         insert_place  = 1;
-        x_is          = 0;
-        allow_padding = 1;
-        put_a_media_string(media_line_buffer, x + alt_offset, current_y);
-        line_idx++;
-        current_y += 0x12;
+        x_is = 0; allow_padding = 1;
+        put_a_media_string(media_line_buffer, x + alt_off, y_current);
+        line_nr++; y_current += 0x12;
 
-        if (line_idx >= line_count) {
-            /* Switch over to the continuation rectangle. */
-            x     = alt_x;
-            width = alt_width;
-        }
+        if (line_nr >= line_count) { x = alt_x; width = alt_width; }
     }
 }
 
