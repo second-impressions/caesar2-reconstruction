@@ -1027,33 +1027,36 @@ void evolve_forum_activity(int rows)
 // Dispatch soldiers from forts to engage nearby enemy citizens.
 // FUNCTION: C2 0x4176e
 // FUNCTION: C2WIN 0x00464a1f
-void evolve_fort_activity(int row_count)
+void evolve_fort_activity(int rows)
 {
-    int row_idx;
-    int col_idx;
-    unsigned char building_kind;
+    int row;
+    int new_counter;
+    int col;
     unsigned char counter;
-    short enemy_idx;
-    int spawn_result;
 
     cm_sptr = evolve_row * 1600;
 
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
-            building_kind = ((unsigned char *)city_map)[cm_sptr];
-            if (building_kind == 0xbf) {
+    for (row = 0; row < rows; row++) {
+        for (col = 0; col < 80; col++, cm_sptr += 20) {
+            unsigned char kind;
+
+            kind = ((unsigned char *)city_map)[cm_sptr];
+            if (kind == 0xbf) {
                 counter = ((unsigned char *)city_map)[cm_sptr + 6] & 0x0f;
                 if (counter == 0) {
+                    int res;
+                    short enemy_target;
+
                     if (population < 2) continue;
-                    enemy_idx = find_enemy(col_idx, evolve_row + row_idx, 6);
-                    if (enemy_idx == 0) continue;
+                    enemy_target = find_enemy(col, evolve_row + row, 6);
+                    if (enemy_target == 0) continue;
                     counter = 3;
-                    spawn_result = put_out_a(4, (unsigned char)col_idx, (unsigned char)(evolve_row + row_idx), 0, 0, 1, 0);
-                    if (spawn_result != 0) {
-                        citizen_a = enemy_idx;
+                    res = put_out_a(4, (unsigned char)col, (unsigned char)(evolve_row + row), 0, 0, 1, 0);
+                    if (res != 0) {
+                        citizen_a = enemy_target;
                         citizen_list[created_citizen_no].target_kind = citizen_a;
-                        citizen_list[created_citizen_no].target_marker = citizen_list[enemy_idx].evolve_timer;
-                        citizen_list[created_citizen_no].dest_x = citizen_list[enemy_idx].x; citizen_list[created_citizen_no].dest_y = citizen_list[enemy_idx].y;
+                        citizen_list[created_citizen_no].target_marker = citizen_list[citizen_a].evolve_timer;
+                        citizen_list[created_citizen_no].dest_x = citizen_list[citizen_a].x; citizen_list[created_citizen_no].dest_y = citizen_list[citizen_a].y;
                         citizen_list[created_citizen_no].state_idx = 1;
                         citizen_list[created_citizen_no].saved_state_idx = 6;
                         citizen_list[created_citizen_no].wait_count = 0x14;
