@@ -1437,14 +1437,15 @@ pipeline_done:
 // FUNCTION: C2WIN 0x00465bbb
 void spread_fire_and_plague_and_unrest(int row_count)
 {
-    int row_idx;
-    int col_idx;
-    unsigned char building_kind;
-    unsigned char damage_count;
+    int map_row;
+    int col_no;
+    unsigned char cell_kind;
+    unsigned char fire;
     signed char unrest;
-    unsigned char range_flags;
-    unsigned char health_flags;
-    unsigned char random_value;
+    unsigned char range_flag;
+    unsigned char health_level;
+    unsigned char rand_num;
+    unsigned char status;
 
     cm_sptr = evolve_row * 1600;
 
@@ -1467,95 +1468,92 @@ void spread_fire_and_plague_and_unrest(int row_count)
         if (unrest_random_count >= 0x40) unrest_random_count -= 0x40;
     }
 
-    for (row_idx = 0; row_idx < row_count; row_idx++) {
-        for (col_idx = 0; col_idx < 80; col_idx++, cm_sptr += 20) {
+    for (map_row = 0; map_row < row_count; map_row++) {
+        for (col_no = 0; col_no < 80; col_no++, cm_sptr += 20) {
 
             if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits & 0x80) {
-                building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-                if (building_kind < 8) {
-                    damage_count = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire - 1;
-                    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire = damage_count;
-                    if (damage_count == 0) {
+                cell_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+                if (cell_kind < 8) {
+                    fire = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire - 1;
+                    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire = fire;
+                    if (fire == 0) {
                         (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).edge_bits &= 0x7f;
-                    } else {
-                        if (fire_spread_count++ < fire_spread_target) goto next;
+                    } else if (fire_spread_count++ >= fire_spread_target) {
                         fire_spread_target += 2;
-                        if (fire_spread_direction == 0 && row_idx + evolve_row <= 0)
-                            goto next;
-                        if (fire_spread_direction == 4 && row_idx + evolve_row >= 0x4f)
-                            goto next;
-                        if (fire_spread_direction == 6 && col_idx <= 0)
-                            goto next;
-                        if (fire_spread_direction == 2 && col_idx >= 0x4f)
-                            goto next;
+                        if (fire_spread_direction == 0 && map_row + evolve_row <= 0)
+                            continue;
+                        else if (fire_spread_direction == 4 && map_row + evolve_row >= 0x4f)
+                            continue;
+                        else if (fire_spread_direction == 6 && col_no <= 0)
+                            continue;
+                        else if (fire_spread_direction == 2 && col_no >= 0x4f)
+                            continue;
                         spread_fire_atom(cm_sptr, fire_spread_direction);
                     }
-                } else if (building_kind >= 0x82 && building_kind <= 0xa1) {
+                } else if (cell_kind >= 0x82 && cell_kind <= 0xa1) {
                     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag &= 0xcf;
-                    damage_count = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire;
-                    damage_count--; (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire = damage_count;
-                    if (damage_count == 0) {
+                    fire = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire;
+                    fire = fire - 1; (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fire = fire;
+                    if (fire == 0) {
                         destroy_an_atom(cm_sptr, 0);
-                    } else {
-                        if (plague_spread_count++ < plague_spread_target) goto next;
+                    } else if (plague_spread_count++ >= plague_spread_target) {
                         plague_spread_target++;
-                        if (plague_spread_direction == 0 && row_idx + evolve_row <= 0)
-                            goto next;
-                        if (plague_spread_direction == 4 && row_idx + evolve_row >= 0x4f)
-                            goto next;
-                        if (plague_spread_direction == 6 && col_idx <= 0)
-                            goto next;
-                        if (plague_spread_direction == 2 && col_idx >= 0x4f)
-                            goto next;
-                        if (damage_count == 9)
-                            goto next;
+                        if (plague_spread_direction == 0 && map_row + evolve_row <= 0)
+                            continue;
+                        else if (plague_spread_direction == 4 && map_row + evolve_row >= 0x4f)
+                            continue;
+                        else if (plague_spread_direction == 6 && col_no <= 0)
+                            continue;
+                        else if (plague_spread_direction == 2 && col_no >= 0x4f)
+                            continue;
+                        if (fire == 9)
+                            continue;
                         spread_plague_atom(cm_sptr, plague_spread_direction);
                     }
                 }
             } else {
-                building_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-                if (building_kind < 0x82 || building_kind > 0x9b) goto next;
-                unrest = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
-                if (unrest != 0) goto next;
+                cell_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
+                if (cell_kind >= 0x82 && cell_kind <= 0x9b) {
+                    status = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).activity_a & 0xf;
+                    if (status != 0) continue;
 
-                unrest = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag & 0xf;
-                range_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag;
-                health_flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).health;
-                if ((range_flags & 0x0c) == 0) unrest--;
-                if ((range_flags & 0x30) != 0) unrest--;
-                if ((health_flags & 0x03) != 0) unrest--;
-                unrest += insurrection_factor;
+                    unrest = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag & 0xf;
+                    range_flag = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).range_flag;
+                    health_level = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).health;
+                    if ((range_flag & 0x0c) == 0) unrest = unrest - 1;
+                    if ((range_flag & 0x30) != 0) unrest = unrest - 1;
+                    if ((health_level & 0x03) != 0) unrest = unrest - 1;
+                    unrest += insurrection_factor;
 
-                unrest_random_count++;
-                if (unrest_random_count >= 0x40) unrest_random_count = 0;
-                random_value = unrest_random_data[unrest_random_count];
-                if (random_value == 9)
-                    unrest += house_type_to_unrest[building_kind - 0x82].unrest_delta;
-                else
-                    unrest += random_value;
-                if (unrest < 0) unrest = 0;
-                else if (unrest > 0xf) {
-                    if (insurrection_factor > 6)
-                        insurrection_factor = 6;
-                    else if (insurrection_factor > 2)
-                        insurrection_factor = 2;
-                    destroy_an_atom(cm_sptr, 0);
-                    if (put_out_a(7, (unsigned char)col_idx, (unsigned char)(evolve_row + row_idx), 0, 0, 0, 0) != 0) {
-                        citizen_list[created_citizen_no].speed_phase = 0;
-                        citizen_list[created_citizen_no].speed_count = 0;
-                        citizen_list[created_citizen_no].state_idx = 1;
-                        citizen_list[created_citizen_no].wait_count = 0x14;
-                        citizen_list[created_citizen_no].saved_state_idx = 0xb;
-                        if (put_a_message == 0)
-                            put_message(0x57, cm_sptr, 0x15);
+                    unrest_random_count++;
+                    if (unrest_random_count >= 0x40) unrest_random_count = 0;
+                    rand_num = unrest_random_data[unrest_random_count];
+                    if (rand_num == 9)
+                        unrest += house_type_to_unrest[cell_kind - 0x82];
+                    else
+                        unrest = unrest + rand_num;
+                    if (unrest < 0) unrest = 0;
+                    else if (unrest > 0xf) {
+                        if (insurrection_factor > 6)
+                            insurrection_factor = 6;
+                        else if (insurrection_factor > 2)
+                            insurrection_factor = 2;
+                        destroy_an_atom(cm_sptr, 0);
+                        if (put_out_a(7, (unsigned char)col_no, (unsigned char)(evolve_row + map_row), 0, 0, 0, 0) != 0) {
+                            citizen_list[created_citizen_no].speed_phase = 0;
+                            citizen_list[created_citizen_no].speed_count = 0;
+                            citizen_list[created_citizen_no].state_idx = 1;
+                            citizen_list[created_citizen_no].wait_count = 0x14;
+                            citizen_list[created_citizen_no].saved_state_idx = 0xb;
+                            if (put_a_message == 0)
+                                put_message(0x57, cm_sptr, 0x15);
+                        }
+                        continue;
                     }
-                    goto next;
+                    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag &= 0xf0;
+                    (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag |= unrest;
                 }
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag &= 0xf0;
-                (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag |= unrest;
             }
-next:
-            ;
         }
     }
 }
