@@ -496,8 +496,8 @@ int get_linked_page(void)
 void push_forward_help_history(void)
 {
     help_history[this_help_action] = this_help_page;
-    if (this_help_action < 0xc7)
-        this_help_action++;
+    if (this_help_action >= 0xc7) return;
+    this_help_action++;
 }
 
 // Move back one help-history entry and restore that page.
