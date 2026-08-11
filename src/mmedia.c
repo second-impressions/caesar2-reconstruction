@@ -457,24 +457,30 @@ void put_a_media_string(char *text, int x, int y)
 // FUNCTION: C2WIN 0x00452f00
 int get_linked_page(void)
 {
-    int i;
-    int hotspot_width;
-    int hotspot_y;
+    int count;
+    int mouse_y;
+    int x_start;
+    int mouse_width;
+    int box_height;
 
-    for (i = 0; i < nof_hot_spots; i++) {
-        hotspot_width   = help_page_hot_spots[i].x2 - help_page_hot_spots[i].x1;
-        hotspot_y = help_page_hot_spots[i].y;
-        if (mouse_in_area(help_page_hot_spots[i].x1, hotspot_y, hotspot_width, 0x12)) {
+    for (count = 0; count < nof_hot_spots; count++) {
+        mouse_width = help_page_hot_spots[count].x2 - help_page_hot_spots[count].x1;
+        box_height = 0x12;
+        x_start = help_page_hot_spots[count].x1;
+        mouse_y = help_page_hot_spots[count].y;
+        if (mouse_in_area(x_start, mouse_y, mouse_width, box_height)) {
             push_forward_help_history();
-            this_help_page = help_page_hot_spots[i].page;
+            this_help_page = help_page_hot_spots[count].page;
             return 1;
         }
 
-        if (help_page_hot_spots[i].x3 == 0) continue;
-        hotspot_width = help_page_hot_spots[i].x4 - help_page_hot_spots[i].x3;
-        if (mouse_in_area(help_page_hot_spots[i].x3, hotspot_y += 0x12, hotspot_width, 0x12)) {
+        if (help_page_hot_spots[count].x3 == 0) continue;
+        mouse_width = help_page_hot_spots[count].x4 - help_page_hot_spots[count].x3;
+        x_start = help_page_hot_spots[count].x3;
+        mouse_y += 0x12;
+        if (mouse_in_area(x_start, mouse_y, mouse_width, box_height)) {
             push_forward_help_history();
-            this_help_page = help_page_hot_spots[i].page;
+            this_help_page = help_page_hot_spots[count].page;
             return 1;
         }
     }
