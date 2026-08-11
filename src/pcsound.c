@@ -355,12 +355,13 @@ void neg_sound(void)
 void serve_sample(int sample_handle, unsigned char **buffers, int buffer_size)
 {
     int buffer_idx;
-    int bytes_read;
+    int count;
 
     buffer_idx = AIL_sample_buffer_ready(sample_handle);
-    if (buffer_idx == -1) return;
-    bytes_read = read(db_handle, buffers[buffer_idx], buffer_size);
-    AIL_load_sample_buffer(sample_handle, buffer_idx, buffers[buffer_idx], bytes_read);
+    if (buffer_idx != -1) {
+        count = read(db_handle, buffers[buffer_idx], buffer_size);
+        AIL_load_sample_buffer(sample_handle, buffer_idx, buffers[buffer_idx], count);
+    }
 }
 
 // Open a speech sample and prepare the dedicated double-buffered streaming voice.
