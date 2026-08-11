@@ -252,9 +252,11 @@ void get_industry_ov_image(void)
 // FUNCTION: C2WIN 0x0049db80
 void get_unrest_ov_image(void)
 {
+    unsigned char flags;
     unsigned char unrest;
 
-    unrest = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag & 0xf;
+    flags = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).fpu_flag;
+    unrest = flags & 0xf;
     if (unrest == 0) {
         landfill_pool[cm_dptr] = 0;
     } else if (unrest >= 0xb) {
