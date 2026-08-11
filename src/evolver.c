@@ -1435,10 +1435,10 @@ void spread_fire_and_plague_and_unrest(int row_count)
     int col_no;
     unsigned char cell_kind;
     unsigned char fire;
+    unsigned char rand_num;
     signed char unrest;
     unsigned char range_flag;
     unsigned char health_level;
-    unsigned char rand_num;
     unsigned char status;
 
     cm_sptr = evolve_row * 1600;
