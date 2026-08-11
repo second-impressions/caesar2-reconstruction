@@ -1087,7 +1087,11 @@ int init_sample_buffer(int sample_count)
 // FUNCTION: C2 0x1358a
 void free_sample_buffer(int sample_count)
 {
-    if (sample_buffer != 0) free(sample_buffer);
+    if (sample_buffer == 0) return;
+    free(sample_buffer);
+#if PLATFORM_WINDOWS
+    sample_buffer = 0;
+#endif
 }
 
 // Report successful initialization of the statically allocated tune buffer.
