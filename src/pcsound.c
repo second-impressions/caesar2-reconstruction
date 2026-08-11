@@ -303,7 +303,8 @@ int check_for_free_slot(void)
 {
     for (ds = 0; ds < c2inf.max_samples; ds++) {
         dig_status = AIL_sample_status(S_dig[ds]);
-        if (dig_status != 4) return 1;
+        if (dig_status == 4) continue;
+        return 1;
     }
     return 0;
 }
