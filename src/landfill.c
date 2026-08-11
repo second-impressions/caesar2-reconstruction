@@ -422,45 +422,48 @@ void get_circus_bodge(unsigned char building_kind)
 // FUNCTION: C2WIN 0x0049e844
 void show_region_landfill(int x_start, int y_start)
 {
-    unsigned char corner_flags;
-    unsigned char region_kind;
-    unsigned char region_gfx_idx;
-    int block_idx;
+    unsigned char edge_flag;
+    unsigned char map_kind;
+    unsigned char flags;
+    int size;
 #if PLATFORM_WINDOWS
-    int landfill_idx;
-    unsigned char terrain_flags;
+    int index;
+    unsigned char road;
     int addr;
+    int tile;
+    int image;
 #endif
 
     sprite_y = y_start * screen_width;
-    cm_y = 0; cm_sptr = 0;
+    cm_y = 0;
 #if PLATFORM_WINDOWS
-    landfill_idx = 0;
+    index = 0;
 #endif
+    cm_sptr = 0;
     for ( ; cm_y < 60; cm_y++, sprite_y += 0x500) {
         sprite_x = x_start;
 #if PLATFORM_WINDOWS
-        for (cm_x = 0; cm_x < 60; cm_x++, landfill_idx++, cm_sptr += 8, sprite_x += 2) {
-        terrain_flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & 0x17;
+        for (cm_x = 0; cm_x < 60; cm_x++, index++, cm_sptr += 8, sprite_x += 2) {
+        road = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).terrain & 0x17;
 #else
         for (cm_x = 0; cm_x < 60; cm_x++, cm_sptr += 8, sprite_x += 2) {
 #endif
-        corner_flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 3;
-        region_kind = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
-        region_gfx_idx = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx;
-        if (region_kind == 0x92 && (region_gfx_idx & 3) != 0) continue;
-        if (region_kind >= 0x85 && region_kind < 0x8d && (region_gfx_idx & 3) != 0) continue;
-        if (region_kind == 0x8d && region_gfx_idx != 0x28) continue;
-        if (region_kind == 0x8e && region_gfx_idx != 0x31) continue;
-        if (region_kind == 0x8f && region_gfx_idx != 0x3a) continue;
-        if (region_kind == 0x90 && region_gfx_idx != 0x43) continue;
-        if (region_kind == 0x91 && region_gfx_idx != 0x4c) continue;
+        edge_flag = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).occupant & 3;
+        map_kind = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).base_kind;
+        flags = (*(struct region_cell *)((unsigned char *)region_map + (cm_sptr))).gfx;
+        if (map_kind == 0x92 && (flags & 3) != 0) continue;
+        if (map_kind >= 0x85 && map_kind < 0x8d && (flags & 3) != 0) continue;
+        if (map_kind == 0x8d && flags != 0x28) continue;
+        if (map_kind == 0x8e && flags != 0x31) continue;
+        if (map_kind == 0x8f && flags != 0x3a) continue;
+        if (map_kind == 0x90 && flags != 0x43) continue;
+        if (map_kind == 0x91 && flags != 0x4c) continue;
         get_reg_geog_ov_image();
-        if (sprite_image_no < 0xc8) block_idx = 0;
-        else if (sprite_image_no < 0xd1) block_idx = 1;
-        else if (sprite_image_no < 0xd5) block_idx = 2;
-        else block_idx = 3;
-        if (block_idx > 0 && corner_flags != 0) continue;
+        if (sprite_image_no < 0xc8) size = 0;
+        else if (sprite_image_no < 0xd1) size = 1;
+        else if (sprite_image_no < 0xd5) size = 2;
+        else size = 3;
+        if (size > 0 && edge_flag != 0) continue;
 #if PLATFORM_WINDOWS
         addr = sprite_image_no * 16;
         sprite_start = landfill[addr + 0xc]
@@ -469,10 +472,10 @@ void show_region_landfill(int x_start, int y_start)
         sprite_start = landfill[sprite_image_no * 16 + 0xc]
                      + (landfill[sprite_image_no * 16 + 0xd] << 8);
 #endif
-        if (block_idx == 0) place_2x2_block(landfill + sprite_start, sprite_x + sprite_y);
-        else if (block_idx == 1) place_4x4_block(landfill + sprite_start, sprite_x + sprite_y);
-        else if (block_idx == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
-        else if (block_idx == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
+        if (size == 0) place_2x2_block(landfill + sprite_start, sprite_x + sprite_y);
+        else if (size == 1) place_4x4_block(landfill + sprite_start, sprite_x + sprite_y);
+        else if (size == 2) place_6x6_block(landfill + sprite_start, sprite_x + sprite_y);
+        else if (size == 3) place_8x8_block(landfill + sprite_start, sprite_x + sprite_y);
         }
     }
     write_image(misc, 4, x_start + 2, y_start + 2);
