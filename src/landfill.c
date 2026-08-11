@@ -20,12 +20,9 @@ void clear_landfill(void)
     cm_y = 0;
     cm_dptr = 0;
     for ( ; cm_y < 80; cm_y++) {
-        cm_x = 0;
-        do {
+        for (cm_x = 0; cm_x < 80; cm_x++, cm_dptr++) {
             landfill_pool[cm_dptr] = 0;
-            cm_x++;
-            cm_dptr++;
-        } while (cm_x < 80);
+        }
     }
 }
 
