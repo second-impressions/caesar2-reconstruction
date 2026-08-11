@@ -2217,179 +2217,180 @@ void push_shell(int row_count)
 // FUNCTION: C2WIN 0x00468079
 void evolve_region(int row_count)
 {
-    int test_value;
-    int col_idx;
-    unsigned char corner_state;
-    unsigned char road_flag;
+    int result;
+    int column_idx;
+    unsigned char edge_flag;
+    unsigned char roadbyte;
     int pop_level;
-    unsigned char outside_walls_flag;
-    unsigned char gfx_idx;
-    unsigned char trader_direction;
+    unsigned char outside;
+    unsigned char base_gfx;
+    unsigned char trader_bits;
+    int old_level;
     unsigned char current_tier;
-    int row_idx;
-    int workforce_level;
-    int level_value;
-    int production_penalty;
-    unsigned char building_kind;
-    unsigned char good_idx;
-    int shifted_value;
+    int map_row;
+    int slave_workforce;
+    int target;
+    int debar_amount;
+    unsigned char structure_kind;
+    unsigned char resource;
+    int map_level;
 
     if (c2inf.peace_mode != 0) {
         return;
     }
 
     pop_level = get_pop_level();
-    workforce_level = slave_requirements[5].current;
-    if (no_of_workcamps != 0) workforce_level /= no_of_workcamps;
-    else workforce_level = 0;
-    workforce_level /= 10;
-    if (workforce_level > 3) workforce_level = 3;
-    if (workforce_level < 0) workforce_level = 0;
+    slave_workforce = slave_requirements[5].current;
+    if (no_of_workcamps != 0) slave_workforce /= no_of_workcamps;
+    else slave_workforce = 0;
+    slave_workforce /= 10;
+    if (slave_workforce > 3) slave_workforce = 3;
+    if (slave_workforce < 0) slave_workforce = 0;
 
     if (evolve_row == 0)
         cmu_count[4] = 0;
 
-    test_value = (province_difficulty + rand8) * 4;
-    if      (test_value > 0x3c) production_penalty = 3;
-    else if (test_value > 0x30) production_penalty = 2;
-    else if (test_value > 0x20) production_penalty = 1;
-    else               production_penalty = 0;
+    result = (province_difficulty + rand8) * 4;
+    if      (result > 0x3c) debar_amount = 3;
+    else if (result > 0x30) debar_amount = 2;
+    else if (result > 0x20) debar_amount = 1;
+    else               debar_amount = 0;
 
     cm_sptr = evolve_row * 480;
 
-    for (row_idx = 0; row_idx < row_count; row_idx++)
-        for (col_idx = 0; col_idx < 60; col_idx++, cm_sptr += 8) {
-            corner_state = ((unsigned char *)region_map)[cm_sptr + 7] & 3;
-            building_kind = ((unsigned char *)region_map)[cm_sptr];
-            if (building_kind == 0xd4) corner_state = 0;
-            if (corner_state != 0) continue;
+    for (map_row = 0; map_row < row_count; map_row++)
+        for (column_idx = 0; column_idx < 60; column_idx++, cm_sptr += 8) {
+            edge_flag = ((unsigned char *)region_map)[cm_sptr + 7] & 3;
+            structure_kind = ((unsigned char *)region_map)[cm_sptr];
+            if (structure_kind == 0xd4) edge_flag = 0;
+            if (edge_flag != 0) continue;
 
-            gfx_idx = ((unsigned char *)region_map)[cm_sptr + 4];
-            road_flag  = ((unsigned char *)region_map)[cm_sptr + 3] & 0x20;
-            outside_walls_flag  = ((unsigned char *)region_map)[cm_sptr + 6] & 0x40;
+            base_gfx = ((unsigned char *)region_map)[cm_sptr + 4];
+            roadbyte  = ((unsigned char *)region_map)[cm_sptr + 3] & 0x20;
+            outside  = ((unsigned char *)region_map)[cm_sptr + 6] & 0x40;
 
-            if (building_kind == 0x92 && cmu_count[4] == 0) {
-                level_value = pop_level;
+            if (structure_kind == 0x92 && cmu_count[4] == 0) {
+                target = pop_level;
                 cmu_count[4] = 1;
-                current_tier = gfx_idx / 4;
-                if (current_tier < level_value) change_reg_sized(building_kind, gfx_idx + 4, 2, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind, gfx_idx - 4, 2, cm_sptr);
-            } else if (building_kind >= 0x98 && building_kind <= 0x9b) {
-                level_value = (pop_level - 1) / 2;
-                if (road_flag && outside_walls_flag) level_value += 2;
-                else if (road_flag)   level_value += 4;
-                current_tier = gfx_idx - 0x50;
-                if (level_value > current_tier) change_reg_sized(building_kind, gfx_idx + 1, 1, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind, gfx_idx - 1, 1, cm_sptr);
-            } else if (building_kind == 0x97) {
-                level_value = (pop_level - 1) / 2;
-                if (road_flag && outside_walls_flag) level_value += 2;
-                else if (road_flag)   level_value += 4;
-                current_tier = gfx_idx - 0x32;
-                if (level_value > current_tier) change_reg_sized(building_kind, gfx_idx + 1, 1, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind, gfx_idx - 1, 1, cm_sptr);
-            } else if (building_kind == 0xd3) {
-                level_value = workforce_level;
-                current_tier = gfx_idx - 0x3c;
-                if (current_tier < level_value) change_reg_sized(building_kind, gfx_idx + 1, 1, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind, gfx_idx - 1, 1, cm_sptr);
-            } else if (building_kind == 0xd4) {
+                current_tier = base_gfx / 4;
+                if (current_tier < target) change_reg_sized(structure_kind, base_gfx + 4, 2, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind, base_gfx - 4, 2, cm_sptr);
+            } else if (structure_kind >= 0x98 && structure_kind <= 0x9b) {
+                target = (pop_level - 1) / 2;
+                if (roadbyte && outside) target += 2;
+                else if (roadbyte)   target += 4;
+                current_tier = base_gfx - 0x50;
+                if (target > current_tier) change_reg_sized(structure_kind, base_gfx + 1, 1, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind, base_gfx - 1, 1, cm_sptr);
+            } else if (structure_kind == 0x97) {
+                target = (pop_level - 1) / 2;
+                if (roadbyte && outside) target += 2;
+                else if (roadbyte)   target += 4;
+                current_tier = base_gfx - 0x32;
+                if (target > current_tier) change_reg_sized(structure_kind, base_gfx + 1, 1, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind, base_gfx - 1, 1, cm_sptr);
+            } else if (structure_kind == 0xd3) {
+                target = slave_workforce;
+                current_tier = base_gfx - 0x3c;
+                if (current_tier < target) change_reg_sized(structure_kind, base_gfx + 1, 1, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind, base_gfx - 1, 1, cm_sptr);
+            } else if (structure_kind == 0xd4) {
                 ;
-            } else if (building_kind >= 0xdc && building_kind <= 0xdf) {
-                level_value = get_reg_buildings_in_radius(col_idx, evolve_row + row_idx, 2, 1, 0xd3);
-                level_value = workforce_level * level_value;
-                if (road_flag && outside_walls_flag) level_value--;
-                else if (!road_flag) level_value = 0;
-                if (level_value > 3) level_value = 3; else if (level_value < 0) level_value = 0;
-                current_tier = building_kind - 0xdc;
-                if (level_value > current_tier) change_reg_sized(building_kind + 1, gfx_idx + 4, 2, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind - 1, gfx_idx - 4, 2, cm_sptr);
-                good_idx = ((unsigned char *)region_map)[cm_sptr + 7] & 0xf0;
-                good_idx >>= 4;
-                if (level_value > production_penalty) {
-                    level_value -= production_penalty;
-                    fill_warehouses_with(col_idx, evolve_row + row_idx, level_value, good_idx, 0);
-                    industry[good_idx].supply_pipeline[1] += level_value;
+            } else if (structure_kind >= 0xdc && structure_kind <= 0xdf) {
+                target = get_reg_buildings_in_radius(column_idx, evolve_row + map_row, 2, 1, 0xd3);
+                target = slave_workforce * target;
+                if (roadbyte && outside) target--;
+                else if (!roadbyte) target = 0;
+                if (target > 3) target = 3; else if (target < 0) target = 0;
+                current_tier = structure_kind - 0xdc;
+                if (target > current_tier) change_reg_sized(structure_kind + 1, base_gfx + 4, 2, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind - 1, base_gfx - 4, 2, cm_sptr);
+                resource = ((unsigned char *)region_map)[cm_sptr + 7] & 0xf0;
+                resource >>= 4;
+                if (target > debar_amount) {
+                    target -= debar_amount;
+                    fill_warehouses_with(column_idx, evolve_row + map_row, target, resource, 0);
+                    industry[resource].supply_pipeline[1] += target;
                 }
-            } else if (building_kind >= 0xe0 && building_kind <= 0xe3) {
-                level_value = get_reg_buildings_in_radius(col_idx, evolve_row + row_idx, 2, 1, 0xd3);
-                level_value = workforce_level * level_value;
-                if (road_flag && outside_walls_flag) level_value--;
-                else if (!road_flag) level_value = 0;
-                if (level_value > 3) level_value = 3; else if (level_value < 0) level_value = 0;
-                current_tier = building_kind - 0xe0;
-                if (level_value > current_tier) change_reg_sized(building_kind + 1, gfx_idx + 4, 2, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind - 1, gfx_idx - 4, 2, cm_sptr);
-                good_idx = ((unsigned char *)region_map)[cm_sptr + 7] & 0xf0;
-                good_idx >>= 4;
-                if (good_idx == 0) {
-                    good_idx = region_sources[province_is].choices[3];
-                    good_idx <<= 4;
-                    ((unsigned char *)region_map)[cm_sptr + 7] |= good_idx;
-                    good_idx >>= 4;
+            } else if (structure_kind >= 0xe0 && structure_kind <= 0xe3) {
+                target = get_reg_buildings_in_radius(column_idx, evolve_row + map_row, 2, 1, 0xd3);
+                target = slave_workforce * target;
+                if (roadbyte && outside) target--;
+                else if (!roadbyte) target = 0;
+                if (target > 3) target = 3; else if (target < 0) target = 0;
+                current_tier = structure_kind - 0xe0;
+                if (target > current_tier) change_reg_sized(structure_kind + 1, base_gfx + 4, 2, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind - 1, base_gfx - 4, 2, cm_sptr);
+                resource = ((unsigned char *)region_map)[cm_sptr + 7] & 0xf0;
+                resource >>= 4;
+                if (resource == 0) {
+                    resource = region_sources[province_is].choices[3];
+                    resource <<= 4;
+                    ((unsigned char *)region_map)[cm_sptr + 7] |= resource;
+                    resource >>= 4;
                 }
-                if (level_value > production_penalty) {
-                    level_value -= production_penalty;
-                    fill_warehouses_with(col_idx, evolve_row + row_idx, level_value, good_idx, 0);
-                    industry[good_idx].supply_pipeline[1] += level_value;
+                if (target > debar_amount) {
+                    target -= debar_amount;
+                    fill_warehouses_with(column_idx, evolve_row + map_row, target, resource, 0);
+                    industry[resource].supply_pipeline[1] += target;
                 }
-            } else if (building_kind >= 0xe4 && building_kind <= 0xe7) {
-                level_value = get_reg_buildings_in_radius(col_idx, evolve_row + row_idx, 2, 1, 0xd3);
-                level_value = workforce_level * level_value;
-                if (road_flag && outside_walls_flag) level_value--;
-                else if (!road_flag) level_value = 0;
-                if (level_value > 3) level_value = 3; else if (level_value < 0) level_value = 0;
-                current_tier = building_kind - 0xe4;
-                if (level_value > current_tier) change_reg_sized(building_kind + 1, gfx_idx + 4, 2, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind - 1, gfx_idx - 4, 2, cm_sptr);
-                good_idx = ((unsigned char *)region_map)[cm_sptr + 7] & 0xf0;
-                good_idx >>= 4;
-                if (good_idx == 0) {
-                    good_idx = region_sources[province_is].choices[6];
-                    good_idx <<= 4;
-                    ((unsigned char *)region_map)[cm_sptr + 7] |= good_idx;
-                    good_idx >>= 4;
+            } else if (structure_kind >= 0xe4 && structure_kind <= 0xe7) {
+                target = get_reg_buildings_in_radius(column_idx, evolve_row + map_row, 2, 1, 0xd3);
+                target = slave_workforce * target;
+                if (roadbyte && outside) target--;
+                else if (!roadbyte) target = 0;
+                if (target > 3) target = 3; else if (target < 0) target = 0;
+                current_tier = structure_kind - 0xe4;
+                if (target > current_tier) change_reg_sized(structure_kind + 1, base_gfx + 4, 2, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind - 1, base_gfx - 4, 2, cm_sptr);
+                resource = ((unsigned char *)region_map)[cm_sptr + 7] & 0xf0;
+                resource >>= 4;
+                if (resource == 0) {
+                    resource = region_sources[province_is].choices[6];
+                    resource <<= 4;
+                    ((unsigned char *)region_map)[cm_sptr + 7] |= resource;
+                    resource >>= 4;
                 }
-                if (level_value > production_penalty) {
-                    level_value -= production_penalty;
-                    fill_warehouses_with(col_idx, evolve_row + row_idx, level_value, good_idx, 0);
-                    industry[good_idx].supply_pipeline[1] += level_value;
+                if (target > debar_amount) {
+                    target -= debar_amount;
+                    fill_warehouses_with(column_idx, evolve_row + map_row, target, resource, 0);
+                    industry[resource].supply_pipeline[1] += target;
                 }
-            } else if (building_kind >= 0xe8 && building_kind <= 0xeb) {
-                level_value = ((unsigned char *)region_map)[cm_sptr + 7] & 0x1c;
-                level_value >>= 2;
-                if (level_value != 0) level_value--;
-                shifted_value = level_value; shifted_value <<= 2;
+            } else if (structure_kind >= 0xe8 && structure_kind <= 0xeb) {
+                target = ((unsigned char *)region_map)[cm_sptr + 7] & 0x1c;
+                target >>= 2;
+                if (target != 0) target--;
+                map_level = target; map_level <<= 2;
                 ((unsigned char *)region_map)[cm_sptr + 7] &= 0xe3;
-                ((unsigned char *)region_map)[cm_sptr + 7] |= shifted_value;
-                if (road_flag && outside_walls_flag) level_value--;
-                else if (!road_flag) level_value = 0;
-                if (level_value > 3) level_value = 3; else if (level_value < 0) level_value = 0;
-                current_tier = building_kind - 0xe8;
-                if (level_value > current_tier) change_reg_sized(building_kind + 1, gfx_idx + 4, 2, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind - 1, gfx_idx - 4, 2, cm_sptr);
-                trader_direction = ((unsigned char *)region_map)[cm_sptr + 7] & 0x60;
-                if      (trader_direction == 0)    good_idx = north_trader_brings;
-                else if (trader_direction == 0x20) good_idx = east_trader_brings;
-                else if (trader_direction == 0x40) good_idx = south_trader_brings;
-                else if (trader_direction == 0x60) good_idx = west_trader_brings;
-                fill_warehouses_with(col_idx, evolve_row + row_idx, level_value, good_idx, 0);
-            } else if (building_kind >= 0xec && building_kind <= 0xef) {
-                test_value = get_reg_buildings_in_radius(col_idx, evolve_row + row_idx, 2, 1, 0xd5);
-                if (test_value != 0) ((unsigned char *)region_map)[cm_sptr + 7] |= 0x80;
+                ((unsigned char *)region_map)[cm_sptr + 7] |= map_level;
+                if (roadbyte && outside) target--;
+                else if (!roadbyte) target = 0;
+                if (target > 3) target = 3; else if (target < 0) target = 0;
+                current_tier = structure_kind - 0xe8;
+                if (target > current_tier) change_reg_sized(structure_kind + 1, base_gfx + 4, 2, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind - 1, base_gfx - 4, 2, cm_sptr);
+                trader_bits = ((unsigned char *)region_map)[cm_sptr + 7] & 0x60;
+                if      (trader_bits == 0)    resource = north_trader_brings;
+                else if (trader_bits == 0x20) resource = east_trader_brings;
+                else if (trader_bits == 0x40) resource = south_trader_brings;
+                else if (trader_bits == 0x60) resource = west_trader_brings;
+                fill_warehouses_with(column_idx, evolve_row + map_row, target, resource, 0);
+            } else if (structure_kind >= 0xec && structure_kind <= 0xef) {
+                target = get_reg_buildings_in_radius(column_idx, evolve_row + map_row, 2, 1, 0xd5);
+                if (target != 0) ((unsigned char *)region_map)[cm_sptr + 7] |= 0x80;
                 else ((unsigned char *)region_map)[cm_sptr + 7] &= 0x7f;
-                level_value = ((unsigned char *)region_map)[cm_sptr + 7] & 0x1c;
-                level_value >>= 2;
-                if (level_value != 0 && (evolve_tick4 & 1)) level_value--;
-                shifted_value = level_value; shifted_value <<= 2;
+                target = ((unsigned char *)region_map)[cm_sptr + 7] & 0x1c;
+                target >>= 2;
+                if (target != 0 && (evolve_tick4 & 1)) target--;
+                map_level = target; map_level <<= 2;
                 ((unsigned char *)region_map)[cm_sptr + 7] &= 0xe3;
-                ((unsigned char *)region_map)[cm_sptr + 7] |= shifted_value;
-                if (road_flag && outside_walls_flag) level_value--;
-                else if (!road_flag) level_value = 0;
-                if (level_value > 3) level_value = 3; else if (level_value < 0) level_value = 0;
-                current_tier = building_kind - 0xec;
-                if (level_value > current_tier) change_reg_sized(building_kind + 1, gfx_idx + 4, 2, cm_sptr);
-                if (level_value < current_tier) change_reg_sized(building_kind - 1, gfx_idx - 4, 2, cm_sptr);
+                ((unsigned char *)region_map)[cm_sptr + 7] |= map_level;
+                if (roadbyte && outside) target--;
+                else if (!roadbyte) target = 0;
+                if (target > 3) target = 3; else if (target < 0) target = 0;
+                current_tier = structure_kind - 0xec;
+                if (target > current_tier) change_reg_sized(structure_kind + 1, base_gfx + 4, 2, cm_sptr);
+                if (target < current_tier) change_reg_sized(structure_kind - 1, base_gfx - 4, 2, cm_sptr);
             }
         }
 }
