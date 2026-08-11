@@ -38,13 +38,9 @@ void get_landfill(int evolve)
     cm_sptr = 0;
     cm_dptr = 0;
     for ( ; cm_y < 80; cm_y++) {
-        cm_x = 0;
-        do {
+        for (cm_x = 0; cm_x < 80; cm_x++, cm_sptr += 20, cm_dptr++) {
             ov_routines[ov_map_mode]();
-            cm_x++;
-            cm_sptr += 20;
-            cm_dptr++;
-        } while (cm_x < 80);
+        }
     }
 }
 
