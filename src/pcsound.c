@@ -11,6 +11,9 @@ char __far *MK_FP(int off, int seg);
 static char __far *MK_FP(unsigned off, unsigned seg) { return 0; }
 #endif
 extern int  open(const char *path, int flags, ...);
+extern int sprintf(char *buffer, const char *format, ...);
+extern char file_buffer[80];
+extern char cd_drive[4];
 
 /* Sound module globals. */
 extern int _ds;
@@ -365,7 +368,7 @@ void serve_sample(int sample_handle, unsigned char **buffers, int buffer_size)
 // Open a speech sample and prepare the dedicated double-buffered streaming voice.
 // FUNCTION: C2 0x12003
 // FUNCTION: C2WIN 0x00401c57
-void set_db_sound(char *filename)
+void set_db_sound(unsigned char *filename)
 {
     if (c2inf.samples_on == 0)   return;
     if (c2inf.speech_on == 0)    return;
@@ -374,9 +377,14 @@ void set_db_sound(char *filename)
     if (*filename == 0)             return;
     if (check_file_exists(filename) == 0) return;
 
+#if PLATFORM_WINDOWS
+    sprintf(file_buffer, "%s%s\\raw\\%s", cd_drive, "C2Win95", filename);
+    db_handle = open(file_buffer, O_RDONLY | O_BINARY);
+#else
     db_file = filename;
     cd_path(filename);
     db_handle = open(db_file, O_RDONLY | O_BINARY);
+#endif
     db_playing = 1;
 
     db_buf[0] = scratch_buffer + 140000;   /* 0x222e0 */
@@ -389,7 +397,9 @@ void set_db_sound(char *filename)
     AIL_init_sample(S_dig[ds]);
     AIL_set_sample_type(S_dig[ds], 0, 0);
     AIL_set_sample_playback_rate(S_dig[ds], 22050);
+#if !PLATFORM_WINDOWS
     main_path();
+#endif
 }
 
 // Refill the active speech stream and close it after playback finishes.
