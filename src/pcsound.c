@@ -237,7 +237,7 @@ void fade_sequences_out(int sequence_idx)
 // Load or reuse a cached sample and start its playback when a voice is available.
 // FUNCTION: C2 0x11b7b
 // FUNCTION: C2WIN 0x0040164d
-void set_sound(char *filename, int loop_count)
+void set_sound(unsigned char *filename, int loop_count)
 {
     if (c2inf.samples_on == 0) return;
     if (samples_running == 0) return;
