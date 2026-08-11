@@ -669,12 +669,11 @@ void save_a_game(void)
 int select_filename(int dialog_mode)
 {
     int old_pointer_mode;
+    int control_result;
 
     old_pointer_mode = pointer_mode;
     pointer_mode = 0;
-    out1 = 0;
-    insert_cursor = 0;
-    this_letter = 0;
+    this_letter = insert_cursor = out1 = 0;
     clear_keys();
     adjust_var = &first_entry;
     adjust_step = 2;
@@ -704,7 +703,11 @@ int select_filename(int dialog_mode)
         }
         setup_refresh_area(0x30, 0x90, 0xc, 2, 2);
         refresh_svga_screen();
+#if PLATFORM_WINDOWS
+        if (control_buttons(0x20, 0x50, loadsave_buttons, 4) != 0);
+#else
         control_buttons(0x20, 0x50, loadsave_buttons, 4);
+#endif
         setup_refresh_area(0x3e, 0xb0, 0x15, 0xe, 2);
 
         file_no = 0x3e7;
