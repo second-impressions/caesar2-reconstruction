@@ -230,6 +230,8 @@ void cycle_map_colours(void)
 }
 #endif
 
+extern void show_diamond_ptr(void);
+
 // Advances the city simulation when due, renders the active map and interface, handles player
 // actions, and services animation and ambient audio for one frame.
 // FUNCTION: C2 0x3d3ca
