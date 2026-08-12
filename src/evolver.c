@@ -111,8 +111,6 @@ void change_house(int tier_idx, int footprint_size, int orientation);
 void pad_house_with_domus(int previous_size);
 void reduce_villa_to_domus(unsigned char *cell_ptr);
 void remove_house(void);
-/* Callers before this point treat the return as implicit int;
-   only the Windows build sees the prototype. */
 #if PLATFORM_WINDOWS
 void evolve_a_plaza(signed char land_value, signed char old_kind, int cell_x);
 #endif
@@ -2135,6 +2133,11 @@ void clear_fire_zones(void)
         }
     }
 }
+
+int get_reg_buildings_in_radius(int x, int y, int span, int radius,
+                                unsigned char building_kind);
+void change_reg_sized(int rm_byte, int color, int size, int rm_offset);
+void fill_warehouses_with(int x, int y, int amount, int goods, int refresh);
 
 // Propagate wall security values across the city map in one rotating sweep direction.
 // FUNCTION: C2 0x4350a
