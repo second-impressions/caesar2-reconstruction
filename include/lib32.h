@@ -70,6 +70,7 @@ extern void set_vga_256x(void);
 extern int button_time_flag;
 extern int local_time;
 extern int time_is;
+#if PLATFORM_WINDOWS
 extern int old_mouse_x;
 extern int old_mouse_y;
 extern unsigned char old_mouse_lb;
@@ -79,6 +80,17 @@ extern int mouse_was_pressed;
 extern unsigned char old_mouse_rb;
 extern int mouse_x;
 extern int mouse_y;
+#else
+extern int mouse_y;
+extern int mouse_x;
+extern int old_mouse_x;
+extern int old_mouse_y;
+extern int mouse_installed;
+extern int mouse_movement;
+extern int mouse_was_pressed;
+extern unsigned char old_mouse_rb;
+extern unsigned char old_mouse_lb;
+#endif
 extern unsigned char mouse_left_button;
 extern unsigned char mouse_left_click;
 extern unsigned char debar_fade_click;
@@ -96,6 +108,9 @@ extern void set_mode3(void);
 /* Symbol page 3 (PS emission page 8). */
 extern int first_entry;
 extern int cscreen;
+#if !PLATFORM_WINDOWS
+extern int screen_width;
+#endif
 #if PLATFORM_WINDOWS
 extern char lang_file[12];
 #else
@@ -124,7 +139,9 @@ extern unsigned char screen_mode;
 extern unsigned char pointer_mode;
 extern void set_vga_mode(int mode);
 extern void page1_read(void);
+#if PLATFORM_WINDOWS
 extern int screen_width;
+#endif
 extern void set_vga_palette(char *p);
 extern void set_vga_palette_range(char *p, int start, int end);
 
@@ -139,12 +156,14 @@ extern char * text_pointer;
 extern char insert_text[];
 extern int char_count;
 extern int this_letter;
+#if PLATFORM_WINDOWS
 extern int fb_current_char_length;
 extern int fb_max_char_length;
 extern void cycle_colours(int start_idx, int end_idx);
 extern void pulse_red(int idx, int delta);
 extern void swap_background_to_red(void);
 extern void swap_background_to(int idx);
+#endif
 extern int insert_count;
 extern int insert_place;
 extern int x_is;
@@ -156,8 +175,17 @@ extern unsigned char allow_padding;
 extern unsigned char hot_key_out_off_build;
 extern unsigned char hold_hot_keys;
 extern unsigned char padding_off;
+#if !PLATFORM_WINDOWS
+extern void cycle_colours(int start_idx, int end_idx);
+extern void pulse_red(int idx, int delta);
+extern void swap_background_to_red(void);
+extern void swap_background_to(int idx);
+#endif
 
 /* Symbol page 5 (PS emission page 6). */
+#if !PLATFORM_WINDOWS
+extern int sprite_height;
+#endif
 extern int old_sprite_y;
 extern int old_sprite_x;
 extern int sprite2_start;
@@ -165,14 +193,21 @@ extern int sprite3_start;
 extern int sprite_colour;
 extern int sprite_error;
 extern int sprite_width;
+#if PLATFORM_WINDOWS
 extern int sprite_height;
+#endif
 extern int sprite_image_no;
 extern int sprite3_image_no;
 extern int sprite2_height;
+#if !PLATFORM_WINDOWS
+extern int data_ptr;
+#endif
 extern int sprite2_image_no;
 extern int sprite_start;
 extern int sprite2_width;
+#if PLATFORM_WINDOWS
 extern int data_ptr;
+#endif
 extern int sprite3_width;
 extern int sprite_base_y;
 extern int sprite_base_x;
@@ -188,6 +223,7 @@ extern int sprite_y;
 extern int font_style;
 extern int absolute_ofset;
 extern int x_wrap;
+#if PLATFORM_WINDOWS
 extern int font_screen_limit;
 extern int dy;
 extern int sprite_bank;
@@ -198,10 +234,25 @@ extern int D;
 extern int y_start;
 extern int sprite_next_bank_count;
 extern int ey;
+#else
+extern int dx;
+extern int font_screen_limit;
+extern int dy;
+extern int ex;
+extern int ey;
+extern int sprite_bank;
+extern int x_start;
+extern int D;
+extern int y_start;
+extern int sprite_next_bank_count;
+#endif
 extern int gx;
 extern int gy;
 extern int y_length;
 extern int ix;
+#if !PLATFORM_WINDOWS
+extern int iy;
+#endif
 extern int x_length;
 extern int sprite_bank_ofset;
 extern int x_end;
@@ -216,7 +267,9 @@ extern int test_value4d;
 extern int test_value4a;
 extern int test_value4b;
 extern int test_value4c;
+#if PLATFORM_WINDOWS
 extern int iy;
+#endif
 extern int test_value2d;
 extern int adjust_min;
 extern int test_value2a;

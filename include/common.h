@@ -27,6 +27,7 @@ extern int evolve_count;
 extern int ex;
 extern int ey;
 extern char ferret_run[];
+#if PLATFORM_WINDOWS
 extern short figure_no;
 extern short hunting_army;
 extern int ferret_run_length;
@@ -34,23 +35,46 @@ extern int ferret_targ_y;
 extern int map_actual_atom;
 extern int map_actual_height;
 extern unsigned char map_mode;
+#else
+extern int ferret_run_length;
+extern short figure_no;
+extern short hunting_army;
+extern int map_actual_atom;
+extern int map_actual_height;
+extern int map_actual_width;
+extern unsigned char map_mode;
+#endif
 
 /* Page 2: the remaining 24 members of the first dword run.  Equal-hash
  * declarations are reversed so Watcom's hash chain emits PS order. */
 extern int anti_ferret_moves;
+#if !PLATFORM_WINDOWS
+extern int ferret_targ_y;
+#endif
 extern int last_anti_ferret_dirc;
+#if PLATFORM_WINDOWS
 extern int map_actual_width;
 extern int tb_y;
 extern int tb_x;
+#endif
 extern int tb_ptr;
 extern int anti_ferret_running;
 extern int clock_ferret_moves;
 extern int clock_ferret_ptr;
+#if !PLATFORM_WINDOWS
+extern int tb_x;
+extern int tb_y;
+#endif
 extern int clock_ferret_count;
 extern int ferret_map_hi;
 extern int clock_ferret_running;
-extern int anti_ferret_count;
+#if !PLATFORM_WINDOWS
 extern int ferret_map_wi;
+#endif
+extern int anti_ferret_count;
+#if PLATFORM_WINDOWS
+extern int ferret_map_wi;
+#endif
 extern unsigned char *ferret_map;
 extern int anti_ferret_ptr;
 extern int ferret_vert_off;
