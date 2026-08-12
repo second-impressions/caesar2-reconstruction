@@ -1295,7 +1295,7 @@ void place2_sprite(int draw_style)
         old_sprite_x = sprite_x; old_sprite_y = sprite_y;
         sprite_x    += xoff; sprite_y += y_off;
         sprite_x    -= sprite_width >> 1;
-        sprite_y    -= sprite2_height + sprite_height + sprite3_height;
+        sprite_y    -= sprite_height + sprite2_height + sprite3_height;
         sprite_base_x = sprite_x;
         sprite_base_y = sprite_y;
 #if PLATFORM_DOS
