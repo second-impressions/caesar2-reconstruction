@@ -12,6 +12,16 @@ void get_circus_bodge(unsigned char building_kind);
 void show_region_landfill(int x_start, int y_start);
 #if PLATFORM_WINDOWS
 extern unsigned char *screen_buffer;
+extern unsigned char *window_buffer;
+extern unsigned char map_window_bitmap[];
+extern void *game_window[];
+extern void draw_window_buffer(void *window, void *buffer, int source_x,
+                               int source_y, int width, int height,
+                               int dest_x, int dest_y);
+extern void show_city_landfill_to_screen(int screen_x, int screen_y,
+                                         unsigned char *screen);
+extern void show_region_landfill_to_screen(int screen_x, int screen_y,
+                                           unsigned char *screen);
 void show_battle_landfill_to_screen(int start_row, int row_count,
                                     int screen_x, int screen_y,
                                     unsigned char *screen);
@@ -329,8 +339,20 @@ int get_reg_geog_ov_image(void)
 
 // Draw the city or region overlay for the active map mode.
 // FUNCTION: C2 0x3f187
+// FUNCTION: C2WIN 0x0049dfcb
 void show_landfill(int x_start, int y_start)
 {
+#if PLATFORM_WINDOWS
+    if (map_mode == 0) {
+        show_city_landfill_to_screen(2, 0x1a, window_buffer);
+        draw_window_buffer(game_window[2], map_window_bitmap,
+                           0, 0x18, 0xa2, 0xa2, 0, 0x18);
+    } else if (map_mode == 1) {
+        show_region_landfill_to_screen(0x15, 0x2d, window_buffer);
+        draw_window_buffer(game_window[2], map_window_bitmap,
+                           0x15, 0x2d, 0x80, 0x80, 0x15, 0x2d);
+    }
+#else
     if (map_mode == 0) {
         show_city_landfill(x_start, y_start);
         return;
@@ -338,6 +360,7 @@ void show_landfill(int x_start, int y_start)
     if (map_mode == 1) {
         show_region_landfill(x_start, y_start);
     }
+#endif
 }
 
 // Draw the 80x80 city overlay, selecting each cell's sprite and footprint-sized blitter.

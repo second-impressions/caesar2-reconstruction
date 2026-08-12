@@ -28,7 +28,7 @@ extern void cycle_map_colours(void);
 extern void cycle_window_colours(int start_idx, int end_idx, unsigned char *bitmap);
 extern void act_cohort_box(void *window);
 extern void act_non_cohort_box(void *window);
-extern void show_window_landfill(int screen_x, int screen_y);
+extern void show_landfill(int screen_x, int screen_y);
 extern void city_mode_show_provmap(void);
 extern void prov_mode_show_citymap(void);
 extern void show_tutorial_timer(int refresh);
@@ -371,7 +371,7 @@ void main_game_loop(void)
 
     if (update_landfill) {
 #if PLATFORM_WINDOWS
-        show_window_landfill(com_x, com_y);
+        show_landfill(com_x, com_y);
 #else
         show_landfill(com_x, com_y);
         setup_refresh_area(0x1e0, 0x30, 0xa, 0xb, 1);
