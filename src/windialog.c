@@ -62,9 +62,11 @@ int show_native_confirm(void *window, char *message, char *yes_text,
 // FUNCTION: C2WIN 0x0048a1d5
 void show_native_year_end_options(void *window)
 {
+    int result;
+
     set_modal_window_state(0);
-    DialogBoxParamA(application_instance, "YEAREND", window,
-                    year_end_dialog_proc, 0);
+    result = DialogBoxParamA(application_instance, "YEAREND", window,
+                             year_end_dialog_proc, 0);
     if (flag_mode != 0) {
         flag_mode = 0;
     }
