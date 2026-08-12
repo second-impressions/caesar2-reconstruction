@@ -238,8 +238,8 @@ extern void show_diamond_ptr(void);
 // FUNCTION: C2WIN 0x0040fb4a
 void main_game_loop(void)
 {
-    int i;
     int loops;
+    int i;
 
     cycle_count++;
     button_time_flag = running_delay1();
