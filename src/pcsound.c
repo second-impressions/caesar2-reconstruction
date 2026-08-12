@@ -945,6 +945,8 @@ void set_missile_fire_fx(int missile_type)
 }
 
 // Play eligible ambient sounds and rotate through each slot's sample names.
+void init_city_ambients(void);
+
 // FUNCTION: C2 0x12e1e
 // FUNCTION: C2WIN 0x0040332c
 void play_ambient_fx(void)
