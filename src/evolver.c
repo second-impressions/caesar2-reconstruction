@@ -962,7 +962,7 @@ void cap_land_value(int rows)
 }
 
 int put_out_a(char citizen_kind, char cell_x, char cell_y, char,
-              char start_idx, char perimeter_size, char barbarian_flag);
+              char start_idx, char perimeter_size, char);
 
 // Update forum activity and periodically send citizens from occupied forum buildings.
 // FUNCTION: C2 0x415bb
