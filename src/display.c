@@ -519,7 +519,7 @@ void draw_battle_part(int header_idx)
     sprite_x      = int_battle_header[header_idx * 8 + 8];
     sprite_y      = int_battle_header[header_idx * 8 + 9];
     if (header_idx >= 4) sprite_y += 0xc8;
-    readfile("int_batl.pl8", ((void *)scratch_buffer), sprite_height * sprite_width, file_offset);
+    readfile("int_batl.pl8", ((void *)scratch_buffer), sprite_width * sprite_height, file_offset);
     x_wrap = 0x280 - sprite_width;
     place_i_sprite(scratch_buffer);
 }
