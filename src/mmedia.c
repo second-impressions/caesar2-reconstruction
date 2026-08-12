@@ -391,6 +391,9 @@ void show_help_page(void)
     hold_mouse_replace = 1;
 }
 
+void rewind_help_history(void);
+void do_tutorial(void);
+
 // Word-wrap the loaded help or tutorial text and render it across the supplied text regions.
 // FUNCTION: C2 0x584a9
 // FUNCTION: C2WIN 0x0045296c
@@ -453,7 +456,7 @@ void media_text_place(int x, int y, int width, int line_count,
         put_a_media_string(media_line_buffer, x + alt_off, y_current);
         line_nr++; y_current += 0x12;
 
-        if (line_nr >= line_count) { x = alt_x; width = alt_width; }
+        if (line_count <= line_nr) { x = alt_x; width = alt_width; }
     }
 }
 
