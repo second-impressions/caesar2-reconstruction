@@ -471,7 +471,7 @@ void draw_city_map_part(int part_idx)
         sprite_x += 0xee;
     }
     sprite_y      = int_city_header[part_idx * 8 + 9];
-    readfile("int_city.pl8", ((void *)scratch_buffer), sprite_height * sprite_width, file_offset);
+    readfile("int_city.pl8", ((void *)scratch_buffer), sprite_width * sprite_height, file_offset);
     x_wrap = 0x280 - sprite_width;
     place_i_sprite(scratch_buffer);
 }
