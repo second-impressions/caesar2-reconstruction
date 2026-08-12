@@ -956,7 +956,7 @@ int run_2_map_ferrets(int margin, unsigned char *map_base, int map_width, int ma
 
     clock_ferret_x = anti_ferret_x = start_x;
     clock_ferret_y = anti_ferret_y = start_y;
-    anti_ferret_ptr = clock_ferret_ptr = cell_size * (start_y * map_width + start_x);
+    clock_ferret_ptr = anti_ferret_ptr = cell_size * (start_y * map_width + start_x);
     clock_ferret_running = anti_ferret_running = 1;
     clock_ferret_count = anti_ferret_count = *(map_base + clock_ferret_ptr + 5) + 1;
     *(map_base + clock_ferret_ptr + 2) = 1;
