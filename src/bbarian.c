@@ -502,7 +502,6 @@ int do_sea_trade();
 void continue_battle();
 void get_contenders();
 void get_villagers();
-void stop_db(void);
 
 // Drops a requested number of barbarian citizens along a city-map edge.
 // FUNCTION: C2 0x53c43
@@ -580,6 +579,8 @@ void get_random_start_points_from_dirc(int dirc, int size, int mask)
         else { barb_x = 0; barb_y = size - 1 - y; }
     }
 }
+
+void stop_db(void);
 
 // Advances `temp_army` to the next eligible cohort in round-robin order.
 // FUNCTION: C2 0x53e8e
