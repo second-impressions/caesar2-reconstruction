@@ -2228,12 +2228,12 @@ void evolve_region(int row_count)
     unsigned char outside;
     unsigned char base_gfx;
     unsigned char trader_bits;
+    int map_row;
     int old_level;
     unsigned char current_tier;
-    int map_row;
     int slave_workforce;
-    int target;
     int debar_amount;
+    int target;
     unsigned char structure_kind;
     unsigned char resource;
     int map_level;
