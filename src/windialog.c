@@ -77,9 +77,11 @@ void show_native_year_end_options(void *window)
 // FUNCTION: C2WIN 0x0048a4c1
 void show_native_census(void *window)
 {
+    int result;
+
     set_modal_window_state(0);
-    DialogBoxParamA(application_instance, "CENSUS", window,
-                    census_dialog_proc, 0);
+    result = DialogBoxParamA(application_instance, "CENSUS", window,
+                             census_dialog_proc, 0);
     if (flag_mode != 0) {
         flag_mode = 0;
     }
