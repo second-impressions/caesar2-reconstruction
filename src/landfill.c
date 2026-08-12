@@ -579,6 +579,9 @@ void update_battle_landfill(void)
     }
 }
 
+extern void draw_a_point(int, int, int);
+extern void draw_a_rect(int, int, int, int, int);
+
 // Draw a terrain-coloured region mini-map and mark the selected cohort army.
 // FUNCTION: C2 0x3f854
 // FUNCTION: C2WIN 0x0049f284
