@@ -1,6 +1,7 @@
 
 #include "c2_data.h"
 
+#if !PLATFORM_WINDOWS
 
 extern void put_a_font_string(char *str, int x, int y, unsigned char *font, int color);
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
@@ -279,3 +280,4 @@ void show_debug_screen(void) {
     refresh_svga_screen();
     hold_mouse_replace = 1;
 }
+#endif
