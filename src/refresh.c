@@ -57,8 +57,8 @@ extern void refresh_16x16_block(int, unsigned short);
 extern int pm_diamond_full_height;
 extern void resize_pm_screen(void);
 extern void update_map_scrollbars(unsigned int mode);
-extern void *active_window;
-extern unsigned char screen_buffer[];
+extern void *current_window;
+extern unsigned char main_window_bitmap[];
 extern void win_bitblt();
 #endif
 
@@ -589,10 +589,10 @@ void refresh_svga_screen(void)
     int w;
     int h;
 
-    GetClientRect(active_window, &rect);
+    GetClientRect(current_window, &rect);
     w = rect.right - rect.left;
     h = rect.bottom - rect.top;
-    win_bitblt(active_window, screen_buffer, 0, 0, w, h, 0, 0);
+    win_bitblt(current_window, main_window_bitmap, 0, 0, w, h, 0, 0);
 #else
     int row_idx;
     int col_idx;
