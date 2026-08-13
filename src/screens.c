@@ -305,6 +305,7 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_TOTALS_THEIR_MORALE bt_their_morale
 #define OLD_BATTLE_TOTALS_OUR_MORALE bt_our_morale
 #define OLD_PAUSED old_paused
+#define TRIBUNE_FLAG_COUNTER tribune_flag_counter
 #else
 #define OLD_BATTLE_STATS_MODE request_message.prev_mode
 #define OLD_BATTLE_STATS_ICON request_message.icon_over
@@ -317,6 +318,7 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_TOTALS_THEIR_MORALE request_message.bt_their_morale
 #define OLD_BATTLE_TOTALS_OUR_MORALE request_message.bt_our_morale
 #define OLD_PAUSED request_message.paused
+#define TRIBUNE_FLAG_COUNTER request_message.tribune_flag_counter
 #endif
 
 // Update the battle statistics panel when its unit data or pointer context changes.
@@ -2428,20 +2430,20 @@ void show_this_tribune(void)
 // FUNCTION: C2WIN 0x004286d5
 void update_tribune_flag(int mode)
 {
-    if (++request_message.tribune_flag_counter >= 0x40) request_message.tribune_flag_counter = 0;
+    if (++TRIBUNE_FLAG_COUNTER >= 0x40) TRIBUNE_FLAG_COUNTER = 0;
     temp_army = (short)get_actual_viewed_army();
-    if (army_list[temp_army].state_idx == 0xa) request_message.tribune_flag_counter = 0;
+    if (army_list[temp_army].state_idx == 0xa) TRIBUNE_FLAG_COUNTER = 0;
     stone_random_count = 0xb;
     if (mode == 0) {
         show_a_mosaic_blank(0x190, 0x56, 2, 2);
-        write_general_sprite((request_message.tribune_flag_counter >> 3) + 0x3a, 0x190, 0x56);
+        write_general_sprite((TRIBUNE_FLAG_COUNTER >> 3) + 0x3a, 0x190, 0x56);
 #if !PLATFORM_WINDOWS
         setup_refresh_area(0x190, 0x56, 2, 2, 2);
 #endif
     } else {
         if (forum_viewed_army == 0xa) return;
         show_a_mosaic_blank(0x240, 0x32, 2, 2);
-        write_general_sprite((request_message.tribune_flag_counter >> 3) + 0x19, 0x240, 0x32);
+        write_general_sprite((TRIBUNE_FLAG_COUNTER >> 3) + 0x19, 0x240, 0x32);
 #if !PLATFORM_WINDOWS
         setup_refresh_area(0x240, 0x32, 2, 2, 2);
 #endif

@@ -53,5 +53,6 @@ int bt_our_men;
 int bt_their_morale;
 int bt_our_morale;
 int old_paused;
+int tribune_flag_counter;
 
 #endif

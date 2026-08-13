@@ -1204,7 +1204,7 @@ extern int wall_accident;
 extern int wall_cover;
 extern int wall_rate;
 extern int warned_city_size;
-extern int warned_new_struct;
+extern int tribune_flag_counter;
 extern char warned_of_cutbacks;
 extern unsigned char warned_of_emperor;
 extern unsigned char warned_of_emperor_reply_level;
