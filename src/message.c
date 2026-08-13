@@ -33,9 +33,9 @@ extern void grey_all_windows(void);
 extern int get_window_input(void *window);
 extern int enter_pressed(void);
 extern void wait_for(int delay);
-extern void draw_window_buffer(void *window, void *buffer, int source_x,
-                               int source_y, int width, int height,
-                               int dest_x, int dest_y);
+extern void win_bitblt(void *window, void *buffer, int source_x,
+                       int source_y, int width, int height,
+                       int dest_x, int dest_y);
 extern void clear_mouse_input(void);
 extern void act_request_down(void);
 extern void act_request_up(void);
@@ -205,11 +205,11 @@ void message(int message_idx, int is_emperor, int message_param) {
     }
     ShowWindow(message_window, 5);
     if (is_emperor == 0)
-        draw_window_buffer(message_window, message_background, 0, 0,
-                           0x160, 0x170, 0x50, 0x40);
+        win_bitblt(message_window, message_background, 0, 0,
+                   0x160, 0x170, 0x50, 0x40);
     else
-        draw_window_buffer(message_window, message_background, 0, 0,
-                           0x160, 0x190, 0x50, 0x40);
+        win_bitblt(message_window, message_background, 0, 0,
+                   0x160, 0x190, 0x50, 0x40);
     out1 = 0;
     set_mouse_mode(-1);
     while (out1 != 1) {
@@ -217,8 +217,8 @@ void message(int message_idx, int is_emperor, int message_param) {
         if (request_message.active == 0 && click != 0)
             out1 = 1;
         continue_smacking(0x60, 0x50, 1);
-        draw_window_buffer(message_window, message_background, 0, 0,
-                           0x160, 0xb4, 0x50, 0x40);
+        win_bitblt(message_window, message_background, 0, 0,
+                   0x160, 0xb4, 0x50, 0x40);
         if (enter_pressed() == 0 && request_message.active == 0) {
             if (over != 0) {
             } else if (message_window_closed != 0) {
@@ -245,11 +245,11 @@ void message(int message_idx, int is_emperor, int message_param) {
                         internal_screen = oldscreen;
                     }
                     if (is_emperor == 0)
-                        draw_window_buffer(message_window, message_background,
-                                           0, 0, 0x160, 0x170, 0x50, 0x40);
+                        win_bitblt(message_window, message_background,
+                                   0, 0, 0x160, 0x170, 0x50, 0x40);
                     else
-                        draw_window_buffer(message_window, message_background,
-                                           0, 0, 0x160, 0x190, 0x50, 0x40);
+                        win_bitblt(message_window, message_background,
+                                   0, 0, 0x160, 0x190, 0x50, 0x40);
                 } else if (mse_x >= 0xe0 && mse_x <= 0xf8 &&
                            mse_y >= 0x14e && mse_x <= 0x166) {
                     act_request_down();
@@ -262,11 +262,11 @@ void message(int message_idx, int is_emperor, int message_param) {
                         internal_screen = oldscreen;
                     }
                     if (is_emperor == 0)
-                        draw_window_buffer(message_window, message_background,
-                                           0, 0, 0x160, 0x170, 0x50, 0x40);
+                        win_bitblt(message_window, message_background,
+                                   0, 0, 0x160, 0x170, 0x50, 0x40);
                     else
-                        draw_window_buffer(message_window, message_background,
-                                           0, 0, 0x160, 0x190, 0x50, 0x40);
+                        win_bitblt(message_window, message_background,
+                                   0, 0, 0x160, 0x190, 0x50, 0x40);
                 }
             } else if (click == 3) {
                 out1 = 1;

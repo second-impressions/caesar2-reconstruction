@@ -12,9 +12,9 @@ extern unsigned char input_poll_active;
 extern void *map_window;
 extern unsigned char *window_buffer;
 extern unsigned char map_window_bitmap[];
-extern void draw_window_buffer(void *window, void *buffer, int source_x,
-                               int source_y, int width, int height,
-                               int dest_x, int dest_y);
+extern void win_bitblt(void *window, void *buffer, int source_x,
+                       int source_y, int width, int height,
+                       int dest_x, int dest_y);
 extern void show_window_battle_landfill(int start_row, int row_count,
                                         int screen_x, int screen_y,
                                         unsigned char *buffer);
@@ -586,11 +586,11 @@ void battle_game_loop(void)
 #if PLATFORM_WINDOWS
     if (update_landfill) {
         show_window_battle_landfill(0, 0x34, 6, 9, window_buffer);
-        draw_window_buffer(map_window, map_window_bitmap, 0, 0, 0x6e, 0x72, 0, 0);
+        win_bitblt(map_window, map_window_bitmap, 0, 0, 0x6e, 0x72, 0, 0);
         update_landfill--;
     } else {
         update_battle_landfill();
-        draw_window_buffer(map_window, map_window_bitmap, 0, 0, 0x6e, 0x72, 0, 0);
+        win_bitblt(map_window, map_window_bitmap, 0, 0, 0x6e, 0x72, 0, 0);
     }
 #else
     if (update_landfill) {

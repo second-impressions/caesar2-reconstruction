@@ -15,9 +15,9 @@ extern unsigned char *screen_buffer;
 extern unsigned char *window_buffer;
 extern unsigned char map_window_bitmap[];
 extern void *game_window[];
-extern void draw_window_buffer(void *window, void *buffer, int source_x,
-                               int source_y, int width, int height,
-                               int dest_x, int dest_y);
+extern void win_bitblt(void *window, void *buffer, int source_x,
+                       int source_y, int width, int height,
+                       int dest_x, int dest_y);
 extern void show_city_landfill_to_screen(int screen_x, int screen_y,
                                          unsigned char *screen);
 extern void show_region_landfill_to_screen(int screen_x, int screen_y,
@@ -345,12 +345,12 @@ void show_landfill(int x_start, int y_start)
 #if PLATFORM_WINDOWS
     if (map_mode == 0) {
         show_city_landfill_to_screen(2, 0x1a, window_buffer);
-        draw_window_buffer(game_window[2], map_window_bitmap,
-                           0, 0x18, 0xa2, 0xa2, 0, 0x18);
+        win_bitblt(game_window[2], map_window_bitmap,
+                   0, 0x18, 0xa2, 0xa2, 0, 0x18);
     } else if (map_mode == 1) {
         show_region_landfill_to_screen(0x15, 0x2d, window_buffer);
-        draw_window_buffer(game_window[2], map_window_bitmap,
-                           0x15, 0x2d, 0x80, 0x80, 0x15, 0x2d);
+        win_bitblt(game_window[2], map_window_bitmap,
+                   0x15, 0x2d, 0x80, 0x80, 0x15, 0x2d);
     }
 #else
     if (map_mode == 0) {

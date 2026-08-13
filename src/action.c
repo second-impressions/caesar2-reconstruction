@@ -4270,9 +4270,9 @@ extern int (__stdcall *DialogBoxParamA)(void *instance, char *name,
                                        long init_param);
 extern long __stdcall forum_dialog_proc(void *window, unsigned int message,
                                        unsigned int wparam, long lparam);
-extern void draw_window_buffer(void *window, void *buffer, int source_x,
-                               int source_y, int width, int height,
-                               int dest_x, int dest_y);
+extern void win_bitblt(void *window, void *buffer, int source_x,
+                       int source_y, int width, int height,
+                       int dest_x, int dest_y);
 extern void grey_all_windows(void);
 extern void set_forum_tune(int tune);
 extern void pause_cityprov_tune(void);
@@ -4307,8 +4307,8 @@ void act_forum(void)
     GetClientRect(active_window, &rect);
     window_width = rect.right - rect.left;
     window_y_size = rect.bottom - rect.top;
-    draw_window_buffer(active_window, forum_background, 0, 0,
-                       window_width, window_y_size, 0, 0);
+    win_bitblt(active_window, forum_background, 0, 0,
+               window_width, window_y_size, 0, 0);
     grey_all_windows();
     pointer_mode = 0;
     stop_all_sounds();
