@@ -632,11 +632,7 @@ void battle_game_loop(void)
 #endif
         if (battle_turbo == 0) play_ambient_fx();
         continue_db();
-#if PLATFORM_WINDOWS
     }
-#else
-    }
-#endif
 }
 
 #undef BATTLE_SCREEN_REFRESH
