@@ -175,7 +175,7 @@ void action(void)
     if (pointer_mode == 0 || pointer_mode == 2 || pointer_mode == 6) {
     } else {
         if (pointer_mode == 5) {
-            if (perform_battle_strip_action() != 0) { goto end_of_action; }
+            if (perform_cohort_box_action() != 0) { goto end_of_action; }
         } else if (pointer_mode == 1 && last_icon_over == 0xd) {
             if (map_mode == 0) {
                 if (perform_city_strip_action() != 0) {
