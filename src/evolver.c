@@ -2216,6 +2216,13 @@ void push_shell(int row_count)
 
 // Evolve regional settlements and industries, process warehouse deliveries, and add produced goods
 // to city supply pipelines.
+#if PLATFORM_WINDOWS
+static int region_pass_count;
+#define EVOLVE_COUNT region_pass_count
+#else
+#define EVOLVE_COUNT cmu_count[4]
+#endif
+
 // FUNCTION: C2 0x436ab
 // FUNCTION: C2WIN 0x00468079
 void evolve_region(int row_count)
@@ -2251,7 +2258,7 @@ void evolve_region(int row_count)
     if (slave_workforce < 0) slave_workforce = 0;
 
     if (evolve_row == 0)
-        cmu_count[4] = 0;
+        EVOLVE_COUNT = 0;
 
     result = (province_difficulty + rand8) * 4;
     if      (result > 0x3c) debar_amount = 3;
@@ -2272,9 +2279,9 @@ void evolve_region(int row_count)
             roadbyte  = ((unsigned char *)region_map)[cm_sptr + 3] & 0x20;
             outside  = ((unsigned char *)region_map)[cm_sptr + 6] & 0x40;
 
-            if (structure_kind == 0x92 && cmu_count[4] == 0) {
+            if (structure_kind == 0x92 && EVOLVE_COUNT == 0) {
                 target = pop_level;
-                cmu_count[4] = 1;
+                EVOLVE_COUNT = 1;
                 current_tier = base_gfx / 4;
                 if (current_tier < target) change_reg_sized(structure_kind, base_gfx + 4, 2, cm_sptr);
                 if (target < current_tier) change_reg_sized(structure_kind, base_gfx - 4, 2, cm_sptr);
@@ -2397,6 +2404,8 @@ void evolve_region(int row_count)
             }
         }
 }
+
+#undef EVOLVE_COUNT
 
 // Return the population bracket used to determine regional settlement growth.
 // FUNCTION: C2 0x43f9f
