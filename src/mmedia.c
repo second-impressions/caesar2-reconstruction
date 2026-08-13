@@ -8,6 +8,20 @@ extern int  one_letter(unsigned char *font, int letter);
 extern void font_list(int idx, int word_count, int x, int y, unsigned char *font, int color);
 extern void font_no(int value, char pad_char, char *suffix, int x, int y, unsigned char *font, int color);
 extern int  get_next_word_length(char *src, unsigned char *font);
+void launch_help(int page);
+void load_media_entry(void);
+void rewind_help_history(void);
+void init_help_history(void);
+void do_tutorial(void);
+int city_icon_allowed(int icon_idx);
+int region_icon_allowed(int icon_idx);
+void grey_city_map_parts(void);
+void grey_region_map_parts(void);
+#if PLATFORM_WINDOWS
+void show_tutorial_timer(unsigned char refresh);
+#else
+void show_tutorial_timer(void);
+#endif
 void media_text_place(int x, int y, int width, int line_count, int alt_x, int alt_width, unsigned char *font);
 
 #if PLATFORM_WINDOWS
@@ -38,6 +52,7 @@ extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
                                     int x, int y, int width, int height,
                                     unsigned int flags);
 extern void setup_window(void *parent, void *window, int x, int y);
+extern void setup_game_window(void *parent, void *window, int x, int y);
 extern void show_game_window(int mode);
 extern void hide_game_window(int mode);
 extern void restore_game_windows(void);
@@ -49,7 +64,8 @@ extern void tutorial_gloop_end(void);
 extern unsigned char game_paused;
 extern unsigned long tutorial_start_time;
 extern unsigned long (*GetTickCount)(void);
-extern void grey_map_icon(int icon_no, int mode);
+extern void grey_city_map_icon(int icon_no, int mode);
+extern void grey_region_map_icon(int icon_no, int mode);
 extern void draw_window_buffer(void *window, void *buffer, int source_x,
                                int source_y, int width, int height,
                                int dest_x, int dest_y);
@@ -155,11 +171,9 @@ int media_left_image;
 int tutorial_correct;
 int linked_text_flag;
 /* Forward declarations (functions defined later in this file). */
-void load_media_entry(void);
 void show_help_page(void);
 void put_a_media_string(char *text, int x, int y);
 void push_forward_help_history(void);
-void init_help_history(void);
 void do_a_tutorial_page(void);
 void show_please_wait(void);
 void act_back_tutorial_page(void);
@@ -390,9 +404,6 @@ void show_help_page(void)
     set_palette(temp_palette);
     hold_mouse_replace = 1;
 }
-
-void rewind_help_history(void);
-void do_tutorial(void);
 
 // Word-wrap the loaded help or tutorial text and render it across the supplied text regions.
 // FUNCTION: C2 0x584a9
@@ -748,7 +759,7 @@ void do_a_tutorial_page(void)
         reset_getmeoutofhere_buttons();
         hide_game_window(5);
         tile_main_window(c2inf.wallpaper);
-        setup_window(0, game_window[0], 0, 0);
+        setup_game_window(0, game_window[0], 0, 0);
         active_window = game_window[0];
         show_game_window(0);
         update_window_menu(0);
@@ -972,7 +983,7 @@ void grey_city_map_parts(void)
     for (icon_no = 4; icon_no < 0x1c; icon_no++) {
 #if PLATFORM_WINDOWS
         if (city_icon_allowed(icon_no - 4) != 0) continue;
-        grey_map_icon(icon_no, 2);
+        grey_city_map_icon(icon_no, 2);
 #else
         if (city_icon_allowed(icon_no - 4) == 0) {
             w = int_city_header[icon_no * 8 + 4];
@@ -1000,7 +1011,7 @@ void grey_region_map_parts(void)
     for (icon_no = 4; icon_no < 0x17; icon_no++) {
 #if PLATFORM_WINDOWS
         if (region_icon_allowed(icon_no - 4) != 0) continue;
-        grey_map_icon(icon_no, 2);
+        grey_region_map_icon(icon_no, 2);
 #else
         if (region_icon_allowed(icon_no - 4) == 0) {
             w = int_region_header[icon_no * 8 + 4];
