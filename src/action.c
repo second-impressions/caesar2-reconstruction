@@ -13,7 +13,11 @@ int  pause_db(void);
 void helping(int help_page_id);
 void show_citymap(void);
 void show_regionmap(void);
+#if PLATFORM_WINDOWS
+void scroll_windows(void);
+#else
 void show_battlemap(void);
+#endif
 void region_map_screen(int do_black_out);
 void act_goto_message(void);
 void act_goto_city_map(void);
@@ -315,7 +319,11 @@ void action(void)
         goto end_of_action;
     }
 
+#if PLATFORM_WINDOWS
+    scroll_windows();
+#else
     scroll();
+#endif
     mouse_follow_cohort();
     show_latest_route();
     mouse_hunt_enemies();
@@ -761,7 +769,11 @@ void flag_mode_action(void)
         }
     }
 
+#if PLATFORM_WINDOWS
+    scroll_windows();
+#else
     scroll();
+#endif
 
     if (mouse_left_preclick != 0 && pm_over != 0) {
         if (map_mode == 0) {
@@ -813,7 +825,11 @@ void battle_action(void)
     if (perform_battle_strip_action() != 0) { redraw_icons = 1; update_map = 1; goto end_battle_action; }
 #endif
 
+#if PLATFORM_WINDOWS
+    scroll_windows();
+#else
     scroll();
+#endif
 
     if (pm_over != 0) {
 
