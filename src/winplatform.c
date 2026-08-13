@@ -42,4 +42,11 @@ void clear_mouse_input(void)
     mouse_left_preclick = window_mouse_state_6 = 0;
 }
 
+int prev_mode;
+int icon_over;
+int bs_type;
+int bs_morale;
+int bs_men;
+int bs_nof_units;
+
 #endif
