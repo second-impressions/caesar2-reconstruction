@@ -6,7 +6,7 @@
 extern struct win_log_palette windows_palette;
 extern struct win_rgb_quad dib_palette[256];
 extern void *animated_palette;
-extern void *logical_palette;
+extern void *system_palette;
 extern void *screen_dc;
 extern void *game_dc;
 extern void *status_dc;
@@ -40,7 +40,7 @@ void direct_palette_set(unsigned char *palette)
     }
     AnimatePalette(animated_palette, 10, 246, &windows_palette.entries[10]);
     set_palette_entry_flags(1);
-    SetPaletteEntries(logical_palette, 10, 246, &windows_palette.entries[10]);
+    SetPaletteEntries(system_palette, 10, 246, &windows_palette.entries[10]);
     set_palette_entry_flags(0);
     WinGSetDIBColorTable(screen_dc, 10, 246, &dib_palette[10]);
     WinGSetDIBColorTable(game_dc, 10, 246, &dib_palette[10]);
