@@ -5,6 +5,8 @@ int mouse_styles[10] = { 0, 1, 2, 3, 9, 0, 2, 3, 4, 4 };
 
 #if PLATFORM_WINDOWS
 int screen_switch_pending;
+extern int windows_running_delay1(void);
+#define running_delay1 windows_running_delay1
 extern int application_active;
 extern unsigned char input_poll_active;
 extern void *map_window;
