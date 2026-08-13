@@ -1181,7 +1181,7 @@ extern int tutorial_page;
 extern int tutorial_timer;
 extern short unit_a;
 extern short unit_no;
-extern int utility_level;
+extern int old_cost;
 extern int unrest_debar;
 extern int unrest_random_count;
 extern int unrest_random_data[];

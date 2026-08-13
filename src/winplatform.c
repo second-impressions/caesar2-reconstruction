@@ -55,5 +55,6 @@ int bt_our_morale;
 int old_paused;
 int tribune_flag_counter;
 int old_population;
+int old_cost;
 
 #endif
