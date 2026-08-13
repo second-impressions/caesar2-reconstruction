@@ -259,9 +259,9 @@ int want_promotion(int promotion_level)
     }
     if (result == 2 || result == 3) {
         if (map_mode == 0) {
-            redraw_city_window();
-        } else if (map_mode == 1) {
             redraw_region_window();
+        } else if (map_mode == 1) {
+            redraw_city_window();
         }
     }
     flush_sb_buffer();
