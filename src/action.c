@@ -37,7 +37,7 @@ extern void clear_mouse_input(void);
 extern unsigned long (*GetTickCount)(void);
 extern void set_main_menu_enabled(unsigned char enabled);
 extern void load_screen_parts(unsigned char mode);
-extern void size_game_window(int mode);
+extern void size_map_window(int mode);
 extern void *game_window[];
 extern void *status_window;
 extern void *map_window;
@@ -3924,7 +3924,7 @@ void act_goto_city_map(void)
         SendMessageA(map_window, 0xc, 0, (long)main_window_title);
     }
     load_screen_parts(map_mode);
-    size_game_window(map_mode);
+    size_map_window(map_mode);
 #else
     if (map_mode == 0) {
         return;
@@ -3988,7 +3988,7 @@ void act_goto_prov_map(void)
     SendMessageA(game_window[1], 0xc, 0, (long)city_window_title);
     SendMessageA(map_window, 0xc, 0, (long)main_window_title);
     load_screen_parts(map_mode);
-    size_game_window(map_mode);
+    size_map_window(map_mode);
 #endif
     city_pm_x = pm_x;
     city_pm_y = pm_y;
@@ -4332,7 +4332,7 @@ void act_forum(void)
     forum_dept_over = FORUM_DEPT_OVERVIEW;
     update_window_titles();
     load_screen_parts(map_mode);
-    size_game_window(map_mode);
+    size_map_window(map_mode);
     if (map_mode == 0) {
         city_map_screen(1);
     } else if (map_mode == 1) {
@@ -5323,7 +5323,7 @@ void act_tutorial(void)
 #if PLATFORM_WINDOWS
     set_main_menu_enabled(0);
     load_screen_parts(map_mode);
-    size_game_window(map_mode);
+    size_map_window(map_mode);
     SetWindowPos(game_window[1], 0, game_window_x, game_window_y,
                  game_window_width, game_window_height, 0x10);
     SetWindowPos(status_window, 0, status_window_x, status_window_y,
