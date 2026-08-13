@@ -306,6 +306,7 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_TOTALS_OUR_MORALE bt_our_morale
 #define OLD_PAUSED old_paused
 #define TRIBUNE_FLAG_COUNTER tribune_flag_counter
+#define TURBO_CACHED_POPULATION old_population
 #else
 #define OLD_BATTLE_STATS_MODE request_message.prev_mode
 #define OLD_BATTLE_STATS_ICON request_message.icon_over
@@ -319,6 +320,7 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_TOTALS_OUR_MORALE request_message.bt_our_morale
 #define OLD_PAUSED request_message.paused
 #define TRIBUNE_FLAG_COUNTER request_message.tribune_flag_counter
+#define TURBO_CACHED_POPULATION request_message.cached_population
 #endif
 
 // Update the battle statistics panel when its unit data or pointer context changes.
@@ -3243,7 +3245,7 @@ void show_census_panel(void)
 // FUNCTION: C2WIN 0x0042abb8
 void show_turbo_panel(void)
 {
-    if (request_message.cached_population != population) goto redraw_turbo_panel;
+    if (TURBO_CACHED_POPULATION != population) goto redraw_turbo_panel;
     if (turbo_mode > 2) return;
 
 redraw_turbo_panel:
@@ -3258,7 +3260,7 @@ redraw_turbo_panel:
     x_is = 0;
     font_no(population, 0x20, " ", 0x70, 0xe4, font1, 0x10);
     font_list(0x1e, 1, x_is + 0x70, 0xe4, font1, 0x10);
-    request_message.cached_population = population;
+    TURBO_CACHED_POPULATION = population;
 }
 
 // Reset the query panel and selected person.

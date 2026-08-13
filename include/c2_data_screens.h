@@ -1193,7 +1193,7 @@ extern int used_memory;
 extern int vgawintab[];
 extern int vid_bank_tech;
 extern int vid_error;
-extern int vid_memory;
+extern int old_population;
 extern char vid_new_val;
 extern int vid_no_of_banks;
 extern char vid_old_val;
