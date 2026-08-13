@@ -38,7 +38,7 @@ extern unsigned long (*GetTickCount)(void);
 extern void set_main_menu_enabled(unsigned char enabled);
 extern void load_screen_parts(unsigned char mode);
 extern void size_game_window(int mode);
-extern void *game_window;
+extern void *game_window[];
 extern void *status_window;
 extern void *map_window;
 extern int game_window_x;
@@ -3917,7 +3917,7 @@ void act_goto_city_map(void)
     zoom_level = city_zoom_level;
     map_mode = 0;
     update_window_titles();
-    SendMessageA(game_window, 0xc, 0, (long)city_window_title);
+    SendMessageA(game_window[1], 0xc, 0, (long)city_window_title);
     if (tutorial_mode != 0) {
         SendMessageA(map_window, 0xc, 0, (long)tutorial_window_title);
     } else {
@@ -3961,7 +3961,7 @@ void act_goto_prov_map(void)
     show_map_window(1);
     update_window_menu(1);
     swap_map_windows(1);
-    BringWindowToTop(game_window);
+    BringWindowToTop(game_window[1]);
 #endif
     if (map_mode == 1) {
         return;
@@ -3985,7 +3985,7 @@ void act_goto_prov_map(void)
 
 #if PLATFORM_WINDOWS
     update_window_titles();
-    SendMessageA(game_window, 0xc, 0, (long)city_window_title);
+    SendMessageA(game_window[1], 0xc, 0, (long)city_window_title);
     SendMessageA(map_window, 0xc, 0, (long)main_window_title);
     load_screen_parts(map_mode);
     size_game_window(map_mode);
@@ -4120,7 +4120,7 @@ void act_correct_map(void)
     pointer_mode = 0;
 #if PLATFORM_WINDOWS
     show_landfill(com_x, com_y);
-    redraw_game_window(game_window);
+    redraw_game_window(game_window[2]);
 #endif
 }
 
@@ -4338,7 +4338,7 @@ void act_forum(void)
     } else if (map_mode == 1) {
         region_map_screen(1);
     }
-    redraw_game_window(game_window);
+    redraw_game_window(game_window[2]);
     if (tutorial_mode != 0) {
         set_forum_tune(0);
         start_forum_tune();
@@ -5324,7 +5324,7 @@ void act_tutorial(void)
     set_main_menu_enabled(0);
     load_screen_parts(map_mode);
     size_game_window(map_mode);
-    SetWindowPos(game_window, 0, game_window_x, game_window_y,
+    SetWindowPos(game_window[1], 0, game_window_x, game_window_y,
                  game_window_width, game_window_height, 0x10);
     SetWindowPos(status_window, 0, status_window_x, status_window_y,
                  0, 0, 0x11);
