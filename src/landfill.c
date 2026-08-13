@@ -573,13 +573,13 @@ void update_battle_landfill(void)
     }
     if (BATTLE_LANDFILL_COUNT < 10) {
 #if PLATFORM_WINDOWS
-        show_battle_landfill_to_screen(BATTLE_LANDFILL_COUNT * 5, 5, 6, 9, screen_buffer);
+        show_battle_landfill_to_screen(BATTLE_LANDFILL_COUNT * 5, 5, 6, 9, window_buffer);
 #else
         show_battle_landfill(BATTLE_LANDFILL_COUNT * 5, 5, 0xb1, 0x170);
 #endif
     } else {
 #if PLATFORM_WINDOWS
-        show_battle_landfill_to_screen(50, 2, 6, 9, screen_buffer);
+        show_battle_landfill_to_screen(50, 2, 6, 9, window_buffer);
 #else
         show_battle_landfill(50, 2, 0xb1, 0x170);
 #endif
