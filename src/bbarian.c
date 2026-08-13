@@ -25,7 +25,7 @@ extern void show_pointer_help();
 extern void play_windows_smacked_anim(char *filename);
 extern void load_map_window_image(unsigned char mode);
 extern void start_cityprov_tune(void);
-extern void redraw_region_window(void);
+extern void redraw_city_window(void);
 #endif
 
 /* File-local state. */
@@ -1019,7 +1019,7 @@ void continue_battle(int pre_loaded)
         update_window_menu(0);
         BringWindowToTop(game_window[1]);
     }
-    if (map_window_expanded == 1) redraw_region_window();
+    if (map_window_expanded == 1) redraw_city_window();
 #else
     if (battle_victor == 0) {
         do_vga_smacked_anim("battwon.smk");
