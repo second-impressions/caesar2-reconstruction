@@ -892,7 +892,7 @@ void show_tutorial_timer(void)
     font_no(tutorial_timer, ' ', " ", 0x12, 0x186, font2, 0x10);
     internal_screen = old_screen;
     if (refresh != 0) {
-        win_bitblt(game_window[2], main_window_bitmap,
+        win_bitblt(game_window[2], map_window_bitmap,
                    2, 0x17d, 0x60, 0x20, 2, 0x17d);
     }
 #else
