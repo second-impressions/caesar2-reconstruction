@@ -21,7 +21,7 @@ struct mmedia_rect {
 extern char file_buffer[80];
 extern char cd_drive[4];
 extern void *main_window;
-extern void *game_window;
+extern void *game_window[];
 extern void *map_window;
 extern void *tutorial_window;
 extern void *active_window;
@@ -270,10 +270,10 @@ void show_help_page(void)
         if (map_mode == 0 || map_mode == 1) {
             if (map_mode == 1 && window_status[0] != 0) {
                 grey_screen_area(screen_buffer, 0, 0, 0x280, 0x1e0, 0x280);
-                GetClientRect(game_window, &window_rect);
+                GetClientRect(game_window[0], &window_rect);
                 client_width = window_rect.right - window_rect.left;
                 client_y_size = window_rect.bottom - window_rect.top;
-                win_bitblt(game_window, map_window_bitmap, 0, 0,
+                win_bitblt(game_window[0], map_window_bitmap, 0, 0,
                            client_width, client_y_size, 0, 0);
             }
             if (map_mode == 0 && window_status[1] != 0) {
@@ -741,8 +741,8 @@ void do_a_tutorial_page(void)
         reset_getmeoutofhere_buttons();
         hide_game_window(5);
         tile_main_window(c2inf.wallpaper);
-        setup_window(0, game_window, 0, 0);
-        active_window = game_window;
+        setup_window(0, game_window[0], 0, 0);
+        active_window = game_window[0];
         show_game_window(0);
         update_window_menu(0);
         tutorial_start_time = GetTickCount();
@@ -756,8 +756,8 @@ void do_a_tutorial_page(void)
         else                          act_goto_city_map();
 
 #if PLATFORM_WINDOWS
-        if (screen_mode == 0)      city_map_screen(0);
-        else if (screen_mode == 1) region_map_screen(0);
+        if (map_mode == 0)      city_map_screen(0);
+        else if (map_mode == 1) region_map_screen(0);
         show_game_window(2);
         selected_icon_text = last_icon_used = selected_icon_no = 0;
 #else
@@ -885,7 +885,7 @@ void show_tutorial_timer(void)
     font_no(tutorial_timer, ' ', " ", 0x12, 0x186, font2, 0x10);
     internal_screen = old_screen;
     if (refresh != 0) {
-        draw_window_buffer(main_window, main_window_bitmap,
+        draw_window_buffer(game_window[2], main_window_bitmap,
                            2, 0x17d, 0x60, 0x20, 2, 0x17d);
     }
 #else
