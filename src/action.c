@@ -3920,7 +3920,7 @@ void act_goto_city_map(void)
     show_game_window(0);
     update_window_menu(0);
     swap_map_windows(0);
-    BringWindowToTop(map_window);
+    BringWindowToTop(game_window[0]);
     if (map_mode == 0) {
         return;
     }
@@ -3941,9 +3941,9 @@ void act_goto_city_map(void)
     update_window_titles();
     SendMessageA(game_window[1], 0xc, 0, (long)city_window_title);
     if (tutorial_mode != 0) {
-        SendMessageA(map_window, 0xc, 0, (long)tutorial_window_title);
+        SendMessageA(game_window[0], 0xc, 0, (long)tutorial_window_title);
     } else {
-        SendMessageA(map_window, 0xc, 0, (long)main_window_title);
+        SendMessageA(game_window[0], 0xc, 0, (long)main_window_title);
     }
     load_screen_parts(map_mode);
     size_map_window(map_mode);
@@ -4008,7 +4008,7 @@ void act_goto_prov_map(void)
 #if PLATFORM_WINDOWS
     update_window_titles();
     SendMessageA(game_window[1], 0xc, 0, (long)city_window_title);
-    SendMessageA(map_window, 0xc, 0, (long)main_window_title);
+    SendMessageA(game_window[0], 0xc, 0, (long)main_window_title);
     load_screen_parts(map_mode);
     size_map_window(map_mode);
 #endif
