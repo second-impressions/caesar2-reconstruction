@@ -42,8 +42,8 @@ extern void act_request_up(void);
 extern void load_screen_parts(unsigned char mode);
 extern void size_map_window(int mode);
 extern void refresh_map_window(void *window);
-extern void redraw_city_window(void);
-extern void redraw_region_window(void);
+extern void activate_city_window(void);
+extern void activate_region_window(void);
 #endif
 
 // Globals owned by this translation unit
@@ -310,11 +310,11 @@ void message(int message_idx, int is_emperor, int message_param) {
         if (map_no == 1) {
             ret = jump_to_regionmap_ptr(message_goto_ptr);
             if (ret == 1)
-                redraw_region_window();
+                activate_region_window();
         } else {
             ret = jump_to_citymap_ptr(message_goto_ptr);
             if (ret == 1)
-                redraw_city_window();
+                activate_city_window();
         }
     }
     if (map_mode == 0)

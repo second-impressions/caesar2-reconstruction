@@ -4181,8 +4181,8 @@ void act_goto_flags(void)
 // FUNCTION: C2 0x33b40
 // FUNCTION: C2WIN 0x004b7ca9
 #if PLATFORM_WINDOWS
-void redraw_city_window(void);
-void redraw_region_window(void);
+void activate_city_window(void);
+void activate_region_window(void);
 #endif
 void act_set_marker1(void)
 {
@@ -4203,7 +4203,7 @@ void act_set_marker1(void)
     target_map_ptr = city_flag_list[last_city_flag];
     jump_to_citymap_ptr(target_map_ptr);
 #if PLATFORM_WINDOWS
-    redraw_city_window();
+    activate_city_window();
 #endif
 }
 
@@ -4229,7 +4229,7 @@ void act_set_marker2(void)
     target_map_ptr = prov_flag_list[last_prov_flag];
     jump_to_regionmap_ptr(target_map_ptr);
 #if PLATFORM_WINDOWS
-    redraw_region_window();
+    activate_region_window();
 #endif
 }
 
@@ -4257,12 +4257,12 @@ void act_set_marker3(void)
     if (danger_flag_map_mode == 0) {
         jump_to_citymap_ptr(target_map_ptr);
 #if PLATFORM_WINDOWS
-        redraw_city_window();
+        activate_city_window();
 #endif
     } else {
         jump_to_regionmap_ptr(target_map_ptr);
 #if PLATFORM_WINDOWS
-        redraw_region_window();
+        activate_region_window();
 #endif
     }
 }
