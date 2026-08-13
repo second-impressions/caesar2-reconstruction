@@ -300,6 +300,10 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_STATS_MORALE bs_morale
 #define OLD_BATTLE_STATS_MEN bs_men
 #define OLD_BATTLE_STATS_NOF_UNITS bs_nof_units
+#define OLD_BATTLE_TOTALS_THEIR_MEN bt_their_men
+#define OLD_BATTLE_TOTALS_OUR_MEN bt_our_men
+#define OLD_BATTLE_TOTALS_THEIR_MORALE bt_their_morale
+#define OLD_BATTLE_TOTALS_OUR_MORALE bt_our_morale
 #else
 #define OLD_BATTLE_STATS_MODE request_message.prev_mode
 #define OLD_BATTLE_STATS_ICON request_message.icon_over
@@ -307,6 +311,10 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_STATS_MORALE request_message.bs_morale
 #define OLD_BATTLE_STATS_MEN request_message.bs_men
 #define OLD_BATTLE_STATS_NOF_UNITS request_message.bs_nof_units
+#define OLD_BATTLE_TOTALS_THEIR_MEN request_message.bt_their_men
+#define OLD_BATTLE_TOTALS_OUR_MEN request_message.bt_our_men
+#define OLD_BATTLE_TOTALS_THEIR_MORALE request_message.bt_their_morale
+#define OLD_BATTLE_TOTALS_OUR_MORALE request_message.bt_our_morale
 #endif
 
 // Update the battle statistics panel when its unit data or pointer context changes.
@@ -433,17 +441,17 @@ void battle_totals_panel(void)
 
     c = 0;
 
-    if (request_message.bt_their_men    != their_battle_men)    c = 1;
-    if (request_message.bt_our_men      != our_battle_men)      c = 1;
-    if (request_message.bt_their_morale != their_battle_morale) c = 1;
-    if (request_message.bt_our_morale   != our_battle_morale)   c = 1;
+    if (OLD_BATTLE_TOTALS_THEIR_MEN    != their_battle_men)    c = 1;
+    if (OLD_BATTLE_TOTALS_OUR_MEN      != our_battle_men)      c = 1;
+    if (OLD_BATTLE_TOTALS_THEIR_MORALE != their_battle_morale) c = 1;
+    if (OLD_BATTLE_TOTALS_OUR_MORALE   != our_battle_morale)   c = 1;
     if (redraw_icons != 0)                                      c = 1;
     if (c == 0) return;
 
-    request_message.bt_their_men    = their_battle_men;
-    request_message.bt_our_men      = our_battle_men;
-    request_message.bt_their_morale = their_battle_morale;
-    request_message.bt_our_morale   = our_battle_morale;
+    OLD_BATTLE_TOTALS_THEIR_MEN    = their_battle_men;
+    OLD_BATTLE_TOTALS_OUR_MEN      = our_battle_men;
+    OLD_BATTLE_TOTALS_THEIR_MORALE = their_battle_morale;
+    OLD_BATTLE_TOTALS_OUR_MORALE   = our_battle_morale;
 
     sprite_width  = 9;
     sprite_height = 0x22;

@@ -48,5 +48,9 @@ int bs_type;
 int bs_morale;
 int bs_men;
 int bs_nof_units;
+int bt_their_men;
+int bt_our_men;
+int bt_their_morale;
+int bt_our_morale;
 
 #endif
