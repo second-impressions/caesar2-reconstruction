@@ -3899,7 +3899,7 @@ void act_goto_city_map(void)
     update_window_menu(0);
     swap_map_windows(0);
     BringWindowToTop(map_window);
-    if (screen_mode == 0) {
+    if (map_mode == 0) {
         return;
     }
     last_icon_over = 0;
@@ -3915,7 +3915,7 @@ void act_goto_city_map(void)
     prov_zoom_level = zoom_level;
     map_direction = city_rotation;
     zoom_level = city_zoom_level;
-    screen_mode = 0;
+    map_mode = 0;
     update_window_titles();
     SendMessageA(game_window, 0xc, 0, (long)city_window_title);
     if (tutorial_mode != 0) {
@@ -3923,8 +3923,8 @@ void act_goto_city_map(void)
     } else {
         SendMessageA(map_window, 0xc, 0, (long)main_window_title);
     }
-    load_screen_parts(screen_mode);
-    size_game_window(screen_mode);
+    load_screen_parts(map_mode);
+    size_game_window(map_mode);
 #else
     if (map_mode == 0) {
         return;
@@ -3951,11 +3951,6 @@ void act_goto_city_map(void)
 // Switches to the region map unless peaceful mode disables it.
 // FUNCTION: C2 0x33783
 // FUNCTION: C2WIN 0x004b7722
-#if PLATFORM_WINDOWS
-#define ACTION_GOTO_MAP_MODE screen_mode
-#else
-#define ACTION_GOTO_MAP_MODE map_mode
-#endif
 void act_goto_prov_map(void)
 {
     if (c2inf.peace_mode != 0) {
@@ -3968,7 +3963,7 @@ void act_goto_prov_map(void)
     swap_map_windows(1);
     BringWindowToTop(game_window);
 #endif
-    if (ACTION_GOTO_MAP_MODE == 1) {
+    if (map_mode == 1) {
         return;
     }
 #if PLATFORM_WINDOWS
@@ -3986,14 +3981,14 @@ void act_goto_prov_map(void)
     city_zoom_level = zoom_level;
     map_direction = prov_rotation;
     zoom_level = prov_zoom_level;
-    ACTION_GOTO_MAP_MODE = 1;
+    map_mode = 1;
 
 #if PLATFORM_WINDOWS
     update_window_titles();
     SendMessageA(game_window, 0xc, 0, (long)city_window_title);
     SendMessageA(map_window, 0xc, 0, (long)main_window_title);
-    load_screen_parts(screen_mode);
-    size_game_window(screen_mode);
+    load_screen_parts(map_mode);
+    size_game_window(map_mode);
 #endif
     city_pm_x = pm_x;
     city_pm_y = pm_y;
@@ -4009,12 +4004,11 @@ void act_goto_prov_map(void)
         region_pm_x = pm_x;
         region_pm_y = pm_y;
     }
-    ACTION_GOTO_MAP_MODE = 1;
+    map_mode = 1;
     pm_x = region_pm_x;
     pm_y = region_pm_y;
     act_correct_map();
 }
-#undef ACTION_GOTO_MAP_MODE
 
 // After a map-mode change (city/region/battle), set the map_actual_* dimensions, command-strip
 // rectangle, reset placing state, rebuild the pseudo_map, refresh the zoom, reload the graphic
@@ -5328,8 +5322,8 @@ void act_tutorial(void)
 {
 #if PLATFORM_WINDOWS
     set_main_menu_enabled(0);
-    load_screen_parts(screen_mode);
-    size_game_window(screen_mode);
+    load_screen_parts(map_mode);
+    size_game_window(map_mode);
     SetWindowPos(game_window, 0, game_window_x, game_window_y,
                  game_window_width, game_window_height, 0x10);
     SetWindowPos(status_window, 0, status_window_x, status_window_y,
@@ -5445,7 +5439,7 @@ void act_preload(void)
 void act_census(void)
 {
 #if PLATFORM_WINDOWS
-    if (screen_mode == 2) {
+    if (map_mode == 2) {
         return;
     }
     in_census_mode = 1;
@@ -5478,15 +5472,10 @@ void act_census(void)
 // pointer mode after the panel closes.
 // FUNCTION: C2 0x34e10
 // FUNCTION: C2WIN 0x004b97d7
-#if PLATFORM_WINDOWS
-#define ACTION_QUERY_MAP_MODE screen_mode
-#else
-#define ACTION_QUERY_MAP_MODE map_mode
-#endif
 void act_query(void)
 {
     int saved_pointer_mode;
-    if (ACTION_QUERY_MAP_MODE > 1) {
+    if (map_mode > 1) {
         return;
     }
     get_pm_over_diamond(1);
@@ -5498,7 +5487,7 @@ void act_query(void)
     act_start_y = act_start_ptr / map_actual_width;
 
     evolve_to_current_fabric();
-    if (ACTION_QUERY_MAP_MODE == 0) {
+    if (map_mode == 0) {
         get_query_info();
     } else {
         get_region_query_info();
@@ -5523,7 +5512,7 @@ void act_query(void)
         }
     }
 
-    if (ACTION_QUERY_MAP_MODE == 0) {
+    if (map_mode == 0) {
         nof_query_buttons = 6;
     } else {
         nof_query_buttons = 3;
@@ -5552,7 +5541,6 @@ void act_query(void)
     pointer_mode = saved_pointer_mode;
     clear_mouse();
 }
-#undef ACTION_QUERY_MAP_MODE
 
 // Query-panel "General" tab. Only acts when query_mode != 0: resets the other two button dots,
 // clears query_mode, and re-renders the panel (city map first when in city view).
@@ -5740,9 +5728,9 @@ void act_do_year_end(void)
         savegame("save\\lastyear.sav");
     }
     show_native_year_end(main_window);
-    if (screen_mode == 0) {
+    if (map_mode == 0) {
         city_map_screen(1);
-    } else if (screen_mode == 1) {
+    } else if (map_mode == 1) {
         region_map_screen(1);
     }
     flush_sb_buffer();
