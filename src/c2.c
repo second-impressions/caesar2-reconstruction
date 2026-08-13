@@ -236,7 +236,7 @@ extern void  demo_lead_out_slideshow(void);
 extern void  free_tune_buffer(void);
 #if PLATFORM_WINDOWS
 extern void  close_windows(void);
-extern void  show_map_window(int mode);
+extern void  hide_game_window(int mode);
 extern void  update_window_menu(int mode);
 extern void  update_sound_menu(void);
 extern void  start_windows_game(void);
@@ -530,9 +530,9 @@ void start_a_promotion(void)
 {
 #if PLATFORM_WINDOWS
     windows_game_active = 0;
-    show_map_window(0);
-    show_map_window(1);
-    show_map_window(2);
+    hide_game_window(0);
+    hide_game_window(1);
+    hide_game_window(2);
     update_window_menu(0);
     update_window_menu(1);
     update_sound_menu();
