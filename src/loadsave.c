@@ -3,6 +3,7 @@
 #if PLATFORM_WINDOWS
 #include <sys/stat.h>
 #include <windows.h>
+extern int _strcmpi(const char *left, const char *right);
 #endif
 #include "c2_data.h"
 #include "c2_types.h"
@@ -617,7 +618,11 @@ void load_a_game(void)
             done = check_file_exists(filename);
             if (done != 0) {
                 get_filename_extension(filename);
+#if PLATFORM_WINDOWS
+                if (_strcmpi("SAV", extension) != 0) done = 0;
+#else
                 if (strcmp("SAV", extension) != 0) done = 0;
+#endif
             }
 
             show_a_system_blank(0x3c, 0x168, 0x15, 1);
