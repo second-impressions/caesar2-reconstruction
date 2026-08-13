@@ -983,7 +983,7 @@ void evolve_forum_activity(int rows)
         for (x = 0; x < 80; x++, cm_sptr += 20) {
             kind = ((unsigned char *)city_map)[cm_sptr];
             if (kind >= 0xae && kind <= 0xb9) {
-                gfx_value = forum_gfxdat[kind + 0x26];
+                gfx_value = size_from_type[kind - 0x82];
                 if (gfx_value == 0) continue;
                 occupancy = ((unsigned char *)city_map)[cm_sptr + 5] & 0x0f;
                 if (occupancy == 0) {
