@@ -51,8 +51,8 @@ extern void size_map_window(int mode);
 extern void *game_window[];
 extern void *status_window;
 extern void *map_window;
-extern int game_window_x;
-extern int game_window_y;
+extern int map_window_x;
+extern int map_window_y;
 extern int game_window_width;
 extern int game_window_height;
 extern int status_window_x;
@@ -5346,9 +5346,9 @@ void act_tutorial(void)
     set_main_menu_enabled(0);
     load_screen_parts(map_mode);
     size_map_window(map_mode);
-    SetWindowPos(game_window[1], 0, game_window_x, game_window_y,
-                 game_window_width, game_window_height, 0x10);
     SetWindowPos(status_window, 0, status_window_x, status_window_y,
+                 game_window_width, game_window_height, 0x10);
+    SetWindowPos(map_window, 0, map_window_x, map_window_y,
                  0, 0, 0x11);
 #endif
     do_tutorial();
