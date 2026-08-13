@@ -1068,15 +1068,9 @@ void place2_a_building_roof(int draw_style)
     }
 
     height = bank[data_ptr + 0xc];
-#if PLATFORM_WINDOWS
-    sprite_start = (bank[data_ptr + 5] << 8)
-                 + (bank[data_ptr + 6] << 16)
-                 + bank[data_ptr + 4];
-#else
     sprite_start = bank[data_ptr + 4]
                  + (bank[data_ptr + 5] << 8)
                  + (bank[data_ptr + 6] << 16);
-#endif
     if      (zoom_level == 0) sprite_hat_start = sprite_start + 0x384;
     else if (zoom_level == 1) sprite_hat_start = sprite_start + 0xc4;
     else                       sprite_hat_start = sprite_start + 0x24;
