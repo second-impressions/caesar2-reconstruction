@@ -555,20 +555,27 @@ void show_battle_landfill(int start_row, int row_count, int screen_x, int screen
 }
 
 
+#if PLATFORM_WINDOWS
+static int battle_landfill_count;
+#define BATTLE_LANDFILL_COUNT battle_landfill_count
+#else
+#define BATTLE_LANDFILL_COUNT cmu_count[3]
+#endif
+
 // Advance and draw the eleven-step battle terrain animation.
 // FUNCTION: C2 0x3f7f5
 // FUNCTION: C2WIN 0x0049f217
 void update_battle_landfill(void)
 {
-    ++cmu_count[3];
-    if (cmu_count[3] > 10) {
-        cmu_count[3] = 0;
+    ++BATTLE_LANDFILL_COUNT;
+    if (BATTLE_LANDFILL_COUNT > 10) {
+        BATTLE_LANDFILL_COUNT = 0;
     }
-    if (cmu_count[3] < 10) {
+    if (BATTLE_LANDFILL_COUNT < 10) {
 #if PLATFORM_WINDOWS
-        show_battle_landfill_to_screen(cmu_count[3] * 5, 5, 6, 9, screen_buffer);
+        show_battle_landfill_to_screen(BATTLE_LANDFILL_COUNT * 5, 5, 6, 9, screen_buffer);
 #else
-        show_battle_landfill(cmu_count[3] * 5, 5, 0xb1, 0x170);
+        show_battle_landfill(BATTLE_LANDFILL_COUNT * 5, 5, 0xb1, 0x170);
 #endif
     } else {
 #if PLATFORM_WINDOWS
