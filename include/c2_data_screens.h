@@ -1276,7 +1276,7 @@ extern int bs_nof_units;
 extern int bt_their_morale;
 extern int bt_our_morale;
 extern int prev_mode;
-extern unsigned char zoom_in_decay_count;
+extern int old_paused;
 extern unsigned char zoom_level;
 
 #endif /* C2_DATA_H */

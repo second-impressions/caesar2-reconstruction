@@ -304,6 +304,7 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_TOTALS_OUR_MEN bt_our_men
 #define OLD_BATTLE_TOTALS_THEIR_MORALE bt_their_morale
 #define OLD_BATTLE_TOTALS_OUR_MORALE bt_our_morale
+#define OLD_PAUSED old_paused
 #else
 #define OLD_BATTLE_STATS_MODE request_message.prev_mode
 #define OLD_BATTLE_STATS_ICON request_message.icon_over
@@ -315,6 +316,7 @@ void battle_screen(int do_black_out)
 #define OLD_BATTLE_TOTALS_OUR_MEN request_message.bt_our_men
 #define OLD_BATTLE_TOTALS_THEIR_MORALE request_message.bt_their_morale
 #define OLD_BATTLE_TOTALS_OUR_MORALE request_message.bt_our_morale
+#define OLD_PAUSED request_message.paused
 #endif
 
 // Update the battle statistics panel when its unit data or pointer context changes.
@@ -521,7 +523,7 @@ void show_paused(void)
     if (c2inf.paused != request_message.paused)
         setup_whole_screen_refresh();
 #endif
-    request_message.paused = c2inf.paused;
+    OLD_PAUSED = c2inf.paused;
     if (c2inf.paused == 0) return;
 
     stone_random_count = 0xf;

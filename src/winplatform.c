@@ -52,5 +52,6 @@ int bt_their_men;
 int bt_our_men;
 int bt_their_morale;
 int bt_our_morale;
+int old_paused;
 
 #endif
