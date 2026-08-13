@@ -278,10 +278,10 @@ void show_help_page(void)
             }
             if (map_mode == 0 && window_status[1] != 0) {
                 grey_screen_area(screen_buffer, 0, 0, 0x280, 0x1e0, 0x280);
-                GetClientRect(map_window, &window_rect);
+                GetClientRect(game_window[1], &window_rect);
                 client_width = window_rect.right - window_rect.left;
                 client_y_size = window_rect.bottom - window_rect.top;
-                win_bitblt(map_window, map_window_bitmap, 0, 0,
+                win_bitblt(game_window[1], map_window_bitmap, 0, 0,
                            client_width, client_y_size, 0, 0);
             }
             grey_screen_area(window_buffer, 0, 0, 0xa2, 0x1a2, 0x280);
