@@ -1512,11 +1512,7 @@ void place_sprite(int edge_side)
         } else {
             sprite_offset_x += pm_diamond_half_width;
         }
-#if PLATFORM_WINDOWS
-        sprite_offset_y += pm_diamond_height;
-#else
         sprite_offset_y += pm_diamond_half_height;
-#endif
         if (zoom_level == 0) {
             if (direction <= 3) {
                 if ((terrain_flags & 0x40) != 0) {
@@ -1630,11 +1626,7 @@ after_citizen_a:
         } else {
             sprite_offset_x += pm_diamond_half_width;
         }
-#if PLATFORM_WINDOWS
-        sprite_offset_y += pm_diamond_height;
-#else
         sprite_offset_y += pm_diamond_half_height;
-#endif
         if (zoom_level == 0) {
             if (direction <= 3) {
                 if ((terrain_flags & 0x40) != 0) {
