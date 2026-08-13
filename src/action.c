@@ -25,7 +25,13 @@ void get_next_viewed_cohort(int dir);
 
 /* Selection-box helpers. */
 void get_selection_goods_list(int what);
+#if PLATFORM_WINDOWS
+void windows_control_selection(struct selection_rec *list, int count,
+                               int x, int y, int width);
+#define control_selection windows_control_selection
+#else
 int control_selection(struct selection_rec *list, int count, int x, int y, int width);
+#endif
 #if PLATFORM_WINDOWS
 extern int selection_menu;
 extern void *main_window;
