@@ -189,7 +189,7 @@ void message(int message_idx, int is_emperor, int message_param) {
     imperial_send_amount = 0;
     cover_mouse_droppings();
     grey_all_windows();
-    memcpy(saved_screen_buffer, screen_buffer, 0x4b000);
+    memcpy(saved_screen_buffer, game_screen, 0x4b000);
     x_start = (desktop_width - 0x160) / 2;
     y_start = (desktop_height - 0x170) / 2;
     if (is_emperor == 0)
@@ -295,7 +295,7 @@ void message(int message_idx, int is_emperor, int message_param) {
     }
     stop_smacking();
     ShowWindow(message_window, 0);
-    memcpy(screen_buffer, saved_screen_buffer, 0x4b000);
+    memcpy(game_screen, saved_screen_buffer, 0x4b000);
     refresh_svga_screen();
     pointer_mode = old_pointer_mode;
     load_screen_parts(map_mode);
