@@ -849,15 +849,9 @@ void place2_a_building_top(int draw_style)
     data_ptr     = sprite_image_no * 16 + 8;
     y_length     = bank[data_ptr + 0xd];
     sprite_class = bank[data_ptr + 0xc];
-#if PLATFORM_WINDOWS
-    sprite_start = (bank[data_ptr + 5] << 8)
-                 + (bank[data_ptr + 6] << 16)
-                 + bank[data_ptr + 4];
-#else
     sprite_start = bank[data_ptr + 4]
                  + (bank[data_ptr + 5] << 8)
                  + (bank[data_ptr + 6] << 16);
-#endif
     if (zoom_level == 0)      sprite_hat_start = sprite_start + 0x384;
     else if (zoom_level == 1) sprite_hat_start = sprite_start + 0xc4;
     else                      sprite_hat_start = sprite_start + 0x24;
@@ -947,15 +941,8 @@ void place2_a_building_top(int draw_style)
         goods_amount >>= 4;
         if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 0x40) == 0) return;
         sprite_image_no = goods_amount + 9;
-#if PLATFORM_WINDOWS
-        goods_x = *(int *)((unsigned char *)reg_type_x_off
-                               + (map_direction / 2) * 4 + zoom_level * 16);
-        sprite_y_off = *(int *)((unsigned char *)reg_type_y_off
-                               + (map_direction / 2) * 4 + zoom_level * 16);
-#else
         goods_x = reg_type_x_off[zoom_level][map_direction / 2];
         sprite_y_off = reg_type_y_off[zoom_level][map_direction / 2];
-#endif
         if (draw_style == 1) goods_x -= pm_diamond_half_width;
 
         data_ptr = sprite_image_no * 16 + 8;
