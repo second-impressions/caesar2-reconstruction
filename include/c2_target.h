@@ -80,11 +80,6 @@
  * allocated sample handle; DOS sets the digital driver's master volume
  * (verified at C2WIN 0x40149b vs C2 0x11a53). */
 
-/* The DOS mouse poll consumes mse_button after updating the engine state.
- * The Windows port preserves the sampled byte for its Windows input path
- * (verified at C2WIN 0x44c216 vs C2 0x25ccc). */
-#define C2_FEAT_PRESERVE_MOUSE_SAMPLE PLATFORM_WINDOWS
-
 /* DOS Smacker playback changes to the movie's CD path before closing and
  * restores the main path afterwards. The Windows port opens movies through
  * its native file path and omits both calls. */
