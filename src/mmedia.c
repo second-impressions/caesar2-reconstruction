@@ -639,7 +639,7 @@ void do_tutorial(void)
     hold_mouse_replace = 1;
 #if PLATFORM_WINDOWS
     restore_game_windows();
-    show_game_window(5);
+    hide_game_window(5);
     tile_main_window(c2inf.wallpaper);
     update_window_titles();
 #endif
