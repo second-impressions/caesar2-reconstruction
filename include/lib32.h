@@ -77,7 +77,7 @@ extern unsigned char old_mouse_lb;
 extern int mouse_installed;
 extern int mouse_movement;
 extern int mouse_was_pressed;
-extern unsigned char old_mouse_rb;
+extern unsigned char mouse_right_button;
 extern int mouse_x;
 extern int mouse_y;
 #else
@@ -96,7 +96,11 @@ extern unsigned char mouse_left_click;
 extern unsigned char debar_fade_click;
 extern unsigned char mouse_right_preclick;
 extern unsigned char mouse_left_preclick;
+#if PLATFORM_WINDOWS
+extern unsigned char old_mouse_rb;
+#else
 extern unsigned char mouse_right_button;
+#endif
 extern unsigned char mouse_right_click;
 extern unsigned char key_code;
 extern char debug_interupt;
