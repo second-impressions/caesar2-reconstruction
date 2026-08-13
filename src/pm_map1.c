@@ -1351,11 +1351,7 @@ void top_it(int edge_side)
 #endif
             sprite_num = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).extra_edge;
             sprite_image_no = (unsigned char)rotated_map[sprite_num - 0x10].dir[direction_index];
-#if PLATFORM_WINDOWS
-            sprite_image_no = sprite_image_no - 0x60;
-#else
             sprite_image_no -= 0x60;
-#endif
             if (sprite_image_no > 2) {
                 image_off_x = 0;
 #if PLATFORM_WINDOWS
