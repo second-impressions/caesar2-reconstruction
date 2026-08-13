@@ -2050,7 +2050,7 @@ int one_reg_wall_ramification(void)
         if (choose_from(wall_data, 0xe) != 0) {
             (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).base_kind = first_choice - 0xa;
             (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).edge_bits &= 0xe3;
-            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = house_gfxdat[first_choice + 0x51];
+            (*(struct region_cell *)((unsigned char *)region_map + (gmn_sptr))).gfx = reg_wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE];
             return 1;
         }
         gmn_err_sptr = gmn_sptr;
@@ -2199,7 +2199,7 @@ void clear_an_area(int x1, int y1, int x2, int y2)
                 if ((*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind >= 0x82) {
 
                     tile_kind = (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).base_kind;
-                    forum_size = forum_gfxdat[tile_kind + 0x26];
+                    forum_size = size_from_type[tile_kind - 0x82];
                     if (forum_size == 0) clear_to_empty(cm_sptr);
                     if (forum_size == 4) clear_sized_to_rubble(cm_sptr, 2, 0);
                     else if (forum_size == 9) clear_sized_to_rubble(cm_sptr, 3, 0);
@@ -2338,7 +2338,7 @@ void destroy_an_atom(int sptr, int rubble_kind)
     saved_random_count = stone_random_count;
     kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
     if (kind >= 0x82) {
-        forum_size = forum_gfxdat[kind + 0x26];
+        forum_size = size_from_type[kind - 0x82];
         if (forum_size == 4)
             clear_sized_to_rubble(sptr, 2, rubble_kind);
         else if (forum_size == 9)
@@ -2381,7 +2381,7 @@ void spread_fire_atom(int sptr, int dir)
     kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
     if (kind >= 0xbc && kind <= 0xe2) return;
     if (kind >= 0x82) {
-        forum_size = forum_gfxdat[kind + 0x26];
+        forum_size = size_from_type[kind - 0x82];
         if (forum_size == 4)
             clear_sized_to_rubble(sptr, 2, 1);
         else if (forum_size == 9)
@@ -2413,7 +2413,7 @@ void spread_plague_atom(int sptr, int dir)
     kind = (*(struct city_cell *)((unsigned char *)city_map + (sptr))).base_kind;
     if (kind >= 0x82 && kind <= 0xa1) {
         if (((*(struct city_cell *)((unsigned char *)city_map + (sptr))).edge_bits & 0x80) != 0) return;
-        tile_size = forum_gfxdat[kind + 0x26];
+        tile_size = size_from_type[kind - 0x82];
         if (tile_size == 4)
             plague_sized(sptr, 2);
         else if (tile_size == 9)
@@ -2435,7 +2435,7 @@ void plague_an_atom(int sptr)
     if (kind < 0x82) return;
     if (kind > 0xa1) return;
 
-    tile_size = forum_gfxdat[kind + 0x26];
+    tile_size = size_from_type[kind - 0x82];
     if (tile_size == 4)
         plague_sized(sptr, 2);
     else if (tile_size == 9)
