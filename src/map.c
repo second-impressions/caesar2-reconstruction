@@ -5296,7 +5296,7 @@ void init_flag_markers(void)
 
 // Update the number of active city markers.
 // FUNCTION: C2 0x6f173
-// FUNCTION: C2WIN 0x004ae2e2
+// FUNCTION: C2WIN 0x004ae295
 void count_city_flags(void)
 {
     int i;
@@ -5309,7 +5309,7 @@ void count_city_flags(void)
 
 // Update the number of active province markers.
 // FUNCTION: C2 0x6f196
-// FUNCTION: C2WIN 0x004ae32f
+// FUNCTION: C2WIN 0x004ae2e2
 void count_prov_flags(void)
 {
     int i;
@@ -5447,7 +5447,7 @@ void clear_danger_flag(void)
 
 // Update the number of active danger markers.
 // FUNCTION: C2 0x6f390
-// FUNCTION: C2WIN 0x004ae295 REORDERED
+// FUNCTION: C2WIN 0x004ae32f
 void count_danger_flags(void)
 {
     int i;
