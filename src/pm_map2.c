@@ -1400,11 +1400,7 @@ after_sprite3:
                 xoff -= pm_diamond_width;
         }
 #endif
-#if PLATFORM_WINDOWS
-        y_off += pm_diamond_height;
-#else
         y_off += pm_diamond_half_height;
-#endif
 
         if ((flag_kind & 0x80) != 0) {
             sprite_image_no = 6;
@@ -1471,28 +1467,16 @@ restore_overlay:
                 xoff -= pm_diamond_width;
         }
 #endif
-#if PLATFORM_WINDOWS
-        y_off += pm_diamond_height;
-#else
         y_off += pm_diamond_half_height;
-#endif
 
         if (flag == 3)
             sprite_image_no = zoom_level + 0xe;
         else
             sprite_image_no = zoom_level + 0xb;
         data_ptr      = sprite_image_no * 16 + 8;
-#if PLATFORM_WINDOWS
-        sprite_start  = mice[data_ptr + 4] + (mice[data_ptr + 5] << 8) + (mice[data_ptr + 6] << 16);
-        sprite_width  = (mice[data_ptr + 1] << 8)
-                      + mice[data_ptr];
-        sprite_height = (mice[data_ptr + 3] << 8)
-                      + mice[data_ptr + 2];
-#else
         sprite_start  = mice[data_ptr + 4] + (mice[data_ptr + 5] << 8) + (mice[data_ptr + 6] << 16);
         sprite_width  = (mice[data_ptr + 0]) + (mice[data_ptr + 1] << 8);
         sprite_height = (mice[data_ptr + 2]) + (mice[data_ptr + 3] << 8);
-#endif
         if (sprite_start > 0x4baf0) { sprite_error++; return; }
         if (sprite_width <= 0)      { sprite_error++; return; }
         if (sprite_width > 0x12c)   { sprite_error++; return; }
