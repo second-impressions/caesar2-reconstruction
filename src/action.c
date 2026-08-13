@@ -37,9 +37,26 @@ void windows_control_selection(struct selection_rec *list, int count,
 int control_selection(struct selection_rec *list, int count, int x, int y, int width);
 #endif
 #if PLATFORM_WINDOWS
+extern unsigned char window_mouse_state_1;
+extern unsigned char window_mouse_state_2;
+extern unsigned char window_mouse_state_3;
+extern unsigned char window_mouse_state_4;
+extern unsigned char window_mouse_state_5;
+extern unsigned char window_mouse_state_6;
+extern unsigned int window_timer;
+extern int prev_mode;
+extern int icon_over;
+extern int bs_type;
+extern int bs_morale;
+extern int bs_men;
+extern int bs_nof_units;
+extern int bt_their_men;
+extern int bt_our_men;
+extern int bt_their_morale;
 extern int selection_menu;
 extern void *main_window;
 extern void *active_window;
+extern void *help_window;
 extern unsigned char shifted_mouse_click;
 extern unsigned long tutorial_start_time;
 extern void act_query_windows(void);
@@ -306,7 +323,7 @@ void action(void)
                     tutorial_pause_time = GetTickCount() - tutorial_start_time;
                     tutorial_start_time = GetTickCount();
                 }
-                active_window = main_window;
+                help_window = main_window;
 #endif
                 helping(icons_helped);
 #if PLATFORM_WINDOWS
@@ -529,7 +546,7 @@ void action(void)
                     tutorial_pause_time = GetTickCount() - tutorial_start_time;
                     tutorial_start_time = GetTickCount();
                 }
-                active_window = main_window;
+                help_window = main_window;
 #endif
                 helping(icons_helped);
 #if PLATFORM_WINDOWS
@@ -5177,7 +5194,7 @@ void act_battle_select_all(void)
 void act_battle_help(void)
 {
 #if PLATFORM_WINDOWS
-    active_window = main_window;
+    help_window = main_window;
 #endif
     helping(0x33);
 }
