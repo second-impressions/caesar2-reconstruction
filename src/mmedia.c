@@ -28,7 +28,7 @@ extern void *active_window;
 extern unsigned char *window_buffer;
 extern unsigned char *screen_buffer;
 extern unsigned char *game_screen;
-extern unsigned char main_window_bitmap[];
+extern unsigned char game_window_bitmap[];
 extern unsigned char map_window_bitmap[];
 extern unsigned char window_status[];
 extern int sprintf(char *buffer, const char *format, ...);
@@ -273,7 +273,7 @@ void show_help_page(void)
                 GetClientRect(game_window[0], &window_rect);
                 client_width = window_rect.right - window_rect.left;
                 client_y_size = window_rect.bottom - window_rect.top;
-                win_bitblt(game_window[0], map_window_bitmap, 0, 0,
+                win_bitblt(game_window[0], game_window_bitmap, 0, 0,
                            client_width, client_y_size, 0, 0);
             }
             if (map_mode == 0 && window_status[1] != 0) {
@@ -281,7 +281,7 @@ void show_help_page(void)
                 GetClientRect(game_window[1], &window_rect);
                 client_width = window_rect.right - window_rect.left;
                 client_y_size = window_rect.bottom - window_rect.top;
-                win_bitblt(game_window[1], map_window_bitmap, 0, 0,
+                win_bitblt(game_window[1], game_window_bitmap, 0, 0,
                            client_width, client_y_size, 0, 0);
             }
             grey_screen_area(window_buffer, 0, 0, 0xa2, 0x1a2, 0x280);
