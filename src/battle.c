@@ -18,7 +18,7 @@ extern int saved_game_window_status;
 extern RECT game_window_rect;
 extern HWND game_window;
 extern HWND main_window;
-extern void show_map_window(int mode);
+extern void hide_game_window(int mode);
 extern void update_window_menu(int mode);
 extern void update_window_titles(void);
 extern void update_game_window_title(void);
@@ -151,7 +151,7 @@ void do_fight_battle(int continuing)
         saved_game_window_status = window_status[0];
         if (saved_game_window_status != 0) {
             GetWindowRect(game_window, &game_window_rect);
-            show_map_window(0);
+            hide_game_window(0);
             update_window_menu(0);
         }
     } else {
