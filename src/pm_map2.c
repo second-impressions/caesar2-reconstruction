@@ -17,8 +17,8 @@ extern void write_i_sprite(unsigned char *sprite_addr);
 extern void write_i_left_sprite(unsigned char *sprite_addr);
 extern void write_i_right_sprite(unsigned char *sprite_addr);
 #if PLATFORM_WINDOWS
-extern void *active_window;
-extern unsigned char screen_buffer[];
+extern void *game_window[];
+extern unsigned char map_window_bitmap[];
 extern void win_bitblt(void *window, unsigned char *buffer, int x, int y,
                        int width, int height, int source_x, int source_y);
 #endif
@@ -196,18 +196,18 @@ void show_regionmap_top(void)
     mid2_line_with_sides_top();
 #if PLATFORM_WINDOWS
     if (redraw == 1)
-        win_bitblt(active_window, screen_buffer, 0, 0, 0x280, 0x1e0, 0, 0);
+        win_bitblt(game_window[1], map_window_bitmap, 0, 0, 0x280, 0x1e0, 0, 0);
 #endif
     for (j = 0; j < (pm_screen_height - 2) / 2; j++) {
         mid2_line_no_sides_top();
 #if PLATFORM_WINDOWS
         if (redraw == 1)
-            win_bitblt(active_window, screen_buffer, 0, 0, 0x280, 0x1e0, 0, 0);
+            win_bitblt(game_window[1], map_window_bitmap, 0, 0, 0x280, 0x1e0, 0, 0);
 #endif
         mid2_line_with_sides_top();
 #if PLATFORM_WINDOWS
         if (redraw == 1)
-            win_bitblt(active_window, screen_buffer, 0, 0, 0x280, 0x1e0, 0, 0);
+            win_bitblt(game_window[1], map_window_bitmap, 0, 0, 0x280, 0x1e0, 0, 0);
 #endif
     }
 
