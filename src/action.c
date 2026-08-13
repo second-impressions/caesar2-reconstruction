@@ -53,7 +53,7 @@ extern int (__stdcall *SetWindowPos)(void *window, void *insert_after,
 extern int (__stdcall *BringWindowToTop)(void *window);
 extern long (__stdcall *SendMessageA)(void *window, unsigned int message,
                                      unsigned int wparam, long lparam);
-extern void show_map_window(int mode);
+extern void show_game_window(int mode);
 extern void update_window_menu(int mode);
 extern void swap_map_windows(int mode);
 extern void update_window_titles(void);
@@ -3895,7 +3895,7 @@ void act_swap_maps(void)
 void act_goto_city_map(void)
 {
 #if PLATFORM_WINDOWS
-    show_map_window(0);
+    show_game_window(0);
     update_window_menu(0);
     swap_map_windows(0);
     BringWindowToTop(map_window);
@@ -3958,7 +3958,7 @@ void act_goto_prov_map(void)
         return;
     }
 #if PLATFORM_WINDOWS
-    show_map_window(1);
+    show_game_window(1);
     update_window_menu(1);
     swap_map_windows(1);
     BringWindowToTop(game_window[1]);
