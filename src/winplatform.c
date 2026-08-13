@@ -56,5 +56,10 @@ int old_paused;
 int tribune_flag_counter;
 int old_population;
 int old_cost;
+int alarm_chime_counter;
+int alarm_blink_timer;
+int alarm_blink_state;
+int cached_denarii;
+int cached_month;
 
 #endif

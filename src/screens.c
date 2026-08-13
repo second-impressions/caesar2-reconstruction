@@ -307,6 +307,11 @@ void battle_screen(int do_black_out)
 #define OLD_PAUSED old_paused
 #define TRIBUNE_FLAG_COUNTER tribune_flag_counter
 #define TURBO_CACHED_POPULATION old_population
+#define TOPLINE_ALARM_CHIME_COUNTER alarm_chime_counter
+#define TOPLINE_ALARM_BLINK_TIMER alarm_blink_timer
+#define TOPLINE_ALARM_BLINK_STATE alarm_blink_state
+#define TOPLINE_CACHED_DENARII cached_denarii
+#define TOPLINE_CACHED_MONTH cached_month
 #else
 #define OLD_BATTLE_STATS_MODE request_message.prev_mode
 #define OLD_BATTLE_STATS_ICON request_message.icon_over
@@ -321,6 +326,11 @@ void battle_screen(int do_black_out)
 #define OLD_PAUSED request_message.paused
 #define TRIBUNE_FLAG_COUNTER request_message.tribune_flag_counter
 #define TURBO_CACHED_POPULATION request_message.cached_population
+#define TOPLINE_ALARM_CHIME_COUNTER request_message.alarm_chime_counter
+#define TOPLINE_ALARM_BLINK_TIMER request_message.alarm_blink_timer
+#define TOPLINE_ALARM_BLINK_STATE request_message.alarm_blink_state
+#define TOPLINE_CACHED_DENARII request_message.cached_denarii
+#define TOPLINE_CACHED_MONTH request_message.cached_month
 #endif
 
 // Update the battle statistics panel when its unit data or pointer context changes.
@@ -2846,37 +2856,37 @@ void show_top_line(void)
 {
     unsigned char dirty = 0;
 
-    if (--request_message.alarm_blink_timer <= 0) {
-        request_message.alarm_blink_state ^= 1;
-        request_message.alarm_blink_timer = 0x28;
+    if (--TOPLINE_ALARM_BLINK_TIMER <= 0) {
+        TOPLINE_ALARM_BLINK_STATE ^= 1;
+        TOPLINE_ALARM_BLINK_TIMER = 0x28;
         dirty = 1;
     }
     if (redraw_topline != 0)                                  dirty = 1;
-    if (request_message.cached_month != month)   dirty = 1;
-    if (request_message.cached_denarii != denarii) dirty = 1;
+    if (TOPLINE_CACHED_MONTH != month)   dirty = 1;
+    if (TOPLINE_CACHED_DENARII != denarii) dirty = 1;
     if (!dirty)
         return;
 
     redraw_topline = 0;
-    request_message.cached_month = month;
-    request_message.cached_denarii = denarii;
+    TOPLINE_CACHED_MONTH = month;
+    TOPLINE_CACHED_DENARII = denarii;
 
     sprite_width  = 0x15;
     sprite_height = 0xf;
     show_fast_rect(0x12e, 5, 0x1a);
 
     if (pointer_mode == 5)
-        request_message.alarm_blink_state = 1;
+        TOPLINE_ALARM_BLINK_STATE = 1;
 
     if (slave_warning == 0
-        || request_message.alarm_blink_state != 0
+        || TOPLINE_ALARM_BLINK_STATE != 0
         || map_mode == 2) {
         show_date(year, 0x130, 6, 0);
         font_list(0x19, month, x_is + 0x138, 6, font1, 0x10);
     } else {
         font_list(9, 3, 0x138, 6, font1, 0xb);
-        if (++request_message.alarm_chime_counter >= 8) {
-            request_message.alarm_chime_counter = 0;
+        if (++TOPLINE_ALARM_CHIME_COUNTER >= 8) {
+            TOPLINE_ALARM_CHIME_COUNTER = 0;
             set_pri_sound("a09.wav", 1);
         }
     }
