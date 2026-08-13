@@ -8,7 +8,7 @@ extern void font_format_split(int idx, int word_skip, int x, int y_start, int ma
 extern unsigned char background_tile;
 extern void *main_window;
 extern void save_window_status(void);
-extern void show_map_window(int mode);
+extern void hide_game_window(int mode);
 extern void tile_main_window(unsigned char tile);
 extern void play_windows_smacked_anim(char *filename);
 extern int show_native_promotion(void *window, int rank);
@@ -80,9 +80,9 @@ int show_want_promotion_box(int rank)
 
     stop_tune();
     save_window_status();
-    show_map_window(0);
-    show_map_window(1);
-    show_map_window(2);
+    hide_game_window(0);
+    hide_game_window(1);
+    hide_game_window(2);
     tile_main_window(background_tile);
     if (rank >= 10)
         play_windows_smacked_anim("wingame.smk");
