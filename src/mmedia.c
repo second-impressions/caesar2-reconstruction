@@ -45,7 +45,7 @@ extern void tile_main_window(int tile);
 extern void update_window_titles(void);
 extern void reset_getmeoutofhere_buttons(void);
 extern void gloop_start(void);
-extern void gloop_end(void);
+extern void tutorial_gloop_end(void);
 extern unsigned char game_paused;
 extern unsigned long tutorial_start_time;
 extern unsigned long (*GetTickCount)(void);
@@ -716,7 +716,7 @@ void do_a_tutorial_page(void)
 #endif
 #if PLATFORM_WINDOWS
     gloop_start();
-    gloop_end();
+    tutorial_gloop_end();
 #else
     just_idle_game_loop();
 #endif
