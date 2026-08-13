@@ -524,6 +524,13 @@ void draw_battle_part(int header_idx)
     place_i_sprite(scratch_buffer);
 }
 
+#if PLATFORM_WINDOWS
+static int cursor_count;
+#define CURSOR_COUNT cursor_count
+#else
+#define CURSOR_COUNT request_message.caret_count
+#endif
+
 // Blink either the insertion bar or underline caret at the text cursor.
 // FUNCTION: C2 0x5ae3e
 // FUNCTION: C2WIN 0x00460add
@@ -532,11 +539,11 @@ void show_cursor(unsigned char *font_ptr)
     int letter_width;
     int colour;
 
-    request_message.caret_count++;
-    if (request_message.caret_count > 0x10) request_message.caret_count = 0;
+    CURSOR_COUNT++;
+    if (CURSOR_COUNT > 0x10) CURSOR_COUNT = 0;
     if (cursor_y == 0) return;
     letter_width = get_letter_width((signed char)format_buffer[this_letter], font_ptr);
-    if (request_message.caret_count > 8) {
+    if (CURSOR_COUNT > 8) {
 #if PLATFORM_WINDOWS
         colour = 0xf9;
 #else
