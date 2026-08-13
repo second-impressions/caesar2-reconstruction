@@ -370,9 +370,7 @@ void action(void)
             tracking_army = over_an_army;
             pointer_mode = 5;
             gen_refresh1 = 1;
-#if !PLATFORM_WINDOWS
             setup_whole_screen_refresh();
-#endif
             goto end_of_action;
         }
 #endif
