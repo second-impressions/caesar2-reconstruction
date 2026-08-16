@@ -10,8 +10,11 @@ only after the rebuilt non-debug image has passed the strict comparison.
 - [Nix](https://nixos.org/) with flakes (the dev shell provides Python and
   uv; enter it with `nix develop`, or `direnv allow` once for automatic
   activation)
-- [podman](https://podman.io/) with the `watcom-10.0a-wibo` toolchain image
-  (the Watcom compiler/linker run inside it, not in the shell)
+- [podman](https://podman.io/) — the Watcom compiler and linker run inside a
+  container, not in the shell. The image is public and pulled on first use:
+  `ghcr.io/second-impressions/watcom-10.0a-wibo`, built and verified by
+  [second-impressions/watcom-compilers](https://github.com/second-impressions/watcom-compilers).
+  Set `C2_WATCOM_IMAGE` to point at a different or locally built image.
 
 ## ISO Sources
 
@@ -166,6 +169,9 @@ DOS process).  A display-free smoke test that proves DOS/4GW + CRT startup
 + the recovered `main()`:
 
 ```bash
+# Needs the dosemu2 image, which runs DOS binaries. It is not published;
+# build it from the watcom-compilers checkout:
+#   scripts/build-images.sh --filter '^watcom-10\.0a-dosemu2$'
 podman run --rm -v "$PWD/install/caesar2:/src" \
     localhost/watcom-10.0a-dosemu2 PSREBLD.EXE   # expect the CD-check prompt
 ```

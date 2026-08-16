@@ -32,7 +32,8 @@
 
             # The Watcom 10.0a toolchain itself is NOT in this shell: c2
             # rebuild/delink shell out to the system podman with the
-            # localhost/watcom-10.0a-wibo image.
+            # ghcr.io/second-impressions/watcom-10.0a-wibo image (public;
+            # override with C2_WATCOM_IMAGE).
           };
         }
       );

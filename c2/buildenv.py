@@ -27,7 +27,15 @@ import capstone
 _CS = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
 _CS.detail = False
 
-_STOCK_IMAGE = "localhost/watcom-10.0a-wibo"
+# The Watcom 10.0a toolchain image, published from second-impressions/
+# watcom-compilers. It is public, so a fresh checkout needs no local build:
+# podman pulls it on first use.
+#
+# Override with C2_WATCOM_IMAGE to test against a locally built image (the
+# watcom-compilers build tags those localhost/watcom-10.0a-wibo).
+_STOCK_IMAGE = os.environ.get(
+    "C2_WATCOM_IMAGE", "ghcr.io/second-impressions/watcom-10.0a-wibo:latest"
+)
 
 # The canonical PS.EXE compile flags (Watcom 10.0a; default OptSize=50,
 # unsigned char).  Proven settled — per-flag byte-level proofs in the
