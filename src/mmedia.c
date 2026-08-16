@@ -884,14 +884,18 @@ void show_please_wait(void)
     refresh_svga_screen();
 }
 
+// The Windows build takes a refresh flag the DOS build does not; only the
+// parameter list differs, so the two share one declaration and one body.
 #if PLATFORM_WINDOWS
-// FUNCTION: C2WIN 0x00453a1a
-void show_tutorial_timer(unsigned char refresh)
+#define SHOW_TUTORIAL_TIMER_PARAMS unsigned char refresh
 #else
+#define SHOW_TUTORIAL_TIMER_PARAMS void
+#endif
+
 // Update the visible tutorial countdown while tutorial mode is active.
 // FUNCTION: C2 0x58f16
-void show_tutorial_timer(void)
-#endif
+// FUNCTION: C2WIN 0x00453a1a
+void show_tutorial_timer(SHOW_TUTORIAL_TIMER_PARAMS)
 {
 #if PLATFORM_WINDOWS
     unsigned char *old_screen;

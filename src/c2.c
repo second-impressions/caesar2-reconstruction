@@ -551,14 +551,18 @@ void start_a_promotion(void)
 #endif
 }
 
+// The Windows build returns a status the DOS build has no caller for; only
+// the return type differs, so the two share one declaration and one body.
 #if PLATFORM_WINDOWS
-// FUNCTION: C2WIN 0x00443eca
-int new_province(void)
+#define NEW_PROVINCE_RESULT int
 #else
+#define NEW_PROVINCE_RESULT void
+#endif
+
 // Initializes a province's map, population, armies, economy, ratings, and regional systems.
 // FUNCTION: C2 0x10565
-void new_province(void)
-#endif
+// FUNCTION: C2WIN 0x00443eca
+NEW_PROVINCE_RESULT new_province(void)
 {
     int denarii_reduction;
 

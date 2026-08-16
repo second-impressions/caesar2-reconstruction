@@ -29,8 +29,8 @@ EXPECTED_REORDERED = {
     ("C2WIN", 0x00484208),
     ("C2WIN", 0x004841FD),
     ("C2WIN", 0x004841CE),
-    ("C2WIN", 0x004AE295),
-    ("C2WIN", 0x004AE6DB),
+    ("C2WIN", 0x0048ED84),
+    ("C2WIN", 0x004AA98D),
     ("C2WIN", 0x004AEABE),
 }
 
