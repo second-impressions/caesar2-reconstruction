@@ -317,7 +317,6 @@ extern int file_exists(char *filename);
 
 // Populate directory[] with up to 100 DOS 8.3 filenames matching a wildcard pattern.
 // FUNCTION: C2 0x24212
-// FUNCTION: C2WIN 0x0044a7e0
 void get_directory(char *pattern)
 {
     struct find_t find_buf;
@@ -339,6 +338,7 @@ void get_directory(char *pattern)
     first_entry = 0;
 }
 #else
+// FUNCTION: C2WIN 0x0044a7e0
 void get_directory(char *pattern)
 {
     struct _finddata_t find_buf;
@@ -1430,13 +1430,13 @@ void fade_to_black_out(void)
 
 // Wait for a complete vertical-blank cycle on port 0x3DA bit 3.
 // FUNCTION: C2 0x255cb
-// FUNCTION: C2WIN 0x0044bc5e
 void wvbl2(void)
 {
     while (inp(0x3DA) & 8) ;
     while (!(inp(0x3DA) & 8)) ;
 }
 #else
+// FUNCTION: C2WIN 0x0044bc5e
 void wvbl2(void)
 {
 }
@@ -1446,7 +1446,6 @@ void wvbl2(void)
 // Toggle the active framebuffer page (cscreen / oscreen) by reprogramming the CRTC start-address
 // registers and flipping a private page flag.
 // FUNCTION: C2 0x255e8
-// FUNCTION: C2WIN 0x0044bc69
 void swap_screens(void)
 {
     static int page_flag;
@@ -1463,6 +1462,7 @@ void swap_screens(void)
     }
 }
 #else
+// FUNCTION: C2WIN 0x0044bc69
 void swap_screens(void)
 {
 }
@@ -3278,7 +3278,6 @@ int timer(int mode)
 
 // Play a short 880 Hz beep.
 // FUNCTION: C2 0x2759c
-// FUNCTION: C2WIN 0x0044e9f8
 void high_beep(void)
 {
     sound(0x370);
@@ -3288,7 +3287,6 @@ void high_beep(void)
 
 // Short beep at 220 Hz (0xDC).
 // FUNCTION: C2 0x275bf
-// FUNCTION: C2WIN 0x0044ea10
 void low_beep(void)
 {
     sound(0xdc);
@@ -3298,11 +3296,13 @@ void low_beep(void)
 #else
 void vhigh_beep(void);
 
+// FUNCTION: C2WIN 0x0044e9f8
 void high_beep(void)
 {
     Beep(0x370, 50);
 }
 
+// FUNCTION: C2WIN 0x0044ea10
 void low_beep(void)
 {
     Beep(0xdc, 50);
@@ -3349,7 +3349,6 @@ void test_beeps(void)
 
 // Short beep at 1720 Hz (0x6b8) for 150 ms.
 // FUNCTION: C2 0x2763c
-// FUNCTION: C2WIN 0x0044e9dd
 void vhigh_beep(void)
 {
     sound(0x6b8);
@@ -3357,6 +3356,7 @@ void vhigh_beep(void)
     nosound();
 }
 #else
+// FUNCTION: C2WIN 0x0044e9dd
 void vhigh_beep(void)
 {
     Beep(0x6b8, 150);
