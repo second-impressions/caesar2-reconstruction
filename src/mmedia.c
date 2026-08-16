@@ -884,12 +884,12 @@ void show_please_wait(void)
     refresh_svga_screen();
 }
 
-// Update the visible tutorial countdown while tutorial mode is active.
-// FUNCTION: C2 0x58f16
-// FUNCTION: C2WIN 0x00453a1a
 #if PLATFORM_WINDOWS
+// FUNCTION: C2WIN 0x00453a1a
 void show_tutorial_timer(unsigned char refresh)
 #else
+// Update the visible tutorial countdown while tutorial mode is active.
+// FUNCTION: C2 0x58f16
 void show_tutorial_timer(void)
 #endif
 {

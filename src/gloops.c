@@ -503,14 +503,15 @@ void main_game_loop(void)
 #define WHOLE_SCREEN_REFRESH() setup_whole_screen_refresh()
 #endif
 
-// Advances battle units when due, renders the battle map and panels, handles battle input, and
-// services screen and audio updates for one frame.
-// FUNCTION: C2 0x3d816
-// FUNCTION: C2WIN 0x004101e4
 #if PLATFORM_WINDOWS
 extern void update_window_battle_totals(void);
 extern void update_window_battle_stats(void);
 #endif
+
+// Advances battle units when due, renders the battle map and panels, handles battle input, and
+// services screen and audio updates for one frame.
+// FUNCTION: C2 0x3d816
+// FUNCTION: C2WIN 0x004101e4
 void battle_game_loop(void)
 {
     cycle_count++;

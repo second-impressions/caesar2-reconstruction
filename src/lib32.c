@@ -510,10 +510,8 @@ char get_filename_length(char *filename)
     return length;
 }
 
-// Locate a file in the platform's local and media search paths.
-// FUNCTION: C2 0x24446
-// FUNCTION: C2WIN 0x0044abdd
 #if PLATFORM_WINDOWS
+// FUNCTION: C2WIN 0x0044abdd
 int check_file_exists(char *filename)
 {
     int fd;
@@ -552,6 +550,8 @@ int check_file_exists(char *filename)
     return 0;
 }
 #else
+// Locate a file in the platform's local and media search paths.
+// FUNCTION: C2 0x24446
 int check_file_exists(char *filename)
 {
     int fd;
@@ -588,9 +588,6 @@ int is_file_on_harddrive(char *filename)
     return found;
 }
 
-// Read `size` bytes from `fname` at byte `offset` into `buf`. Returns the number of bytes actually
-// read, or 0 if both the hard-drive and CD attempts failed to read anything.
-// FUNCTION: C2 0x2449a
 #if PLATFORM_WINDOWS
 // FUNCTION: C2WIN 0x0044ae48
 int readfile(const char *filename, void *buffer, int size, int offset)
@@ -637,6 +634,9 @@ done:
     return bytes_read;
 }
 #else
+// Read `size` bytes from `fname` at byte `offset` into `buf`. Returns the number of bytes actually
+// read, or 0 if both the hard-drive and CD attempts failed to read anything.
+// FUNCTION: C2 0x2449a
 int readfile(const char *filename, void *buffer, int size, int offset)
 {
     int fd;
@@ -900,14 +900,14 @@ int set_svga_640_480(int mode)
 }
 #endif /* PLATFORM_DOS */
 
-// Detects the installed VGA chipset and records its capabilities.
-// FUNCTION: C2 0x24b0e
-// FUNCTION: C2WIN 0x0044b500
 #if PLATFORM_WINDOWS
+// FUNCTION: C2WIN 0x0044b500
 void recognise_card(void)
 {
 }
 #else
+// Detects the installed VGA chipset and records its capabilities.
+// FUNCTION: C2 0x24b0e
 void recognise_card(void)
 {
     int i;
@@ -969,15 +969,15 @@ int check_for_Tseng(void)
     return 0;
 }
 
-// Set vid_tech / vid_bank_tech / vid_no_of_banks based on the detected VESA memory and recognised
-// cards.
-// FUNCTION: C2 0x24c2f
-// FUNCTION: C2WIN 0x0044b50b
 #if PLATFORM_WINDOWS
+// FUNCTION: C2WIN 0x0044b50b
 void get_video_technique(void)
 {
 }
 #else
+// Set vid_tech / vid_bank_tech / vid_no_of_banks based on the detected VESA memory and recognised
+// cards.
+// FUNCTION: C2 0x24c2f
 void get_video_technique(void)
 {
     vid_tech         = 0;
@@ -992,14 +992,14 @@ void get_video_technique(void)
 }
 #endif
 
-// Print the detected VESA mode, chipset, memory, and banking information.
-// FUNCTION: C2 0x24c7f
-// FUNCTION: C2WIN 0x0044b516
 #if PLATFORM_WINDOWS
+// FUNCTION: C2WIN 0x0044b516
 void print_vesa_info(void)
 {
 }
 #else
+// Print the detected VESA mode, chipset, memory, and banking information.
+// FUNCTION: C2 0x24c7f
 void print_vesa_info(void)
 {
     int oem_string_addr;

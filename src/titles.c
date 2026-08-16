@@ -69,11 +69,8 @@ void lose_game_screen(void)
     set_palette(city_palette);
 }
 
-// Shows the promotion or victory dialog with its video, text, speech, and response buttons.
-// Ranks of 10 or higher select the victory variant.
-// FUNCTION: C2 0x5a067
-// FUNCTION: C2WIN 0x004aea34
 #if PLATFORM_WINDOWS
+// FUNCTION: C2WIN 0x004aea34
 int show_want_promotion_box(int rank)
 {
     int result;
@@ -92,6 +89,9 @@ int show_want_promotion_box(int rank)
     return result;
 }
 #else
+// Shows the promotion or victory dialog with its video, text, speech, and response buttons.
+// Ranks of 10 or higher select the victory variant.
+// FUNCTION: C2 0x5a067
 void show_want_promotion_box(int rank)
 {
     stop_tune();
