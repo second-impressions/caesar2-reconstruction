@@ -134,10 +134,7 @@ must stay exact, `strict 0 differing code byte(s)`, and the final
 `whole file: 0 differing byte(s)`) and `c2 reccmp code` (100% accuracy)
 before committing.  Even style edits are constrained — the optimiser's
 output depends on statement order, declaration order, and idiom choice.
-The inferred source-style guide (`observed-source-style.md`) and the
-155-rule Watcom codegen catalogue live in the
-[watcom10.0a](../../ReverseEngineering/watcom10.0a) sibling repo's `docs/`;
-the game's data structures are documented in `include/entities.h`.
+The game's data structures are documented in `include/entities.h`.
 
 Every tracked source is an ordinary, hand-editable file under that same
 invariant — including `include/c2_data.h` (which began as generator

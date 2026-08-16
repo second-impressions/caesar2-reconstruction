@@ -38,8 +38,8 @@ _STOCK_IMAGE = os.environ.get(
 )
 
 # The canonical PS.EXE compile flags (Watcom 10.0a; default OptSize=50,
-# unsigned char).  Proven settled — per-flag byte-level proofs in the
-# watcom10.0a sibling repo (docs/watcom-10.0a-flags.md).
+# unsigned char).  Each flag was settled individually against the original
+# binary, at byte level.
 # -dPLATFORM_DOS=1 selects the DOS platform in include/c2_target.h; it is
 # a preprocessor define only (codegen-neutral — the header defaults to the
 # same platform without it).

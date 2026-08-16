@@ -125,4 +125,4 @@ reconstructable from the tooling repo's `scripts/wv_check.py` /
 
 - byte-exact Watcom debug section;
 - original source file/path strings and file naming;
-- inverse-compiler research (continues in the watcom10.0a sibling repo).
+- inverse-compiler research.
