@@ -165,13 +165,4 @@ assets from a CD (copy the CD's `HD/` tree plus the media directories
 `xmi/`, `smk/`, `raw/`, `pl8/` into an install directory), drop the rebuilt
 `PS.EXE` next to them, and run it in any DOS emulator (e.g. DOSBox-X,
 which also offers a GDB remote stub for attaching a debugger to the live
-DOS process).  A display-free smoke test that proves DOS/4GW + CRT startup
-+ the recovered `main()`:
-
-```bash
-# Needs the dosemu2 image, which runs DOS binaries. It is not published;
-# build it from the watcom-compilers checkout:
-#   scripts/build-images.sh --filter '^watcom-10\.0a-dosemu2$'
-podman run --rm -v "$PWD/install/caesar2:/src" \
-    localhost/watcom-10.0a-dosemu2 PSREBLD.EXE   # expect the CD-check prompt
-```
+DOS process).

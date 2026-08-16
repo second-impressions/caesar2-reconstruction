@@ -1303,15 +1303,15 @@ void get_average_ind_tax(void) {
     average_ind_tax_asses     = per_business % 100;
 }
 
-// Updates imperial favour, requests, tribute reviews, and personal tax demands.
-// FUNCTION: C2 0x574e8
-// FUNCTION: C2WIN 0x004580c6
 #if PLATFORM_WINDOWS
 #define TRIBUTE_TAX_PROVINCE completed_provinces
 #else
 #define TRIBUTE_TAX_PROVINCE cp
 #endif
 
+// Updates imperial favour, requests, tribute reviews, and personal tax demands.
+// FUNCTION: C2 0x574e8
+// FUNCTION: C2WIN 0x004580c6
 void get_new_tribute(void) {
     int delta;
 #if !PLATFORM_WINDOWS

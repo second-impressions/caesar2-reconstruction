@@ -596,12 +596,13 @@ void init_help_history(void)
         help_history[i] = 0;
 }
 
-// Run the tutorial campaign with beginner settings, then restore skill and peace mode.
-// FUNCTION: C2 0x5892d
-// FUNCTION: C2WIN 0x0045313c
 #if PLATFORM_WINDOWS
 extern void update_tutorial_window_title(void);
 #endif
+
+// Run the tutorial campaign with beginner settings, then restore skill and peace mode.
+// FUNCTION: C2 0x5892d
+// FUNCTION: C2WIN 0x0045313c
 void do_tutorial(void)
 {
     int skill = c2inf.skill_level;

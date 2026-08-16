@@ -21,6 +21,9 @@ COND_RE = re.compile(r"^\s*#\s*(if|ifdef|ifndef)\b\s*(.*?)\s*$")
 # Conditions allowed outside c2_target.h itself.
 ALLOWED_TOKENS = re.compile(
     r"PLATFORM_(DOS|WINDOWS)|C2_FEAT_[A-Z0-9_]+|C2_PATCHLEVEL"
+    r"|C2_FIX_[A-Z0-9_]+"    # optional source-level repairs (c2_bugfixes.h),
+                             # off for the shipped targets so the rebuild stays
+                             # byte-exact; continuation ports may enable them
     r"|S_IRUSR"              # portable stat-mode fallback
     r"|\w+_H\b"              # include guards
 )

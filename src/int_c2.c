@@ -2050,11 +2050,11 @@ void random_target(void)
             citizen_list[citizen_no].y + rand8 - 6;
 }
 
+void get_dirc_from_army_wf_run(void);
+
 // Choose a neighbouring road, preferring an unoccupied direction that does not reverse course.
 // FUNCTION: C2 0x49184
 // FUNCTION: C2WIN 0x0040b607
-void get_dirc_from_army_wf_run(void);
-
 int city_test_for_road(int cell_x, int cell_y, int cell_offset, signed char heading)
 {
     char road_list[8][3];

@@ -2214,8 +2214,6 @@ void push_shell(int row_count)
     }
 }
 
-// Evolve regional settlements and industries, process warehouse deliveries, and add produced goods
-// to city supply pipelines.
 #if PLATFORM_WINDOWS
 static int region_pass_count;
 #define EVOLVE_COUNT region_pass_count
@@ -2223,6 +2221,8 @@ static int region_pass_count;
 #define EVOLVE_COUNT cmu_count[4]
 #endif
 
+// Evolve regional settlements and industries, process warehouse deliveries, and add produced goods
+// to city supply pipelines.
 // FUNCTION: C2 0x436ab
 // FUNCTION: C2WIN 0x00468079
 void evolve_region(int row_count)

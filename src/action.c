@@ -2392,10 +2392,6 @@ void act_dont_exit(void)
     out1     = 1;
 }
 
-// Open the FX-options dialog (mode 0 = tunes), pumping `tune_game_loop` until the modal closes. On
-// exit refresh the whole screen and re-apply tune volume.
-// FUNCTION: C2 0x32030
-// FUNCTION: C2WIN 0x004b4f73
 #if PLATFORM_WINDOWS
 #define FX_TUTORIAL_ACTIVE tutorial_mode
 #define FX_INITIAL_OUT1 0
@@ -2403,6 +2399,11 @@ void act_dont_exit(void)
 #define FX_TUTORIAL_ACTIVE tutorial_active
 #define FX_INITIAL_OUT1 tutorial_active
 #endif
+
+// Open the FX-options dialog (mode 0 = tunes), pumping `tune_game_loop` until the modal closes. On
+// exit refresh the whole screen and re-apply tune volume.
+// FUNCTION: C2 0x32030
+// FUNCTION: C2WIN 0x004b4f73
 void act_toggle_tunes(void)
 {
 #if !PLATFORM_WINDOWS
@@ -3596,14 +3597,15 @@ void act_set_return_home(void)
     clear_mouse();
 }
 
-// Stop the selected cohort's patrol, return it to idle state, and refresh the map controls.
-// FUNCTION: C2 0x33360
-// FUNCTION: C2WIN 0x004b6ce8
 #if PLATFORM_WINDOWS
 #define TRACKED_ARMY_STATE ((signed char)army_list[tracking_army].state_idx)
 #else
 #define TRACKED_ARMY_STATE army_state
 #endif
+
+// Stop the selected cohort's patrol, return it to idle state, and refresh the map controls.
+// FUNCTION: C2 0x33360
+// FUNCTION: C2WIN 0x004b6ce8
 void act_set_patrol_stop(void)
 {
     int route_row;
@@ -4173,15 +4175,16 @@ void act_goto_flags(void)
     pm_build_shape = 0;
 }
 
+#if PLATFORM_WINDOWS
+void activate_city_window(void);
+void activate_region_window(void);
+#endif
+
 // Cycle to the next "city flag" marker. If `next_city_flag` returns 0 the city has none and a "no
 // markers" message (id 0x67) pops up; otherwise enter flag-marker pointer mode (with a 10-tick
 // decay) and pan the city map to that flag.
 // FUNCTION: C2 0x33b40
 // FUNCTION: C2WIN 0x004b7ca9
-#if PLATFORM_WINDOWS
-void activate_city_window(void);
-void activate_region_window(void);
-#endif
 void act_set_marker1(void)
 {
     int target_map_ptr;
@@ -4448,14 +4451,15 @@ void act_forum(void)
 #endif
 }
 
-// Runs the interaction loop for the active forum department.
-// FUNCTION: C2 0x33ea7
-// FUNCTION: C2WIN 0x004b7e89
 #if PLATFORM_WINDOWS
 #define ACTIVE_FORUM_DEPT forum_dept
 #else
 #define ACTIVE_FORUM_DEPT dept
 #endif
+
+// Runs the interaction loop for the active forum department.
+// FUNCTION: C2 0x33ea7
+// FUNCTION: C2WIN 0x004b7e89
 void forum_game_loop(void)
 {
 #if !PLATFORM_WINDOWS

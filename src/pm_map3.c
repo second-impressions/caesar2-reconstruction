@@ -617,15 +617,16 @@ void bottom3_line_no_sides(void)
     pm_y_clip += pm_diamond_half_height;
 }
 
-// Render a cell's figure, elephant riders, and linked arrow sprites with directional offsets
-// and screen clipping.
-// FUNCTION: C2 0x3ca7f
-// FUNCTION: C2WIN 0x0041f231
 extern void write_i_sprite(unsigned char *sprite_addr);
 extern void write_i_left_sprite(unsigned char *sprite_addr);
 extern void write_i_right_sprite(unsigned char *sprite_addr);
 extern void xclip(int clip_left, int clip_right);
 extern void yclip(int clip_top, int clip_bottom);
+
+// Render a cell's figure, elephant riders, and linked arrow sprites with directional offsets
+// and screen clipping.
+// FUNCTION: C2 0x3ca7f
+// FUNCTION: C2WIN 0x0041f231
 void place3_sprite(int style)
 {
     int base_y_offset;

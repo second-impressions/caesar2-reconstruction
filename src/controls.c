@@ -688,12 +688,12 @@ void de_toggle_all_icons(struct icon_rec *icon_list, int icon_count)
     }
 }
 
-// Update button repeat and visual states, then handle toggle, momentary, and repeating clicks.
-// FUNCTION: C2 0x2e4f3
-// FUNCTION: C2WIN 0x004217c7
 void adjust(int message_idx, int *value_ptr, int step_value, int max_value, int min_value, int x, int y, int display_kind);
 int exit_screen_at(int, int);
 
+// Update button repeat and visual states, then handle toggle, momentary, and repeating clicks.
+// FUNCTION: C2 0x2e4f3
+// FUNCTION: C2WIN 0x004217c7
 int control_buttons(int x, int y, struct button_rec *button_list, int button_count)
 {
     int i;

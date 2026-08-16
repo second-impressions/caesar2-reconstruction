@@ -3833,8 +3833,6 @@ int get_wf_dirc(int search_mode)
 
 
 // Advance the current projectile and resolve expiry or impact.
-void set_missile_fight_fx(int event);
-
 // FUNCTION: C2 0x51e5a
 // FUNCTION: C2WIN 0x004809d7
 void fly_to_target(void)

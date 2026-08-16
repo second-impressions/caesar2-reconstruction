@@ -941,9 +941,6 @@ void show_first_region_box(void)
     hold_mouse_replace = 1;
 }
 
-// Show information and available actions for the selected province.
-// FUNCTION: C2 0x5cd03
-// FUNCTION: C2WIN 0x004244a7
 #if PLATFORM_WINDOWS
 #define THIS_REGION_INDEX region_over
 #define THIS_REGION_HOME (region_over - 1)
@@ -952,6 +949,9 @@ void show_first_region_box(void)
 #define THIS_REGION_HOME (region_idx - show_media)
 #endif
 
+// Show information and available actions for the selected province.
+// FUNCTION: C2 0x5cd03
+// FUNCTION: C2WIN 0x004244a7
 void this_region_box(int confirmation_mode)
 {
     int show_media;
@@ -1146,11 +1146,11 @@ void show_about_box(void)
     hold_mouse_replace = 1;
 }
 
+extern void show_a_system_blank(int x, int y, int w, int h);
+
 // Show the player's current name in the new-game settings.
 // FUNCTION: C2 0x5d581
 // FUNCTION: C2WIN 0x00424dd3
-extern void show_a_system_blank(int x, int y, int w, int h);
-
 void show_name_choice(void)
 {
     show_a_system_blank(0x60, 0x110, 0x1c, 3);
@@ -1956,11 +1956,11 @@ void show_temple_tip(void)
 #endif
 }
 
+void get_history_in_buffer(int *history_buf);
+
 // Show the clerks forum with historical graphs and range controls.
 // FUNCTION: C2 0x5f7e2
 // FUNCTION: C2WIN 0x004271af
-void get_history_in_buffer(int *history_buf);
-
 void forum_clerks_screen(void)
 {
     cover_mouse_droppings();
@@ -2021,12 +2021,12 @@ void history_selection(void)
 #endif
 }
 
-// Draw the population, treasury, employment, and reputation history graphs.
-// FUNCTION: C2 0x5f9f0
-// FUNCTION: C2WIN 0x004273b1
 int get_history_from_buffer(int *history_buf, int row_idx, int col_idx);
 int show_history_graph(int graph_x, int graph_y, int statistic_idx);
 
+// Draw the population, treasury, employment, and reputation history graphs.
+// FUNCTION: C2 0x5f9f0
+// FUNCTION: C2WIN 0x004273b1
 void history_graphs(void)
 {
     int top;
@@ -2062,15 +2062,15 @@ void history_graphs(void)
 #endif
 }
 
-// Plot one historical statistic over the selected number of years.
-// FUNCTION: C2 0x5fbba
-// FUNCTION: C2WIN 0x004275a1
 void draw_a_rect(int x, int y, int w, int h, int colour);
 void check_viewed_cohort(void);
 void place_3_legend_blocks(int caption_idx, int top_gfx_idx, int middle_gfx_idx, int bottom_gfx_idx);
 void place_9_legend_blocks(void);
 void show_ov_legend_panel(void);
 
+// Plot one historical statistic over the selected number of years.
+// FUNCTION: C2 0x5fbba
+// FUNCTION: C2WIN 0x004275a1
 int show_history_graph(int graph_x, int graph_y, int statistic_idx)
 {
     int no_years = history_graph_years[history_graph_length];
@@ -3181,11 +3181,11 @@ void place_9_legend_blocks(void)
     font_list(0x35, 0x18, 0x250, 0xaa, font1, 0x10);
 }
 
+extern void place_2x2_block(unsigned char *src, int screen_off);
+
 // Draw and frame one legend color tile.
 // FUNCTION: C2 0x627b6
 // FUNCTION: C2WIN 0x0042a7d8
-extern void place_2x2_block(unsigned char *src, int screen_off);
-
 void place_legend_block(int sprite_idx, int x, int y)
 {
     int i;
@@ -3880,13 +3880,13 @@ int general_business_cause(void)
     return 0x39;
 }
 
-// List the people living in the queried house, or report that it is empty.
-// FUNCTION: C2 0x639b4
-// FUNCTION: C2WIN 0x0042c330
 void test_range_for(int x, int y, int radius, int mode);
 int mouse_in_area(int x, int y, int w, int h);
 int test_range_for_road(int x, int y, int range);
 
+// List the people living in the queried house, or report that it is empty.
+// FUNCTION: C2 0x639b4
+// FUNCTION: C2WIN 0x0042c330
 void show_people_query_panel(void)
 {
     int word_health;
@@ -4025,11 +4025,11 @@ void show_people_query_panel(void)
                       0x150, 0x64, 0, 0, font1, 0x10);
 }
 
+int test_area_for_population(int extra, int x, int y, int radius);
+
 // Select the person clicked in the query-panel resident list.
 // FUNCTION: C2 0x63ef3
 // FUNCTION: C2WIN 0x0042cba3
-int test_area_for_population(int extra, int x, int y, int radius);
-
 void get_queried_person(void)
 {
     int i;
@@ -4267,11 +4267,11 @@ int reg_port_quote(int base)
     return quote;
 }
 
+int get_reg_buildings_in_radius(int x, int, int, int, int);
+
 // Collect building, service, business, and resident data for the queried city tile.
 // FUNCTION: C2 0x648e6
 // FUNCTION: C2WIN 0x0042dbbf
-int get_reg_buildings_in_radius(int x, int, int, int, int);
-
 void get_query_info(void)
 {
     unsigned char occupant_b;
@@ -4418,10 +4418,11 @@ void get_query_info(void)
     }
 }
 
+int get_pop_level(void);
+
 // Collect building, access, labor, and goods data for the queried region tile.
 // FUNCTION: C2 0x64e92
 // FUNCTION: C2WIN 0x0042e3ed
-int get_pop_level(void);
 int get_reg_buildings_in_radius(int x, int y, int span, int radius,
                                 unsigned char building_kind);
 

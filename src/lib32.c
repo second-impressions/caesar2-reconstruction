@@ -4083,13 +4083,13 @@ void exit_game(void)
 #endif
 }
 
-// Initialize random state, video, framebuffers, audio, scratch memory, and mouse limits.
-// FUNCTION: C2 0x283fa REORDERED
-// FUNCTION: C2WIN 0x0044ff39
 #if PLATFORM_WINDOWS
 extern unsigned char *game_screen;
 #endif
 
+// Initialize random state, video, framebuffers, audio, scratch memory, and mouse limits.
+// FUNCTION: C2 0x283fa REORDERED
+// FUNCTION: C2WIN 0x0044ff39
 int start_system(void)
 {
     int i;
