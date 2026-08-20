@@ -26,7 +26,6 @@ extern void update_window_date(void);
 extern void update_window_denarii(unsigned char force);
 extern void update_window_population(unsigned char force);
 extern void update_window_icon_text(unsigned char force);
-extern void cycle_map_colours(void);
 extern void cycle_window_colours(int start_idx, int end_idx, unsigned char *bitmap);
 extern void act_cohort_box(void *window);
 extern void act_non_cohort_box(void *window);
