@@ -231,7 +231,6 @@ extern void  demo_lead_out_slideshow(void);
 #endif
 extern void  free_tune_buffer(void);
 #if PLATFORM_WINDOWS
-extern void  close_windows(void);
 extern void  hide_game_window(int mode);
 extern void  update_window_menu(int mode);
 extern void  update_sound_menu(void);
