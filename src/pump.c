@@ -1,6 +1,8 @@
 #include "pump.h"
 #include "c2_data.h"
 
+#include <stdlib.h>
+
 unsigned char p_len[64] = { 3, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 };
 
 unsigned char p_code[64] = { 0, 32, 48, 64, 80, 88, 96, 104, 112, 120, 128, 136, 144, 148, 152, 156, 160, 164, 168, 172, 176, 180, 184, 188, 192, 194, 196, 198, 200, 202, 204, 206, 208, 210, 212, 214, 216, 218, 220, 222, 224, 226, 228, 230, 232, 234, 236, 238, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255 };
@@ -43,8 +45,6 @@ unsigned char getlen;
 #define MAX_FREQ    0x8000
 
 extern void  memmove(void *dst, const void *src, unsigned int n);
-extern void *calloc(unsigned int nmemb, unsigned int size);
-extern void free(void *);
 /* Forward declarations (functions defined later in this file). */
 void InsertNode(short r);
 void DeleteNode(short p);
