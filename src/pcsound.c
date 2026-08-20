@@ -4,14 +4,15 @@
 #include "c2_data.h"
 #include "smacker.h"
 #include <fcntl.h>             /* O_BINARY */
+#include <io.h>
+#include <stdio.h>
+#include <stdlib.h>
 #if PLATFORM_DOS
 char __far *MK_FP(int off, int seg);
 #pragma aux MK_FP = parm [eax] [edx] value [dx eax];
 #elif PLATFORM_WINDOWS
 static char __far *MK_FP(unsigned off, unsigned seg);
 #endif
-extern int  open(const char *path, int flags, ...);
-extern int sprintf(char *buffer, const char *format, ...);
 extern char file_buffer[80];
 extern char cd_drive[4];
 #if PLATFORM_WINDOWS
@@ -65,9 +66,6 @@ char __far *start_sound(char *sample_data, int loop_count);
 char __far *start_tune(unsigned char *sequence_data, int sequence_num, int sequence_idx);
 void init_ss_entires(void);
 
-void free(void *p);
-
-extern void *malloc(unsigned int size);
 /* Forward declarations (functions defined later in this file). */
 void stop_samples(void);
 void stop_sequences(void);
