@@ -1121,7 +1121,7 @@ void set_vga_palette_range(char *p, int start, int end)
 #endif /* PLATFORM_DOS */
 
 #if PLATFORM_WINDOWS
-extern void direct_palette_set(char *p);
+extern void direct_palette_set(unsigned char *palette);
 
 // FUNCTION: C2WIN 0x0044b56e
 void set_vga_palette(char *p)
