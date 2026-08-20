@@ -944,7 +944,6 @@ extern void *main_window;
 extern unsigned char native_dialog_extended;
 extern char *confirm_yes_text;
 extern char *confirm_no_text;
-int show_native_confirm(void *window, char *message, char *yes_text, char *no_text);
 void act_yes(void);
 void act_no(void);
 #endif
