@@ -68,7 +68,7 @@ extern void font_list(int string_idx, int word_count, int list_x, int list_y, un
 extern int  get_fb_width(unsigned char *font_ptr);
 extern void show_cursor(unsigned char *font_ptr);
 
-extern void exit_screen_void(void);
+extern int exit_screen(void);
 
 /* Forward declarations (functions defined later in this file). */
 void explain_forum(void);
