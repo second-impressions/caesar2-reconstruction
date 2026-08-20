@@ -70,19 +70,15 @@ void get_population_and_industry_count(int radius, int demand_mode);
 // FUNCTION: C2WIN 0x004040b0
 void citizen_intelligence(void)
 {
-    age_count++;
-    if (age_count >= 0x40) age_count = 0;
+    age_count++; if (age_count >= 0x40) age_count = 0;
     no_of_rioters    = (no_of_rioters    > 1);
     no_of_barbarians = (no_of_barbarians > 1);
     no_of_citizens = 0;
     for (citizen_no = 0; citizen_no < 0xc9; citizen_no++) {
         if (citizen_list[citizen_no].exists != 0) {
             no_of_citizens++;
-            if (citizen_list[citizen_no].type <= 0
-             || citizen_list[citizen_no].type >= 8)
-                remove_citizen(citizen_no);
-            else
-                citizen_intelligences[citizen_list[citizen_no].type]();
+            if (citizen_list[citizen_no].type <= 0 || citizen_list[citizen_no].type >= 8) remove_citizen(citizen_no);
+            else citizen_intelligences[citizen_list[citizen_no].type]();
         }
     }
 }
