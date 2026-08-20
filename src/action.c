@@ -60,7 +60,6 @@ extern void *help_window;
 extern unsigned char shifted_mouse_click;
 extern unsigned long tutorial_start_time;
 extern void act_query_windows(void);
-extern void clear_mouse_input(void);
 extern unsigned long (*GetTickCount)(void);
 extern void set_main_menu_enabled(unsigned char enabled);
 extern void load_screen_parts(unsigned char mode);
