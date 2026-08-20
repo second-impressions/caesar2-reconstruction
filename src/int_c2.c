@@ -99,11 +99,8 @@ void army_intelligence(void)
         if (army_list[army_no].exists != 0) {
             no_of_armies++;
             army_list[army_no].map_x = army_list[army_no].map_y = 0;
-            if (army_list[army_no].type <= 0
-             || army_list[army_no].type >= 9)
-                remove_army(army_no);
-            else
-                army_intelligences[army_list[army_no].type]();
+            if (army_list[army_no].type <= 0 || army_list[army_no].type >= 9) remove_army(army_no);
+            else army_intelligences[army_list[army_no].type]();
         }
     }
 }
