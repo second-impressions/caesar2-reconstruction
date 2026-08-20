@@ -244,14 +244,8 @@ extern int   choose_init_region(void);
 #endif
 void *load_a_battle_gfx_file(int battle_zoom, int troop_gfx_idx, int use_aux);
 extern void get_pseudo_map(int n);
-extern unsigned _dos_setdrive(unsigned drive, unsigned *total);
-extern unsigned _dos_getdrive(unsigned *drive);
-extern int      chdir(const char *path);
-extern int      open(const char *path, int flags, ...);
-extern int      close(int fd);
-#if PLATFORM_WINDOWS
+#include <io.h>
 #include <direct.h>
-#endif
 /* Forward declarations (functions defined later in this file). */
 void deal_with_battles(void);
 void start_a_new_game(void);
@@ -1418,6 +1412,8 @@ void do_neg(void)
 {
     neg_sound();
 }
+
+#include <dos.h>
 
 #if PLATFORM_WINDOWS
 // FUNCTION: C2WIN 0x004457c4
