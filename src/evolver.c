@@ -1284,142 +1284,52 @@ void business_output(int cell_x, int cell_y)
   int factor = ind_growth_factor;
   int num_people = test_area_for_population(2, cell_x, cell_y, 2);
   int max_supply;
-  if (num_people > 0x82)
-    low_half += 4;
-  else if (num_people > 0x5a)
-    low_half += 3;
-  else if (num_people > 0x32)
-    low_half += 2;
-  else if (num_people > 10)
-    low_half += 1;
-  if (low_half <= 0)
-    max_supply = 0;
-  else
-    if (low_half <= 1)
-    max_supply = 3;
-  else
-    if (low_half <= 2)
-    max_supply = 5;
-  else
-    if (low_half <= 3)
-    max_supply = 7;
-  else
-    max_supply = 7;
-  if (upper_level == 0)
-  {
-    factor -= 2;
-    if (max_supply > 4)
-      max_supply = 4;
-  }
-  if (supply_pipeline <= 0)
-    max_supply = 0;
-  else
-    if (supply_pipeline <= 0x32)
-  {
-    factor -= 3;
-    if (max_supply > 1)
-      max_supply = 1;
-  }
-  else
-    if (supply_pipeline <= 0xc8)
-  {
-    factor -= 2;
-    if (max_supply > 3)
-      max_supply = 3;
-  }
-  else
-    if (supply_pipeline <= 0x190)
-  {
-    factor -= 1;
-    if (max_supply > 5)
-      max_supply = 5;
-  }
-  else
-  {
-    if (supply_pipeline <= 600)
-      goto pipeline_done;
-    if (supply_pipeline <= 0x320)
-      factor += 1;
-    else
-      if (supply_pipeline <= 0x3e8)
-      factor += 2;
-    else
-      if (supply_pipeline > 1000)
-      factor += 3;
+  if (num_people > 0x82) low_half += 4;
+  else if (num_people > 0x5a) low_half += 3;
+  else if (num_people > 0x32) low_half += 2;
+  else if (num_people > 10) low_half += 1;
+  if (low_half <= 0) max_supply = 0;
+  else if (low_half <= 1) max_supply = 3;
+  else if (low_half <= 2) max_supply = 5;
+  else if (low_half <= 3) max_supply = 7;
+  else max_supply = 7;
+  if (upper_level == 0) { factor -= 2; if (max_supply > 4) max_supply = 4; }
+  if (supply_pipeline <= 0) max_supply = 0;
+  else if (supply_pipeline <= 0x32) { factor -= 3; if (max_supply > 1) max_supply = 1; }
+  else if (supply_pipeline <= 0xc8) { factor -= 2; if (max_supply > 3) max_supply = 3; }
+  else if (supply_pipeline <= 0x190) { factor -= 1; if (max_supply > 5) max_supply = 5; }
+  else {
+    if (supply_pipeline <= 600) goto pipeline_done;
+    if (supply_pipeline <= 0x320) factor += 1;
+    else if (supply_pipeline <= 0x3e8) factor += 2;
+    else if (supply_pipeline > 1000) factor += 3;
   }
 pipeline_done:
-  if (no_of_empire_connections <= 0)
-  {
-    if (max_supply > 4)
-      max_supply = 4;
-  }
-  else
-    if (no_of_empire_connections <= 1)
-    factor += 1;
-  else
-    if (no_of_empire_connections > 1)
-    factor += 2;
-  if (city_stock <= 0)
-    max_supply = 0;
-  else
-    if (city_stock <= 0x14)
-  {
-    if (max_supply > 1)
-      max_supply = 1;
-  }
-  else
-    if (city_stock <= 0x22)
-  {
-    if (max_supply > 2)
-      max_supply = 2;
-  }
-  else
-    if (city_stock <= 0x32)
-  {
-    if (max_supply > 3)
-      max_supply = 3;
-  }
-  else
-    if (city_stock <= 0x43)
-  {
-    if (max_supply > 4)
-      max_supply = 4;
-  }
-  else
-    if (city_stock <= 0x4b)
-  {
-    if (max_supply > 5)
-      max_supply = 5;
-  }
-  else
-    if ((city_stock <= 99) && (max_supply > 6))
-    max_supply = 6;
-  if (max_supply < factor)
-    factor = max_supply;
-  if (factor < 0)
-    factor = 0;
-  if (factor > 7)
-    factor = 7;
+  if (no_of_empire_connections <= 0) { if (max_supply > 4) max_supply = 4; }
+  else if (no_of_empire_connections <= 1) factor += 1;
+  else if (no_of_empire_connections > 1) factor += 2;
+  if (city_stock <= 0) max_supply = 0;
+  else if (city_stock <= 0x14) { if (max_supply > 1) max_supply = 1; }
+  else if (city_stock <= 0x22) { if (max_supply > 2) max_supply = 2; }
+  else if (city_stock <= 0x32) { if (max_supply > 3) max_supply = 3; }
+  else if (city_stock <= 0x43) { if (max_supply > 4) max_supply = 4; }
+  else if (city_stock <= 0x4b) { if (max_supply > 5) max_supply = 5; }
+  else if ((city_stock <= 99) && (max_supply > 6)) max_supply = 6;
+  if (max_supply < factor) factor = max_supply;
+  if (factor < 0) factor = 0;
+  if (factor > 7) factor = 7;
   (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building &= 0xf;
   factor <<= 4;
   (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= factor;
-  if (low_half != 0)
-  {
+  if (low_half != 0) {
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building &= 0xfc;
-    if (low_half == 2)
-      (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 1;
-    else
-      if (low_half == 3)
-      (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 2;
+    if (low_half == 2) (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 1;
+    else if (low_half == 3) (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 2;
   }
-  if (upper_level != 0)
-  {
+  if (upper_level != 0) {
     (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building &= 0xf3;
-    if (upper_level == 8)
-      (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 4;
-    else
-      if (upper_level == 0xc)
-      (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 8;
+    if (upper_level == 8) (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 4;
+    else if (upper_level == 0xc) (*(struct city_cell *)((unsigned char *)city_map + (cm_sptr))).building |= 8;
   }
 }
 
