@@ -17,7 +17,7 @@ extern int application_active;
 extern unsigned char streamed_tune_ready;
 extern unsigned char streamed_tune_inhibit;
 
-long _tell(int handle);
+#include <io.h>
 void play_next_tune(void);
 extern void (__stdcall *Sleep)(unsigned long milliseconds);
 

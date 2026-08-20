@@ -252,8 +252,7 @@ extern int      chdir(const char *path);
 extern int      open(const char *path, int flags, ...);
 extern int      close(int fd);
 #if PLATFORM_WINDOWS
-extern int      _chdrive(int drive);
-extern int      _getdrive(void);
+#include <direct.h>
 #endif
 /* Forward declarations (functions defined later in this file). */
 void deal_with_battles(void);

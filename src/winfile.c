@@ -2,8 +2,7 @@
 
 #if PLATFORM_WINDOWS
 
-extern int _open(char *filename, int mode);
-extern int _close(int handle);
+#include <io.h>
 
 // FUNCTION: C2WIN 0x0040f570
 int valid_save_file(char *filename)

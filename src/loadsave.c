@@ -2,8 +2,8 @@
 #include <fcntl.h>       /* O_BINARY: 0x200 under Watcom, 0x8000 under MSVC */
 #if PLATFORM_WINDOWS
 #include <sys/stat.h>
+#include <string.h>
 #include <windows.h>
-extern int _strcmpi(const char *left, const char *right);
 #endif
 #include "c2_data.h"
 #include "c2_types.h"
