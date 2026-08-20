@@ -227,7 +227,6 @@ extern unsigned char to_upper(unsigned char c);
 extern int to_upper();
 #endif
 
-extern int   getch(void);
 extern void  demo_lead_in_slideshow(void);
 #if PLATFORM_WINDOWS
 extern void  demo_lead_out_slideshow(void);
