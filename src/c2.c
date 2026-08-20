@@ -216,9 +216,7 @@ static unsigned char battle_gfx_zoom;
 static unsigned char windows_game_active;
 #endif
 
-extern void *malloc(unsigned int size);
-extern void  printf(const char *fmt, ...);
-extern void  exit(int status);
+#include <stdio.h>
 
 extern int read_config();
 #if PLATFORM_WINDOWS
