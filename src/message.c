@@ -36,7 +36,6 @@ extern void wait_for(int delay);
 extern void win_bitblt(void *window, void *buffer, int source_x,
                        int source_y, int width, int height,
                        int dest_x, int dest_y);
-extern void clear_mouse_input(void);
 extern void act_request_down(void);
 extern void act_request_up(void);
 extern void load_screen_parts(unsigned char mode);
