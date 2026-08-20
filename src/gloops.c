@@ -233,6 +233,14 @@ void cycle_map_colours(void)
 
 extern void show_diamond_ptr(void);
 
+#if PLATFORM_WINDOWS
+#define MAP_SCREEN_REFRESH()
+#define WHOLE_SCREEN_REFRESH()
+#else
+#define MAP_SCREEN_REFRESH() setup_map_screen_refresh()
+#define WHOLE_SCREEN_REFRESH() setup_whole_screen_refresh()
+#endif
+
 // Advances the city simulation when due, renders the active map and interface, handles player
 // actions, and services animation and ambient audio for one frame.
 // FUNCTION: C2 0x3d3ca
@@ -246,10 +254,8 @@ void main_game_loop(void)
     button_time_flag = running_delay1();
 
     if (game_speed() != 0) {
-        if (turbo_mode != 0)
-            loops = 4;
-        else
-            loops = 1;
+        if (turbo_mode != 0) loops = 4;
+        else loops = 1;
         for (i = 0; i < loops; i++) {
             do_32_count();
             random();
@@ -273,9 +279,7 @@ void main_game_loop(void)
     } else {
         if (exit_flag != 0) return;
 #endif
-    if (turbo_mode > 1) {
-        show_turbo_panel();
-    }
+    if (turbo_mode > 1) { show_turbo_panel(); }
 #if PLATFORM_WINDOWS
     else if (map_mode == 0) {
         if (window_status[0] == 1 && application_active == 1)
@@ -285,11 +289,9 @@ void main_game_loop(void)
             show_regionmap();
     }
 #else
-    else if (map_mode == 0) {
-        show_citymap();
-    } else if (map_mode == 1 && pointer_mode != 5) {
-        show_regionmap();
-    }
+    else if (map_mode == 0) { show_citymap(); }
+    else if (map_mode == 1)
+        if (pointer_mode != 5) { show_regionmap(); }
 #endif
 
     if (turbo_mode < 2) {
@@ -300,9 +302,7 @@ void main_game_loop(void)
 #endif
         old_pm_over = pm_over;
         pm_over = get_pm_over_diamond(0);
-        if (pm_over != 0 && pointer_mode == 0 && particles_built == 0) {
-            show_diamond_ptr();
-        }
+        if (pm_over != 0 && pointer_mode == 0 && particles_built == 0) { show_diamond_ptr(); }
         if (pm_over != 0) {
             over_ptr = pm_over_cm_ptr / map_actual_atom;
             over_x = over_ptr % map_actual_width;
@@ -349,33 +349,26 @@ void main_game_loop(void)
                 act_non_cohort_box(main_window);
             }
 #else
-            if (army_list[tracking_army].type == 1) {
-                show_cohort_box();
-            } else {
-                show_non_cohort_box();
-            }
+            if (army_list[tracking_army].type == 1) { show_cohort_box(); }
+            else { show_non_cohort_box(); }
 #endif
             gen_refresh1 = 0;
         }
 #if !PLATFORM_WINDOWS
-        if (army_list[tracking_army].type == 1)
-            update_tribune_flag(0);
-        if (army_list[tracking_army].type == 1)
-            show_buttons(0x190, 0x82, cohort_buttons, 1);
+        if (army_list[tracking_army].type == 1) update_tribune_flag(0);
+        if (army_list[tracking_army].type == 1) show_buttons(0x190, 0x82, cohort_buttons, 1);
 #endif
     }
 
 #if !PLATFORM_WINDOWS
-    if (scrolling)
-        setup_map_screen_refresh();
+    if (scrolling) setup_map_screen_refresh();
 #endif
 
     if (update_landfill) {
 #if PLATFORM_WINDOWS
         show_landfill(com_x, com_y);
 #else
-        show_landfill(com_x, com_y);
-        setup_refresh_area(0x1e0, 0x30, 0xa, 0xb, 1);
+        show_landfill(com_x, com_y); setup_refresh_area(0x1e0, 0x30, 0xa, 0xb, 1);
 #endif
         update_landfill--;
     }
@@ -391,24 +384,16 @@ void main_game_loop(void)
         if (!scrolling && colour_cycle_delay2(0x96) != 0 && game_paused == 0)
             cycle_window_colours(0x50, 0x55, main_window_bitmap);
 #else
-    if (pm_over != 0)
-        refresh_a_square(pm_over_x >> 4, pm_over_y >> 4, 2);
+    if (pm_over != 0) refresh_a_square(pm_over_x >> 4, pm_over_y >> 4, 2);
 #endif
 
     /* Select the cursor for the active tool and hovered map object. */
-    if (flag_mode) {
-        show_mouse(0xa);
-    } else if (illegal_build == 1) {
-        show_mouse(0x14);
-    } else if (illegal_build == 2) {
-        show_mouse(0x13);
-    } else if (over_an_army) {
-        show_mouse(0x11);
-    } else if ((pointer_mode == 2 || pointer_mode == 6) && pm_over == 0) {
-        show_mouse(mouse_styles[0]);
-    } else {
-        show_mouse(mouse_styles[pointer_mode]);
-    }
+    if (flag_mode) { show_mouse(0xa); }
+    else if (illegal_build == 1) { show_mouse(0x14); }
+    else if (illegal_build == 2) { show_mouse(0x13); }
+    else if (over_an_army) { show_mouse(0x11); }
+    else if ((pointer_mode == 2 || pointer_mode == 6) && pm_over == 0) { show_mouse(mouse_styles[0]); }
+    else { show_mouse(mouse_styles[pointer_mode]); }
 #if !PLATFORM_WINDOWS
     set_mouse_refresh();
 #endif
@@ -422,34 +407,21 @@ void main_game_loop(void)
     refresh_svga_screen();
 
     if (!scrolling && colour_cycle_delay1(0x3c) != 0 && c2inf.paused == 0) {
-        if (map_mode == 0) {
-            cycle_colours(0x40, 0x47);
-        } else {
-            cycle_colours(0x41, 0x43);
-        }
+        if (map_mode == 0) { cycle_colours(0x40, 0x47); }
+        else { cycle_colours(0x41, 0x43); }
         pulse_red(0x48, 6);
     }
-    if (!scrolling && colour_cycle_delay2(0x96) != 0 && c2inf.paused == 0 && map_mode == 0) {
-        cycle_colours(0x50, 0x55);
+    if (!scrolling && colour_cycle_delay2(0x96) != 0 && c2inf.paused == 0) {
+        if (map_mode == 0) { cycle_colours(0x50, 0x55); }
     }
 #endif
 
-    if (stopped_scrolling) {
-        update_landfill = 1;
-        clear_edge_info();
-#if !PLATFORM_WINDOWS
-        setup_whole_screen_refresh();
-#endif
-        update_map = 1;
-    }
+    if (stopped_scrolling) { update_landfill = 1; clear_edge_info(); WHOLE_SCREEN_REFRESH(); update_map = 1; }
 
-    if (turbo_mode != 0)
-        turbo_mode = turbo_mode + 1;
+    if (turbo_mode != 0) turbo_mode = turbo_mode + 1;
 
-    if (flag_mode != 0)
-        flag_mode_action();
-    else
-        action();
+    if (flag_mode != 0) flag_mode_action();
+    else action();
 
 #if PLATFORM_WINDOWS
     if (application_active == 1 && map_mode == 0 &&
@@ -460,28 +432,16 @@ void main_game_loop(void)
         prov_mode_show_citymap();
 #endif
 
-    if (hot_exit_flag) {
-        act_exit_game();
-        hot_exit_flag = 0;
-    }
+    if (hot_exit_flag) { act_exit_game(); hot_exit_flag = 0; }
     if (restart_flag != 0)
         return;
 
-    if (flag_mode_decay_count != 0) {
-        flag_mode_decay_count = flag_mode_decay_count - 1;
-        if (flag_mode_decay_count <= 0) {
-            flag_mode = 0;
-#if !PLATFORM_WINDOWS
-            setup_map_screen_refresh();
-#endif
-        }
-    }
-    if (!mouse_left_button
+    if (flag_mode_decay_count != 0) { flag_mode_decay_count = flag_mode_decay_count - 1; if (flag_mode_decay_count <= 0) { flag_mode = 0; MAP_SCREEN_REFRESH(); } }
 #if PLATFORM_WINDOWS
-        && application_active == 1
+    if (!mouse_left_button && application_active == 1) show_messages();
+#else
+    if (!mouse_left_button) show_messages();
 #endif
-    )
-        show_messages();
     pm_limits();
 #if PLATFORM_WINDOWS
     if (application_active == 1) {
@@ -496,10 +456,8 @@ void main_game_loop(void)
 
 #if PLATFORM_WINDOWS
 #define BATTLE_SCREEN_REFRESH()
-#define WHOLE_SCREEN_REFRESH()
 #else
 #define BATTLE_SCREEN_REFRESH() setup_battle_screen_refresh()
-#define WHOLE_SCREEN_REFRESH() setup_whole_screen_refresh()
 #endif
 
 #if PLATFORM_WINDOWS
@@ -637,6 +595,7 @@ void battle_game_loop(void)
 }
 
 #undef BATTLE_SCREEN_REFRESH
+#undef MAP_SCREEN_REFRESH
 #undef WHOLE_SCREEN_REFRESH
 
 // Provides an empty hook for drawing content above the mouse cursor.
