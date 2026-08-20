@@ -10,7 +10,6 @@ extern int (__stdcall *DialogBoxParamA)(void *instance, char *name,
                                        int parameter);
 
 void set_modal_window_state(int active);
-void clear_mouse_input(void);
 long __stdcall annual_dialog_proc(void *window, unsigned int message,
                                   unsigned int wparam, long lparam);
 
