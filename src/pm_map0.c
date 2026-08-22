@@ -889,7 +889,7 @@ void place_overlay(int style)
 // Loads a people sprite and draws the left half of its overlay at the current zoom level.
 // FUNCTION: C2 0x363c5
 // FUNCTION: C2WIN 0x00485cc6
-void place_lefthalf_overlay()
+void place_lefthalf_overlay(int style)
 {
 #if PLATFORM_WINDOWS
     int mode;
@@ -942,7 +942,7 @@ void place_lefthalf_overlay()
 // Loads a people sprite and draws the right half of its overlay at the current zoom level.
 // FUNCTION: C2 0x3645d
 // FUNCTION: C2WIN 0x00485df7
-void place_righthalf_overlay()
+void place_righthalf_overlay(int style)
 {
 #if PLATFORM_WINDOWS
     int mode;
