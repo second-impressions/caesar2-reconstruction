@@ -857,12 +857,13 @@ int set_svga_640_480(int mode)
 }
 #endif /* PLATFORM_DOS */
 
-#if PLATFORM_WINDOWS
-// FUNCTION: C2WIN 0x0044b500
-void recognise_card(void)
-{
-}
-#else
+/* Selected on PLATFORM_DOS rather than PLATFORM_WINDOWS so the call and its
+ * callee share one condition: check_for_Trident below is a port-mapped VGA
+ * register sequence compiled only under #if PLATFORM_DOS.  The two shipped
+ * targets are mutually exclusive, so each still selects the branch it always
+ * did; stating the guard positively just stops a third target from taking the
+ * probing body and referencing a function that was never compiled. */
+#if PLATFORM_DOS
 // Detects the installed VGA chipset and records its capabilities.
 // FUNCTION: C2 0x24b0e
 void recognise_card(void)
@@ -883,6 +884,11 @@ void recognise_card(void)
         card_is          = 0;
         cards_recognised = 0;
     }
+}
+#else
+// FUNCTION: C2WIN 0x0044b500
+void recognise_card(void)
+{
 }
 #endif
 
