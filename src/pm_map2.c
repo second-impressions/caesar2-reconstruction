@@ -320,7 +320,7 @@ void mid2_line_with_sides_base(void)
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (((pm_shown_ptr) >= 0x0FFF0000)) {
         sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
-#if PLATFORM_WINDOWS
+#if C2_FEAT_REGION_SIDED_DRAW
         place_lefthalf_diamond();
 #endif
     } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
@@ -338,7 +338,7 @@ void mid2_line_with_sides_base(void)
         sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
         sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
         sprite_image_no += 0x10;
-#if PLATFORM_WINDOWS
+#if C2_FEAT_REGION_SIDED_DRAW
         place_lefthalf_diamond();
 #endif
     }
@@ -358,7 +358,7 @@ left_edge_done:
         pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
         if (((pm_shown_ptr) >= 0x0FFF0000)) {
             sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
-#if PLATFORM_WINDOWS
+#if C2_FEAT_REGION_SIDED_DRAW
             place_diamond(0);
             sprite_x += pm_diamond_width;
 #endif
@@ -378,7 +378,7 @@ left_edge_done:
             sprite_image_no = (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind;
             sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
             sprite_image_no += 0x10;
-#if PLATFORM_WINDOWS
+#if C2_FEAT_REGION_SIDED_DRAW
             place_diamond(0);
             sprite_x += pm_diamond_width;
 #endif
@@ -397,7 +397,7 @@ left_edge_done:
     pm_shown_ptr = pseudo_map[pm_shown_y][pm_shown_x++];
     if (((pm_shown_ptr) >= 0x0FFF0000)) {
         sprite_image_no = ((pm_shown_ptr) - 0x0FFF0000);
-#if PLATFORM_WINDOWS
+#if C2_FEAT_REGION_SIDED_DRAW
         place_righthalf_diamond();
 #endif
     } else if ((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).base_kind > 0x7c) {
@@ -419,7 +419,7 @@ left_edge_done:
         sprite_image_no = rotated2_map[sprite_image_no].dir[map_direction >> 1];
 #endif
         sprite_image_no += 0x10;
-#if PLATFORM_WINDOWS
+#if C2_FEAT_REGION_SIDED_DRAW
         place_righthalf_diamond();
 #endif
     }

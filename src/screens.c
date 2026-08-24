@@ -3730,7 +3730,6 @@ int general_business_cause(void)
 
 void test_range_for(int x, int y, int radius, int mode);
 int mouse_in_area(int x, int y, int w, int h);
-int test_range_for_road(int x, int y, int range);
 
 // List the people living in the queried house, or report that it is empty.
 // FUNCTION: C2 0x639b4
@@ -4116,6 +4115,7 @@ int reg_port_quote(int base)
 }
 
 int get_reg_buildings_in_radius(int x, int, int, int, int);
+int test_range_for_road(int x, int y, int range);
 
 // Collect building, service, business, and resident data for the queried city tile.
 // FUNCTION: C2 0x648e6

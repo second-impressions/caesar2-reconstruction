@@ -435,7 +435,7 @@ void rotate_pm_clockwise(void)
         if (map_mode == 2) {
             pm_x = 0xd;
             pm_y = 0x18;
-#if PLATFORM_DOS
+#if C2_FEAT_BATTLE_ZOOM2_ROTATE_CLAMP
             return;
 #endif
         }
@@ -488,7 +488,7 @@ void rotate_pm_anticlockwise(void)
         if (map_mode == 2) {
             pm_x = 0xd;
             pm_y = 0x18;
-#if PLATFORM_DOS
+#if C2_FEAT_BATTLE_ZOOM2_ROTATE_CLAMP
             return;
 #endif
         }

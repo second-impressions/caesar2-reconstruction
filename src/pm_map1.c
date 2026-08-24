@@ -1223,6 +1223,8 @@ void top_it(int edge_side)
 #if PLATFORM_WINDOWS
     mode = map_mode;
     if (mode > 1) mode = 0;
+#endif
+#if C2_FEAT_CITY_TOP_DIRECTION_INIT
     direction_index = map_direction / 2;
 #endif
     tile_type          = (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).base_kind;

@@ -51,7 +51,7 @@ void show_battlemap(void)
     }
     if (update_map != 0)
         --update_map;
-#if PLATFORM_DOS
+#if C2_FEAT_SOFTWARE_BATTLE_SETUP
     if (battle_setup_count > 1)
         show_battle_setup_box();
 #endif

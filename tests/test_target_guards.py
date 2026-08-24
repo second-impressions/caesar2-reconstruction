@@ -10,6 +10,7 @@ compiler capabilities are selected by ``PLATFORM_*`` too.
 from __future__ import annotations
 
 import re
+import subprocess
 from pathlib import Path
 
 SRC = Path("src")
@@ -70,6 +71,37 @@ def test_guard_vocabulary_is_closed():
         "conditional guards outside the approved vocabulary:\n"
         + "\n".join(offenders)
     )
+
+
+def test_shipped_targets_define_complete_explicit_behavior_profiles():
+    features = {
+        "C2_FEAT_TILE_REFRESH", "C2_FEAT_ROTATE_PM_LIMITS",
+        "C2_FEAT_PUMP_FREE_NULLS", "C2_FEAT_MODAL_PROMOTION",
+        "C2_FEAT_SMACK_CD_PATH", "C2_FEAT_REGION_SIDED_DRAW",
+        "C2_FEAT_CITY_TOP_DIRECTION_INIT",
+        "C2_FEAT_BATTLE_ZOOM2_ROTATE_CLAMP",
+        "C2_FEAT_SOFTWARE_BATTLE_SETUP",
+    }
+    profiles = {
+        "dos": ([], {"C2_FEAT_TILE_REFRESH", "C2_FEAT_SMACK_CD_PATH",
+                      "C2_FEAT_BATTLE_ZOOM2_ROTATE_CLAMP",
+                      "C2_FEAT_SOFTWARE_BATTLE_SETUP"}),
+        "windows": (["PLATFORM_WINDOWS=1"], {"C2_FEAT_ROTATE_PM_LIMITS",
+                    "C2_FEAT_PUMP_FREE_NULLS", "C2_FEAT_MODAL_PROMOTION",
+                    "C2_FEAT_REGION_SIDED_DRAW",
+                    "C2_FEAT_CITY_TOP_DIRECTION_INIT"}),
+    }
+    for _name, (defines, enabled) in profiles.items():
+        command = ["cc", "-dM", "-E", "-x", "c", "-"]
+        command += [f"-D{define}" for define in defines]
+        result = subprocess.run(command,
+                                input='#include "include/c2_target.h"\n',
+                                text=True, check=True, capture_output=True)
+        values = dict(re.findall(
+            r"^#define (C2_FEAT_[A-Z0-9_]+) ([01])$",
+            result.stdout, re.MULTILINE))
+        assert features <= values.keys()
+        assert {feature for feature in features if values[feature] == "1"} == enabled
 
 
 def test_every_feature_macro_is_defined_in_the_target_header():

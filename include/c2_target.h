@@ -58,23 +58,23 @@
  * changes; the Windows port repaints differently and dropped these
  * calls at all but a handful of sites (each guarded site verified
  * against CAESAR2.EXE machine code, 2026-07-17). */
-#define C2_FEAT_TILE_REFRESH      PLATFORM_DOS
+/* Selected explicitly in the complete target profile below. */
 
 /* The Windows build-A rotate handlers clamp the pseudo-map viewport
  * with a pm_limits() tail call that the DOS build does not make
  * (verified at C2WIN 0x4b6f46 / 0x4b6f99). */
-#define C2_FEAT_ROTATE_PM_LIMITS  PLATFORM_WINDOWS
+
 
 /* The Windows build resets each compression work-table pointer to
  * null after freeing it in free_pumping_memory; the DOS build leaves
  * the pointers dangling (verified at C2WIN 0x43c7e8 vs C2 0x6fffc). */
-#define C2_FEAT_PUMP_FREE_NULLS   PLATFORM_WINDOWS
+
 
 /* The DOS promotion offer spins a nested input loop over the
  * want-promotion box; the Windows port made the box modal (it returns
  * the choice) and re-shows any open advisor windows after a review
  * choice (verified at C2WIN 0x454e88 vs C2 0x554b1). */
-#define C2_FEAT_MODAL_PROMOTION   PLATFORM_WINDOWS
+
 
 /* The Windows audio port applies the configured effects volume to each
  * allocated sample handle; DOS sets the digital driver's master volume
@@ -83,7 +83,33 @@
 /* DOS Smacker playback changes to the movie's CD path before closing and
  * restores the main path afterwards. The Windows port opens movies through
  * its native file path and omits both calls. */
-#define C2_FEAT_SMACK_CD_PATH     PLATFORM_DOS
+/* Additional recovered renderer choices needed by third targets. */
+
+/* Every shipped target explicitly chooses every recovered behavior. */
+#if PLATFORM_DOS
+#  define C2_FEAT_TILE_REFRESH                  1
+#  define C2_FEAT_ROTATE_PM_LIMITS              0
+#  define C2_FEAT_PUMP_FREE_NULLS               0
+#  define C2_FEAT_MODAL_PROMOTION               0
+#  define C2_FEAT_SMACK_CD_PATH                 1
+#  define C2_FEAT_REGION_SIDED_DRAW             0
+#  define C2_FEAT_CITY_TOP_DIRECTION_INIT       0
+#  define C2_FEAT_BATTLE_ZOOM2_ROTATE_CLAMP     1
+#  define C2_FEAT_SOFTWARE_BATTLE_SETUP         1
+#elif PLATFORM_WINDOWS
+#  define C2_FEAT_TILE_REFRESH                  0
+#  define C2_FEAT_ROTATE_PM_LIMITS              1
+#  define C2_FEAT_PUMP_FREE_NULLS               1
+#  define C2_FEAT_MODAL_PROMOTION               1
+#  define C2_FEAT_SMACK_CD_PATH                 0
+#  define C2_FEAT_REGION_SIDED_DRAW             1
+#  define C2_FEAT_CITY_TOP_DIRECTION_INIT       1
+#  define C2_FEAT_BATTLE_ZOOM2_ROTATE_CLAMP     0
+#  define C2_FEAT_SOFTWARE_BATTLE_SETUP         0
+#else
+#  error "target has no explicit recovered behavior profile"
+#endif
+
 
 /* The later Windows map renderer rejects pseudo-map rows past the city-map
  * boundary before each scanline pass. */
