@@ -83,7 +83,7 @@ void show_regionmap_base(void)
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             }
@@ -127,7 +127,7 @@ void show_regionmap_base(void)
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             }
@@ -267,7 +267,7 @@ void mid2_line_no_sides_base(void)
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             }
@@ -331,7 +331,7 @@ void mid2_line_with_sides_base(void)
     } else {
         if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
             (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
         }
@@ -371,7 +371,7 @@ left_edge_done:
         } else {
             if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             }
@@ -408,7 +408,7 @@ left_edge_done:
     } else {
         if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
             (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
         }
@@ -744,7 +744,7 @@ void place2_a_building_base(int draw_style)
 
     if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
         (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
         refresh_a_bigger_square(sprite_x >> 4, (sprite_y - 0x30) >> 4);
 #endif
     }
@@ -1087,7 +1087,7 @@ void place2_a_building_roof(int draw_style)
         sprite_y = pm_screen_y_end - 1;
         if (((*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
             (*(struct region_cell *)((unsigned char *)region_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_a_bigger_square(sprite_x >> 4, (sprite_y - 0x30) >> 4);
 #endif
         }
@@ -1279,7 +1279,7 @@ void place2_sprite(int draw_style)
         sprite_y    -= sprite_height + sprite2_height + sprite3_height;
         sprite_base_x = sprite_x;
         sprite_base_y = sprite_y;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
         refresh_region_sprite_square(sprite_x >> 4, sprite_y >> 4);
 #endif
 #if PLATFORM_WINDOWS
@@ -1427,7 +1427,7 @@ after_sprite3:
         else if (zoom_level == 1) { sprite_x -= sprite_width >> 2; sprite_y = sprite_top_y; }
         else                      { sprite_x -= sprite_width >> 3; sprite_y = sprite_top_y; }
 #endif
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
         refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
 #endif
 #if PLATFORM_WINDOWS
@@ -1486,7 +1486,7 @@ restore_overlay:
         sprite_x    += xoff;
         sprite_y    += y_off;
         sprite_y    -= sprite_height;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
         refresh_sprite_square(sprite_x >> 4, sprite_y >> 4);
 #endif
 #if PLATFORM_WINDOWS

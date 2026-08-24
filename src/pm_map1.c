@@ -150,7 +150,7 @@ void show_citymap_base(void)
         } else {
             if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             }
@@ -192,7 +192,7 @@ void show_citymap_base(void)
         } else {
             if (((*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits & 1) != 0) {
                 (*(struct city_cell *)((unsigned char *)city_map + (pm_shown_ptr))).edge_bits &= 0xfe;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             }

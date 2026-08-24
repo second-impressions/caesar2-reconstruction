@@ -100,7 +100,7 @@ void show_battlemap_base(void)
                 else if (tile == 8) sprite_image_no = 0xd;
                 else                sprite_image_no = 0xe;
                 place_diamond(2);
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
                 sprite_x += pm_diamond_width;
@@ -156,7 +156,7 @@ void show_battlemap_base(void)
                 else if (tile == 8) sprite_image_no = 0xd;
                 else sprite_image_no = 0xe;
                 place_diamond(1);
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
                 sprite_x += pm_diamond_width;
@@ -263,7 +263,7 @@ void mid3_line_no_sides_base(void)
                 else if (tile == 8) sprite_image_no = 0xd;
                 else                sprite_image_no = 0xe;
                 place_diamond(0);
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
                 sprite_x += pm_diamond_width;
@@ -322,7 +322,7 @@ void mid3_line_with_sides_base(void)
             else if (tile == 8) sprite_image_no = 0xd;
             else                sprite_image_no = 0xe;
             place_lefthalf_diamond();
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             goto left_done;
@@ -365,7 +365,7 @@ left_done:
                 else if (tile == 8) sprite_image_no = 0xd;
                 else                sprite_image_no = 0xe;
                 place_diamond(0);
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
                 sprite_x += pm_diamond_width;
@@ -409,7 +409,7 @@ left_done:
             else if (tile == 8) sprite_image_no = 0xd;
             else                sprite_image_no = 0xe;
             place_righthalf_diamond();
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_a_square(sprite_x >> 4, sprite_y >> 4, 2);
 #endif
             goto mid_done;
@@ -680,19 +680,19 @@ void place3_sprite(int style)
         if (figure_list[figure_a].fight_state == 2) {
             if (zoom_level == 1) { sprite_x -= 0x18; sprite_y -= 0x40; }
             else                 { sprite_x -= 0xc;  sprite_y -= 0x20; }
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_figure3_square((sprite_x - 4) >> 4, sprite_y >> 4);
 #endif
         } else if (figure_list[figure_a].fight_state != 0) {
             if (zoom_level == 1) { sprite_x -= 0x14; sprite_y -= 0x2a; }
             else                 { sprite_x -= 0xa;  sprite_y -= 0x14; }
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_figure2_square((sprite_x - 4) >> 4, sprite_y >> 4);
 #endif
         } else {
             if (zoom_level == 1) { sprite_x -= 0xa;  sprite_y -= 0x20; }
             else                 { sprite_x -= 4;    sprite_y -= 0x10; }
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_figure_square((sprite_x - 0x14) >> 4, sprite_y >> 4);
 #endif
         }
@@ -753,7 +753,7 @@ figure_done:
                 sprite_x += rider * 6;
                 sprite_y -= rider * 6;
                 if (rider <= 0) sprite_height -= 8;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
                 refresh_figure_square((sprite_x - 4) >> 4, sprite_y >> 4);
 #endif
 #if PLATFORM_WINDOWS
@@ -810,7 +810,7 @@ arrow_loop:
             sprite_x -= sprite_width >> 1;
             sprite_y -= sprite_height;
             sprite_y -= (unsigned char)arrow_list[arrow_a].anim_count / 2 + 0x20;
-#if PLATFORM_DOS
+#if C2_FEAT_TILE_REFRESH
             refresh_figure_square((sprite_x - 4) >> 4, sprite_y >> 4);
 #endif
 #if PLATFORM_WINDOWS
