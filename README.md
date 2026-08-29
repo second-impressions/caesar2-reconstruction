@@ -163,3 +163,15 @@ assets from a CD (copy the CD's `HD/` tree plus the media directories
 `PS.EXE` next to them, and run it in any DOS emulator (e.g. DOSBox-X,
 which also offers a GDB remote stub for attaching a debugger to the live
 DOS process).
+
+## License
+
+Except for third-party components carrying their own notices, this project is
+licensed under the [GNU Affero General Public License, version 3 or later](LICENSE)
+(`AGPL-3.0-or-later`). It is distributed without warranty.
+
+This declaration applies to contributions that project contributors are
+entitled to license. It does not grant rights to original Caesar II
+executables, game assets, or other third-party material; those remain subject
+to their respective rights holders and are not part of the licensed project
+source.
