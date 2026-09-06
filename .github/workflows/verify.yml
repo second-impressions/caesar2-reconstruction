@@ -1,0 +1,83 @@
+name: Verify
+
+# The reconstruction is byte-exact or it is nothing: every push to main and
+# every pull request rebuilds PS.EXE with the pinned Watcom toolchain and
+# compares it whole-file with the original, then validates the Windows
+# witness and the source annotations. The originals are copyrighted and
+# never committed; they are extracted from the archive.org CD image once
+# and kept in the (private, per-repository) Actions cache by their hashes.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  byte-exact:
+    name: Byte-exact rebuild
+    runs-on: ubuntu-latest
+    steps:
+      # The pinned reccmp fork is a sibling path dependency (../reccmp) for
+      # the duration of its formats migration; check it out next to us.
+      - uses: actions/checkout@v5
+        with:
+          path: caesar2-reconstruction
+      - uses: actions/checkout@v5
+        with:
+          repository: second-impressions/reccmp
+          ref: watcom-reconstruction
+          path: reccmp
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: experimental-features = nix-command flakes
+      - name: Restore the Nix store
+        uses: nix-community/cache-nix-action@v7
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('caesar2-reconstruction/flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size-linux: 2G
+          save: true
+      - name: Restore the original executables
+        id: originals
+        uses: actions/cache@v4
+        with:
+          path: caesar2-reconstruction/original
+          key: originals-${{ hashFiles('caesar2-reconstruction/reccmp-project.yml') }}
+      - name: Install the Python toolchain
+        working-directory: caesar2-reconstruction
+        run: nix develop --command uv sync --frozen
+      - name: Fetch the originals (PS.EXE and CAESAR2.EXE from the 1996-08-29 CD)
+        if: steps.originals.outputs.cache-hit != 'true'
+        working-directory: caesar2-reconstruction
+        run: nix develop --command uv run c2 fetch-original --cd usa-1996-08-29
+      - name: Validate the originals against the pinned hashes
+        working-directory: caesar2-reconstruction
+        run: nix develop --command uv run c2 reccmp prepare --windows-original original/CAESAR2.EXE
+      - name: Pull the Watcom 10.0a image
+        run: podman pull ghcr.io/second-impressions/watcom-10.0a-wibo:latest
+      - name: Rebuild PS.EXE and compare whole-file with the original
+        working-directory: caesar2-reconstruction
+        run: nix develop --command uv run c2 rebuild --require-exact
+      - name: Function and data reports
+        working-directory: caesar2-reconstruction
+        run: |
+          nix develop --command uv run c2 reccmp code --json build/reccmp.json --html build/reccmp.html
+          nix develop --command uv run c2 reccmp data
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reccmp-report
+          path: |
+            caesar2-reconstruction/build/reccmp.json
+            caesar2-reconstruction/build/reccmp.html
+      - name: Annotation and tooling tests
+        working-directory: caesar2-reconstruction
+        run: nix develop --command uv run pytest -q

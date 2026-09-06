@@ -46,6 +46,13 @@ uv run c2 reccmp code --html build/reccmp.html --json build/reccmp.json
 uv run c2 reccmp data
 ```
 
+Every pull request and push to `main` runs the same gate in CI
+(`.github/workflows/verify.yml`): `c2 rebuild --require-exact` must be
+whole-file byte-exact with the original `PS.EXE`, the Windows witness must
+match its pinned hash, and the annotation tests must pass. The originals are
+extracted once from the USA 1996-08-29 CD image (which carries both) into the
+repository's private Actions cache.
+
 The original executables, generated binaries, and machine-local reccmp
 configs are intentionally untracked.  The target hash is pinned in
 `reccmp-project.yml`; `c2 reccmp prepare` validates the local original

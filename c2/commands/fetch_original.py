@@ -34,7 +34,7 @@ from rich.progress import (BarColumn, DownloadColumn, Progress, TextColumn,
                            TransferSpeedColumn)
 
 from c2.original import ensure_original, sha256_of
-from c2.reccmp_project import expected_original_hash
+from c2.reccmp_project import WINDOWS_TARGET_ID, expected_original_hash
 
 ARCHIVE_ITEM = "20231129_20231129_0828"
 ARCHIVE_URL = f"https://archive.org/download/{ARCHIVE_ITEM}"
@@ -75,6 +75,8 @@ CDS: dict[str, tuple[str, int, str, str]] = {
 DEFAULT_CD = "germany-1996-12-18"
 
 ISO_PS_EXE = "/HD/PS.EXE;1"     # path of the original inside the CD
+# The Windows source witness (build A) rides on the hybrid CDs beside it.
+ISO_CAESAR2_EXE = "/C2WIN95/HD/CAESAR2.EXE;1"
 
 RAW_SECTOR = 2352               # raw CD sector (MODE1 or MODE2/XA framing)
 ISO_SECTOR = 2048
@@ -126,16 +128,27 @@ def strip_raw_sectors(src: BinaryIO, dst: BinaryIO, raw_size: int,
             progress.advance(task, RAW_SECTOR)
 
 
-def extract_ps_exe_from_iso(iso_path: Path) -> bytes:
-    """Extract HD/PS.EXE from a plain ISO9660 image."""
+def extract_from_iso(iso_path: Path, iso_file: str) -> Optional[bytes]:
+    """Extract one file from a plain ISO9660 image; None if it is absent."""
     iso = pycdlib.PyCdlib()
     iso.open(str(iso_path))
     try:
         buf = io.BytesIO()
-        iso.get_file_from_iso_fp(buf, iso_path=ISO_PS_EXE)
+        try:
+            iso.get_file_from_iso_fp(buf, iso_path=iso_file)
+        except pycdlib.pycdlibexception.PyCdlibInvalidInput:
+            return None
         return buf.getvalue()
     finally:
         iso.close()
+
+
+def extract_ps_exe_from_iso(iso_path: Path) -> bytes:
+    """Extract HD/PS.EXE from a plain ISO9660 image."""
+    data = extract_from_iso(iso_path, ISO_PS_EXE)
+    if data is None:
+        raise ValueError(f"{ISO_PS_EXE} is not on this CD")
+    return data
 
 
 def _download(url: str, dest: Path, expected_size: int,
@@ -179,20 +192,35 @@ def fetch_original(
                            "downloading (still hash-verified).")] = None,
     force: Annotated[bool, typer.Option(
         "--force", help="Overwrite an existing (e.g. wrong-hash) dest.")] = False,
+    windows_dest: Annotated[Path, typer.Option(
+        "--windows-dest", help="Where to install the Windows build A "
+                               "CAESAR2.EXE when the CD carries it.")]
+    = Path("original/CAESAR2.EXE"),
 ) -> None:
     """Download a Caesar II CD image from archive.org and extract the
-    original debug-symbol PS.EXE to its expected location."""
+    original debug-symbol PS.EXE to its expected location.
+
+    Hybrid CDs (usa-1996-08-29, europe-1997-09-12, italy-covermount) also
+    carry the Windows source witness, build A of CAESAR2.EXE; it is
+    installed beside PS.EXE when its hash matches the pinned C2WIN target."""
     if cd not in CDS:
         raise typer.BadParameter(f"unknown --cd (choose from: {', '.join(CDS)})")
     name, zsize, zmd5, _zsha1 = CDS[cd]
+    expected_windows = expected_original_hash(target_id=WINDOWS_TARGET_ID)
 
+    have_windows = (windows_dest.is_file() and not force and
+                    sha256_of(windows_dest) == expected_windows)
     if dest.is_file() and not force:
         if sha256_of(dest) == expected_original_hash():
-            typer.echo(f"{dest} already present and hash-verified — nothing to do.")
-            return
-        typer.echo(f"{dest} exists but has the WRONG hash; rerun with --force "
-                   "to replace it.", err=True)
-        raise typer.Exit(1)
+            if have_windows or cd in ("germany-1996-12-18",
+                                      "germany-1996-12-18-alt",
+                                      "usa-1997-11-12", "usa-1997-03-10"):
+                typer.echo(f"{dest} already present and hash-verified — nothing to do.")
+                return
+        else:
+            typer.echo(f"{dest} exists but has the WRONG hash; rerun with --force "
+                       "to replace it.", err=True)
+            raise typer.Exit(1)
 
     tmp_zip: Optional[Path] = None
     tmp_iso: Optional[Path] = None
@@ -240,12 +268,29 @@ def fetch_original(
                 f"extracted PS.EXE sha256 {actual} != expected {expected} "
                 f"(wrong CD build?)")
 
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        tmp_out = dest.with_suffix(".tmp")
-        tmp_out.write_bytes(data)
-        tmp_out.replace(dest)
-        typer.echo(f"installed {dest} ({len(data):,} bytes, sha256 verified)")
+        if not (dest.is_file() and sha256_of(dest) == expected):
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            tmp_out = dest.with_suffix(".tmp")
+            tmp_out.write_bytes(data)
+            tmp_out.replace(dest)
+            typer.echo(f"installed {dest} ({len(data):,} bytes, sha256 verified)")
         ensure_original(dest)
+
+        windows = extract_from_iso(tmp_iso, ISO_CAESAR2_EXE)
+        if windows is None:
+            typer.echo(f"this CD carries no {ISO_CAESAR2_EXE}; the Windows "
+                       "witness comes from usa-1996-08-29, europe-1997-09-12 "
+                       "or italy-covermount")
+        elif hashlib.sha256(windows).hexdigest() != expected_windows:
+            typer.echo(f"this CD's CAESAR2.EXE is not build {WINDOWS_TARGET_ID} "
+                       "(sha256 differs); not installed")
+        elif not have_windows:
+            windows_dest.parent.mkdir(parents=True, exist_ok=True)
+            tmp_out = windows_dest.with_suffix(".tmp")
+            tmp_out.write_bytes(windows)
+            tmp_out.replace(windows_dest)
+            typer.echo(f"installed {windows_dest} ({len(windows):,} bytes, "
+                       "sha256 verified)")
     finally:
         for tmp in (tmp_zip, tmp_iso):
             if tmp is not None and tmp.exists():
