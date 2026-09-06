@@ -1,0 +1,8 @@
+[
+  {
+    "ps_name": "cycle_colours",
+    "src": "lib32.c",
+    "status": "discarded",
+    "reason": "MSVC compiles this shared-source helper and its presence controls later lib32.c codegen, but the Windows linker discards it because all Windows call sites use the native palette-cycle helpers."
+  }
+]
