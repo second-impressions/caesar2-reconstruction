@@ -46,10 +46,29 @@ uv run c2 reccmp code --html build/reccmp.html --json build/reccmp.json
 uv run c2 reccmp data
 ```
 
-Every pull request and push to `main` runs the same gate in CI
+The Windows build has its own byte oracle. `CAESAR2.EXE` (build A) was
+compiled with MSVC 4.0 `/Od`; `c2 win-verify` compiles every translation unit
+with that toolchain (the public `msvc-4.00-wibo` image), masks the
+relocation slots of each function's COFF bytes, locates the function in
+`CAESAR2.EXE` (its `// FUNCTION: C2WIN` annotation, else `data/windows/
+func-map.json`) and compares. There is no whole-file Windows rebuild — the
+link is not reproduced — so per-function exactness is the Windows gate:
+
+```bash
+uv run c2 win-verify --files-only          # per-TU summary
+uv run c2 win-verify -v <function>         # structural asm diff of one function
+uv run c2 win-verify --require-exact       # the CI gate
+```
+
+Beware that MSVC 4.0's stack-slot assignment depends on local *names* and
+on the symbol table built up to that point in the TU, so a rename or a
+removed prototype can change the Windows bytes while `PS.EXE` stays exact.
+
+Every pull request and push to `main` runs both gates in CI
 (`.github/workflows/verify.yml`): `c2 rebuild --require-exact` must be
-whole-file byte-exact with the original `PS.EXE`, the Windows witness must
-match its pinned hash, and the annotation tests must pass. The originals are
+whole-file byte-exact with the original `PS.EXE`, `c2 win-verify
+--require-exact` must find every comparable function byte-exact in
+`CAESAR2.EXE`, and the annotation tests must pass. The originals are
 extracted once from the USA 1996-08-29 CD image (which carries both) into the
 repository's private Actions cache.
 

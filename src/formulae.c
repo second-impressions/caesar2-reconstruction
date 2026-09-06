@@ -104,8 +104,8 @@ void adjust_peace_criteria(void) {
 // FUNCTION: C2 0x55573
 // FUNCTION: C2WIN 0x00454fdb
 void adjust_culture_criteria(void) {
-    int population_divisor;
-    int uncapped_rating;
+    int population_factor;
+    int value;
     entertainment_level  = theatre_culture_count * 5;
     entertainment_level += odium_culture_count * 8;
     entertainment_level += arena_culture_count * 12;
@@ -123,17 +123,17 @@ void adjust_culture_criteria(void) {
     utility_level += accessed_hospitals_count * 10;
     utility_level += accessed_libraries_count * 20;
     utility_level *= 100;
-    population_divisor = population / 16 + 2;
-    entertainment_level /= population_divisor;
-    religion_level /= population_divisor;
-    utility_level /= population_divisor;
+    population_factor = population / 16 + 2;
+    entertainment_level /= population_factor;
+    religion_level /= population_factor;
+    utility_level /= population_factor;
     if (entertainment_level > 100) entertainment_level = 100;
     if (religion_level > 100) religion_level = 100;
     if (utility_level > 100) utility_level = 100;
     culture_rating = (entertainment_level + religion_level + utility_level) / 3;
-    uncapped_rating = culture_rating;
+    value = culture_rating;
     culture_rating = city_pop_limit_10_to_1(culture_rating, 3);
-    culture_rating_pop_limit = (uncapped_rating > culture_rating);
+    culture_rating_pop_limit = (value > culture_rating);
     if (population < 10) culture_rating_pop_limit = 0;
 }
 

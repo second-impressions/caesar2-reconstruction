@@ -998,24 +998,24 @@ int run_2_map_ferrets(int margin, unsigned char *map_base, int map_width, int ma
 // Converts a marked ferret path into a bounded sequence of directions.
 // FUNCTION: C2 0x2bceb
 // FUNCTION: C2WIN 0x0046b875
-void load_ferret_run(int start_x, int start_y, int max_length)
+void load_ferret_run(int x, int y, int max_len)
 {
-    unsigned char direction;
-    unsigned char reverse_direction;
+    unsigned char reverse_dir;
+    unsigned char dir;
 
     ferret_run_length = 0;
-    tb_x = start_x;
-    tb_y = start_y;
-    tb_ptr = (start_x + start_y * ferret_map_wi) * ferret_horiz_off;
-    reverse_direction = 8;
-    while (max_length > ferret_run_length) {
-        for (direction = 0; direction < 8; direction++) {
-            if (get_ferret2(direction) == 1 && direction != reverse_direction) break;
+    tb_x = x;
+    tb_y = y;
+    tb_ptr = (y * ferret_map_wi + x) * ferret_horiz_off;
+    reverse_dir = 8;
+    while (ferret_run_length < max_len) {
+        for (dir = 0; dir < 8; dir++) {
+            if (get_ferret2(dir) == 1 && dir != reverse_dir) break;
         }
-        if (direction >= 8) return;
-        reverse_direction = (direction + 4) % 8;
-        ferret_run[ferret_run_length++] = direction;
-        move_to_tb_value(direction);
+        if (dir >= 8) return;
+        reverse_dir = (dir + 4) % 8;
+        ferret_run[ferret_run_length++] = dir;
+        move_to_tb_value(dir);
     }
 }
 

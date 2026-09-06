@@ -1,0 +1,7946 @@
+[
+ {
+  "name": "citizen_intelligences",
+  "win_va": "0x004d03e8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00099ebc"
+ },
+ {
+  "name": "army_intelligences",
+  "win_va": "0x004d0408",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00099edc"
+ },
+ {
+  "name": "citizen_states",
+  "win_va": "0x004d0430",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x00099f00"
+ },
+ {
+  "name": "army_states",
+  "win_va": "0x004d0468",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00099f34"
+ },
+ {
+  "name": "history_graph_years",
+  "win_va": "0x004d0ad8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0009a988"
+ },
+ {
+  "name": "lib_ret4",
+  "win_va": "0x004d128e",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009367c"
+ },
+ {
+  "name": "lib_para1",
+  "win_va": "0x004d1292",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00093680"
+ },
+ {
+  "name": "refresh_bank_switch_data",
+  "win_va": "0x004d1698",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00093b24"
+ },
+ {
+  "name": "p_len",
+  "win_va": "0x004d1878",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009a99c"
+ },
+ {
+  "name": "p_code",
+  "win_va": "0x004d18b8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009a9dc"
+ },
+ {
+  "name": "d_code",
+  "win_va": "0x004d18f8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0009aa1c"
+ },
+ {
+  "name": "d_len",
+  "win_va": "0x004d19f8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0009ab1c"
+ },
+ {
+  "name": "c2_map_gfx",
+  "win_va": "0x004d1b00",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000927d4"
+ },
+ {
+  "name": "c2_overlay_gfx",
+  "win_va": "0x004d1ec0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00092b94"
+ },
+ {
+  "name": "c2_battle_gfx",
+  "win_va": "0x004d1f00",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00092bd0"
+ },
+ {
+  "name": "c2_battle_aux_gfx",
+  "win_va": "0x004d2450",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00093120"
+ },
+ {
+  "name": "multiples",
+  "win_va": "0x004d2f10",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00093ac4"
+ },
+ {
+  "name": "city_tutorial_icons",
+  "win_va": "0x004d3100",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009a39c"
+ },
+ {
+  "name": "region_tutorial_icons",
+  "win_va": "0x004d3120",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009a3ba"
+ },
+ {
+  "name": "tut_files",
+  "win_va": "0x004d3140",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0009a3d8"
+ },
+ {
+  "name": "tut_palfiles",
+  "win_va": "0x004d3300",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009a598"
+ },
+ {
+  "name": "events",
+  "win_va": "0x004d3558",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009a22c"
+ },
+ {
+  "name": "smacks",
+  "win_va": "0x004d36a0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009a758"
+ },
+ {
+  "name": "aquaduct_tops2",
+  "win_va": "0x004d3958",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00099a44"
+ },
+ {
+  "name": "arena_top_data",
+  "win_va": "0x004d3980",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00099a6c"
+ },
+ {
+  "name": "stretch_ofsets_2x2",
+  "win_va": "0x004d3ab0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00099cfc"
+ },
+ {
+  "name": "stretch_ofsets_3x3",
+  "win_va": "0x004d3ae0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00099d2c"
+ },
+ {
+  "name": "putouts1",
+  "win_va": "0x004d3b30",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00099d7c"
+ },
+ {
+  "name": "putouts2",
+  "win_va": "0x004d3b50",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00099d9c"
+ },
+ {
+  "name": "putouts3",
+  "win_va": "0x004d3b90",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00099ddc"
+ },
+ {
+  "name": "putouts4",
+  "win_va": "0x004d3bf0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00099e3c"
+ },
+ {
+  "name": "forum_repapering",
+  "win_va": "0x004d3c70",
+  "tier": "instr-multi",
+  "votes": "12/12",
+  "ps_addr": "0x00093d04"
+ },
+ {
+  "name": "cohort_drill_spacing",
+  "win_va": "0x004d3e10",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00093e9c"
+ },
+ {
+  "name": "letter_table",
+  "win_va": "0x004d3e68",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00093ef0"
+ },
+ {
+  "name": "stone_random_data",
+  "win_va": "0x004d3f48",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00093fd0"
+ },
+ {
+  "name": "reg_type_x_off",
+  "win_va": "0x004d4148",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000941d0"
+ },
+ {
+  "name": "reg_type_y_off",
+  "win_va": "0x004d4178",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00094200"
+ },
+ {
+  "name": "city_mm_enties",
+  "win_va": "0x004d4650",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000946bd"
+ },
+ {
+  "name": "q_goods",
+  "win_va": "0x00509b78",
+  "tier": "exact",
+  "votes": "10/10",
+  "ps_addr": "0x00117c26"
+ },
+ {
+  "name": "sailable_sea",
+  "win_va": "0x004d49e0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00094a47"
+ },
+ {
+  "name": "house_gfxdat",
+  "win_va": "0x004d4ee0",
+  "tier": "instr-multi",
+  "votes": "9/10",
+  "ps_addr": "0x00094f43"
+ },
+ {
+  "name": "forum_gfxdat",
+  "win_va": "0x004d4f60",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00094fc3"
+ },
+ {
+  "name": "fountain_gfxdat",
+  "win_va": "0x004d4fe8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0009504b"
+ },
+ {
+  "name": "reg_wall_gfxdat",
+  "win_va": "0x004d4ff8",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00095055"
+ },
+ {
+  "name": "size_from_type",
+  "win_va": "0x004d5018",
+  "tier": "native-xref",
+  "votes": "5/5",
+  "ps_addr": "0x0009506b"
+ },
+ {
+  "name": "losses_to_morale",
+  "win_va": "0x004d5118",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00095167"
+ },
+ {
+  "name": "empire_region_order",
+  "win_va": "0x004d5274",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000952bb"
+ },
+ {
+  "name": "provincial_difficulty",
+  "win_va": "0x004d52a0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000952e7"
+ },
+ {
+  "name": "region_borders",
+  "win_va": "0x004d5350",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x00095397"
+ },
+ {
+  "name": "tribe_type",
+  "win_va": "0x004d5400",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00095447"
+ },
+ {
+  "name": "tribe_to_standard",
+  "win_va": "0x004d5448",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0009548f"
+ },
+ {
+  "name": "mercenary_type",
+  "win_va": "0x004d5460",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000954a7"
+ },
+ {
+  "name": "tribe_battle_setup",
+  "win_va": "0x004d5900",
+  "tier": "instr-multi",
+  "votes": "13/14",
+  "ps_addr": "0x00095947"
+ },
+ {
+  "name": "tribe_ai_data",
+  "win_va": "0x004d59a8",
+  "tier": "instr-multi",
+  "votes": "8/9",
+  "ps_addr": "0x000959ef"
+ },
+ {
+  "name": "region_sources",
+  "win_va": "0x004d5a98",
+  "tier": "instr-multi",
+  "votes": "11/11",
+  "ps_addr": "0x00095adf"
+ },
+ {
+  "name": "empire_positions",
+  "win_va": "0x004d5c78",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00095cbf"
+ },
+ {
+  "name": "empire_flag_positions",
+  "win_va": "0x004d5d28",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x00095d6f"
+ },
+ {
+  "name": "promotion_levels",
+  "win_va": "0x004d5dd8",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00095e1f"
+ },
+ {
+  "name": "promotion_av_levels",
+  "win_va": "0x004d5f68",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00095faf"
+ },
+ {
+  "name": "province_completion_to_promotion",
+  "win_va": "0x004d60f8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009613f"
+ },
+ {
+  "name": "promotions_to_win_game",
+  "win_va": "0x004d61e0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00096220"
+ },
+ {
+  "name": "pompous_conquests",
+  "win_va": "0x004d61e8",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00096225"
+ },
+ {
+  "name": "buildings_lv_effect",
+  "win_va": "0x004d6488",
+  "tier": "initializer-exact",
+  "votes": "224/224",
+  "ps_addr": "0x000964c1"
+ },
+ {
+  "name": "init_salary",
+  "win_va": "0x004d6568",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000965a1"
+ },
+ {
+  "name": "main_paras",
+  "win_va": "0x004d65c0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000965f9"
+ },
+ {
+  "name": "regular_baseline",
+  "win_va": "0x004d65c4",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": null
+ },
+ {
+  "name": "recruit_caps",
+  "win_va": "0x004d65c8",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": null
+ },
+ {
+  "name": "imperial_tax_base",
+  "win_va": "0x004d65d4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": null
+ },
+ {
+  "name": "tax_triggers",
+  "win_va": "0x004d65e8",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00096621"
+ },
+ {
+  "name": "tax_rates",
+  "win_va": "0x004d65f8",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x0009662d"
+ },
+ {
+  "name": "tribute_adjust",
+  "win_va": "0x004d66e8",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x0009671d"
+ },
+ {
+  "name": "city_costs",
+  "win_va": "0x004d6728",
+  "tier": "exact",
+  "votes": "36/36",
+  "ps_addr": "0x0009674b"
+ },
+ {
+  "name": "region_costs",
+  "win_va": "0x004d68b8",
+  "tier": "exact",
+  "votes": "12/12",
+  "ps_addr": "0x000968db"
+ },
+ {
+  "name": "city_level_good_supply",
+  "win_va": "0x004d6908",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0009692b"
+ },
+ {
+  "name": "pop_tax_to_growth_data",
+  "win_va": "0x004d6a48",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00096a6b"
+ },
+ {
+  "name": "employment_to_pop_growth_factor",
+  "win_va": "0x004d6ab0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00096ad3"
+ },
+ {
+  "name": "ind_tax_to_growth_data",
+  "win_va": "0x004d6b08",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00096b27"
+ },
+ {
+  "name": "tax_to_revolt_data",
+  "win_va": "0x004d6b70",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00096b8f"
+ },
+ {
+  "name": "conscription_to_revolt_data",
+  "win_va": "0x004d6bd8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00096bf7"
+ },
+ {
+  "name": "skill_to_imperial_request",
+  "win_va": "0x004d6f00",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00096f1f"
+ },
+ {
+  "name": "skill_to_denarii_reduction",
+  "win_va": "0x004d6f30",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00096f47"
+ },
+ {
+  "name": "attack_pos_data",
+  "win_va": "0x004d6fa0",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00099f78"
+ },
+ {
+  "name": "figure_intelligences",
+  "win_va": "0x004d70a0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0009a058"
+ },
+ {
+  "name": "figure_states",
+  "win_va": "0x004d70e8",
+  "tier": "exact",
+  "votes": "9/9",
+  "ps_addr": "0x0009a0a0"
+ },
+ {
+  "name": "wf_battle_dircs",
+  "win_va": "0x004d7270",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0009a224"
+ },
+ {
+  "name": "speech_files",
+  "win_va": "0x004d7278",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00093698"
+ },
+ {
+  "name": "confirming_buttons",
+  "win_va": "0x004d7e40",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00098ff6"
+ },
+ {
+  "name": "help_buttons",
+  "win_va": "0x004d7e70",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00099026"
+ },
+ {
+  "name": "queery_buttons",
+  "win_va": "0x004d7ea0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00099056"
+ },
+ {
+  "name": "adjusting_buttons",
+  "win_va": "0x004d7f48",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000990fe"
+ },
+ {
+  "name": "skill1_buttons",
+  "win_va": "0x004d7f78",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x0009912e"
+ },
+ {
+  "name": "exit_buttons",
+  "win_va": "0x004d8068",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x0009921e"
+ },
+ {
+  "name": "promotion_buttons",
+  "win_va": "0x004d8200",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000993b6"
+ },
+ {
+  "name": "model_entries",
+  "win_va": "0x004d8668",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x0009ac1c"
+ },
+ {
+  "name": "savegame_entries",
+  "win_va": "0x004d87a8",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x0009ad5c"
+ },
+ {
+  "name": "rotated_bank2",
+  "win_va": "0x004da8e0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00097604"
+ },
+ {
+  "name": "rotated_map",
+  "win_va": "0x004da238",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00096f5c"
+ },
+ {
+  "name": "rotated_bank4",
+  "win_va": "0x004dac90",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000979b4"
+ },
+ {
+  "name": "rotated2_map",
+  "win_va": "0x004dae20",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00097b44"
+ },
+ {
+  "name": "rotated2_bank0",
+  "win_va": "0x004db020",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00097d44"
+ },
+ {
+  "name": "rotated2_bank1",
+  "win_va": "0x004db2b0",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00097fd4"
+ },
+ {
+  "name": "rotated2_bank2",
+  "win_va": "0x004db420",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00098144"
+ },
+ {
+  "name": "rotated2_bank3",
+  "win_va": "0x004db6b0",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000983d4"
+ },
+ {
+  "name": "return_map_mode",
+  "win_va": "0x005229cc",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102ed8"
+ },
+ {
+  "name": "map_mode",
+  "win_va": "0x004dbab8",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x00117c46"
+ },
+ {
+  "name": "screen_mode",
+  "win_va": "0x0053d5ec",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000cccbc"
+ },
+ {
+  "name": "gmn_ofsets",
+  "win_va": "0x004dbac0",
+  "tier": "instr-multi",
+  "votes": "10/10",
+  "ps_addr": "0x00098754"
+ },
+ {
+  "name": "last_house_query_mode",
+  "win_va": "0x004dbad0",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102638"
+ },
+ {
+  "name": "people_data",
+  "win_va": "0x004dbad8",
+  "tier": "instr-multi",
+  "votes": "13/19",
+  "ps_addr": "0x001025cc"
+ },
+ {
+  "name": "fixt_data",
+  "win_va": "0x004dbae0",
+  "tier": "instr-multi",
+  "votes": "17/24",
+  "ps_addr": "0x001025d4"
+ },
+ {
+  "name": "house_data",
+  "win_va": "0x004dbae8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001025a8"
+ },
+ {
+  "name": "building_data1",
+  "win_va": "0x004dbaf0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001025a0"
+ },
+ {
+  "name": "building_data2",
+  "win_va": "0x004dbaf8",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102594"
+ },
+ {
+  "name": "building_data3",
+  "win_va": "0x004dbb00",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102598"
+ },
+ {
+  "name": "building_data4",
+  "win_va": "0x004dbb08",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00102590"
+ },
+ {
+  "name": "tops_data",
+  "win_va": "0x004dbb10",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x0010258c"
+ },
+ {
+  "name": "figure1_data",
+  "win_va": "0x004dbb18",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x001025d0"
+ },
+ {
+  "name": "figure2_data",
+  "win_va": "0x004dbb1c",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x001025d8"
+ },
+ {
+  "name": "rome2_buttons",
+  "win_va": "0x004d8620",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x000997d6"
+ },
+ {
+  "name": "figure3_data",
+  "win_va": "0x004dbb20",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x001025e0"
+ },
+ {
+  "name": "figure4_data",
+  "win_va": "0x004dbb24",
+  "tier": "instr-multi",
+  "votes": "6/8",
+  "ps_addr": "0x001025e4"
+ },
+ {
+  "name": "figure5_data",
+  "win_va": "0x004dbb28",
+  "tier": "instr-multi",
+  "votes": "8/9",
+  "ps_addr": "0x00102588"
+ },
+ {
+  "name": "figure6_data",
+  "win_va": "0x004dbb2c",
+  "tier": "instr-multi",
+  "votes": "6/8",
+  "ps_addr": "0x0010259c"
+ },
+ {
+  "name": "figure7_data",
+  "win_va": "0x004dbb30",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x00102574"
+ },
+ {
+  "name": "figure8_data",
+  "win_va": "0x004dbb34",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x0010257c"
+ },
+ {
+  "name": "figure9_data",
+  "win_va": "0x004dbb38",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102580"
+ },
+ {
+  "name": "figure10_data",
+  "win_va": "0x004dbb3c",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102584"
+ },
+ {
+  "name": "city_actions",
+  "win_va": "0x004dbb68",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00099820"
+ },
+ {
+  "name": "help_redir_temple_tips",
+  "win_va": "0x004dbc90",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00099938"
+ },
+ {
+  "name": "help_redir_temple_history",
+  "win_va": "0x004dbc98",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00099940"
+ },
+ {
+  "name": "help_redir_ent_history",
+  "win_va": "0x004dbca0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00099948"
+ },
+ {
+  "name": "help_debar",
+  "win_va": "0x004dbcc8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00099970"
+ },
+ {
+  "name": "cmu_count",
+  "win_va": "0x00527000",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00117c80"
+ },
+ {
+  "name": "game_speed_count",
+  "win_va": "0x004de2e4",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": null
+ },
+ {
+  "name": "scroll_speed_count",
+  "win_va": "0x004de2e8",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": null
+ },
+ {
+  "name": "request_message",
+  "win_va": "0x0052701c",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x00117e64"
+ },
+ {
+  "name": "cohort_tick_gate",
+  "win_va": "0x004de3e8",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": null
+ },
+ {
+  "name": "enemy_tick_gate",
+  "win_va": "0x004de3ec",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": null
+ },
+ {
+  "name": "gmn_err_x",
+  "win_va": "0x004df0d4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102698"
+ },
+ {
+  "name": "q_had_goods",
+  "win_va": "0x004df0d8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c19"
+ },
+ {
+  "name": "gmn_err_y",
+  "win_va": "0x004df0e0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010269c"
+ },
+ {
+  "name": "east_trader_count0",
+  "win_va": "0x004df0e4",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00102810"
+ },
+ {
+  "name": "east_trader_count1",
+  "win_va": "0x004df0e8",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001027a8"
+ },
+ {
+  "name": "our_battle_stance",
+  "win_va": "0x004df0ec",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102f50"
+ },
+ {
+  "name": "religion_level",
+  "win_va": "0x004df0f0",
+  "tier": "instr-multi",
+  "votes": "11/13",
+  "ps_addr": "0x00102728"
+ },
+ {
+  "name": "estimate_construction_cost",
+  "win_va": "0x004df0f4",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102bf8"
+ },
+ {
+  "name": "mercs_cost_per_50",
+  "win_va": "0x004df0f8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102ec0"
+ },
+ {
+  "name": "retreat_flag",
+  "win_va": "0x004df0fc",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102f3c"
+ },
+ {
+  "name": "conscription_rate",
+  "win_va": "0x004df104",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x00102b14"
+ },
+ {
+  "name": "hunting_army",
+  "win_va": "0x004df108",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x0011588e"
+ },
+ {
+  "name": "east_trader_brings",
+  "win_va": "0x004df10c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010274c"
+ },
+ {
+  "name": "no_of_border_towns",
+  "win_va": "0x004e6948",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001028d0"
+ },
+ {
+  "name": "no_of_towns",
+  "win_va": "0x004df110",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001028a8"
+ },
+ {
+  "name": "threat_mood",
+  "win_va": "0x004df114",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102ea8"
+ },
+ {
+  "name": "library_cover",
+  "win_va": "0x004df11c",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102824"
+ },
+ {
+  "name": "account_operating_cost",
+  "win_va": "0x004df120",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102be8"
+ },
+ {
+  "name": "misc",
+  "win_va": "0x004df130",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x000d1be4"
+ },
+ {
+  "name": "act_start_pm_ptr",
+  "win_va": "0x004dff30",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102cd8"
+ },
+ {
+  "name": "mercs_speed",
+  "win_va": "0x004dff34",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102efc"
+ },
+ {
+  "name": "stolen_denarii",
+  "win_va": "0x004dff38",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102bcc"
+ },
+ {
+  "name": "act_start_ptr",
+  "win_va": "0x004dff3c",
+  "tier": "instr-multi",
+  "votes": "12/12",
+  "ps_addr": "0x00102cb4"
+ },
+ {
+  "name": "pop_tax_last_count",
+  "win_va": "0x004e68b8",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102ad0"
+ },
+ {
+  "name": "ind_tax_last_count",
+  "win_va": "0x00509c54",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102abc"
+ },
+ {
+  "name": "small_temples_pass_count",
+  "win_va": "0x004dff44",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a10"
+ },
+ {
+  "name": "their_battle_morale",
+  "win_va": "0x004dff48",
+  "tier": "instr-multi",
+  "votes": "9/10",
+  "ps_addr": "0x00102f44"
+ },
+ {
+  "name": "this_years_denarii",
+  "win_va": "0x004dff4c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102bac"
+ },
+ {
+  "name": "com_h",
+  "win_va": "0x004dff50",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00102d0c"
+ },
+ {
+  "name": "total_no_of_specials",
+  "win_va": "0x004dff58",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102ae4"
+ },
+ {
+  "name": "arrow_list",
+  "win_va": "0x004dff60",
+  "tier": "exact",
+  "votes": "41/41",
+  "ps_addr": "0x001158ba"
+ },
+ {
+  "name": "odium_culture_count",
+  "win_va": "0x004e22b8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102998"
+ },
+ {
+  "name": "exit_y_at",
+  "win_va": "0x004e22bc",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001025c4"
+ },
+ {
+  "name": "figure_list",
+  "win_va": "0x004e22c0",
+  "tier": "exact",
+  "votes": "123/123",
+  "ps_addr": "0x000d37d4"
+ },
+ {
+  "name": "elephant_archer_images",
+  "win_va": "0x004d7088",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x0009a043"
+ },
+ {
+  "name": "com_w",
+  "win_va": "0x004e67d8",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102d10"
+ },
+ {
+  "name": "com_x",
+  "win_va": "0x004e67e0",
+  "tier": "instr-multi",
+  "votes": "8/10",
+  "ps_addr": "0x00102d14"
+ },
+ {
+  "name": "com_y",
+  "win_va": "0x004e67e4",
+  "tier": "instr-multi",
+  "votes": "11/13",
+  "ps_addr": "0x00102d18"
+ },
+ {
+  "name": "no_of_city_flags",
+  "win_va": "0x004e67e8",
+  "tier": "native-xref",
+  "votes": "4/4",
+  "ps_addr": "0x00102cdc"
+ },
+ {
+  "name": "redraw_icons",
+  "win_va": "0x004e67ec",
+  "tier": "instr-multi",
+  "votes": "10/11",
+  "ps_addr": "0x00117c4e"
+ },
+ {
+  "name": "circus_maximus_pass_count",
+  "win_va": "0x004e67f0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0010297c"
+ },
+ {
+  "name": "imperial_send_amount",
+  "win_va": "0x004e67f4",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102b78"
+ },
+ {
+  "name": "prov_flag_list",
+  "win_va": "0x004e6800",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x000d3104"
+ },
+ {
+  "name": "current_operating_cost",
+  "win_va": "0x004e6850",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102c18"
+ },
+ {
+  "name": "revolt_accident",
+  "win_va": "0x00515b5c",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001028c8"
+ },
+ {
+  "name": "slave_welfare_bill",
+  "win_va": "0x004e6854",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102c50"
+ },
+ {
+  "name": "circus_maximus_count",
+  "win_va": "0x004e6858",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102988"
+ },
+ {
+  "name": "hlite_right",
+  "win_va": "0x004e685c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102e80"
+ },
+ {
+  "name": "particles_built",
+  "win_va": "0x004e6860",
+  "tier": "instr-multi",
+  "votes": "19/21",
+  "ps_addr": "0x001025fc"
+ },
+ {
+  "name": "medium_forums_count",
+  "win_va": "0x004e686c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a7c"
+ },
+ {
+  "name": "plague_pass_count",
+  "win_va": "0x004e6870",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102ab8"
+ },
+ {
+  "name": "road_cover",
+  "win_va": "0x004e6874",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x001028b8"
+ },
+ {
+  "name": "grammaticus_count",
+  "win_va": "0x004e6878",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102984"
+ },
+ {
+  "name": "large_forums_pass_count",
+  "win_va": "0x004e687c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a38"
+ },
+ {
+  "name": "region_accident",
+  "win_va": "0x004e6a54",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001028b4"
+ },
+ {
+  "name": "ind_tax_counts",
+  "win_va": "0x004e6880",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x00102aac"
+ },
+ {
+  "name": "med_temples_pass_count",
+  "win_va": "0x004e6884",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001029fc"
+ },
+ {
+  "name": "warned_of_emperor_reply_level",
+  "win_va": "0x004e6888",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117c56"
+ },
+ {
+  "name": "hlite_off_x",
+  "win_va": "0x004e6890",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102e58"
+ },
+ {
+  "name": "average_rating",
+  "win_va": "0x004e6894",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102710"
+ },
+ {
+  "name": "prosperity_rating",
+  "win_va": "0x004e6898",
+  "tier": "instr-multi",
+  "votes": "6/8",
+  "ps_addr": "0x001026f4"
+ },
+ {
+  "name": "cohort_in_action",
+  "win_va": "0x004e68a0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00110952"
+ },
+ {
+  "name": "hlite_off_y",
+  "win_va": "0x004e68ac",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102e54"
+ },
+ {
+  "name": "best_elastic_dirc",
+  "win_va": "0x004e68b0",
+  "tier": "instr-multi",
+  "votes": "12/12",
+  "ps_addr": "0x00102cd4"
+ },
+ {
+  "name": "income_multiple",
+  "win_va": "0x004dff40",
+  "tier": "instr-multi",
+  "votes": "2/7",
+  "ps_addr": "0x00102b90"
+ },
+ {
+  "name": "estimate_pop_tax",
+  "win_va": "0x004e68bc",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102bfc"
+ },
+ {
+  "name": "arena_pass_count",
+  "win_va": "0x004e68c0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0010299c"
+ },
+ {
+  "name": "history_graph_length",
+  "win_va": "0x004e68c4",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102798"
+ },
+ {
+  "name": "total_imperial_taxes",
+  "win_va": "0x004e68c8",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102bdc"
+ },
+ {
+  "name": "gmn_density",
+  "win_va": "0x004e68cc",
+  "tier": "instr-multi",
+  "votes": "22/30",
+  "ps_addr": "0x001026d4"
+ },
+ {
+  "name": "tune_branch",
+  "win_va": "0x004e68d0",
+  "tier": "exact",
+  "votes": "16/16",
+  "ps_addr": "0x00102e30"
+ },
+ {
+  "name": "unrest_random_count",
+  "win_va": "0x004e68d4",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102680"
+ },
+ {
+  "name": "pm_shown_ptr",
+  "win_va": "0x004e68d8",
+  "tier": "instr-multi",
+  "votes": "286/288",
+  "ps_addr": "0x00102d84"
+ },
+ {
+  "name": "needed_no_of_specials",
+  "win_va": "0x004e68e0",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102ae0"
+ },
+ {
+  "name": "total_no_of_auxillaries",
+  "win_va": "0x004e68e4",
+  "tier": "exact",
+  "votes": "3/4",
+  "ps_addr": "0x00102b38"
+ },
+ {
+  "name": "gmn_max_run",
+  "win_va": "0x00512b4c",
+  "tier": "native-xref",
+  "votes": "32/32",
+  "ps_addr": "0x00102690"
+ },
+ {
+  "name": "odium_pass_count",
+  "win_va": "0x004e68ec",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102978"
+ },
+ {
+  "name": "pop_tax_rate",
+  "win_va": "0x004e68f0",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102c34"
+ },
+ {
+  "name": "test_result1",
+  "win_va": "0x004e68f4",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x001025bc"
+ },
+ {
+  "name": "moving_tribute",
+  "win_va": "0x004e68f8",
+  "tier": "instr-multi",
+  "votes": "13/14",
+  "ps_addr": "0x00102b60"
+ },
+ {
+  "name": "test_result2",
+  "win_va": "0x004e68fc",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x001025b8"
+ },
+ {
+  "name": "q_supplies",
+  "win_va": "0x004e6900",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102888"
+ },
+ {
+  "name": "circus_maximus_culture_count",
+  "win_va": "0x004e6904",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102914"
+ },
+ {
+  "name": "test_result3",
+  "win_va": "0x004e6908",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x001025b4"
+ },
+ {
+  "name": "test_result4",
+  "win_va": "0x004e690c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001025b0"
+ },
+ {
+  "name": "q_lv",
+  "win_va": "0x004e6918",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00117c24"
+ },
+ {
+  "name": "province_difficulty",
+  "win_va": "0x004e6920",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102784"
+ },
+ {
+  "name": "x",
+  "win_va": "0x004e6924",
+  "tier": "exact",
+  "votes": "12/12",
+  "ps_addr": "0x001027c8"
+ },
+ {
+  "name": "no_of_ports",
+  "win_va": "0x00525d3c",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x0010292c"
+ },
+ {
+  "name": "y",
+  "win_va": "0x004e692c",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x001027cc"
+ },
+ {
+  "name": "circus_culture_count",
+  "win_va": "0x004e6930",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102940"
+ },
+ {
+  "name": "total_no_of_bribes",
+  "win_va": "0x004e6934",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102b9c"
+ },
+ {
+  "name": "max_mercs_allowed",
+  "win_va": "0x004e6938",
+  "tier": "instr-multi",
+  "votes": "6/8",
+  "ps_addr": "0x00102ec4"
+ },
+ {
+  "name": "total_no_of_regulars",
+  "win_va": "0x004e693c",
+  "tier": "exact",
+  "votes": "3/4",
+  "ps_addr": "0x00102b34"
+ },
+ {
+  "name": "final_bribe",
+  "win_va": "0x004e6940",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102e04"
+ },
+ {
+  "name": "pm_diamond_width",
+  "win_va": "0x004e6944",
+  "tier": "instr-multi",
+  "votes": "78/85",
+  "ps_addr": "0x00102d74"
+ },
+ {
+  "name": "no_of_farms",
+  "win_va": "0x0050b71c",
+  "tier": "instr-single",
+  "votes": "1/3",
+  "ps_addr": "0x001028b0"
+ },
+ {
+  "name": "no_of_trading_posts",
+  "win_va": "0x0050a0a0",
+  "tier": "instr-single",
+  "votes": "1/3",
+  "ps_addr": "0x00102904"
+ },
+ {
+  "name": "theatre_culture_pass_count",
+  "win_va": "0x004e694c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029a4"
+ },
+ {
+  "name": "created_arrow_no",
+  "win_va": "0x004e6950",
+  "tier": "exact",
+  "votes": "10/10",
+  "ps_addr": "0x001158b2"
+ },
+ {
+  "name": "created_unit_no",
+  "win_va": "0x004e6952",
+  "tier": "instr-multi",
+  "votes": "31/42",
+  "ps_addr": "0x001158a0"
+ },
+ {
+  "name": "large_temples_culture_pass_count",
+  "win_va": "0x004e6954",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029f8"
+ },
+ {
+  "name": "account_pop_tax",
+  "win_va": "0x004e6958",
+  "tier": "exact",
+  "votes": "3/4",
+  "ps_addr": "0x00102c14"
+ },
+ {
+  "name": "arrow_no",
+  "win_va": "0x004e695c",
+  "tier": "exact",
+  "votes": "34/34",
+  "ps_addr": "0x001158a4"
+ },
+ {
+  "name": "no_of_barbarians",
+  "win_va": "0x004e6960",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102830"
+ },
+ {
+  "name": "prosperity_rating_pop_limit",
+  "win_va": "0x004e6964",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102738"
+ },
+ {
+  "name": "update_landfill",
+  "win_va": "0x004e6968",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00117c4d"
+ },
+ {
+  "name": "east_border_x",
+  "win_va": "0x004e696c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027bc"
+ },
+ {
+  "name": "east_border_y",
+  "win_va": "0x004e6970",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027b8"
+ },
+ {
+  "name": "had_clear_sound",
+  "win_va": "0x004e6974",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102cc8"
+ },
+ {
+  "name": "pm_x_coord",
+  "win_va": "0x004e6978",
+  "tier": "instr-multi",
+  "votes": "15/16",
+  "ps_addr": "0x00102d64"
+ },
+ {
+  "name": "gmn",
+  "win_va": "0x004e6980",
+  "tier": "instr-multi",
+  "votes": "310/310",
+  "ps_addr": "0x000d2c94"
+ },
+ {
+  "name": "demo_mode",
+  "win_va": "0x004e6990",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102de8"
+ },
+ {
+  "name": "show_message_ptr",
+  "win_va": "0x004e6994",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x00102e44"
+ },
+ {
+  "name": "prefectures_count",
+  "win_va": "0x004e6998",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a44"
+ },
+ {
+  "name": "extra_auxillaries",
+  "win_va": "0x004e699c",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102b30"
+ },
+ {
+  "name": "ferret_run_length",
+  "win_va": "0x004e69a0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102f94"
+ },
+ {
+  "name": "colosseum_count",
+  "win_va": "0x004e69a4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001029bc"
+ },
+ {
+  "name": "cm_sptr",
+  "win_va": "0x004e69a8",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102dc4"
+ },
+ {
+  "name": "fountains_count",
+  "win_va": "0x004e69ac",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a2c"
+ },
+ {
+  "name": "small_forums_count",
+  "win_va": "0x004e69b0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a5c"
+ },
+ {
+  "name": "gen_refresh1",
+  "win_va": "0x004e69b4",
+  "tier": "exact",
+  "votes": "14/14",
+  "ps_addr": "0x00117c4f"
+ },
+ {
+  "name": "gen_refresh2",
+  "win_va": "0x004e69b5",
+  "tier": "exact",
+  "votes": "16/16",
+  "ps_addr": "0x00117c51"
+ },
+ {
+  "name": "gen_refresh3",
+  "win_va": "0x004e69b6",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117c50"
+ },
+ {
+  "name": "update_map",
+  "win_va": "0x004e69b7",
+  "tier": "instr-multi",
+  "votes": "32/32",
+  "ps_addr": "0x00117c47"
+ },
+ {
+  "name": "grammaticus_pass_count",
+  "win_va": "0x004e69b8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102994"
+ },
+ {
+  "name": "pm_y_coord",
+  "win_va": "0x004e69bc",
+  "tier": "instr-multi",
+  "votes": "17/17",
+  "ps_addr": "0x00102d6c"
+ },
+ {
+  "name": "q_outside",
+  "win_va": "0x004e69c0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c27"
+ },
+ {
+  "name": "placing_flags",
+  "win_va": "0x004e69c4",
+  "tier": "exact",
+  "votes": "39/39",
+  "ps_addr": "0x00102600"
+ },
+ {
+  "name": "pm_screen_x_start",
+  "win_va": "0x004e69c8",
+  "tier": "instr-multi",
+  "votes": "43/47",
+  "ps_addr": "0x00102d48"
+ },
+ {
+  "name": "choice_info",
+  "win_va": "0x004e69cc",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c18"
+ },
+ {
+  "name": "gmn_nesw_count",
+  "win_va": "0x00515b2c",
+  "tier": "native-xref",
+  "votes": "40/40",
+  "ps_addr": "0x001026c0"
+ },
+ {
+  "name": "average_pop_tax_denariis",
+  "win_va": "0x004e69dc",
+  "tier": "instr-multi",
+  "votes": "3/5",
+  "ps_addr": "0x00102b74"
+ },
+ {
+  "name": "needed_no_of_regulars",
+  "win_va": "0x004e69e0",
+  "tier": "exact",
+  "votes": "3/4",
+  "ps_addr": "0x00102b20"
+ },
+ {
+  "name": "forts_pass_count",
+  "win_va": "0x004e69e4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a80"
+ },
+ {
+  "name": "months_since_last_raider",
+  "win_va": "0x004e69e8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c74"
+ },
+ {
+  "name": "temp_figure",
+  "win_va": "0x004e69ec",
+  "tier": "instr-multi",
+  "votes": "162/166",
+  "ps_addr": "0x001158a6"
+ },
+ {
+  "name": "q_road",
+  "win_va": "0x004e69ee",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c29"
+ },
+ {
+  "name": "warned_of_emperor",
+  "win_va": "0x004e69ef",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117c5d"
+ },
+ {
+  "name": "extra_irregulars",
+  "win_va": "0x004e69f0",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102b28"
+ },
+ {
+  "name": "over_x",
+  "win_va": "0x004e69f4",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c94"
+ },
+ {
+  "name": "over_y",
+  "win_va": "0x004e69f8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c90"
+ },
+ {
+  "name": "particles_cleared",
+  "win_va": "0x004e69fc",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102628"
+ },
+ {
+  "name": "last_danger_flag",
+  "win_va": "0x004e6a00",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102ce0"
+ },
+ {
+  "name": "last_prov_flag",
+  "win_va": "0x00525d2c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102cf8"
+ },
+ {
+  "name": "accessed_libraries_pass_count",
+  "win_va": "0x004e6a04",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a24"
+ },
+ {
+  "name": "average_cohort_morale",
+  "win_va": "0x004e6a08",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102a90"
+ },
+ {
+  "name": "bad_mood",
+  "win_va": "0x004e6a0c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102e1c"
+ },
+ {
+  "name": "slave_warning",
+  "win_va": "0x004e6a14",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102e08"
+ },
+ {
+  "name": "months_since_last_revolt",
+  "win_va": "0x004e6a18",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c28"
+ },
+ {
+  "name": "this_help_page",
+  "win_va": "0x004e6a20",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102620"
+ },
+ {
+  "name": "fire_rate",
+  "win_va": "0x004e6a24",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x001028f0"
+ },
+ {
+  "name": "av_imperial_gift_level",
+  "win_va": "0x004e6a28",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00102bb0"
+ },
+ {
+  "name": "fire_pass_count",
+  "win_va": "0x004e6a2c",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102ad4"
+ },
+ {
+  "name": "stopped_scrolling",
+  "win_va": "0x004e6a30",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00117c52"
+ },
+ {
+  "name": "rolling_profit",
+  "win_va": "0x004e6a34",
+  "tier": "instr-multi",
+  "votes": "13/14",
+  "ps_addr": "0x00102794"
+ },
+ {
+  "name": "libraries_count",
+  "win_va": "0x004e6a38",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001029d8"
+ },
+ {
+  "name": "cm_dptr",
+  "win_va": "0x004e6a3c",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00102db8"
+ },
+ {
+  "name": "colosseum_pass_count",
+  "win_va": "0x004e6a40",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102980"
+ },
+ {
+  "name": "mercs_catagory",
+  "win_va": "0x004e6a44",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102f00"
+ },
+ {
+  "name": "last_city_mood",
+  "win_va": "0x004e6a48",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102e18"
+ },
+ {
+  "name": "ind_tax_running_total",
+  "win_va": "0x004e6a4c",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102ac0"
+ },
+ {
+  "name": "pm_x",
+  "win_va": "0x004e6a50",
+  "tier": "instr-multi",
+  "votes": "73/77",
+  "ps_addr": "0x00102d5c"
+ },
+ {
+  "name": "pm_y",
+  "win_va": "0x004e6a58",
+  "tier": "instr-multi",
+  "votes": "47/50",
+  "ps_addr": "0x00102d58"
+ },
+ {
+  "name": "plaza_culture_count",
+  "win_va": "0x004e6a5c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102948"
+ },
+ {
+  "name": "med_temples_culture_pass_count",
+  "win_va": "0x004e6a60",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029d0"
+ },
+ {
+  "name": "large_temples_culture_count",
+  "win_va": "0x004e6a64",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a04"
+ },
+ {
+  "name": "slave_population_estimate",
+  "win_va": "0x004e6a68",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102c7c"
+ },
+ {
+  "name": "q_hospital_access",
+  "win_va": "0x004e6a6c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010288c"
+ },
+ {
+  "name": "battle_turbo",
+  "win_va": "0x004e6a74",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102ee8"
+ },
+ {
+  "name": "battle_stats_control",
+  "win_va": "0x004e6a78",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00102f5c"
+ },
+ {
+  "name": "province_is",
+  "win_va": "0x004e6a7c",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102788"
+ },
+ {
+  "name": "map_actual_atom",
+  "win_va": "0x004e6a80",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102da4"
+ },
+ {
+  "name": "unit_no",
+  "win_va": "0x004e6a84",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x001158a2"
+ },
+ {
+  "name": "structure_running_count",
+  "win_va": "0x004e6a88",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a60"
+ },
+ {
+  "name": "players_denarii",
+  "win_va": "0x004e6a8c",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102bbc"
+ },
+ {
+  "name": "starting_denarii",
+  "win_va": "0x004e6a90",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102604"
+ },
+ {
+  "name": "ind_tax_rate",
+  "win_va": "0x004e6a94",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00102c60"
+ },
+ {
+  "name": "business_pass_count",
+  "win_va": "0x004e6a98",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102928"
+ },
+ {
+  "name": "pm_screen_y_start",
+  "win_va": "0x004e6a9c",
+  "tier": "instr-multi",
+  "votes": "11/17",
+  "ps_addr": "0x00102d44"
+ },
+ {
+  "name": "last_icon_used",
+  "win_va": "0x004e6aa0",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102650"
+ },
+ {
+  "name": "emergency_mood",
+  "win_va": "0x004e6aa4",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102e6c"
+ },
+ {
+  "name": "fire_spread_target",
+  "win_va": "0x004e6aa8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102854"
+ },
+ {
+  "name": "med_temples_count",
+  "win_va": "0x004e6aac",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102a1c"
+ },
+ {
+  "name": "north_trader_count0",
+  "win_va": "0x004e6ab0",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x001027d8"
+ },
+ {
+  "name": "north_trader_count1",
+  "win_va": "0x004e6ab4",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x0010278c"
+ },
+ {
+  "name": "bat_attacker_clock",
+  "win_va": "0x00526f40",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117d04"
+ },
+ {
+  "name": "enemy_figure",
+  "win_va": "0x004e6abc",
+  "tier": "exact",
+  "votes": "24/32",
+  "ps_addr": "0x00115880"
+ },
+ {
+  "name": "hlite_centre_x",
+  "win_va": "0x004e6ac0",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102e78"
+ },
+ {
+  "name": "hlite_centre_y",
+  "win_va": "0x004e6ac4",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102e74"
+ },
+ {
+  "name": "north_trader_brings",
+  "win_va": "0x004e6ac8",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x0010279c"
+ },
+ {
+  "name": "current_no_of_specials",
+  "win_va": "0x004e6acc",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102a94"
+ },
+ {
+  "name": "battle_over_count",
+  "win_va": "0x004e6ad0",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102f74"
+ },
+ {
+  "name": "bat_enemy_left_flank_unit",
+  "win_va": "0x0050b770",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102ea4"
+ },
+ {
+  "name": "forum_dept",
+  "win_va": "0x004e6ad4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c15"
+ },
+ {
+  "name": "no_of_figures",
+  "win_va": "0x004e6ad8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0010283c"
+ },
+ {
+  "name": "market_pass_count",
+  "win_va": "0x004e6adc",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102944"
+ },
+ {
+  "name": "pop_growth_factor",
+  "win_va": "0x004e6ae0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c8c"
+ },
+ {
+  "name": "city_map",
+  "win_va": "0x004e6af0",
+  "tier": "exact",
+  "votes": "69/69",
+  "ps_addr": "0x000e3174"
+ },
+ {
+  "name": "wall_gfxdat",
+  "win_va": "0x004d4f90",
+  "tier": "native-xref",
+  "votes": "5/5",
+  "ps_addr": "0x00094ff3"
+ },
+ {
+  "name": "army_wage_level",
+  "win_va": "0x00505ef0",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00102af8"
+ },
+ {
+  "name": "battle_stats_type",
+  "win_va": "0x00505ef4",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102f38"
+ },
+ {
+  "name": "map_direction",
+  "win_va": "0x00505ef8",
+  "tier": "exact",
+  "votes": "4/6",
+  "ps_addr": "0x00102d98"
+ },
+ {
+  "name": "reg_placing_flags",
+  "win_va": "0x00505f00",
+  "tier": "exact",
+  "votes": "13/13",
+  "ps_addr": "0x00102630"
+ },
+ {
+  "name": "business_build_type",
+  "win_va": "0x00505f04",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001025f8"
+ },
+ {
+  "name": "pm_diamond_half_height",
+  "win_va": "0x00505f08",
+  "tier": "instr-multi",
+  "votes": "50/55",
+  "ps_addr": "0x00102d90"
+ },
+ {
+  "name": "pm_diamond_height",
+  "win_va": "0x00505f08",
+  "tier": "instr-multi",
+  "votes": "3/5",
+  "ps_addr": "0x00102d80"
+ },
+ {
+  "name": "province_industries",
+  "win_va": "0x00505f10",
+  "tier": "instr-multi",
+  "votes": "11/11",
+  "ps_addr": "0x000d2ca4"
+ },
+ {
+  "name": "gmn_ns_count",
+  "win_va": "0x0050a050",
+  "tier": "native-xref",
+  "votes": "24/24",
+  "ps_addr": "0x001026cc"
+ },
+ {
+  "name": "gmn_nwse_count",
+  "win_va": "0x00505f90",
+  "tier": "instr-multi",
+  "votes": "16/24",
+  "ps_addr": "0x001026d8"
+ },
+ {
+  "name": "army_list",
+  "win_va": "0x00505fa0",
+  "tier": "exact",
+  "votes": "127/130",
+  "ps_addr": "0x001146b8"
+ },
+ {
+  "name": "current_no_of_auxillaries",
+  "win_va": "0x00507168",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102af4"
+ },
+ {
+  "name": "total_no_of_cohorts",
+  "win_va": "0x004df100",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x00102b3c"
+ },
+ {
+  "name": "game_state",
+  "win_va": "0x0050716c",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102c5c"
+ },
+ {
+  "name": "w_dirc",
+  "win_va": "0x00507171",
+  "tier": "instr-multi",
+  "votes": "18/18",
+  "ps_addr": "0x00117c42"
+ },
+ {
+  "name": "need_glf",
+  "win_va": "0x00507172",
+  "tier": "exact",
+  "votes": "10/10",
+  "ps_addr": "0x00117c10"
+ },
+ {
+  "name": "supplied_baths_pass_count",
+  "win_va": "0x00507174",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a58"
+ },
+ {
+  "name": "hlite_top",
+  "win_va": "0x00507178",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102e84"
+ },
+ {
+  "name": "help_history",
+  "win_va": "0x00507180",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d2afc"
+ },
+ {
+  "name": "last_years_population",
+  "win_va": "0x00507310",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102ba4"
+ },
+ {
+  "name": "months_since_last_city_attack",
+  "win_va": "0x00507314",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c30"
+ },
+ {
+  "name": "accessed_libraries_count",
+  "win_va": "0x00507318",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102964"
+ },
+ {
+  "name": "last_years_ind_tax",
+  "win_va": "0x0050731c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102b7c"
+ },
+ {
+  "name": "reg_city_x",
+  "win_va": "0x00507320",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x0010280c"
+ },
+ {
+  "name": "this_help_action",
+  "win_va": "0x00507324",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102644"
+ },
+ {
+  "name": "reg_city_y",
+  "win_va": "0x00507328",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x00102814"
+ },
+ {
+  "name": "zoom_in_decay_count",
+  "win_va": "0x0050732d",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c48"
+ },
+ {
+  "name": "fountains_pass_count",
+  "win_va": "0x00507330",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a30"
+ },
+ {
+  "name": "refused_promotion",
+  "win_va": "0x00507334",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x001026f8"
+ },
+ {
+  "name": "empire_won",
+  "win_va": "0x00507340",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x000d7cec"
+ },
+ {
+  "name": "reg_city_ptr",
+  "win_va": "0x00507408",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001027c0"
+ },
+ {
+  "name": "target_unit_debar",
+  "win_va": "0x0050740c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102ed4"
+ },
+ {
+  "name": "small_temples_culture_pass_count",
+  "win_va": "0x00507414",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029d4"
+ },
+ {
+  "name": "forum_viewed_army",
+  "win_va": "0x0050741c",
+  "tier": "instr-multi",
+  "votes": "16/17",
+  "ps_addr": "0x00102b80"
+ },
+ {
+  "name": "lv_debar",
+  "win_va": "0x00522944",
+  "tier": "chain-exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102674"
+ },
+ {
+  "name": "no_of_cohorts_in_action",
+  "win_va": "0x00507424",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102e94"
+ },
+ {
+  "name": "imperial_tax",
+  "win_va": "0x00507430",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102bf0"
+ },
+ {
+  "name": "pm_screen_x_end",
+  "win_va": "0x00507434",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102d34"
+ },
+ {
+  "name": "peace_rating",
+  "win_va": "0x00507438",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x00102730"
+ },
+ {
+  "name": "barracks_count",
+  "win_va": "0x0050743c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a88"
+ },
+ {
+  "name": "pm_screen_height",
+  "win_va": "0x00507440",
+  "tier": "instr-multi",
+  "votes": "14/18",
+  "ps_addr": "0x00102d7c"
+ },
+ {
+  "name": "industry_build_ok",
+  "win_va": "0x00507444",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102614"
+ },
+ {
+  "name": "landfill_pool",
+  "win_va": "0x00507450",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x000d7db4"
+ },
+ {
+  "name": "circus_pass_count",
+  "win_va": "0x00508d50",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001029a0"
+ },
+ {
+  "name": "current_no_of_regulars",
+  "win_va": "0x00508d54",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102b04"
+ },
+ {
+  "name": "industry_build_on",
+  "win_va": "0x00508d58",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010260c"
+ },
+ {
+  "name": "gmn_err_sptr",
+  "win_va": "0x00508d5c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001026b4"
+ },
+ {
+  "name": "hlite_off_ptr",
+  "win_va": "0x00508d60",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102e9c"
+ },
+ {
+  "name": "our_battle_specials",
+  "win_va": "0x00508d64",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f10"
+ },
+ {
+  "name": "ind_income_pass_count",
+  "win_va": "0x00508d6c",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102aec"
+ },
+ {
+  "name": "battle_stats_men",
+  "win_va": "0x00508d70",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x00102f40"
+ },
+ {
+  "name": "south_trader_count0",
+  "win_va": "0x00508d78",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001027f8"
+ },
+ {
+  "name": "south_trader_count1",
+  "win_va": "0x00508d7c",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001027a0"
+ },
+ {
+  "name": "baths_count",
+  "win_va": "0x00508d80",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a64"
+ },
+ {
+  "name": "fire_spread_count",
+  "win_va": "0x00508d84",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102868"
+ },
+ {
+  "name": "insurrection_factor",
+  "win_va": "0x00508d88",
+  "tier": "exact",
+  "votes": "12/12",
+  "ps_addr": "0x00102ca8"
+ },
+ {
+  "name": "road_running_count",
+  "win_va": "0x00508d8c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a68"
+ },
+ {
+  "name": "first_help_page",
+  "win_va": "0x00508d90",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0010261c"
+ },
+ {
+  "name": "south_trader_brings",
+  "win_va": "0x00508d94",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001027b0"
+ },
+ {
+  "name": "gardens_culture_pass_count",
+  "win_va": "0x00508d98",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102958"
+ },
+ {
+  "name": "q_people_list",
+  "win_va": "0x00508da0",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00110948"
+ },
+ {
+  "name": "map_height_reduction",
+  "win_va": "0x00508db0",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102da0"
+ },
+ {
+  "name": "mercs_type",
+  "win_va": "0x00508db4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102ee0"
+ },
+ {
+  "name": "placing_cost",
+  "win_va": "0x00508db8",
+  "tier": "exact",
+  "votes": "49/49",
+  "ps_addr": "0x001025f0"
+ },
+ {
+  "name": "over_an_army",
+  "win_va": "0x00508dc0",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x0010262c"
+ },
+ {
+  "name": "pop_growth_future",
+  "win_va": "0x00508dc4",
+  "tier": "exact",
+  "votes": "9/9",
+  "ps_addr": "0x00102ccc"
+ },
+ {
+  "name": "account_construction_cost",
+  "win_va": "0x00508dc8",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102c0c"
+ },
+ {
+  "name": "city_rotation",
+  "win_va": "0x00508dcc",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x00102da8"
+ },
+ {
+  "name": "army_routes",
+  "win_va": "0x00508dd0",
+  "tier": "instr-multi",
+  "votes": "28/28",
+  "ps_addr": "0x00102f9c"
+ },
+ {
+  "name": "gardens_culture_count",
+  "win_va": "0x00509b54",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0010294c"
+ },
+ {
+  "name": "last_battle_mood",
+  "win_va": "0x00509b58",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102e38"
+ },
+ {
+  "name": "needed_no_of_irregulars",
+  "win_va": "0x00509b5c",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102b48"
+ },
+ {
+  "name": "structure_pass_count",
+  "win_va": "0x00509b60",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102ad8"
+ },
+ {
+  "name": "put_a_message",
+  "win_va": "0x00509b64",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00117c5c"
+ },
+ {
+  "name": "no_of_empire_connections",
+  "win_va": "0x00509b68",
+  "tier": "instr-multi",
+  "votes": "7/8",
+  "ps_addr": "0x001028cc"
+ },
+ {
+  "name": "plague_accident",
+  "win_va": "0x00509b6c",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x001028a4"
+ },
+ {
+  "name": "mercs_from",
+  "win_va": "0x00509b70",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102edc"
+ },
+ {
+  "name": "this_years_population",
+  "win_va": "0x00509b74",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102b84"
+ },
+ {
+  "name": "z_x",
+  "win_va": "0x00509b7c",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102700"
+ },
+ {
+  "name": "z_y",
+  "win_va": "0x00509b80",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102704"
+ },
+ {
+  "name": "barracks_pass_count",
+  "win_va": "0x00509b84",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a40"
+ },
+ {
+  "name": "fire_running_count",
+  "win_va": "0x00509b88",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a6c"
+ },
+ {
+  "name": "our_battle_irregs",
+  "win_va": "0x00509b8c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f60"
+ },
+ {
+  "name": "top_lv_spot",
+  "win_va": "0x00509b94",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001027b4"
+ },
+ {
+  "name": "current_construction_cost",
+  "win_va": "0x00509b98",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102be4"
+ },
+ {
+  "name": "cm_x",
+  "win_va": "0x00509b9c",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x00102d60"
+ },
+ {
+  "name": "cm_y",
+  "win_va": "0x00509ba0",
+  "tier": "instr-multi",
+  "votes": "3/5",
+  "ps_addr": "0x00102d68"
+ },
+ {
+  "name": "stone_random_count",
+  "win_va": "0x00509ba4",
+  "tier": "exact",
+  "votes": "15/15",
+  "ps_addr": "0x00117c14"
+ },
+ {
+  "name": "gmn_count",
+  "win_va": "0x00509ba8",
+  "tier": "instr-multi",
+  "votes": "37/53",
+  "ps_addr": "0x001026c4"
+ },
+ {
+  "name": "pax_romanum",
+  "win_va": "0x00509bac",
+  "tier": "instr-multi",
+  "votes": "21/22",
+  "ps_addr": "0x001026f0"
+ },
+ {
+  "name": "action_sound",
+  "win_va": "0x00509bb0",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102c9c"
+ },
+ {
+  "name": "total_no_of_soldiers",
+  "win_va": "0x00509bb4",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102afc"
+ },
+ {
+  "name": "admin_debar",
+  "win_va": "0x00522978",
+  "tier": "chain-exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102668"
+ },
+ {
+  "name": "average_pop_tax_asses",
+  "win_va": "0x00509bbc",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x00102b88"
+ },
+ {
+  "name": "large_temples_pass_count",
+  "win_va": "0x00509bc0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001029e4"
+ },
+ {
+  "name": "odd_battle_tune",
+  "win_va": "0x00509bc4",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102e50"
+ },
+ {
+  "name": "fire_zones",
+  "win_va": "0x00509bd0",
+  "tier": "instr-multi",
+  "votes": "16/16",
+  "ps_addr": "0x00103d20"
+ },
+ {
+  "name": "no_of_workcamps",
+  "win_va": "0x00509c34",
+  "tier": "instr-multi",
+  "votes": "5/8",
+  "ps_addr": "0x00102910"
+ },
+ {
+  "name": "elastic_start_dirc",
+  "win_va": "0x00509c38",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c88"
+ },
+ {
+  "name": "their_battle_stance",
+  "win_va": "0x00509c3c",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102f20"
+ },
+ {
+  "name": "pop_tax_counts",
+  "win_va": "0x00509c44",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x00102a9c"
+ },
+ {
+  "name": "flag_for_workhouse_request",
+  "win_va": "0x00509c48",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102624"
+ },
+ {
+  "name": "estimate_total",
+  "win_va": "0x00509c4c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102bd4"
+ },
+ {
+  "name": "zoom_level",
+  "win_va": "0x00509c50",
+  "tier": "instr-multi",
+  "votes": "6/8",
+  "ps_addr": "0x00117c44"
+ },
+ {
+  "name": "sb_cm_undo_flushed",
+  "win_va": "0x00509c51",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00117c4c"
+ },
+ {
+  "name": "slave_requirements",
+  "win_va": "0x00509c60",
+  "tier": "exact",
+  "votes": "20/20",
+  "ps_addr": "0x000d3024"
+ },
+ {
+  "name": "empire_rating",
+  "win_va": "0x00509ca0",
+  "tier": "instr-multi",
+  "votes": "13/15",
+  "ps_addr": "0x001026e8"
+ },
+ {
+  "name": "battle_stats_morale",
+  "win_va": "0x00509ca8",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x00102f18"
+ },
+ {
+  "name": "battle_turbo_count",
+  "win_va": "0x00509cac",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102ef0"
+ },
+ {
+  "name": "no_of_danger_flags",
+  "win_va": "0x00509cb0",
+  "tier": "native-xref",
+  "votes": "3/3",
+  "ps_addr": "0x00102cf0"
+ },
+ {
+  "name": "message_list",
+  "win_va": "0x00509cc0",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000d3154"
+ },
+ {
+  "name": "health_debar",
+  "win_va": "0x0050b768",
+  "tier": "chain-exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102648"
+ },
+ {
+  "name": "region_palette",
+  "win_va": "0x00509d50",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d31d4"
+ },
+ {
+  "name": "donation_level",
+  "win_va": "0x0050a054",
+  "tier": "exact",
+  "votes": "10/10",
+  "ps_addr": "0x00102bd0"
+ },
+ {
+  "name": "battle_setup_count",
+  "win_va": "0x0050a058",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00102f90"
+ },
+ {
+  "name": "q_local",
+  "win_va": "0x0050a05c",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x0010287c"
+ },
+ {
+  "name": "accessed_hospitals_pass_count",
+  "win_va": "0x0050a060",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a14"
+ },
+ {
+  "name": "slave_random",
+  "win_va": "0x0050a064",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102c08"
+ },
+ {
+  "name": "bat_enemy_right_flank_unit",
+  "win_va": "0x0050a068",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x00102e64"
+ },
+ {
+  "name": "their_battle_routs",
+  "win_va": "0x0050a070",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102f4c"
+ },
+ {
+  "name": "our_battle_routs",
+  "win_va": "0x004e6ab8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102f1c"
+ },
+ {
+  "name": "last_forum_dept",
+  "win_va": "0x0050a074",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c0f"
+ },
+ {
+  "name": "odium_culture_pass_count",
+  "win_va": "0x0050a078",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029b4"
+ },
+ {
+  "name": "evolve_tick3",
+  "win_va": "0x0050a07c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0010285c"
+ },
+ {
+  "name": "evolve_tick4",
+  "win_va": "0x0050a080",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102850"
+ },
+ {
+  "name": "last_imperial_tax_amount",
+  "win_va": "0x0050a088",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x00102bd8"
+ },
+ {
+  "name": "rhetor_culture_pass_count",
+  "win_va": "0x0050a08c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029c0"
+ },
+ {
+  "name": "mercs_tribe",
+  "win_va": "0x0050a090",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102eb8"
+ },
+ {
+  "name": "culture_rating",
+  "win_va": "0x0050a094",
+  "tier": "instr-multi",
+  "votes": "7/8",
+  "ps_addr": "0x001026e4"
+ },
+ {
+  "name": "colosseum_culture_count",
+  "win_va": "0x0050a098",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102950"
+ },
+ {
+  "name": "small_robbery_pass_count",
+  "win_va": "0x0050a09c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029f0"
+ },
+ {
+  "name": "no_of_mines",
+  "win_va": "0x005129c8",
+  "tier": "instr-single",
+  "votes": "1/3",
+  "ps_addr": "0x001028d8"
+ },
+ {
+  "name": "auto_conquered",
+  "win_va": "0x0050a0a4",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x001027a4"
+ },
+ {
+  "name": "business_count",
+  "win_va": "0x0050a0a8",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102954"
+ },
+ {
+  "name": "pm_shown_x",
+  "win_va": "0x0050a0ac",
+  "tier": "instr-multi",
+  "votes": "132/139",
+  "ps_addr": "0x00102d54"
+ },
+ {
+  "name": "pm_shown_y",
+  "win_va": "0x0050a0b0",
+  "tier": "instr-multi",
+  "votes": "99/100",
+  "ps_addr": "0x00102d4c"
+ },
+ {
+  "name": "no_of_census_passes",
+  "win_va": "0x0050a0b4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102ab0"
+ },
+ {
+  "name": "region_warned_status",
+  "win_va": "0x0050a0bf",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": null
+ },
+ {
+  "name": "empire",
+  "win_va": "0x0050a0c0",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x001136e6"
+ },
+ {
+  "name": "tribute",
+  "win_va": "0x0050a0f4",
+  "tier": "exact",
+  "votes": "2/3",
+  "ps_addr": "0x00102b8c"
+ },
+ {
+  "name": "ind_growth_factor",
+  "win_va": "0x0050a0f8",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102cc0"
+ },
+ {
+  "name": "player_rank",
+  "win_va": "0x0050a0fc",
+  "tier": "instr-multi",
+  "votes": "8/9",
+  "ps_addr": "0x00102734"
+ },
+ {
+  "name": "robbery_count",
+  "win_va": "0x0050a100",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010293c"
+ },
+ {
+  "name": "shell_push_direction",
+  "win_va": "0x0050a104",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102834"
+ },
+ {
+  "name": "water_cover",
+  "win_va": "0x0050a108",
+  "tier": "exact",
+  "votes": "15/15",
+  "ps_addr": "0x00102890"
+ },
+ {
+  "name": "large_temples_count",
+  "win_va": "0x0050a10c",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102a28"
+ },
+ {
+  "name": "insurrection_future",
+  "win_va": "0x0050a110",
+  "tier": "exact",
+  "votes": "24/24",
+  "ps_addr": "0x00102c84"
+ },
+ {
+  "name": "current_gdp",
+  "win_va": "0x0050a114",
+  "tier": "instr-multi",
+  "votes": "7/8",
+  "ps_addr": "0x00102768"
+ },
+ {
+  "name": "rhetor_pass_count",
+  "win_va": "0x0050a118",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102968"
+ },
+ {
+  "name": "hospital_cover",
+  "win_va": "0x0050a120",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102878"
+ },
+ {
+  "name": "landfill",
+  "win_va": "0x0050a130",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d0304"
+ },
+ {
+  "name": "rhetor_culture_count",
+  "win_va": "0x0050b670",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029a8"
+ },
+ {
+  "name": "top_lv_x",
+  "win_va": "0x0050b674",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x001027e8"
+ },
+ {
+  "name": "theatre_culture_count",
+  "win_va": "0x0050b678",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029b0"
+ },
+ {
+  "name": "top_lv_y",
+  "win_va": "0x0050b67c",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x001027e4"
+ },
+ {
+  "name": "no_of_rioters",
+  "win_va": "0x0050b680",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102828"
+ },
+ {
+  "name": "redraw_topline",
+  "win_va": "0x0050b684",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00117c55"
+ },
+ {
+  "name": "created_figure_no",
+  "win_va": "0x0050b686",
+  "tier": "instr-multi",
+  "votes": "28/37",
+  "ps_addr": "0x001158ae"
+ },
+ {
+  "name": "battle_victor",
+  "win_va": "0x0050b688",
+  "tier": "instr-multi",
+  "votes": "12/12",
+  "ps_addr": "0x00102f88"
+ },
+ {
+  "name": "their_battle_specials",
+  "win_va": "0x0050b68c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f54"
+ },
+ {
+  "name": "scroll_amount",
+  "win_va": "0x0050b690",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x00102ddc"
+ },
+ {
+  "name": "imperial_review",
+  "win_va": "0x0050b694",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102bf4"
+ },
+ {
+  "name": "plague_spread_target",
+  "win_va": "0x0050b698",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102840"
+ },
+ {
+  "name": "q_gfx",
+  "win_va": "0x0050b69d",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c3f"
+ },
+ {
+  "name": "query_mode",
+  "win_va": "0x0050b6a0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0010263c"
+ },
+ {
+  "name": "small_forums_pass_count",
+  "win_va": "0x0050b6a4",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a8c"
+ },
+ {
+  "name": "lacking_irregulars",
+  "win_va": "0x0050b6a8",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102b54"
+ },
+ {
+  "name": "fig_at_edge",
+  "win_va": "0x0050b6ac",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117c43"
+ },
+ {
+  "name": "city_flag_list",
+  "win_va": "0x0050b6b0",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x000d30b4"
+ },
+ {
+  "name": "hlite_bottom",
+  "win_va": "0x0050b700",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102ea0"
+ },
+ {
+  "name": "imperial_request",
+  "win_va": "0x0050b704",
+  "tier": "instr-multi",
+  "votes": "14/14",
+  "ps_addr": "0x00102c10"
+ },
+ {
+  "name": "roman_right_edge",
+  "win_va": "0x0050b708",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102eac"
+ },
+ {
+  "name": "needed_no_of_soldiers",
+  "win_va": "0x0050b70c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102b1c"
+ },
+ {
+  "name": "lacking_regulars",
+  "win_va": "0x0050b860",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102b4c"
+ },
+ {
+  "name": "extra_specials",
+  "win_va": "0x0050b710",
+  "tier": "instr-multi",
+  "votes": "3/5",
+  "ps_addr": "0x00102acc"
+ },
+ {
+  "name": "pm_over_cm_ptr",
+  "win_va": "0x0050b714",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102cec"
+ },
+ {
+  "name": "update_ov_bar",
+  "win_va": "0x0050b718",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0010266c"
+ },
+ {
+  "name": "no_of_quarrys",
+  "win_va": "0x004e6928",
+  "tier": "instr-single",
+  "votes": "1/3",
+  "ps_addr": "0x001028fc"
+ },
+ {
+  "name": "no_of_connected_towns",
+  "win_va": "0x00515778",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x0010289c"
+ },
+ {
+  "name": "forts_count",
+  "win_va": "0x0050b720",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a34"
+ },
+ {
+  "name": "hlite_left",
+  "win_va": "0x0050b724",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102e70"
+ },
+ {
+  "name": "q_type",
+  "win_va": "0x0050b728",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117c31"
+ },
+ {
+  "name": "slaves",
+  "win_va": "0x0050b72c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102c20"
+ },
+ {
+  "name": "roman_front_edge",
+  "win_va": "0x0050b730",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102ee4"
+ },
+ {
+  "name": "region_pm_x",
+  "win_va": "0x0050b738",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102d2c"
+ },
+ {
+  "name": "region_pm_y",
+  "win_va": "0x0050b740",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102d30"
+ },
+ {
+  "name": "q_pop_level",
+  "win_va": "0x0050b748",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102864"
+ },
+ {
+  "name": "history_entry",
+  "win_va": "0x0050b750",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x0010276c"
+ },
+ {
+  "name": "entertainment_debar",
+  "win_va": "0x00509d40",
+  "tier": "chain-exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102684"
+ },
+ {
+  "name": "max_population",
+  "win_va": "0x0050b778",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102c4c"
+ },
+ {
+  "name": "week",
+  "win_va": "0x0050b77c",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102c2c"
+ },
+ {
+  "name": "large_robbery_pass_count",
+  "win_va": "0x0050b784",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029f4"
+ },
+ {
+  "name": "scrolling",
+  "win_va": "0x0050b788",
+  "tier": "instr-multi",
+  "votes": "13/13",
+  "ps_addr": "0x00117c45"
+ },
+ {
+  "name": "medium_forums_pass_count",
+  "win_va": "0x0050b78c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a50"
+ },
+ {
+  "name": "nof_query_buttons",
+  "win_va": "0x0050b790",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x001025dc"
+ },
+ {
+  "name": "road_pass_count",
+  "win_va": "0x0050b798",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102aa8"
+ },
+ {
+  "name": "enemy_citizen",
+  "win_va": "0x0050b79c",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x00115898"
+ },
+ {
+  "name": "evolve_col",
+  "win_va": "0x0050b7a0",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102874"
+ },
+ {
+  "name": "roman_back_edge",
+  "win_va": "0x0050b7a4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102ef4"
+ },
+ {
+  "name": "last_tribute",
+  "win_va": "0x0050b7a8",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102b5c"
+ },
+ {
+  "name": "wall_accident",
+  "win_va": "0x0050b7ac",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x001028e0"
+ },
+ {
+  "name": "our_battle_start_men",
+  "win_va": "0x0050b7b0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102f2c"
+ },
+ {
+  "name": "north_border_x",
+  "win_va": "0x0050b7b4",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027fc"
+ },
+ {
+  "name": "north_border_y",
+  "win_va": "0x0050b7b8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102800"
+ },
+ {
+  "name": "years_elapsed_in_region",
+  "win_va": "0x0050b7bc",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c78"
+ },
+ {
+  "name": "warned_of_not_build",
+  "win_va": "0x0050b7c0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102e34"
+ },
+ {
+  "name": "last_imperial_tax_percent",
+  "win_va": "0x0050b7c8",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102bc4"
+ },
+ {
+  "name": "imperial_favour",
+  "win_va": "0x0050b7cc",
+  "tier": "instr-multi",
+  "votes": "40/40",
+  "ps_addr": "0x00102c04"
+ },
+ {
+  "name": "placing_type",
+  "win_va": "0x0050b7d0",
+  "tier": "exact",
+  "votes": "39/39",
+  "ps_addr": "0x00102640"
+ },
+ {
+  "name": "region_direction",
+  "win_va": "0x0050b7d4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102e00"
+ },
+ {
+  "name": "empire_connections",
+  "win_va": "0x0050b7d8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001028ac"
+ },
+ {
+  "name": "current_no_of_irregulars",
+  "win_va": "0x0050b7dc",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102b18"
+ },
+ {
+  "name": "pop_tax_running_total",
+  "win_va": "0x0050b7e0",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x00102adc"
+ },
+ {
+  "name": "evolve_clock",
+  "win_va": "0x0050b7e4",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00102860"
+ },
+ {
+  "name": "lacking_specials",
+  "win_va": "0x0050b7ec",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102a98"
+ },
+ {
+  "name": "med_temples_culture_count",
+  "win_va": "0x0050b7f0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029c8"
+ },
+ {
+  "name": "q_patrol",
+  "win_va": "0x0050b7f4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c2b"
+ },
+ {
+  "name": "tracking_army",
+  "win_va": "0x0050b7f6",
+  "tier": "instr-multi",
+  "votes": "67/67",
+  "ps_addr": "0x0011588a"
+ },
+ {
+  "name": "ind_growth_future",
+  "win_va": "0x0050b7f8",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102c98"
+ },
+ {
+  "name": "average_cohort_readiness",
+  "win_va": "0x0050b7fc",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102af0"
+ },
+ {
+  "name": "city_zoom_level",
+  "win_va": "0x0050b800",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102dd4"
+ },
+ {
+  "name": "warned_new_struct",
+  "win_va": "0x0050b804",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102df4"
+ },
+ {
+  "name": "pm_screen_y_end",
+  "win_va": "0x0050b808",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102d94"
+ },
+ {
+  "name": "city_pm_x",
+  "win_va": "0x0050b80c",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102d08"
+ },
+ {
+  "name": "battle_scale",
+  "win_va": "0x0050b810",
+  "tier": "instr-multi",
+  "votes": "22/22",
+  "ps_addr": "0x00102f78"
+ },
+ {
+  "name": "wall_rate",
+  "win_va": "0x0050b814",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x001028f8"
+ },
+ {
+  "name": "city_pm_y",
+  "win_va": "0x0050b818",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102d04"
+ },
+ {
+  "name": "citizen_a",
+  "win_va": "0x0050b81c",
+  "tier": "instr-multi",
+  "votes": "48/51",
+  "ps_addr": "0x0011589c"
+ },
+ {
+  "name": "rhetor_count",
+  "win_va": "0x0050b820",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001029c4"
+ },
+ {
+  "name": "free_message_ptr",
+  "win_va": "0x0050b824",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00102e40"
+ },
+ {
+  "name": "citizen_b",
+  "win_va": "0x0050b828",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x0011589a"
+ },
+ {
+  "name": "figure_a",
+  "win_va": "0x0050b82a",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x0011588c"
+ },
+ {
+  "name": "battle_type",
+  "win_va": "0x0050b82c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102f04"
+ },
+ {
+  "name": "our_battle_morale",
+  "win_va": "0x0050b830",
+  "tier": "instr-multi",
+  "votes": "11/11",
+  "ps_addr": "0x00102f30"
+ },
+ {
+  "name": "created_citizen_no",
+  "win_va": "0x0050b834",
+  "tier": "instr-multi",
+  "votes": "15/23",
+  "ps_addr": "0x001158aa"
+ },
+ {
+  "name": "arena_top_count",
+  "win_va": "0x0050b838",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102678"
+ },
+ {
+  "name": "water_debar",
+  "win_va": "0x005157e4",
+  "tier": "chain-exact",
+  "votes": "3/3",
+  "ps_addr": "0x0010268c"
+ },
+ {
+  "name": "nof_hot_spots",
+  "win_va": "0x0050b840",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102618"
+ },
+ {
+  "name": "account_total",
+  "win_va": "0x0050b844",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00102c1c"
+ },
+ {
+  "name": "hospitals_count",
+  "win_va": "0x0050b848",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001029e8"
+ },
+ {
+  "name": "plague_running_count",
+  "win_va": "0x0050b84c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a70"
+ },
+ {
+  "name": "small_temples_culture_count",
+  "win_va": "0x0050b850",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a00"
+ },
+ {
+  "name": "imperial_req_goods",
+  "win_va": "0x0050b854",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102bc0"
+ },
+ {
+  "name": "sb_rm_undo_flushed",
+  "win_va": "0x0050b858",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00117c4b"
+ },
+ {
+  "name": "q_no_of_people",
+  "win_va": "0x0050b85c",
+  "tier": "instr-multi",
+  "votes": "11/11",
+  "ps_addr": "0x00102884"
+ },
+ {
+  "name": "pm_over",
+  "win_va": "0x0050b864",
+  "tier": "instr-multi",
+  "votes": "10/11",
+  "ps_addr": "0x00102d1c"
+ },
+ {
+  "name": "overlays_on",
+  "win_va": "0x0050b868",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102d9c"
+ },
+ {
+  "name": "road_accident",
+  "win_va": "0x0050b86c",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x001028e4"
+ },
+ {
+  "name": "current_no_of_soldiers",
+  "win_va": "0x0050b870",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x00102b08"
+ },
+ {
+  "name": "tune_mood_hold",
+  "win_va": "0x0050b874",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102e20"
+ },
+ {
+  "name": "warned_city_size",
+  "win_va": "0x0050b87c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102e14"
+ },
+ {
+  "name": "best_elastic_value",
+  "win_va": "0x0050b880",
+  "tier": "instr-multi",
+  "votes": "20/20",
+  "ps_addr": "0x00102ca0"
+ },
+ {
+  "name": "army_a",
+  "win_va": "0x0050b884",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00115888"
+ },
+ {
+  "name": "region_over",
+  "win_va": "0x0050b888",
+  "tier": "instr-multi",
+  "votes": "16/17",
+  "ps_addr": "0x00102f98"
+ },
+ {
+  "name": "created_army_no",
+  "win_va": "0x0050b88c",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x001158b4"
+ },
+ {
+  "name": "hot_key_out_off_build",
+  "win_va": "0x0054d54c",
+  "tier": "exact",
+  "votes": "44/44",
+  "ps_addr": "0x000cccb7"
+ },
+ {
+  "name": "odium_count",
+  "win_va": "0x0050b890",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010298c"
+ },
+ {
+  "name": "start_x_pos",
+  "win_va": "0x0050b894",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102dc0"
+ },
+ {
+  "name": "prov_zoom_level",
+  "win_va": "0x0050b898",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102db0"
+ },
+ {
+  "name": "in_the_forum",
+  "win_va": "0x00515b7c",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102de0"
+ },
+ {
+  "name": "bat_enemy_second_fan_unit",
+  "win_va": "0x0050b89c",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x00102e68"
+ },
+ {
+  "name": "west_trader_is",
+  "win_va": "0x0050b8a0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027c4"
+ },
+ {
+  "name": "pm_build_shape",
+  "win_va": "0x0050b8a4",
+  "tier": "exact",
+  "votes": "49/49",
+  "ps_addr": "0x00102d3c"
+ },
+ {
+  "name": "tutorial_page",
+  "win_va": "0x0050b8a8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102df0"
+ },
+ {
+  "name": "water_trouble_rate",
+  "win_va": "0x0050b8b0",
+  "tier": "exact",
+  "votes": "16/16",
+  "ps_addr": "0x001028dc"
+ },
+ {
+  "name": "our_battle_men",
+  "win_va": "0x0050b8b4",
+  "tier": "exact",
+  "votes": "13/13",
+  "ps_addr": "0x00102f84"
+ },
+ {
+  "name": "temp_army",
+  "win_va": "0x0050b8b8",
+  "tier": "instr-multi",
+  "votes": "85/85",
+  "ps_addr": "0x001158b6"
+ },
+ {
+  "name": "south_border_x",
+  "win_va": "0x0050b8c4",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102804"
+ },
+ {
+  "name": "this_years_ind_tax",
+  "win_va": "0x0050b8c8",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102bb8"
+ },
+ {
+  "name": "south_border_y",
+  "win_va": "0x0050b8cc",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102808"
+ },
+ {
+  "name": "battle_drag_start_x",
+  "win_va": "0x0050b8d0",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102e8c"
+ },
+ {
+  "name": "battle_drag_start_y",
+  "win_va": "0x0050b8d4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102e88"
+ },
+ {
+  "name": "their_battle_regs",
+  "win_va": "0x0050b8d8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f08"
+ },
+ {
+  "name": "in_census_mode",
+  "win_va": "0x0050b8dc",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102e10"
+ },
+ {
+  "name": "month",
+  "win_va": "0x0050b8e0",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102c40"
+ },
+ {
+  "name": "imperial_gift_level",
+  "win_va": "0x0050b8e4",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102ba0"
+ },
+ {
+  "name": "tutorial_mode",
+  "win_va": "0x0050b8e8",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102e0c"
+ },
+ {
+  "name": "large_robbery_count",
+  "win_va": "0x0050b8ec",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001029dc"
+ },
+ {
+  "name": "total_amount_of_bribes",
+  "win_va": "0x0050b8f0",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102b94"
+ },
+ {
+  "name": "year",
+  "win_va": "0x0050b8f4",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102c58"
+ },
+ {
+  "name": "start_year",
+  "win_va": "0x005229c0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102c6c"
+ },
+ {
+  "name": "libraries_pass_count",
+  "win_va": "0x0050b8fc",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029ec"
+ },
+ {
+  "name": "promotion_cheat",
+  "win_va": "0x0050b904",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x0010272c"
+ },
+ {
+  "name": "warned_of_cutbacks",
+  "win_va": "0x0050b908",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c5e"
+ },
+ {
+  "name": "choice_count",
+  "win_va": "0x0050b909",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c16"
+ },
+ {
+  "name": "arrow_a",
+  "win_va": "0x0050b90a",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x0011589e"
+ },
+ {
+  "name": "accessed_hospitals_count",
+  "win_va": "0x0050b90c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102a0c"
+ },
+ {
+  "name": "their_battle_start_men",
+  "win_va": "0x0050b910",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102f24"
+ },
+ {
+  "name": "arena_culture_count",
+  "win_va": "0x0050b914",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102908"
+ },
+ {
+  "name": "estimate_operating_cost",
+  "win_va": "0x0050b91c",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102be0"
+ },
+ {
+  "name": "warned_of_robbery",
+  "win_va": "0x0050b920",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117c5a"
+ },
+ {
+  "name": "our_battle_horse",
+  "win_va": "0x0050b924",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f48"
+ },
+ {
+  "name": "region_map",
+  "win_va": "0x0050b930",
+  "tier": "exact",
+  "votes": "30/30",
+  "ps_addr": "0x000d96b4"
+ },
+ {
+  "name": "barbarian_name_count",
+  "win_va": "0x0050742c",
+  "tier": "native-xref",
+  "votes": "4/4",
+  "ps_addr": "0x001025ac"
+ },
+ {
+  "name": "plague_spread_count",
+  "win_va": "0x005129b0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010281c"
+ },
+ {
+  "name": "employees",
+  "win_va": "0x005129b4",
+  "tier": "exact",
+  "votes": "23/23",
+  "ps_addr": "0x00102c44"
+ },
+ {
+  "name": "circus_maximus_culture_pass_count",
+  "win_va": "0x005129b8",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102920"
+ },
+ {
+  "name": "hlite_squares",
+  "win_va": "0x005129bc",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102e60"
+ },
+ {
+  "name": "no_of_prov_flags",
+  "win_va": "0x005129c0",
+  "tier": "native-xref",
+  "votes": "4/4",
+  "ps_addr": "0x00102d20"
+ },
+ {
+  "name": "selection_is",
+  "win_va": "0x005129c4",
+  "tier": "instr-multi",
+  "votes": "24/24",
+  "ps_addr": "0x0010265c"
+ },
+ {
+  "name": "no_of_shipyards",
+  "win_va": "0x004e67dc",
+  "tier": "instr-single",
+  "votes": "1/3",
+  "ps_addr": "0x00102960"
+ },
+ {
+  "name": "no_of_warehouses",
+  "win_va": "0x00515b50",
+  "tier": "instr-single",
+  "votes": "1/4",
+  "ps_addr": "0x0010295c"
+ },
+ {
+  "name": "pm_diamond_half_width",
+  "win_va": "0x005129d0",
+  "tier": "instr-multi",
+  "votes": "14/16",
+  "ps_addr": "0x00102d78"
+ },
+ {
+  "name": "q_ptr",
+  "win_va": "0x005129d4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102898"
+ },
+ {
+  "name": "players_salary",
+  "win_va": "0x005129d8",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102c00"
+ },
+ {
+  "name": "supplied_fountains_count",
+  "win_va": "0x005129dc",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00102a48"
+ },
+ {
+  "name": "this_route_number",
+  "win_va": "0x005129e0",
+  "tier": "instr-multi",
+  "votes": "10/10",
+  "ps_addr": "0x00102cd0"
+ },
+ {
+  "name": "battle_stats_start_men",
+  "win_va": "0x005129e4",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102f70"
+ },
+ {
+  "name": "temples_count",
+  "win_va": "0x005129e8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102900"
+ },
+ {
+  "name": "battle_state",
+  "win_va": "0x005129ec",
+  "tier": "instr-multi",
+  "votes": "29/30",
+  "ps_addr": "0x00102f8c"
+ },
+ {
+  "name": "nomansland_ptr",
+  "win_va": "0x00507428",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102e7c"
+ },
+ {
+  "name": "help_page_hot_spots",
+  "win_va": "0x005129f0",
+  "tier": "instr-multi",
+  "votes": "28/29",
+  "ps_addr": "0x000d29e4"
+ },
+ {
+  "name": "population",
+  "win_va": "0x00512b08",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x00102c68"
+ },
+ {
+  "name": "reg_placing_type",
+  "win_va": "0x00512b0c",
+  "tier": "exact",
+  "votes": "14/14",
+  "ps_addr": "0x001025ec"
+ },
+ {
+  "name": "supplied_baths_count",
+  "win_va": "0x00512b10",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00102a3c"
+ },
+ {
+  "name": "start_sptr",
+  "win_va": "0x00512b14",
+  "tier": "instr-multi",
+  "votes": "18/21",
+  "ps_addr": "0x00102de4"
+ },
+ {
+  "name": "pm_x_edge",
+  "win_va": "0x00512b18",
+  "tier": "instr-multi",
+  "votes": "15/15",
+  "ps_addr": "0x00102d70"
+ },
+ {
+  "name": "west_border_x",
+  "win_va": "0x00512b1c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027e0"
+ },
+ {
+  "name": "act_start_x",
+  "win_va": "0x00512b20",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102cb8"
+ },
+ {
+  "name": "pm_y_edge",
+  "win_va": "0x00512b24",
+  "tier": "instr-multi",
+  "votes": "15/15",
+  "ps_addr": "0x00102d50"
+ },
+ {
+  "name": "lib_para2",
+  "win_va": "0x004d1296",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00093684"
+ },
+ {
+  "name": "west_border_y",
+  "win_va": "0x00512b28",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027dc"
+ },
+ {
+  "name": "act_start_y",
+  "win_va": "0x00512b2c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102cbc"
+ },
+ {
+  "name": "our_battle_regs",
+  "win_va": "0x00512b30",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f64"
+ },
+ {
+  "name": "water_running_count",
+  "win_va": "0x00512b3c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a84"
+ },
+ {
+  "name": "pm_screen_width",
+  "win_va": "0x00512b40",
+  "tier": "instr-multi",
+  "votes": "26/32",
+  "ps_addr": "0x00102d38"
+ },
+ {
+  "name": "grammaticus_culture_pass_count",
+  "win_va": "0x00512b44",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0010296c"
+ },
+ {
+  "name": "warned_of_fire",
+  "win_va": "0x00512b48",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c59"
+ },
+ {
+  "name": "gmn_run",
+  "win_va": "0x004e68e8",
+  "tier": "native-xref",
+  "votes": "40/40",
+  "ps_addr": "0x001026bc"
+ },
+ {
+  "name": "population_running_count",
+  "win_va": "0x00512b50",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102aa0"
+ },
+ {
+  "name": "pop_income_pass_count",
+  "win_va": "0x00512b54",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00102aa4"
+ },
+ {
+  "name": "queried_person",
+  "win_va": "0x00512b58",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001025c0"
+ },
+ {
+  "name": "months_since_last_war",
+  "win_va": "0x00512b5c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c80"
+ },
+ {
+  "name": "battle_map",
+  "win_va": "0x00512b60",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x000e0734"
+ },
+ {
+  "name": "int_region_header",
+  "win_va": "0x005155a0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d1a14"
+ },
+ {
+  "name": "army_no",
+  "win_va": "0x00515770",
+  "tier": "exact",
+  "votes": "120/120",
+  "ps_addr": "0x001158b8"
+ },
+ {
+  "name": "pm_y_clip",
+  "win_va": "0x00515774",
+  "tier": "instr-multi",
+  "votes": "44/45",
+  "ps_addr": "0x00102d40"
+ },
+ {
+  "name": "large_forums_count",
+  "win_va": "0x0051577c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102a54"
+ },
+ {
+  "name": "roman_left_edge",
+  "win_va": "0x00515784",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102ec8"
+ },
+ {
+  "name": "danger_flag_list",
+  "win_va": "0x00515790",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d3064"
+ },
+ {
+  "name": "tune_mood",
+  "win_va": "0x005157e0",
+  "tier": "exact",
+  "votes": "25/25",
+  "ps_addr": "0x00102e48"
+ },
+ {
+  "name": "industry",
+  "win_va": "0x005157f0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d2d24"
+ },
+ {
+  "name": "last_years_denarii",
+  "win_va": "0x00515af0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102b64"
+ },
+ {
+  "name": "account_tribute",
+  "win_va": "0x00515af4",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102bb4"
+ },
+ {
+  "name": "denarii",
+  "win_va": "0x00515af8",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00102c64"
+ },
+ {
+  "name": "new_structure_is",
+  "win_va": "0x00515afc",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102e24"
+ },
+ {
+  "name": "supplied_fountains_pass_count",
+  "win_va": "0x00515b00",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a4c"
+ },
+ {
+  "name": "fire_cover",
+  "win_va": "0x00515b04",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x001028e8"
+ },
+ {
+  "name": "estimate_tribute",
+  "win_va": "0x00515b08",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102b70"
+ },
+ {
+  "name": "illegal_build",
+  "win_va": "0x00515b0c",
+  "tier": "instr-multi",
+  "votes": "20/20",
+  "ps_addr": "0x00102610"
+ },
+ {
+  "name": "our_battle_units",
+  "win_va": "0x00515b10",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102f14"
+ },
+ {
+  "name": "entertainment_level",
+  "win_va": "0x00515b14",
+  "tier": "instr-multi",
+  "votes": "14/16",
+  "ps_addr": "0x0010273c"
+ },
+ {
+  "name": "prefectures_pass_count",
+  "win_va": "0x00515b18",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102a78"
+ },
+ {
+  "name": "marching_fx",
+  "win_va": "0x00515b1c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102e4c"
+ },
+ {
+  "name": "baths_pass_count",
+  "win_va": "0x00515b20",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a74"
+ },
+ {
+  "name": "years_elapsed",
+  "win_va": "0x00515b24",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c54"
+ },
+ {
+  "name": "bat_tribe",
+  "win_va": "0x00515b28",
+  "tier": "instr-multi",
+  "votes": "16/17",
+  "ps_addr": "0x00102f7c"
+ },
+ {
+  "name": "gmn_ew_count",
+  "win_va": "0x004e69d4",
+  "tier": "native-xref",
+  "votes": "32/32",
+  "ps_addr": "0x00102694"
+ },
+ {
+  "name": "imperial_req_amount",
+  "win_va": "0x00515b34",
+  "tier": "instr-multi",
+  "votes": "11/11",
+  "ps_addr": "0x00102ba8"
+ },
+ {
+  "name": "wall_cover",
+  "win_va": "0x00515b38",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102894"
+ },
+ {
+  "name": "security_debar",
+  "win_va": "0x00515b3c",
+  "tier": "chain-exact",
+  "votes": "20/20",
+  "ps_addr": "0x00102670"
+ },
+ {
+  "name": "small_temples_count",
+  "win_va": "0x00515b40",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102a08"
+ },
+ {
+  "name": "provinces_on_offer",
+  "win_va": "0x00515b44",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102790"
+ },
+ {
+  "name": "current_temple_tip",
+  "win_va": "0x00515b48",
+  "tier": "instr-multi",
+  "votes": "17/17",
+  "ps_addr": "0x00102714"
+ },
+ {
+  "name": "average_ind_tax_denariis",
+  "win_va": "0x00515b4c",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102b68"
+ },
+ {
+  "name": "battle2_ptr",
+  "win_va": "0x00515b54",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102eb4"
+ },
+ {
+  "name": "no_of_armies",
+  "win_va": "0x00515b58",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102858"
+ },
+ {
+  "name": "city_qptr",
+  "win_va": "0x00515b60",
+  "tier": "exact",
+  "votes": "28/28",
+  "ps_addr": "0x00102dd0"
+ },
+ {
+  "name": "colosseum_top_count",
+  "win_va": "0x00515b64",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102634"
+ },
+ {
+  "name": "temp_citizen",
+  "win_va": "0x00515b6c",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x001158ac"
+ },
+ {
+  "name": "housing_cheat",
+  "win_va": "0x00515b70",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001026ec"
+ },
+ {
+  "name": "q_occa",
+  "win_va": "0x00515b74",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c21"
+ },
+ {
+  "name": "market_count",
+  "win_va": "0x00515b78",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0010291c"
+ },
+ {
+  "name": "lacking_auxillaries",
+  "win_va": "0x0050a11c",
+  "tier": "instr-multi",
+  "votes": "2/4",
+  "ps_addr": "0x00102b2c"
+ },
+ {
+  "name": "extra_regulars",
+  "win_va": "0x00515b80",
+  "tier": "instr-multi",
+  "votes": "3/5",
+  "ps_addr": "0x00102b50"
+ },
+ {
+  "name": "ov2_map_mode",
+  "win_va": "0x00515b84",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c13"
+ },
+ {
+  "name": "pseudo_map",
+  "win_va": "0x00515b90",
+  "tier": "instr-multi",
+  "votes": "69/69",
+  "ps_addr": "0x00103d84"
+ },
+ {
+  "name": "circus_culture_pass_count",
+  "win_va": "0x00522754",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0010290c"
+ },
+ {
+  "name": "evolve_row",
+  "win_va": "0x00522758",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102818"
+ },
+ {
+  "name": "int_city_header",
+  "win_va": "0x00522760",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d1844"
+ },
+ {
+  "name": "west_trader_count0",
+  "win_va": "0x00522930",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00102748"
+ },
+ {
+  "name": "west_trader_count1",
+  "win_va": "0x00522934",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x00102744"
+ },
+ {
+  "name": "total_build_cost",
+  "win_va": "0x00522938",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x001025f4"
+ },
+ {
+  "name": "last_years_pop_tax",
+  "win_va": "0x0052293c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102b98"
+ },
+ {
+  "name": "their_battle_irregs",
+  "win_va": "0x00522940",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102ecc"
+ },
+ {
+  "name": "industry_debar",
+  "win_va": "0x00507420",
+  "tier": "chain-exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102664"
+ },
+ {
+  "name": "unrest_debar",
+  "win_va": "0x0050b83c",
+  "tier": "chain-exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102658"
+ },
+ {
+  "name": "citizen_no",
+  "win_va": "0x00522948",
+  "tier": "exact",
+  "votes": "99/99",
+  "ps_addr": "0x001158b0"
+ },
+ {
+  "name": "bat_enemy_first_fan_unit",
+  "win_va": "0x0052294c",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x00102e98"
+ },
+ {
+  "name": "temp_unit",
+  "win_va": "0x00522958",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x00115884"
+ },
+ {
+  "name": "first_choice",
+  "win_va": "0x0052295a",
+  "tier": "instr-multi",
+  "votes": "13/13",
+  "ps_addr": "0x00117c17"
+ },
+ {
+  "name": "their_battle_army",
+  "win_va": "0x0052295c",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x00115892"
+ },
+ {
+  "name": "gmn_polar_count",
+  "win_va": "0x00522960",
+  "tier": "instr-multi",
+  "votes": "36/36",
+  "ps_addr": "0x001026a0"
+ },
+ {
+  "name": "empire_rating_pop_limit",
+  "win_va": "0x00522964",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102720"
+ },
+ {
+  "name": "west_trader_brings",
+  "win_va": "0x00522968",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102760"
+ },
+ {
+  "name": "history_end_ptr",
+  "win_va": "0x0052296c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001027ac"
+ },
+ {
+  "name": "mercs_in_army",
+  "win_va": "0x00522970",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102eb0"
+ },
+ {
+  "name": "education_debar",
+  "win_va": "0x00509bb8",
+  "tier": "chain-exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102688"
+ },
+ {
+  "name": "q_wh_level",
+  "win_va": "0x0052297c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c1f"
+ },
+ {
+  "name": "battle_drag_on",
+  "win_va": "0x00522980",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102ebc"
+ },
+ {
+  "name": "hut_list",
+  "win_va": "0x00522990",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102754"
+ },
+ {
+  "name": "months_since_last_horde",
+  "win_va": "0x0052299c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102c48"
+ },
+ {
+  "name": "ofset_x",
+  "win_va": "0x005229a4",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x001026e0"
+ },
+ {
+  "name": "their_battle_men",
+  "win_va": "0x005229a8",
+  "tier": "exact",
+  "votes": "13/13",
+  "ps_addr": "0x00102f28"
+ },
+ {
+  "name": "ofset_y",
+  "win_va": "0x005229ac",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x001026dc"
+ },
+ {
+  "name": "auto_conquered_months",
+  "win_va": "0x005229b4",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102780"
+ },
+ {
+  "name": "estimate_ind_tax",
+  "win_va": "0x005229b8",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102bc8"
+ },
+ {
+  "name": "zone_x",
+  "win_va": "0x005229c4",
+  "tier": "instr-multi",
+  "votes": "23/24",
+  "ps_addr": "0x0010271c"
+ },
+ {
+  "name": "zone_y",
+  "win_va": "0x005229c8",
+  "tier": "instr-multi",
+  "votes": "19/21",
+  "ps_addr": "0x00102724"
+ },
+ {
+  "name": "return_zoom_level",
+  "win_va": "0x00508dbc",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102ef8"
+ },
+ {
+  "name": "average_ind_tax_asses",
+  "win_va": "0x005229d0",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x00102b58"
+ },
+ {
+  "name": "colosseum_culture_pass_count",
+  "win_va": "0x005229d4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102924"
+ },
+ {
+  "name": "utility_level",
+  "win_va": "0x005229d8",
+  "tier": "instr-multi",
+  "votes": "11/14",
+  "ps_addr": "0x00102708"
+ },
+ {
+  "name": "theatre_pass_count",
+  "win_va": "0x005229e0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102974"
+ },
+ {
+  "name": "needed_no_of_auxillaries",
+  "win_va": "0x005229e4",
+  "tier": "exact",
+  "votes": "3/4",
+  "ps_addr": "0x00102b10"
+ },
+ {
+  "name": "slave_population_final_estimate",
+  "win_va": "0x005229e8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102c70"
+ },
+ {
+  "name": "prov_rotation",
+  "win_va": "0x005229ec",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x00102dcc"
+ },
+ {
+  "name": "city_palette",
+  "win_va": "0x005229f0",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000d34d4"
+ },
+ {
+  "name": "their_battle_horse",
+  "win_va": "0x00522cf0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f0c"
+ },
+ {
+  "name": "fire_accident",
+  "win_va": "0x00522cf4",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x001028d4"
+ },
+ {
+  "name": "account_ind_tax",
+  "win_va": "0x00522cf8",
+  "tier": "exact",
+  "votes": "3/4",
+  "ps_addr": "0x00102bec"
+ },
+ {
+  "name": "mercs_missile",
+  "win_va": "0x00522cfc",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102ed0"
+ },
+ {
+  "name": "ferret_run",
+  "win_va": "0x00522d00",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x001146a2"
+ },
+ {
+  "name": "selected_icon_no",
+  "win_va": "0x00522d18",
+  "tier": "instr-multi",
+  "votes": "9/11",
+  "ps_addr": "0x00102660"
+ },
+ {
+  "name": "flag_mode_decay_count",
+  "win_va": "0x00522d1c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102cfc"
+ },
+ {
+  "name": "start_y_pos",
+  "win_va": "0x00522d20",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00102dac"
+ },
+ {
+  "name": "warned_of_emperor_reply_month",
+  "win_va": "0x00522d24",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00117c5b"
+ },
+ {
+  "name": "int_battle_header",
+  "win_va": "0x00522d30",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d0134"
+ },
+ {
+  "name": "flag_mode",
+  "win_va": "0x00522f00",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x00102ce4"
+ },
+ {
+  "name": "south_trader_is",
+  "win_va": "0x00522f04",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027d0"
+ },
+ {
+  "name": "top_lv",
+  "win_va": "0x00522f08",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001027f4"
+ },
+ {
+  "name": "total_no_of_irregulars",
+  "win_va": "0x00522f0c",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00102b00"
+ },
+ {
+  "name": "map_width_reduction",
+  "win_va": "0x00522f10",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x00102dc8"
+ },
+ {
+  "name": "our_battle_army",
+  "win_va": "0x00522f14",
+  "tier": "exact",
+  "votes": "21/21",
+  "ps_addr": "0x00115894"
+ },
+ {
+  "name": "figure_no",
+  "win_va": "0x00522f16",
+  "tier": "exact",
+  "votes": "118/126",
+  "ps_addr": "0x001158a8"
+ },
+ {
+  "name": "q_workhouse",
+  "win_va": "0x00522f18",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00102880"
+ },
+ {
+  "name": "employment_rate",
+  "win_va": "0x00522f1c",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x00102c38"
+ },
+ {
+  "name": "population_pass_count",
+  "win_va": "0x00522f20",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102ab4"
+ },
+ {
+  "name": "this_years_pop_tax",
+  "win_va": "0x00522f24",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102b6c"
+ },
+ {
+  "name": "their_battle_auxs",
+  "win_va": "0x00522f28",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102eec"
+ },
+ {
+  "name": "query_panel_reduction",
+  "win_va": "0x00522f2c",
+  "tier": "instr-multi",
+  "votes": "32/32",
+  "ps_addr": "0x001025a4"
+ },
+ {
+  "name": "old_scrolling",
+  "win_va": "0x00522f30",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00117c4a"
+ },
+ {
+  "name": "city_direction",
+  "win_va": "0x00522f34",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102dfc"
+ },
+ {
+  "name": "enemy_army",
+  "win_va": "0x00522f38",
+  "tier": "instr-multi",
+  "votes": "23/23",
+  "ps_addr": "0x00115896"
+ },
+ {
+  "name": "peace_rating_pop_limit",
+  "win_va": "0x00522f3c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x001026fc"
+ },
+ {
+  "name": "plaza_culture_pass_count",
+  "win_va": "0x00522f44",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102930"
+ },
+ {
+  "name": "arena_culture_pass_count",
+  "win_va": "0x00522f48",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102918"
+ },
+ {
+  "name": "grammaticus_culture_count",
+  "win_va": "0x00522f50",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102990"
+ },
+ {
+  "name": "q_shell",
+  "win_va": "0x00522f54",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c20"
+ },
+ {
+  "name": "culture_rating_pop_limit",
+  "win_va": "0x00522f58",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x0010270c"
+ },
+ {
+  "name": "evolve_count",
+  "win_va": "0x00522f5c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x0010286c"
+ },
+ {
+  "name": "med_robbery_count",
+  "win_va": "0x00522f64",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001029e0"
+ },
+ {
+  "name": "selected_icon_text",
+  "win_va": "0x00522f6c",
+  "tier": "instr-multi",
+  "votes": "9/11",
+  "ps_addr": "0x00102654"
+ },
+ {
+  "name": "plague_spread_direction",
+  "win_va": "0x00522f70",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102848"
+ },
+ {
+  "name": "slave_population_change",
+  "win_va": "0x00522f74",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102c3c"
+ },
+ {
+  "name": "gmn_sptr",
+  "win_va": "0x00522f78",
+  "tier": "instr-multi",
+  "votes": "267/272",
+  "ps_addr": "0x001026c8"
+ },
+ {
+  "name": "over_ptr",
+  "win_va": "0x00522f7c",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102ca4"
+ },
+ {
+  "name": "last_icon_over",
+  "win_va": "0x00522f80",
+  "tier": "instr-multi",
+  "votes": "20/20",
+  "ps_addr": "0x0010267c"
+ },
+ {
+  "name": "update_icon",
+  "win_va": "0x00522f88",
+  "tier": "instr-multi",
+  "votes": "11/11",
+  "ps_addr": "0x00102dec"
+ },
+ {
+  "name": "arena_count",
+  "win_va": "0x00522f8c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102970"
+ },
+ {
+  "name": "their_battle_units",
+  "win_va": "0x00522f90",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00102f6c"
+ },
+ {
+  "name": "citizen_list",
+  "win_va": "0x00522fa0",
+  "tier": "exact",
+  "votes": "98/98",
+  "ps_addr": "0x0011095c"
+ },
+ {
+  "name": "last_city_flag",
+  "win_va": "0x0050b918",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102cf4"
+ },
+ {
+  "name": "map_actual_height",
+  "win_va": "0x00525d30",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102dd8"
+ },
+ {
+  "name": "north_trader_is",
+  "win_va": "0x00525d34",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027f0"
+ },
+ {
+  "name": "no_of_villages",
+  "win_va": "0x00525d40",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x001028c4"
+ },
+ {
+  "name": "small_robbery_count",
+  "win_va": "0x00525d44",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00102a18"
+ },
+ {
+  "name": "z_ptr",
+  "win_va": "0x00525d48",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00102718"
+ },
+ {
+  "name": "gmn_x",
+  "win_va": "0x00525d4c",
+  "tier": "instr-multi",
+  "votes": "98/101",
+  "ps_addr": "0x001026b8"
+ },
+ {
+  "name": "gmn_y",
+  "win_va": "0x00525d50",
+  "tier": "instr-multi",
+  "votes": "106/108",
+  "ps_addr": "0x001026b0"
+ },
+ {
+  "name": "no_of_citizens",
+  "win_va": "0x00525d54",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00102820"
+ },
+ {
+  "name": "months_to_game_over",
+  "win_va": "0x00525d58",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x00102c24"
+ },
+ {
+  "name": "road_rate",
+  "win_va": "0x00525d5c",
+  "tier": "instr-multi",
+  "votes": "6/7",
+  "ps_addr": "0x001028c0"
+ },
+ {
+  "name": "fire_spread_direction",
+  "win_va": "0x00525d60",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102870"
+ },
+ {
+  "name": "top_lv_ptr",
+  "win_va": "0x00525d64",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x001027ec"
+ },
+ {
+  "name": "theatre_count",
+  "win_va": "0x00525d68",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001029ac"
+ },
+ {
+  "name": "east_trader_is",
+  "win_va": "0x00525d6c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001027d4"
+ },
+ {
+  "name": "battle_npc_retreat_count",
+  "win_va": "0x004e6a70",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00102f68"
+ },
+ {
+  "name": "med_robbery_pass_count",
+  "win_va": "0x00525d74",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x001029cc"
+ },
+ {
+  "name": "our_battle_auxs",
+  "win_va": "0x00525d78",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00102f58"
+ },
+ {
+  "name": "circus_count",
+  "win_va": "0x00525d7c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x001029b8"
+ },
+ {
+  "name": "unit_list",
+  "win_va": "0x00525d80",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00113718"
+ },
+ {
+  "name": "battle_stats_nof_units",
+  "win_va": "0x00526d0c",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x00102f34"
+ },
+ {
+  "name": "exit_x_at",
+  "win_va": "0x00526d10",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x001025c8"
+ },
+ {
+  "name": "completed_provinces",
+  "win_va": "0x00526d18",
+  "tier": "instr-multi",
+  "votes": "15/17",
+  "ps_addr": "0x00102750"
+ },
+ {
+  "name": "ov_map_mode",
+  "win_va": "0x00526d1c",
+  "tier": "exact",
+  "votes": "10/10",
+  "ps_addr": "0x00117c11"
+ },
+ {
+  "name": "hospitals_pass_count",
+  "win_va": "0x00526d20",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00102a20"
+ },
+ {
+  "name": "map_actual_width",
+  "win_va": "0x00526d24",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00102dbc"
+ },
+ {
+  "name": "speech_filaname",
+  "win_va": "0x00526f04",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000a4838"
+ },
+ {
+  "name": "xright_front",
+  "win_va": "0x00526f08",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00117d14"
+ },
+ {
+  "name": "xleft_front",
+  "win_va": "0x00526f0c",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00117d28"
+ },
+ {
+  "name": "first_front",
+  "win_va": "0x00526f10",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00117cf8"
+ },
+ {
+  "name": "yfront",
+  "win_va": "0x00526f14",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00117d20"
+ },
+ {
+  "name": "xleft_rear",
+  "win_va": "0x00526f18",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00117d44"
+ },
+ {
+  "name": "x_bit",
+  "win_va": "0x00526f1c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00117d00"
+ },
+ {
+  "name": "bat_odds",
+  "win_va": "0x00526f20",
+  "tier": "exact",
+  "votes": "15/15",
+  "ps_addr": "0x00117d08"
+ },
+ {
+  "name": "first_back",
+  "win_va": "0x00526f24",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00117d10"
+ },
+ {
+  "name": "first_rear",
+  "win_va": "0x00526f28",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00117ce4"
+ },
+ {
+  "name": "y_bit",
+  "win_va": "0x00526f2c",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00117cf4"
+ },
+ {
+  "name": "bat_side",
+  "win_va": "0x00526f30",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00117d3c"
+ },
+ {
+  "name": "xright_back",
+  "win_va": "0x00526f34",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00117d54"
+ },
+ {
+  "name": "yback",
+  "win_va": "0x00526f38",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00117d58"
+ },
+ {
+  "name": "xright_rear",
+  "win_va": "0x00526f3c",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00117d30"
+ },
+ {
+  "name": "battle_ai_count",
+  "win_va": "0x00525d70",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x00102f80"
+ },
+ {
+  "name": "bat_size",
+  "win_va": "0x00526f44",
+  "tier": "instr-multi",
+  "votes": "10/10",
+  "ps_addr": "0x00117d1c"
+ },
+ {
+  "name": "bat_control",
+  "win_va": "0x00526f48",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x00117d18"
+ },
+ {
+  "name": "yrear",
+  "win_va": "0x00526f4c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00117d50"
+ },
+ {
+  "name": "bat_spacing",
+  "win_va": "0x00526f50",
+  "tier": "exact",
+  "votes": "12/12",
+  "ps_addr": "0x00117d0c"
+ },
+ {
+  "name": "which_unit",
+  "win_va": "0x00526f54",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117cfc"
+ },
+ {
+  "name": "bat_no_selected",
+  "win_va": "0x00526f58",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117ce8"
+ },
+ {
+  "name": "xpos",
+  "win_va": "0x00526f5c",
+  "tier": "exact",
+  "votes": "16/16",
+  "ps_addr": "0x00117d40"
+ },
+ {
+  "name": "bat_ai_trig_count",
+  "win_va": "0x00526f60",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00117ce0"
+ },
+ {
+  "name": "ypos",
+  "win_va": "0x00526f64",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x00117d2c"
+ },
+ {
+  "name": "bat_which",
+  "win_va": "0x00526f68",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117cf0"
+ },
+ {
+  "name": "bat_width",
+  "win_va": "0x00526f6c",
+  "tier": "exact",
+  "votes": "15/15",
+  "ps_addr": "0x00117d4c"
+ },
+ {
+  "name": "xleft_back",
+  "win_va": "0x00526f70",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00117d38"
+ },
+ {
+  "name": "barb_ptr",
+  "win_va": "0x00526f74",
+  "tier": "instr-multi",
+  "votes": "10/12",
+  "ps_addr": "0x00117d60"
+ },
+ {
+  "name": "revolt_size",
+  "win_va": "0x00526f78",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x00117d5c"
+ },
+ {
+  "name": "barb_x",
+  "win_va": "0x00526f7c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00117d68"
+ },
+ {
+  "name": "barb_y",
+  "win_va": "0x00526f80",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x00117d6c"
+ },
+ {
+  "name": "barb_entry_count",
+  "win_va": "0x00526f84",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117d64"
+ },
+ {
+  "name": "clock_ferret_moves",
+  "win_va": "0x00526f8c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000d00dc"
+ },
+ {
+  "name": "ferret_map_hi",
+  "win_va": "0x00526f90",
+  "tier": "exact",
+  "votes": "12/12",
+  "ps_addr": "0x000d00ec"
+ },
+ {
+  "name": "anti_ferret_count",
+  "win_va": "0x00526f98",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000d0100"
+ },
+ {
+  "name": "ferret_map_wi",
+  "win_va": "0x00526f9c",
+  "tier": "exact",
+  "votes": "12/12",
+  "ps_addr": "0x000d00f8"
+ },
+ {
+  "name": "tb_x",
+  "win_va": "0x00526fa4",
+  "tier": "exact",
+  "votes": "18/18",
+  "ps_addr": "0x000d00e4"
+ },
+ {
+  "name": "tb_y",
+  "win_va": "0x00526fa8",
+  "tier": "exact",
+  "votes": "18/18",
+  "ps_addr": "0x000d00e8"
+ },
+ {
+  "name": "clock_ferret_x",
+  "win_va": "0x00526fb0",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x000d0128"
+ },
+ {
+  "name": "clock_ferret_y",
+  "win_va": "0x00526fb4",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x000d0110"
+ },
+ {
+  "name": "anti_ferret_x",
+  "win_va": "0x00526fb8",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x000d0114"
+ },
+ {
+  "name": "anti_ferret_y",
+  "win_va": "0x00526fbc",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x000d0118"
+ },
+ {
+  "name": "tb_occ_a_flag",
+  "win_va": "0x00526fc4",
+  "tier": "exact",
+  "votes": "32/32",
+  "ps_addr": "0x000d0133"
+ },
+ {
+  "name": "ferret_vert_off",
+  "win_va": "0x00526fc8",
+  "tier": "exact",
+  "votes": "60/90",
+  "ps_addr": "0x000d0108"
+ },
+ {
+  "name": "tb_occ_b_flag",
+  "win_va": "0x00526fcc",
+  "tier": "exact",
+  "votes": "16/16",
+  "ps_addr": "0x000d0130"
+ },
+ {
+  "name": "tb_prev_flag",
+  "win_va": "0x00526fcd",
+  "tier": "exact",
+  "votes": "16/16",
+  "ps_addr": "0x000d0132"
+ },
+ {
+  "name": "ferret_horiz_off",
+  "win_va": "0x00526fd0",
+  "tier": "exact",
+  "votes": "63/90",
+  "ps_addr": "0x000d0124"
+ },
+ {
+  "name": "clock_ferret_count",
+  "win_va": "0x00526fd4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000d00f0"
+ },
+ {
+  "name": "ferret_targ_ptr",
+  "win_va": "0x00526fd8",
+  "tier": "exact",
+  "votes": "16/16",
+  "ps_addr": "0x000d0120"
+ },
+ {
+  "name": "clock_ferret_ptr",
+  "win_va": "0x00526fdc",
+  "tier": "exact",
+  "votes": "30/40",
+  "ps_addr": "0x000d00e0"
+ },
+ {
+  "name": "anti_ferret_moves",
+  "win_va": "0x00526fe0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000d00cc"
+ },
+ {
+  "name": "ferret_targ_x",
+  "win_va": "0x00526fe4",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000d00c4"
+ },
+ {
+  "name": "ferret_targ_y",
+  "win_va": "0x00526fe8",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x000d00c8"
+ },
+ {
+  "name": "ferret_map",
+  "win_va": "0x00526fec",
+  "tier": "exact",
+  "votes": "97/97",
+  "ps_addr": "0x000d00fc"
+ },
+ {
+  "name": "anti_ferret_ptr",
+  "win_va": "0x00526ff0",
+  "tier": "exact",
+  "votes": "28/40",
+  "ps_addr": "0x000d0104"
+ },
+ {
+  "name": "tb_road_flag",
+  "win_va": "0x00526ff8",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x000d0131"
+ },
+ {
+  "name": "tb_ptr",
+  "win_va": "0x00526ffc",
+  "tier": "exact",
+  "votes": "33/45",
+  "ps_addr": "0x000d00d4"
+ },
+ {
+  "name": "overlay0_empty_mode",
+  "win_va": "0x00527004",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00117c7c"
+ },
+ {
+  "name": "city_anim8",
+  "win_va": "0x00527008",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c74"
+ },
+ {
+  "name": "city_anim16",
+  "win_va": "0x0052700c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c78"
+ },
+ {
+  "name": "city_anim32",
+  "win_va": "0x00527010",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c70"
+ },
+ {
+  "name": "city_anim64",
+  "win_va": "0x00527014",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117c68"
+ },
+ {
+  "name": "city_anim128",
+  "win_va": "0x00527018",
+  "tier": "instr-multi",
+  "votes": "4/7",
+  "ps_addr": "0x00117c6c"
+ },
+ {
+  "name": "this_spot",
+  "win_va": "0x00527020",
+  "tier": "instr-multi",
+  "votes": "13/13",
+  "ps_addr": "0x00117e48"
+ },
+ {
+  "name": "tutorial_correct",
+  "win_va": "0x00527024",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00117e5c"
+ },
+ {
+  "name": "media_voc",
+  "win_va": "0x00527028",
+  "tier": "instr-multi",
+  "votes": "2/3",
+  "ps_addr": "0x00117e40"
+ },
+ {
+  "name": "media_line_buffer",
+  "win_va": "0x00527030",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117d70"
+ },
+ {
+  "name": "linked_text_flag",
+  "win_va": "0x005270f8",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x00117e60"
+ },
+ {
+  "name": "tutorial_level",
+  "win_va": "0x005270fc",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00117e4c"
+ },
+ {
+  "name": "tutorial_timer",
+  "win_va": "0x00527104",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00117e54"
+ },
+ {
+  "name": "media_left_image",
+  "win_va": "0x00527108",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00117e58"
+ },
+ {
+  "name": "media_right_image",
+  "win_va": "0x0052710c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x00117e44"
+ },
+ {
+  "name": "tutorial_correct_timer",
+  "win_va": "0x00527110",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00117e3c"
+ },
+ {
+  "name": "greyed_out",
+  "win_va": "0x00527114",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x00117e38"
+ },
+ {
+  "name": "web_node_count",
+  "win_va": "0x00527118",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d0098"
+ },
+ {
+  "name": "web_from",
+  "win_va": "0x0052711c",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x000d00c0"
+ },
+ {
+  "name": "web_out_of_the_walls",
+  "win_va": "0x00527120",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000d00ac"
+ },
+ {
+  "name": "web_nof_dircs",
+  "win_va": "0x00527124",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x000d0094"
+ },
+ {
+  "name": "web_start_x",
+  "win_va": "0x00527128",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000d00b8"
+ },
+ {
+  "name": "web_start_y",
+  "win_va": "0x0052712c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000d00b4"
+ },
+ {
+  "name": "web_x",
+  "win_va": "0x00527130",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000d00a0"
+ },
+ {
+  "name": "web_y",
+  "win_va": "0x00527134",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000d009c"
+ },
+ {
+  "name": "web",
+  "win_va": "0x00527140",
+  "tier": "exact",
+  "votes": "22/22",
+  "ps_addr": "0x000cfcd4"
+ },
+ {
+  "name": "web_ptr",
+  "win_va": "0x00527500",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x000d00b0"
+ },
+ {
+  "name": "web_node",
+  "win_va": "0x00527504",
+  "tier": "exact",
+  "votes": "9/9",
+  "ps_addr": "0x000d00bc"
+ },
+ {
+  "name": "web_first_actual_node",
+  "win_va": "0x00527508",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000d00a4"
+ },
+ {
+  "name": "web_dirc",
+  "win_va": "0x0052750c",
+  "tier": "exact",
+  "votes": "10/10",
+  "ps_addr": "0x000d00c1"
+ },
+ {
+  "name": "web_directions",
+  "win_va": "0x0052750d",
+  "tier": "instr-multi",
+  "votes": "13/16",
+  "ps_addr": "0x000d00c2"
+ },
+ {
+  "name": "web_total_length",
+  "win_va": "0x00527510",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000d00a8"
+ },
+ {
+  "name": "internal_screen",
+  "win_va": "0x00527570",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x000c4e68"
+ },
+ {
+  "name": "y_length",
+  "win_va": "0x005275d4",
+  "tier": "instr-multi",
+  "votes": "27/27",
+  "ps_addr": "0x000c480c"
+ },
+ {
+  "name": "map_gfx_loaded",
+  "win_va": "0x005275dc",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000ccca7"
+ },
+ {
+  "name": "sprite2_height",
+  "win_va": "0x005275e0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4858"
+ },
+ {
+  "name": "highlight_goods_list",
+  "win_va": "0x005275f0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c21c0"
+ },
+ {
+  "name": "exit_flag",
+  "win_va": "0x00527614",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000cccab"
+ },
+ {
+  "name": "select_count",
+  "win_va": "0x00527618",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x000c2228"
+ },
+ {
+  "name": "adjust_step",
+  "win_va": "0x00527620",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000c4780"
+ },
+ {
+  "name": "system_panel",
+  "win_va": "0x00527630",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000ada34"
+ },
+ {
+  "name": "D",
+  "win_va": "0x005318f8",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x000c47f4"
+ },
+ {
+  "name": "mouse_x",
+  "win_va": "0x005318fc",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4e94"
+ },
+ {
+  "name": "mouse_y",
+  "win_va": "0x00531900",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4e90"
+ },
+ {
+  "name": "insert_place",
+  "win_va": "0x00531904",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000c491c"
+ },
+ {
+  "name": "scat128",
+  "win_va": "0x00531908",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c2230"
+ },
+ {
+  "name": "mouse_background",
+  "win_va": "0x00531910",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000a4abc"
+ },
+ {
+  "name": "sprite3_height",
+  "win_va": "0x00531b54",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c487c"
+ },
+ {
+  "name": "cycle_count",
+  "win_va": "0x00531b58",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4768"
+ },
+ {
+  "name": "x_ofset",
+  "win_va": "0x00531b5c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4828"
+ },
+ {
+  "name": "used_memory",
+  "win_va": "0x00531b60",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4eac"
+ },
+ {
+  "name": "fb_max_char_length",
+  "win_va": "0x00531b64",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x000c21a8"
+ },
+ {
+  "name": "char_count",
+  "win_va": "0x00531b68",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000c4910"
+ },
+ {
+  "name": "sprite_colour",
+  "win_va": "0x00531b6c",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000c4840"
+ },
+ {
+  "name": "rand32000",
+  "win_va": "0x00531b74",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c4728"
+ },
+ {
+  "name": "old_sprite_x",
+  "win_va": "0x00531b78",
+  "tier": "instr-multi",
+  "votes": "18/19",
+  "ps_addr": "0x000c4834"
+ },
+ {
+  "name": "old_sprite_y",
+  "win_va": "0x00531b7c",
+  "tier": "instr-multi",
+  "votes": "20/21",
+  "ps_addr": "0x000c4830"
+ },
+ {
+  "name": "font_screen_limit",
+  "win_va": "0x00531b84",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x000c47e4"
+ },
+ {
+  "name": "sprite_x",
+  "win_va": "0x00531b88",
+  "tier": "exact",
+  "votes": "11/11",
+  "ps_addr": "0x000c4888"
+ },
+ {
+  "name": "sprite_y",
+  "win_va": "0x00531b8c",
+  "tier": "exact",
+  "votes": "11/11",
+  "ps_addr": "0x000c488c"
+ },
+ {
+  "name": "cursor_x",
+  "win_va": "0x00531b90",
+  "tier": "instr-multi",
+  "votes": "12/13",
+  "ps_addr": "0x000c48a0"
+ },
+ {
+  "name": "cursor_y",
+  "win_va": "0x00531b94",
+  "tier": "instr-multi",
+  "votes": "12/12",
+  "ps_addr": "0x000c48a4"
+ },
+ {
+  "name": "randseed",
+  "win_va": "0x00531b98",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x000c474c"
+ },
+ {
+  "name": "selection_goods_list",
+  "win_va": "0x00531ba0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c21e8"
+ },
+ {
+  "name": "data_ptr",
+  "win_va": "0x00531bc4",
+  "tier": "instr-multi",
+  "votes": "70/82",
+  "ps_addr": "0x000c4854"
+ },
+ {
+  "name": "no_of_entries",
+  "win_va": "0x00531bc8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4e5c"
+ },
+ {
+  "name": "xclipped",
+  "win_va": "0x00531bcc",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x000cccb2"
+ },
+ {
+  "name": "this_media_entry",
+  "win_va": "0x00531bd0",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x000c70c0"
+ },
+ {
+  "name": "time_is",
+  "win_va": "0x00531c0c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4e8c"
+ },
+ {
+  "name": "current_palette",
+  "win_va": "0x00531c10",
+  "tier": "exact",
+  "votes": "11/11",
+  "ps_addr": "0x000a50fc"
+ },
+ {
+  "name": "x_end",
+  "win_va": "0x00531f10",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000c4820"
+ },
+ {
+  "name": "sprite_width",
+  "win_va": "0x00531f24",
+  "tier": "instr-multi",
+  "votes": "46/60",
+  "ps_addr": "0x000c4848"
+ },
+ {
+  "name": "logos",
+  "win_va": "0x00531f30",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000a56fc"
+ },
+ {
+  "name": "out1",
+  "win_va": "0x00533410",
+  "tier": "exact",
+  "votes": "13/13",
+  "ps_addr": "0x000c4750"
+ },
+ {
+  "name": "out2",
+  "win_va": "0x00533414",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c4744"
+ },
+ {
+  "name": "out3",
+  "win_va": "0x00533418",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4748"
+ },
+ {
+  "name": "out4",
+  "win_va": "0x0053341c",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000c473c"
+ },
+ {
+  "name": "sprite_height",
+  "win_va": "0x00533420",
+  "tier": "instr-multi",
+  "votes": "42/47",
+  "ps_addr": "0x000c482c"
+ },
+ {
+  "name": "sprite2_image_no",
+  "win_va": "0x00533428",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000c485c"
+ },
+ {
+  "name": "scratch_buffer",
+  "win_va": "0x00533954",
+  "tier": "exact",
+  "votes": "17/17",
+  "ps_addr": "0x000c4ec4"
+ },
+ {
+  "name": "rand128",
+  "win_va": "0x00533958",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c2224"
+ },
+ {
+  "name": "this_letter",
+  "win_va": "0x00533960",
+  "tier": "instr-multi",
+  "votes": "17/22",
+  "ps_addr": "0x000c4914"
+ },
+ {
+  "name": "fb_count",
+  "win_va": "0x0054d5b4",
+  "tier": "instr-single",
+  "votes": "1/3",
+  "ps_addr": "0x000c492c"
+ },
+ {
+  "name": "decision",
+  "win_va": "0x00533964",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x000ccca9"
+ },
+ {
+  "name": "drive_name",
+  "win_va": "0x00533968",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000c4e7c"
+ },
+ {
+  "name": "scatseed",
+  "win_va": "0x00533980",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x000c4764"
+ },
+ {
+  "name": "turbo_mode",
+  "win_va": "0x00533984",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x000c4754"
+ },
+ {
+  "name": "text_buffer",
+  "win_va": "0x00533990",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000b84cc"
+ },
+ {
+  "name": "local_time",
+  "win_va": "0x0053d5d0",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4e88"
+ },
+ {
+  "name": "slidper_on",
+  "win_va": "0x0053d5d4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000c222c"
+ },
+ {
+  "name": "insert_count",
+  "win_va": "0x0053d5d8",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x000c4918"
+ },
+ {
+  "name": "sprite_image_no",
+  "win_va": "0x0053d5e0",
+  "tier": "exact",
+  "votes": "21/21",
+  "ps_addr": "0x000c484c"
+ },
+ {
+  "name": "mouse_movement",
+  "win_va": "0x0053d5e4",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4ea4"
+ },
+ {
+  "name": "fb_current_char_length",
+  "win_va": "0x0053d5e8",
+  "tier": "instr-multi",
+  "votes": "7/11",
+  "ps_addr": "0x000c21a4"
+ },
+ {
+  "name": "insert_cursor",
+  "win_va": "0x0053d5ed",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000cccb4"
+ },
+ {
+  "name": "mouse_left_preclick",
+  "win_va": "0x0053d5f4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000cccc4"
+ },
+ {
+  "name": "cnt4",
+  "win_va": "0x0053d5f8",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c4778"
+ },
+ {
+  "name": "cnt8",
+  "win_va": "0x0053d5fc",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c4770"
+ },
+ {
+  "name": "file_loaded_status",
+  "win_va": "0x0053d600",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x000ccca6"
+ },
+ {
+  "name": "select_cost_flag",
+  "win_va": "0x0053d604",
+  "tier": "exact",
+  "votes": "15/15",
+  "ps_addr": "0x000c220c"
+ },
+ {
+  "name": "fb_line_length",
+  "win_va": "0x0053d608",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000c4898"
+ },
+ {
+  "name": "screen_width",
+  "win_va": "0x0053d60c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000c4938"
+ },
+ {
+  "name": "desktop_width",
+  "win_va": "0x00552c50",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": null
+ },
+ {
+  "name": "desktop_height",
+  "win_va": "0x00552c54",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": null
+ },
+ {
+  "name": "para1",
+  "win_va": "0x0053d610",
+  "tier": "exact",
+  "votes": "6/6",
+  "ps_addr": "0x000c2214"
+ },
+ {
+  "name": "got_cursx",
+  "win_va": "0x0053d614",
+  "tier": "instr-multi",
+  "votes": "7/8",
+  "ps_addr": "0x000c489c"
+ },
+ {
+  "name": "para2",
+  "win_va": "0x0053d618",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000c2218"
+ },
+ {
+  "name": "y_end",
+  "win_va": "0x0053d620",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000c4824"
+ },
+ {
+  "name": "dx",
+  "win_va": "0x0053d62c",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c47dc"
+ },
+ {
+  "name": "dy",
+  "win_va": "0x0053d630",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c47e0"
+ },
+ {
+  "name": "ey",
+  "win_va": "0x0053d638",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000c47ec"
+ },
+ {
+  "name": "gx",
+  "win_va": "0x0053d63c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4804"
+ },
+ {
+  "name": "gy",
+  "win_va": "0x0053d640",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4808"
+ },
+ {
+  "name": "hold_hot_keys",
+  "win_va": "0x0053d644",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000cccb8"
+ },
+ {
+  "name": "ix",
+  "win_va": "0x0053d648",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000c4810"
+ },
+ {
+  "name": "iy",
+  "win_va": "0x0053d64c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000c4814"
+ },
+ {
+  "name": "sprite_error",
+  "win_va": "0x0053d650",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4844"
+ },
+ {
+  "name": "mouse_was_pressed",
+  "win_va": "0x0053d658",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000c4ea8"
+ },
+ {
+  "name": "x_is",
+  "win_va": "0x0053d65c",
+  "tier": "exact",
+  "votes": "23/23",
+  "ps_addr": "0x000c4920"
+ },
+ {
+  "name": "game_panels",
+  "win_va": "0x0053d960",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c70fe"
+ },
+ {
+  "name": "file_no",
+  "win_va": "0x005434f4",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x000c4e70"
+ },
+ {
+  "name": "adjust_max",
+  "win_va": "0x005434f8",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c47cc"
+ },
+ {
+  "name": "x_wrap",
+  "win_va": "0x005434fc",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x000c47d8"
+ },
+ {
+  "name": "adjust_min",
+  "win_va": "0x00543500",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4798"
+ },
+ {
+  "name": "sprite_hat_start",
+  "win_va": "0x00543504",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x000c4878"
+ },
+ {
+  "name": "select_height",
+  "win_va": "0x00543508",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c2220"
+ },
+ {
+  "name": "continue_tutorial_status",
+  "win_va": "0x0054350c",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000ccca5"
+ },
+ {
+  "name": "at_limit",
+  "win_va": "0x00543510",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x000c4894"
+ },
+ {
+  "name": "yclipped",
+  "win_va": "0x00543516",
+  "tier": "instr-multi",
+  "votes": "7/7",
+  "ps_addr": "0x000cccb3"
+ },
+ {
+  "name": "first_entry",
+  "win_va": "0x00543518",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x000c4930"
+ },
+ {
+  "name": "greying_data",
+  "win_va": "0x00543520",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x000a49bc"
+ },
+ {
+  "name": "fb_limit",
+  "win_va": "0x00543624",
+  "tier": "instr-multi",
+  "votes": "4/5",
+  "ps_addr": "0x000c4928"
+ },
+ {
+  "name": "allow_padding",
+  "win_va": "0x00543629",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x000cccb6"
+ },
+ {
+  "name": "adjust_var",
+  "win_va": "0x0054362c",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x000c47b0"
+ },
+ {
+  "name": "mse_x",
+  "win_va": "0x00543630",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x000c70fc"
+ },
+ {
+  "name": "mse_y",
+  "win_va": "0x00543632",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x000c70fa"
+ },
+ {
+  "name": "cnt128",
+  "win_va": "0x00543634",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c476c"
+ },
+ {
+  "name": "hold_mouse_replace",
+  "win_va": "0x00543638",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x000cccbb"
+ },
+ {
+  "name": "screen_height",
+  "win_va": "0x0054363c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000c4e78"
+ },
+ {
+  "name": "cnt256",
+  "win_va": "0x00543640",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c477c"
+ },
+ {
+  "name": "restart_flag",
+  "win_va": "0x00543644",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000cccac"
+ },
+ {
+  "name": "screen_size",
+  "win_va": "0x0054364c",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000c4e64"
+ },
+ {
+  "name": "x_start",
+  "win_va": "0x00543650",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000c47f8"
+ },
+ {
+  "name": "temp_palette",
+  "win_va": "0x00543660",
+  "tier": "exact",
+  "votes": "7/7",
+  "ps_addr": "0x000a53fc"
+ },
+ {
+  "name": "key_ascii",
+  "win_va": "0x0053d5ee",
+  "tier": "instr-single",
+  "votes": "1/2",
+  "ps_addr": "0x000ccccc"
+ },
+ {
+  "name": "format_buffer",
+  "win_va": "0x00543970",
+  "tier": "instr-multi",
+  "votes": "8/8",
+  "ps_addr": "0x000b7cfc"
+ },
+ {
+  "name": "sprite_base_x",
+  "win_va": "0x00544140",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4870"
+ },
+ {
+  "name": "sprite_base_y",
+  "win_va": "0x00544144",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c486c"
+ },
+ {
+  "name": "button_time_flag",
+  "win_va": "0x00544148",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000c4e84"
+ },
+ {
+  "name": "key_ready",
+  "win_va": "0x0054414c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000ccccb"
+ },
+ {
+  "name": "insert_text",
+  "win_va": "0x00544150",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c48ac"
+ },
+ {
+  "name": "font1",
+  "win_va": "0x005441c0",
+  "tier": "exact",
+  "votes": "57/57",
+  "ps_addr": "0x000c2234"
+ },
+ {
+  "name": "font2",
+  "win_va": "0x005466c0",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000a6bdc"
+ },
+ {
+  "name": "cnt16",
+  "win_va": "0x0054d518",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c475c"
+ },
+ {
+  "name": "cnt32",
+  "win_va": "0x0054d51c",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c4730"
+ },
+ {
+  "name": "cnt64",
+  "win_va": "0x0054d524",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c4760"
+ },
+ {
+  "name": "text_pointer",
+  "win_va": "0x0054d528",
+  "tier": "instr-multi",
+  "votes": "36/36",
+  "ps_addr": "0x000c48a8"
+ },
+ {
+  "name": "pre_loaded_status",
+  "win_va": "0x0054d52c",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000ccca4"
+ },
+ {
+  "name": "y_start",
+  "win_va": "0x0054d530",
+  "tier": "instr-multi",
+  "votes": "3/4",
+  "ps_addr": "0x000c47fc"
+ },
+ {
+  "name": "select_width",
+  "win_va": "0x0054d538",
+  "tier": "exact",
+  "votes": "8/8",
+  "ps_addr": "0x000c221c"
+ },
+ {
+  "name": "old_mouse_drops_x",
+  "win_va": "0x0054d53c",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c21b4"
+ },
+ {
+  "name": "old_mouse_drops_y",
+  "win_va": "0x0054d540",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c21b0"
+ },
+ {
+  "name": "font_style",
+  "win_va": "0x0054d548",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x000c47d0"
+ },
+ {
+  "name": "scratch_buffer_size",
+  "win_va": "0x0054d550",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x000c4ec0"
+ },
+ {
+  "name": "rand8",
+  "win_va": "0x0054d554",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x000c472c"
+ },
+ {
+  "name": "sprite_start",
+  "win_va": "0x0054d558",
+  "tier": "instr-multi",
+  "votes": "67/71",
+  "ps_addr": "0x000c4860"
+ },
+ {
+  "name": "x_length",
+  "win_va": "0x0054d5b0",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000c4818"
+ },
+ {
+  "name": "pointer_mode",
+  "win_va": "0x0054d5c0",
+  "tier": "exact",
+  "votes": "14/14",
+  "ps_addr": "0x000cccbd"
+ },
+ {
+  "name": "fb_max_width_reached",
+  "win_va": "0x0054d5c4",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x000c4890"
+ },
+ {
+  "name": "fb_no_of_lines",
+  "win_va": "0x0054d5c8",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x000c4924"
+ },
+ {
+  "name": "mice",
+  "win_va": "0x0054d5d0",
+  "tier": "exact",
+  "votes": "1/1",
+  "ps_addr": "0x000c4f0a"
+ },
+ {
+  "name": "slider_total",
+  "win_va": "0x0054f788",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x000c21e4"
+ },
+ {
+  "name": "c2inf",
+  "win_va": "0x0054f790",
+  "tier": "exact",
+  "votes": "13/13",
+  "ps_addr": "0x0009cff0"
+ },
+ {
+  "name": "dad",
+  "win_va": "0x0054f7d8",
+  "tier": "exact",
+  "votes": "24/24",
+  "ps_addr": "0x00117eec"
+ },
+ {
+  "name": "pmp_optr",
+  "win_va": "0x0054f7dc",
+  "tier": "instr-multi",
+  "votes": "12/13",
+  "ps_addr": "0x00117efc"
+ },
+ {
+  "name": "pmp_length",
+  "win_va": "0x0054f7e0",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00117ef4"
+ },
+ {
+  "name": "lson",
+  "win_va": "0x0054f7e4",
+  "tier": "exact",
+  "votes": "20/20",
+  "ps_addr": "0x00117f0c"
+ },
+ {
+  "name": "son",
+  "win_va": "0x0054f7e8",
+  "tier": "exact",
+  "votes": "17/17",
+  "ps_addr": "0x00117f24"
+ },
+ {
+  "name": "prnt",
+  "win_va": "0x0054f7ec",
+  "tier": "exact",
+  "votes": "17/17",
+  "ps_addr": "0x00117f14"
+ },
+ {
+  "name": "pmp_outbuff",
+  "win_va": "0x0054f7f0",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00117f10"
+ },
+ {
+  "name": "text_buf",
+  "win_va": "0x0054f7f4",
+  "tier": "exact",
+  "votes": "4/4",
+  "ps_addr": "0x00117f18"
+ },
+ {
+  "name": "rson",
+  "win_va": "0x0054f7f8",
+  "tier": "exact",
+  "votes": "22/22",
+  "ps_addr": "0x00117f08"
+ },
+ {
+  "name": "codesize",
+  "win_va": "0x0054f7fc",
+  "tier": "instr-multi",
+  "votes": "5/5",
+  "ps_addr": "0x00117f1c"
+ },
+ {
+  "name": "getbuf",
+  "win_va": "0x0054f800",
+  "tier": "instr-multi",
+  "votes": "10/10",
+  "ps_addr": "0x00117f2a"
+ },
+ {
+  "name": "freq",
+  "win_va": "0x0054f804",
+  "tier": "exact",
+  "votes": "25/25",
+  "ps_addr": "0x00117ef8"
+ },
+ {
+  "name": "putbuf",
+  "win_va": "0x0054f808",
+  "tier": "instr-multi",
+  "votes": "9/9",
+  "ps_addr": "0x00117f2c"
+ },
+ {
+  "name": "getlen",
+  "win_va": "0x0054f80a",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00117f31"
+ },
+ {
+  "name": "pmp_iptr",
+  "win_va": "0x0054f80c",
+  "tier": "instr-multi",
+  "votes": "10/10",
+  "ps_addr": "0x00117f00"
+ },
+ {
+  "name": "pmp_inbuff",
+  "win_va": "0x0054f810",
+  "tier": "instr-multi",
+  "votes": "4/4",
+  "ps_addr": "0x00117ef0"
+ },
+ {
+  "name": "putlen",
+  "win_va": "0x0054f814",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00117f30"
+ },
+ {
+  "name": "match_position",
+  "win_va": "0x0054f816",
+  "tier": "exact",
+  "votes": "3/3",
+  "ps_addr": "0x00117f2e"
+ },
+ {
+  "name": "textsize",
+  "win_va": "0x0054f818",
+  "tier": "instr-multi",
+  "votes": "3/3",
+  "ps_addr": "0x00117f04"
+ },
+ {
+  "name": "match_length",
+  "win_va": "0x0054f81c",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x00117f28"
+ },
+ {
+  "name": "ref_x",
+  "win_va": "0x0054f820",
+  "tier": "instr-multi",
+  "votes": "22/23",
+  "ps_addr": "0x000cf774"
+ },
+ {
+  "name": "ref_y",
+  "win_va": "0x0054f824",
+  "tier": "instr-multi",
+  "votes": "21/22",
+  "ps_addr": "0x000cf770"
+ },
+ {
+  "name": "svga_refresh_table",
+  "win_va": "0x0054f830",
+  "tier": "exact",
+  "votes": "26/26",
+  "ps_addr": "0x000cf780"
+ },
+ {
+  "name": "ref_ptr",
+  "win_va": "0x0054fd84",
+  "tier": "exact",
+  "votes": "33/33",
+  "ps_addr": "0x000cf778"
+ },
+ {
+  "name": "svga_refresh_data",
+  "win_va": "0x0054fd90",
+  "tier": "instr-multi",
+  "votes": "5/6",
+  "ps_addr": "0x000ccce8"
+ },
+ {
+  "name": "temp_demand_count",
+  "win_va": "0x00553670",
+  "tier": "instr-multi",
+  "votes": "6/6",
+  "ps_addr": "0x00117c94"
+ },
+ {
+  "name": "age_count",
+  "win_va": "0x00554abc",
+  "tier": "exact",
+  "votes": "10/10",
+  "ps_addr": "0x00117cd4"
+ },
+ {
+  "name": "dig",
+  "win_va": "0x0055b67c",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0011819c"
+ },
+ {
+  "name": "ambient_list",
+  "win_va": "0x0055b690",
+  "tier": "exact",
+  "votes": "145/164",
+  "ps_addr": "0x000a4160"
+ },
+ {
+  "name": "ss_entries",
+  "win_va": "0x0055bf90",
+  "tier": "exact",
+  "votes": "5/5",
+  "ps_addr": "0x0009d2a8"
+ },
+ {
+  "name": "sslot",
+  "win_va": "0x0055c058",
+  "tier": "exact",
+  "votes": "2/2",
+  "ps_addr": "0x000a4140"
+ },
+ {
+  "name": "samples_running",
+  "win_va": "0x0055c068",
+  "tier": "instr-single",
+  "votes": "1/1",
+  "ps_addr": "0x0009d5b8"
+ },
+ {
+  "name": "smacker_open",
+  "win_va": "0x0055c2f4",
+  "tier": "instr-multi",
+  "votes": "2/2",
+  "ps_addr": "0x0009d394"
+ },
+ {
+  "name": "battle_window_mode",
+  "win_va": "0x004d06c8",
+  "tier": "exact",
+  "votes": "2/2"
+ },
+ {
+  "name": "window_status",
+  "win_va": "0x004d130c",
+  "tier": "exact",
+  "votes": "1/1"
+ },
+ {
+  "name": "game_paused",
+  "win_va": "0x0054f7a8",
+  "tier": "exact",
+  "votes": "2/2"
+ },
+ {
+  "name": "saved_game_window_status",
+  "win_va": "0x00554af8",
+  "tier": "exact",
+  "votes": "3/3"
+ },
+ {
+  "name": "game_window_rect",
+  "win_va": "0x00554aa0",
+  "tier": "exact",
+  "votes": "1/1"
+ },
+ {
+  "name": "game_window",
+  "win_va": "0x00552820",
+  "tier": "exact",
+  "votes": "1/1"
+ },
+ {
+  "name": "main_window",
+  "win_va": "0x00552ce0",
+  "tier": "exact",
+  "votes": "1/1"
+ },
+ {
+  "name": "GetWindowRect",
+  "win_va": "0x0055e710",
+  "tier": "exact",
+  "votes": "1/1"
+ },
+ {
+  "name": "cursor_count",
+  "win_va": "0x004de3dc",
+  "tier": "native-xref",
+  "votes": "4/4"
+ },
+ {
+  "name": "battle_landfill_count",
+  "win_va": "0x004de3e4",
+  "tier": "native-xref",
+  "votes": "5/5"
+ },
+ {
+  "name": "prev_mode",
+  "win_va": "0x004de344",
+  "tier": "native-xref",
+  "votes": "10/10"
+ },
+ {
+  "name": "icon_over",
+  "win_va": "0x004de310",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bs_type",
+  "win_va": "0x004de300",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bs_morale",
+  "win_va": "0x004de33c",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bs_men",
+  "win_va": "0x004de2ec",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bs_nof_units",
+  "win_va": "0x004de314",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bt_their_men",
+  "win_va": "0x004de318",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bt_our_men",
+  "win_va": "0x004de32c",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bt_their_morale",
+  "win_va": "0x004de31c",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "bt_our_morale",
+  "win_va": "0x004de334",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "old_paused",
+  "win_va": "0x004de340",
+  "tier": "native-xref",
+  "votes": "1/1"
+ },
+ {
+  "name": "tribune_flag_counter",
+  "win_va": "0x004de2f0",
+  "tier": "native-xref",
+  "votes": "6/6"
+ },
+ {
+  "name": "old_population",
+  "win_va": "0x004de338",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "old_cost",
+  "win_va": "0x004de330",
+  "tier": "native-xref",
+  "votes": "3/3"
+ },
+ {
+  "name": "alarm_chime_counter",
+  "win_va": "0x004de328",
+  "tier": "native-xref",
+  "votes": "3/3"
+ },
+ {
+  "name": "alarm_blink_timer",
+  "win_va": "0x004de2fc",
+  "tier": "native-xref",
+  "votes": "3/3"
+ },
+ {
+  "name": "alarm_blink_state",
+  "win_va": "0x004de2f4",
+  "tier": "native-xref",
+  "votes": "4/4"
+ },
+ {
+  "name": "cached_denarii",
+  "win_va": "0x004de320",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "cached_month",
+  "win_va": "0x004de308",
+  "tier": "native-xref",
+  "votes": "2/2"
+ },
+ {
+  "name": "diamond_ofsets_2x",
+  "win_va": "0x004d41a8",
+  "tier": "native-xref",
+  "votes": "5/5",
+  "ps_addr": "0x00094230"
+ },
+ {
+  "name": "diamond_ofsets_3x",
+  "win_va": "0x004d41b0",
+  "tier": "native-xref",
+  "votes": "3/3",
+  "ps_addr": "0x00094234"
+ },
+ {
+  "name": "diamond_ofsets_4x",
+  "win_va": "0x004d41c0",
+  "tier": "native-xref",
+  "votes": "3/3",
+  "ps_addr": "0x0009423d"
+ },
+ {
+  "name": "coast_data",
+  "win_va": "0x004d47a0",
+  "tier": "native-xref",
+  "votes": "2/2",
+  "ps_addr": "0x00094807"
+ },
+ {
+  "name": "river_data",
+  "win_va": "0x004d4a48",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094aab"
+ },
+ {
+  "name": "road_data",
+  "win_va": "0x004d4a90",
+  "tier": "native-xref",
+  "votes": "2/2",
+  "ps_addr": "0x00094af3"
+ },
+ {
+  "name": "wall_data",
+  "win_va": "0x004d4b50",
+  "tier": "native-xref",
+  "votes": "2/2",
+  "ps_addr": "0x00094bb3"
+ },
+ {
+  "name": "tower_data",
+  "win_va": "0x004d4bf8",
+  "tier": "native-xref",
+  "votes": "2/2",
+  "ps_addr": "0x00094c5b"
+ },
+ {
+  "name": "gateway_data",
+  "win_va": "0x004d4cb8",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094d1b"
+ },
+ {
+  "name": "gateway2_data",
+  "win_va": "0x004d4d00",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094d63"
+ },
+ {
+  "name": "regwallroad_data",
+  "win_va": "0x004d4d18",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094d7b"
+ },
+ {
+  "name": "aquaduct_data",
+  "win_va": "0x004d4d30",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094d93"
+ },
+ {
+  "name": "aquaroad_data",
+  "win_va": "0x004d4dd8",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094e3b"
+ },
+ {
+  "name": "aquawall_data",
+  "win_va": "0x004d4df0",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094e53"
+ },
+ {
+  "name": "wallaqua_data",
+  "win_va": "0x004d4e08",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094e6b"
+ },
+ {
+  "name": "resevoir_data",
+  "win_va": "0x004d4e20",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x00094e83"
+ },
+ {
+  "name": "houses_to_people",
+  "win_va": "0x004d6948",
+  "tier": "native-xref",
+  "votes": "1/1",
+  "ps_addr": "0x0009696b"
+ },
+ {
+  "name": "danger_flag_map_mode",
+  "win_va": "0x004e6910",
+  "tier": "native-xref",
+  "votes": "2/2",
+  "ps_addr": "0x00102ce8"
+ },
+ {
+  "name": "temp_route",
+  "win_va": "0x00526d30",
+  "tier": "native-xref",
+  "votes": "9/9",
+  "ps_addr": "0x00117ecc"
+ },
+ {
+  "name": "mouse_left_button",
+  "win_va": "0x0054f78c",
+  "tier": "native-xref",
+  "votes": "4/4",
+  "ps_addr": "0x0012ccc0"
+ }
+]

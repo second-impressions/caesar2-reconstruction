@@ -1929,14 +1929,9 @@ int use_city_overmap_to_move(void)
 {
     int map_x;
     int map_y;
-    int target_cm_ptr;
 
-    if (mouse_left_preclick == 0) {
-        return 0;
-    }
-    if (last_icon_over != 2) {
-        return 0;
-    }
+    if (mouse_left_preclick == 0) return 0;
+    if (last_icon_over != 2) return 0;
 
     if (mouse_y < com_y && (com_y - 0x18) <= mouse_y) {
         if (mouse_x >= 0x25c) {
@@ -1949,11 +1944,15 @@ int use_city_overmap_to_move(void)
 
     map_x = (mouse_x - com_x) / 2;
     map_y = (mouse_y - com_y) / 4 * 2;
-    target_cm_ptr = (map_y * map_actual_width + map_x) * map_actual_atom;
-    if (jump_to_citymap_ptr(target_cm_ptr) != 0) {
-        return 1;
+    {
+        int target_cm_ptr;
+
+        target_cm_ptr = (map_y * map_actual_width + map_x) * map_actual_atom;
+        if (jump_to_citymap_ptr(target_cm_ptr) == 0) {
+            return 0;
+        }
     }
-    return 0;
+    return 1;
 }
 
 #if PLATFORM_WINDOWS

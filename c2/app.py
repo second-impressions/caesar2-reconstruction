@@ -16,6 +16,7 @@ from c2.commands.delink import delink
 from c2.commands.rebuild import rebuild
 from c2.commands.reccmp import app as reccmp_app
 from c2.commands.fetch_original import fetch_original
+from c2.commands.win_verify import win_verify
 
 app = typer.Typer(
     name="c2",
@@ -26,4 +27,5 @@ app = typer.Typer(
 app.command("fetch-original")(fetch_original)
 app.command("delink")(delink)
 app.command("rebuild")(rebuild)
+app.command("win-verify")(win_verify)
 app.add_typer(reccmp_app, name="reccmp")
