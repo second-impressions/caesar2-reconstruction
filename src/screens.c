@@ -3625,7 +3625,8 @@ void show_query_house_advice(void)
                       (query_panel_reduction + 9) * 0x10 + 0x20,
                       0x160, 0x64, 0, 0, font1, 0x10);
 
-    if (q_lv < next_promotion_level) { font_list(0x3d, 0x56, 0x48, query_panel_reduction * 0x10 + 0x88, font1, 0xd); } }
+    if (q_lv < next_promotion_level) { font_list(0x3d, 0x56, 0x48, query_panel_reduction * 0x10 + 0x88, font1, 0xd); }
+}
 
 // Explain the queried business's output using supplies, workforce, market, trade, and road access.
 // FUNCTION: C2 0x63638

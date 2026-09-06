@@ -865,6 +865,10 @@ def rebuild(
     cflags: Annotated[str, typer.Option(
         "--cflags",
         help="Compiler flags for recovered C sources.")] = PS_CFLAGS,
+    require_exact: Annotated[bool, typer.Option(
+        "--require-exact",
+        help="Exit non-zero unless the bound rebuild is whole-file "
+             "byte-exact with the original (the CI gate).")] = False,
 ) -> dict | None:
     """Build a runnable PS.EXE from recovered source + delinked objects."""
     t_start = time.perf_counter()
@@ -1270,4 +1274,15 @@ def rebuild(
     typer.echo(f"built {output}  ({output.stat().st_size} bytes, "
                f"{'DOS/4GW-bound, self-contained' if bind else 'LE, needs dos4gw.exe'}"
                f", {time.perf_counter() - t_start:.1f}s)")
+    if require_exact:
+        if compare_report is None:
+            typer.echo("--require-exact needs --compare and --bind", err=True)
+            raise typer.Exit(2)
+        whole = compare_report.get("whole_file_byte_diff")
+        if whole != 0 or not compare_report.get("debug_grafted"):
+            typer.echo(f"NOT byte-exact: {whole} differing byte(s) "
+                       f"(debug trailer grafted: "
+                       f"{bool(compare_report.get('debug_grafted'))})", err=True)
+            raise typer.Exit(1)
+        typer.echo("  byte-exact: rebuild matches the original whole-file")
     return compare_report
