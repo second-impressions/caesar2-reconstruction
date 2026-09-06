@@ -62,7 +62,10 @@ uv run c2 win-verify --require-exact       # the CI gate
 
 Beware that MSVC 4.0's stack-slot assignment depends on local *names* and
 on the symbol table built up to that point in the TU, so a rename or a
-removed prototype can change the Windows bytes while `PS.EXE` stays exact.
+removed prototype can change the Windows bytes while `PS.EXE` stays exact —
+and one enum constant added to a shared header re-slots functions in every
+TU that includes it (91 of them, measured). Name things in comments, not in
+new symbols.
 
 Every pull request and push to `main` runs both gates in CI
 (`.github/workflows/verify.yml`): `c2 rebuild --require-exact` must be
