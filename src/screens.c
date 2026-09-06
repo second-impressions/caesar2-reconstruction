@@ -4140,7 +4140,7 @@ void get_query_info(void)
     if (q_type < 0x82)
         size = 1;
     else
-        size = reg_aquaduct_gfxdat[q_type + 8];
+        size = size2_from_type[q_type - 0x82];
 
     subx = suby = 0;
     if (size > 1) {

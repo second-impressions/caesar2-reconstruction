@@ -1524,11 +1524,12 @@ int one_aquaduct_ramification(void)
             choice = choose_from(aquaduct_data, 0xe);
         }
         if (choice != 0) {
+            /* aquaduct_data choices are 0xcb..0xd4, the entries of aquaduct_gfxdat. */
             (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).base_kind = first_choice;
             (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits &= 0xe3;
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].edge_bits;
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
-            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = wall_gfxdat[first_choice - WALL_GFX_FIRST_TILE].sprite;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).edge_bits |= aquaduct_gfxdat[first_choice - 0xcb].edge_bits;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge = aquaduct_gfxdat[first_choice - 0xcb].sprite;
+            (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).building = aquaduct_gfxdat[first_choice - 0xcb].sprite;
             if (polar == 3) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 2;
             else if (polar >= 1) (*(struct city_cell *)((unsigned char *)city_map + (gmn_sptr))).extra_edge += 1;
             return 1;
