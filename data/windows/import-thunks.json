@@ -1,0 +1,7186 @@
+{
+  "schema_version": 1,
+  "binary_sha256": "caca2babb57d9450d8d500b51ffaa4c037b25c8fa0326d43002a281a7ba69f58",
+  "function_starts": 2159,
+  "imports_total": 222,
+  "imports_by_dll": {
+    "COMCTL32.dll": 1,
+    "comdlg32.dll": 2,
+    "GDI32.dll": 20,
+    "KERNEL32.dll": 76,
+    "smackw32.dll": 14,
+    "USER32.dll": 67,
+    "wail32.dll": 32,
+    "WING32.dll": 7,
+    "WINMM.dll": 3
+  },
+  "text_import_thunks_total": 24,
+  "text_import_thunks": [
+    {
+      "win_va": "0x004bef74",
+      "size": 6,
+      "iat_va": "0x0055e728",
+      "dll": "comdlg32.dll",
+      "dependency_class": "system-dll",
+      "name": "GetSaveFileNameA"
+    },
+    {
+      "win_va": "0x004bef7a",
+      "size": 6,
+      "iat_va": "0x0055e72c",
+      "dll": "comdlg32.dll",
+      "dependency_class": "system-dll",
+      "name": "GetOpenFileNameA"
+    },
+    {
+      "win_va": "0x004bef80",
+      "size": 6,
+      "iat_va": "0x0055e750",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 49,
+      "resolved_name": "_SmackSoundUseMSS"
+    },
+    {
+      "win_va": "0x004bef86",
+      "size": 6,
+      "iat_va": "0x0055e734",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 14,
+      "resolved_name": "_SmackClose"
+    },
+    {
+      "win_va": "0x004bef8c",
+      "size": 6,
+      "iat_va": "0x0055e764",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 3,
+      "resolved_name": "_SmackBufferClose"
+    },
+    {
+      "win_va": "0x004bef92",
+      "size": 6,
+      "iat_va": "0x0055e744",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 21,
+      "resolved_name": "_SmackNextFrame"
+    },
+    {
+      "win_va": "0x004bef98",
+      "size": 6,
+      "iat_va": "0x0055e740",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 32,
+      "resolved_name": "_SmackWait"
+    },
+    {
+      "win_va": "0x004bef9e",
+      "size": 6,
+      "iat_va": "0x0055e73c",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 1,
+      "resolved_name": "_SmackBufferBlit"
+    },
+    {
+      "win_va": "0x004befa4",
+      "size": 6,
+      "iat_va": "0x0055e738",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 29,
+      "resolved_name": "_SmackToBufferRect"
+    },
+    {
+      "win_va": "0x004befaa",
+      "size": 6,
+      "iat_va": "0x0055e74c",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 17,
+      "resolved_name": "_SmackDoFrame"
+    },
+    {
+      "win_va": "0x004befb0",
+      "size": 6,
+      "iat_va": "0x0055e748",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 7,
+      "resolved_name": "_SmackBufferNewPalette"
+    },
+    {
+      "win_va": "0x004befb6",
+      "size": 6,
+      "iat_va": "0x0055e768",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 26,
+      "resolved_name": "_SmackSoundOnOff"
+    },
+    {
+      "win_va": "0x004befbc",
+      "size": 6,
+      "iat_va": "0x0055e754",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 28,
+      "resolved_name": "_SmackToBuffer"
+    },
+    {
+      "win_va": "0x004befc2",
+      "size": 6,
+      "iat_va": "0x0055e758",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 8,
+      "resolved_name": "_SmackBufferOpen"
+    },
+    {
+      "win_va": "0x004befc8",
+      "size": 6,
+      "iat_va": "0x0055e75c",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 22,
+      "resolved_name": "_SmackOpen"
+    },
+    {
+      "win_va": "0x004befce",
+      "size": 6,
+      "iat_va": "0x0055e760",
+      "dll": "smackw32.dll",
+      "dependency_class": "third-party-dll",
+      "ordinal": 31,
+      "resolved_name": "_SmackVolumePan"
+    },
+    {
+      "win_va": "0x004befd4",
+      "size": 6,
+      "iat_va": "0x0055e80c",
+      "dll": "WING32.dll",
+      "dependency_class": "system-dll",
+      "name": "WinGSetDIBColorTable"
+    },
+    {
+      "win_va": "0x004befda",
+      "size": 6,
+      "iat_va": "0x0055e808",
+      "dll": "WING32.dll",
+      "dependency_class": "system-dll",
+      "name": "WinGBitBlt"
+    },
+    {
+      "win_va": "0x004befe0",
+      "size": 6,
+      "iat_va": "0x0055e804",
+      "dll": "WING32.dll",
+      "dependency_class": "system-dll",
+      "name": "WinGCreateBitmap"
+    },
+    {
+      "win_va": "0x004befe6",
+      "size": 6,
+      "iat_va": "0x0055e800",
+      "dll": "WING32.dll",
+      "dependency_class": "system-dll",
+      "name": "WinGCreateDC"
+    },
+    {
+      "win_va": "0x004befec",
+      "size": 6,
+      "iat_va": "0x0055e7fc",
+      "dll": "WING32.dll",
+      "dependency_class": "system-dll",
+      "name": "WinGRecommendDIBFormat"
+    },
+    {
+      "win_va": "0x004beff2",
+      "size": 6,
+      "iat_va": "0x0055e7f8",
+      "dll": "WING32.dll",
+      "dependency_class": "system-dll",
+      "name": "WinGGetDIBPointer"
+    },
+    {
+      "win_va": "0x004beff8",
+      "size": 6,
+      "iat_va": "0x0055e7f4",
+      "dll": "WING32.dll",
+      "dependency_class": "system-dll",
+      "name": "WinGStretchBlt"
+    },
+    {
+      "win_va": "0x004cd708",
+      "size": 6,
+      "iat_va": "0x0055e5c0",
+      "dll": "KERNEL32.dll",
+      "dependency_class": "system-dll",
+      "name": "RtlUnwind"
+    }
+  ],
+  "text_import_callers_total": 363,
+  "text_import_callers": [
+    {
+      "win_va": "0x00401000",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e7d4",
+          "dll": "wail32.dll",
+          "name": "_AIL_startup@0"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401065",
+      "size": 32,
+      "imports": [
+        {
+          "iat_va": "0x0055e7d0",
+          "dll": "wail32.dll",
+          "name": "_AIL_shutdown@0"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401085",
+      "size": 459,
+      "imports": [
+        {
+          "iat_va": "0x0055e7cc",
+          "dll": "wail32.dll",
+          "name": "_AIL_allocate_sample_handle@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401250",
+      "size": 308,
+      "imports": [
+        {
+          "iat_va": "0x0055e7c8",
+          "dll": "wail32.dll",
+          "name": "_AIL_allocate_sequence_handle@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040138f",
+      "size": 134,
+      "imports": [
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        },
+        {
+          "iat_va": "0x0055e7c4",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sample@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401415",
+      "size": 134,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b8",
+          "dll": "wail32.dll",
+          "name": "_AIL_sequence_status@4"
+        },
+        {
+          "iat_va": "0x0055e7bc",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sequence@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040149b",
+      "size": 122,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b4",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_volume@8"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401515",
+      "size": 121,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b0",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sequence_volume@12"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040158e",
+      "size": 118,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b0",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sequence_volume@12"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401604",
+      "size": 73,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b0",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sequence_volume@12"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401809",
+      "size": 389,
+      "imports": [
+        {
+          "iat_va": "0x0055e7a4",
+          "dll": "wail32.dll",
+          "name": "_AIL_init_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7a8",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_file@12"
+        },
+        {
+          "iat_va": "0x0055e7ac",
+          "dll": "wail32.dll",
+          "name": "_AIL_start_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7b4",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_volume@8"
+        },
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        },
+        {
+          "iat_va": "0x0055e7c4",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7e8",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_loop_count@8"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040198e",
+      "size": 108,
+      "imports": [
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004019ff",
+      "size": 106,
+      "imports": [
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        },
+        {
+          "iat_va": "0x0055e7c4",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sample@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401a69",
+      "size": 199,
+      "imports": [
+        {
+          "iat_va": "0x0055e7a4",
+          "dll": "wail32.dll",
+          "name": "_AIL_init_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7a8",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_file@12"
+        },
+        {
+          "iat_va": "0x0055e7ac",
+          "dll": "wail32.dll",
+          "name": "_AIL_start_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        },
+        {
+          "iat_va": "0x0055e7c4",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sample@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401b30",
+      "size": 199,
+      "imports": [
+        {
+          "iat_va": "0x0055e7a4",
+          "dll": "wail32.dll",
+          "name": "_AIL_init_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7a8",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_file@12"
+        },
+        {
+          "iat_va": "0x0055e7ac",
+          "dll": "wail32.dll",
+          "name": "_AIL_start_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        },
+        {
+          "iat_va": "0x0055e7c4",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sample@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401bf7",
+      "size": 96,
+      "imports": [
+        {
+          "iat_va": "0x0055e780",
+          "dll": "wail32.dll",
+          "name": "_AIL_load_sample_buffer@16"
+        },
+        {
+          "iat_va": "0x0055e79c",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_buffer_ready@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401c57",
+      "size": 337,
+      "imports": [
+        {
+          "iat_va": "0x0055e794",
+          "dll": "wail32.dll",
+          "name": "_AIL_minimum_sample_buffer_size@12"
+        },
+        {
+          "iat_va": "0x0055e798",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_type@12"
+        },
+        {
+          "iat_va": "0x0055e7a4",
+          "dll": "wail32.dll",
+          "name": "_AIL_init_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7ec",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_playback_rate@8"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401da8",
+      "size": 161,
+      "imports": [
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401e49",
+      "size": 120,
+      "imports": [
+        {
+          "iat_va": "0x0055e7c4",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sample@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401ec1",
+      "size": 186,
+      "imports": [
+        {
+          "iat_va": "0x0055e78c",
+          "dll": "wail32.dll",
+          "name": "_AIL_stop_sample@4"
+        },
+        {
+          "iat_va": "0x0055e790",
+          "dll": "wail32.dll",
+          "name": "_AIL_resume_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00401ffd",
+      "size": 288,
+      "imports": [
+        {
+          "iat_va": "0x0055e784",
+          "dll": "wail32.dll",
+          "name": "_AIL_register_trigger_callback@8"
+        },
+        {
+          "iat_va": "0x0055e788",
+          "dll": "wail32.dll",
+          "name": "_AIL_start_sequence@4"
+        },
+        {
+          "iat_va": "0x0055e7b8",
+          "dll": "wail32.dll",
+          "name": "_AIL_sequence_status@4"
+        },
+        {
+          "iat_va": "0x0055e7bc",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sequence@4"
+        },
+        {
+          "iat_va": "0x0055e7d8",
+          "dll": "wail32.dll",
+          "name": "_AIL_init_sequence@12"
+        },
+        {
+          "iat_va": "0x0055e7dc",
+          "dll": "wail32.dll",
+          "name": "_AIL_stop_sequence@4"
+        },
+        {
+          "iat_va": "0x0055e7e0",
+          "dll": "wail32.dll",
+          "name": "_AIL_resume_sequence@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040211d",
+      "size": 95,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b8",
+          "dll": "wail32.dll",
+          "name": "_AIL_sequence_status@4"
+        },
+        {
+          "iat_va": "0x0055e7bc",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sequence@4"
+        },
+        {
+          "iat_va": "0x0055e7dc",
+          "dll": "wail32.dll",
+          "name": "_AIL_stop_sequence@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040217c",
+      "size": 53,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b8",
+          "dll": "wail32.dll",
+          "name": "_AIL_sequence_status@4"
+        },
+        {
+          "iat_va": "0x0055e7dc",
+          "dll": "wail32.dll",
+          "name": "_AIL_stop_sequence@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004021b1",
+      "size": 76,
+      "imports": [
+        {
+          "iat_va": "0x0055e774",
+          "dll": "wail32.dll",
+          "name": "_AIL_branch_index@8"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00402abd",
+      "size": 68,
+      "imports": [
+        {
+          "iat_va": "0x0055e750",
+          "dll": "smackw32.dll",
+          "ordinal": 49,
+          "resolved_name": "_SmackSoundUseMSS"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040f5b9",
+      "size": 542,
+      "imports": [
+        {
+          "iat_va": "0x0055e5c4",
+          "dll": "KERNEL32.dll",
+          "name": "lstrcpyA"
+        },
+        {
+          "iat_va": "0x0055e6c4",
+          "dll": "USER32.dll",
+          "name": "GetFocus"
+        },
+        {
+          "iat_va": "0x0055e728",
+          "dll": "comdlg32.dll",
+          "name": "GetSaveFileNameA"
+        },
+        {
+          "iat_va": "0x0055e72c",
+          "dll": "comdlg32.dll",
+          "name": "GetOpenFileNameA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0040f8ca",
+      "size": 640,
+      "imports": [
+        {
+          "iat_va": "0x0055e494",
+          "dll": "GDI32.dll",
+          "name": "AnimatePalette"
+        },
+        {
+          "iat_va": "0x0055e4b8",
+          "dll": "GDI32.dll",
+          "name": "SetPaletteEntries"
+        },
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004167eb",
+      "size": 409,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e6c0",
+          "dll": "USER32.dll",
+          "name": "InvalidateRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00416a7e",
+      "size": 788,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e610",
+          "dll": "USER32.dll",
+          "name": "ScreenToClient"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004170ba",
+      "size": 616,
+      "imports": [
+        {
+          "iat_va": "0x0055e614",
+          "dll": "USER32.dll",
+          "name": "SetRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041733e",
+      "size": 1188,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        },
+        {
+          "iat_va": "0x0055e61c",
+          "dll": "USER32.dll",
+          "name": "UpdateWindow"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041792e",
+      "size": 816,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e624",
+          "dll": "USER32.dll",
+          "name": "GetCursorPos"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00417c63",
+      "size": 978,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e610",
+          "dll": "USER32.dll",
+          "name": "ScreenToClient"
+        },
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00418254",
+      "size": 275,
+      "imports": [
+        {
+          "iat_va": "0x0055e628",
+          "dll": "USER32.dll",
+          "name": "SetScrollPos"
+        },
+        {
+          "iat_va": "0x0055e62c",
+          "dll": "USER32.dll",
+          "name": "SetScrollRange"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004187d2",
+      "size": 1252,
+      "imports": [
+        {
+          "iat_va": "0x0055e630",
+          "dll": "USER32.dll",
+          "name": "PtInRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00418cb6",
+      "size": 996,
+      "imports": [
+        {
+          "iat_va": "0x0055e630",
+          "dll": "USER32.dll",
+          "name": "PtInRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041909a",
+      "size": 728,
+      "imports": [
+        {
+          "iat_va": "0x0055e630",
+          "dll": "USER32.dll",
+          "name": "PtInRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041a4f0",
+      "size": 1802,
+      "imports": [
+        {
+          "iat_va": "0x0055e610",
+          "dll": "USER32.dll",
+          "name": "ScreenToClient"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041b0f5",
+      "size": 1056,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d4",
+          "dll": "KERNEL32.dll",
+          "name": "Sleep"
+        },
+        {
+          "iat_va": "0x0055e634",
+          "dll": "USER32.dll",
+          "name": "DispatchMessageA"
+        },
+        {
+          "iat_va": "0x0055e638",
+          "dll": "USER32.dll",
+          "name": "TranslateMessage"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        },
+        {
+          "iat_va": "0x0055e640",
+          "dll": "USER32.dll",
+          "name": "DestroyMenu"
+        },
+        {
+          "iat_va": "0x0055e644",
+          "dll": "USER32.dll",
+          "name": "TrackPopupMenu"
+        },
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        },
+        {
+          "iat_va": "0x0055e64c",
+          "dll": "USER32.dll",
+          "name": "AppendMenuA"
+        },
+        {
+          "iat_va": "0x0055e650",
+          "dll": "USER32.dll",
+          "name": "CreatePopupMenu"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041b685",
+      "size": 852,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e654",
+          "dll": "USER32.dll",
+          "name": "IsIconic"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041b9d9",
+      "size": 785,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041bcea",
+      "size": 933,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e654",
+          "dll": "USER32.dll",
+          "name": "IsIconic"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041c08f",
+      "size": 760,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041c387",
+      "size": 187,
+      "imports": [
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041c442",
+      "size": 161,
+      "imports": [
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041c4e3",
+      "size": 161,
+      "imports": [
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041c584",
+      "size": 1142,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041c9fa",
+      "size": 434,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041cbac",
+      "size": 1207,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d063",
+      "size": 116,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d0d7",
+      "size": 153,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d199",
+      "size": 630,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d4bd",
+      "size": 294,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d5e3",
+      "size": 376,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e610",
+          "dll": "USER32.dll",
+          "name": "ScreenToClient"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d75b",
+      "size": 88,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d7b3",
+      "size": 88,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d80b",
+      "size": 92,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d867",
+      "size": 247,
+      "imports": [
+        {
+          "iat_va": "0x0055e494",
+          "dll": "GDI32.dll",
+          "name": "AnimatePalette"
+        },
+        {
+          "iat_va": "0x0055e4b8",
+          "dll": "GDI32.dll",
+          "name": "SetPaletteEntries"
+        },
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0041d95e",
+      "size": 589,
+      "imports": [
+        {
+          "iat_va": "0x0055e494",
+          "dll": "GDI32.dll",
+          "name": "AnimatePalette"
+        },
+        {
+          "iat_va": "0x0055e4b8",
+          "dll": "GDI32.dll",
+          "name": "SetPaletteEntries"
+        },
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0042a52e",
+      "size": 197,
+      "imports": [
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00432c90",
+      "size": 292,
+      "imports": [
+        {
+          "iat_va": "0x0055e70c",
+          "dll": "USER32.dll",
+          "name": "MessageBoxA"
+        },
+        {
+          "iat_va": "0x0055e718",
+          "dll": "WINMM.dll",
+          "name": "waveOutGetDevCapsA"
+        },
+        {
+          "iat_va": "0x0055e71c",
+          "dll": "WINMM.dll",
+          "name": "waveOutGetNumDevs"
+        },
+        {
+          "iat_va": "0x0055e750",
+          "dll": "smackw32.dll",
+          "ordinal": 49,
+          "resolved_name": "_SmackSoundUseMSS"
+        },
+        {
+          "iat_va": "0x0055e770",
+          "dll": "wail32.dll",
+          "name": "_AIL_last_error@0"
+        },
+        {
+          "iat_va": "0x0055e7e4",
+          "dll": "wail32.dll",
+          "name": "_AIL_waveOutOpen@16"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00432db4",
+      "size": 176,
+      "imports": [
+        {
+          "iat_va": "0x0055e70c",
+          "dll": "USER32.dll",
+          "name": "MessageBoxA"
+        },
+        {
+          "iat_va": "0x0055e720",
+          "dll": "WINMM.dll",
+          "name": "midiOutGetNumDevs"
+        },
+        {
+          "iat_va": "0x0055e770",
+          "dll": "wail32.dll",
+          "name": "_AIL_last_error@0"
+        },
+        {
+          "iat_va": "0x0055e77c",
+          "dll": "wail32.dll",
+          "name": "_AIL_midiOutOpen@12"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00432e64",
+      "size": 113,
+      "imports": [
+        {
+          "iat_va": "0x0055e780",
+          "dll": "wail32.dll",
+          "name": "_AIL_load_sample_buffer@16"
+        },
+        {
+          "iat_va": "0x0055e79c",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_buffer_ready@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00432ed5",
+      "size": 137,
+      "imports": [
+        {
+          "iat_va": "0x0055e7cc",
+          "dll": "wail32.dll",
+          "name": "_AIL_allocate_sample_handle@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00432f5e",
+      "size": 120,
+      "imports": [
+        {
+          "iat_va": "0x0055e7a0",
+          "dll": "wail32.dll",
+          "name": "_AIL_release_sample_handle@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004334a8",
+      "size": 394,
+      "imports": [
+        {
+          "iat_va": "0x0055e798",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_type@12"
+        },
+        {
+          "iat_va": "0x0055e7a4",
+          "dll": "wail32.dll",
+          "name": "_AIL_init_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7b4",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_volume@8"
+        },
+        {
+          "iat_va": "0x0055e7ec",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_playback_rate@8"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00433632",
+      "size": 264,
+      "imports": [
+        {
+          "iat_va": "0x0055e778",
+          "dll": "wail32.dll",
+          "name": "_AIL_serve@0"
+        },
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043373a",
+      "size": 87,
+      "imports": [
+        {
+          "iat_va": "0x0055e7b4",
+          "dll": "wail32.dll",
+          "name": "_AIL_set_sample_volume@8"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00433791",
+      "size": 65,
+      "imports": [
+        {
+          "iat_va": "0x0055e7c4",
+          "dll": "wail32.dll",
+          "name": "_AIL_end_sample@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004337d2",
+      "size": 234,
+      "imports": [
+        {
+          "iat_va": "0x0055e78c",
+          "dll": "wail32.dll",
+          "name": "_AIL_stop_sample@4"
+        },
+        {
+          "iat_va": "0x0055e790",
+          "dll": "wail32.dll",
+          "name": "_AIL_resume_sample@4"
+        },
+        {
+          "iat_va": "0x0055e7c0",
+          "dll": "wail32.dll",
+          "name": "_AIL_sample_status@4"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004338e5",
+      "size": 71,
+      "imports": [
+        {
+          "iat_va": "0x0055e4f0",
+          "dll": "KERNEL32.dll",
+          "name": "CreateThread"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043398c",
+      "size": 95,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d4",
+          "dll": "KERNEL32.dll",
+          "name": "Sleep"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004339eb",
+      "size": 59,
+      "imports": [
+        {
+          "iat_va": "0x0055e4f8",
+          "dll": "KERNEL32.dll",
+          "name": "ResumeThread"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00433a26",
+      "size": 23,
+      "imports": [
+        {
+          "iat_va": "0x0055e4f4",
+          "dll": "KERNEL32.dll",
+          "name": "SuspendThread"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434159",
+      "size": 578,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434445",
+      "size": 135,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004344cc",
+      "size": 85,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434521",
+      "size": 85,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434594",
+      "size": 83,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004345e7",
+      "size": 239,
+      "imports": [
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004346d6",
+      "size": 257,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        },
+        {
+          "iat_va": "0x0055e704",
+          "dll": "USER32.dll",
+          "name": "GetTopWindow"
+        },
+        {
+          "iat_va": "0x0055e708",
+          "dll": "USER32.dll",
+          "name": "GetWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004347d7",
+      "size": 277,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        },
+        {
+          "iat_va": "0x0055e704",
+          "dll": "USER32.dll",
+          "name": "GetTopWindow"
+        },
+        {
+          "iat_va": "0x0055e708",
+          "dll": "USER32.dll",
+          "name": "GetWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004348ec",
+      "size": 158,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043498a",
+      "size": 125,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434a07",
+      "size": 144,
+      "imports": [
+        {
+          "iat_va": "0x0055e654",
+          "dll": "USER32.dll",
+          "name": "IsIconic"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434a97",
+      "size": 60,
+      "imports": [
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434ad3",
+      "size": 776,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00434ddb",
+      "size": 776,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00435125",
+      "size": 703,
+      "imports": [
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e808",
+          "dll": "WING32.dll",
+          "name": "WinGBitBlt"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004353e4",
+      "size": 1480,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        },
+        {
+          "iat_va": "0x0055e654",
+          "dll": "USER32.dll",
+          "name": "IsIconic"
+        },
+        {
+          "iat_va": "0x0055e6f4",
+          "dll": "USER32.dll",
+          "name": "IntersectRect"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004359ac",
+      "size": 1392,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        },
+        {
+          "iat_va": "0x0055e654",
+          "dll": "USER32.dll",
+          "name": "IsIconic"
+        },
+        {
+          "iat_va": "0x0055e6f4",
+          "dll": "USER32.dll",
+          "name": "IntersectRect"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00435f1c",
+      "size": 625,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        },
+        {
+          "iat_va": "0x0055e6f4",
+          "dll": "USER32.dll",
+          "name": "IntersectRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00436243",
+      "size": 189,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00436300",
+      "size": 189,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e614",
+          "dll": "USER32.dll",
+          "name": "SetRect"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004363bd",
+      "size": 151,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e610",
+          "dll": "USER32.dll",
+          "name": "ScreenToClient"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043650b",
+      "size": 128,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043658b",
+      "size": 170,
+      "imports": [
+        {
+          "iat_va": "0x0055e610",
+          "dll": "USER32.dll",
+          "name": "ScreenToClient"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043663f",
+      "size": 111,
+      "imports": [
+        {
+          "iat_va": "0x0055e6ec",
+          "dll": "USER32.dll",
+          "name": "LoadCursorA"
+        },
+        {
+          "iat_va": "0x0055e6f0",
+          "dll": "USER32.dll",
+          "name": "SetCursor"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004366ae",
+      "size": 60,
+      "imports": [
+        {
+          "iat_va": "0x0055e4a0",
+          "dll": "GDI32.dll",
+          "name": "GetPaletteEntries"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004366ea",
+      "size": 74,
+      "imports": [
+        {
+          "iat_va": "0x0055e498",
+          "dll": "GDI32.dll",
+          "name": "SetTextColor"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043684d",
+      "size": 477,
+      "imports": [
+        {
+          "iat_va": "0x0055e49c",
+          "dll": "GDI32.dll",
+          "name": "TextOutA"
+        },
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e614",
+          "dll": "USER32.dll",
+          "name": "SetRect"
+        },
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        },
+        {
+          "iat_va": "0x0055e6e8",
+          "dll": "USER32.dll",
+          "name": "DrawTextA"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00436ac1",
+      "size": 141,
+      "imports": [
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        },
+        {
+          "iat_va": "0x0055e6e4",
+          "dll": "USER32.dll",
+          "name": "CheckMenuItem"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00436e9f",
+      "size": 126,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00436f9d",
+      "size": 995,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00437385",
+      "size": 907,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00437790",
+      "size": 338,
+      "imports": [
+        {
+          "iat_va": "0x0055e4ac",
+          "dll": "GDI32.dll",
+          "name": "GetDeviceCaps"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e70c",
+          "dll": "USER32.dll",
+          "name": "MessageBoxA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004378e7",
+      "size": 139,
+      "imports": [
+        {
+          "iat_va": "0x0055e4e4",
+          "dll": "KERNEL32.dll",
+          "name": "GlobalMemoryStatus"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00437972",
+      "size": 1019,
+      "imports": [
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6c0",
+          "dll": "USER32.dll",
+          "name": "InvalidateRect"
+        },
+        {
+          "iat_va": "0x0055e6c8",
+          "dll": "USER32.dll",
+          "name": "PostQuitMessage"
+        },
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00437d8b",
+      "size": 333,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e6b4",
+          "dll": "USER32.dll",
+          "name": "GetSystemMetrics"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00437ed8",
+      "size": 787,
+      "imports": [
+        {
+          "iat_va": "0x0055e478",
+          "dll": "COMCTL32.dll",
+          "ordinal": 17
+        },
+        {
+          "iat_va": "0x0055e4a4",
+          "dll": "GDI32.dll",
+          "name": "GetTextMetricsA"
+        },
+        {
+          "iat_va": "0x0055e4a8",
+          "dll": "GDI32.dll",
+          "name": "SetBkMode"
+        },
+        {
+          "iat_va": "0x0055e4cc",
+          "dll": "GDI32.dll",
+          "name": "GetStockObject"
+        },
+        {
+          "iat_va": "0x0055e4ec",
+          "dll": "KERNEL32.dll",
+          "name": "GetSystemInfo"
+        },
+        {
+          "iat_va": "0x0055e69c",
+          "dll": "USER32.dll",
+          "name": "LoadIconA"
+        },
+        {
+          "iat_va": "0x0055e6a0",
+          "dll": "USER32.dll",
+          "name": "RegisterClassA"
+        },
+        {
+          "iat_va": "0x0055e6a4",
+          "dll": "USER32.dll",
+          "name": "CreateWindowExA"
+        },
+        {
+          "iat_va": "0x0055e6a8",
+          "dll": "USER32.dll",
+          "name": "LoadAcceleratorsA"
+        },
+        {
+          "iat_va": "0x0055e6ac",
+          "dll": "USER32.dll",
+          "name": "GetMenuCheckMarkDimensions"
+        },
+        {
+          "iat_va": "0x0055e6b0",
+          "dll": "USER32.dll",
+          "name": "DestroyWindow"
+        },
+        {
+          "iat_va": "0x0055e6ec",
+          "dll": "USER32.dll",
+          "name": "LoadCursorA"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        },
+        {
+          "iat_va": "0x0055e70c",
+          "dll": "USER32.dll",
+          "name": "MessageBoxA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004381f1",
+      "size": 1029,
+      "imports": [
+        {
+          "iat_va": "0x0055e4cc",
+          "dll": "GDI32.dll",
+          "name": "GetStockObject"
+        },
+        {
+          "iat_va": "0x0055e69c",
+          "dll": "USER32.dll",
+          "name": "LoadIconA"
+        },
+        {
+          "iat_va": "0x0055e6a0",
+          "dll": "USER32.dll",
+          "name": "RegisterClassA"
+        },
+        {
+          "iat_va": "0x0055e6a4",
+          "dll": "USER32.dll",
+          "name": "CreateWindowExA"
+        },
+        {
+          "iat_va": "0x0055e6ec",
+          "dll": "USER32.dll",
+          "name": "LoadCursorA"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004385f6",
+      "size": 2027,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        },
+        {
+          "iat_va": "0x0055e698",
+          "dll": "USER32.dll",
+          "name": "GetScrollRange"
+        },
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6f0",
+          "dll": "USER32.dll",
+          "name": "SetCursor"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00438f3b",
+      "size": 1828,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        },
+        {
+          "iat_va": "0x0055e698",
+          "dll": "USER32.dll",
+          "name": "GetScrollRange"
+        },
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6f0",
+          "dll": "USER32.dll",
+          "name": "SetCursor"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004397b9",
+      "size": 1350,
+      "imports": [
+        {
+          "iat_va": "0x0055e49c",
+          "dll": "GDI32.dll",
+          "name": "TextOutA"
+        },
+        {
+          "iat_va": "0x0055e4a8",
+          "dll": "GDI32.dll",
+          "name": "SetBkMode"
+        },
+        {
+          "iat_va": "0x0055e4bc",
+          "dll": "GDI32.dll",
+          "name": "DeleteObject"
+        },
+        {
+          "iat_va": "0x0055e4c4",
+          "dll": "GDI32.dll",
+          "name": "GetTextExtentPoint32A"
+        },
+        {
+          "iat_va": "0x0055e4c8",
+          "dll": "GDI32.dll",
+          "name": "CreateSolidBrush"
+        },
+        {
+          "iat_va": "0x0055e690",
+          "dll": "USER32.dll",
+          "name": "GetSysColor"
+        },
+        {
+          "iat_va": "0x0055e694",
+          "dll": "USER32.dll",
+          "name": "FillRect"
+        },
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        },
+        {
+          "iat_va": "0x0055e6f0",
+          "dll": "USER32.dll",
+          "name": "SetCursor"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00439d09",
+      "size": 109,
+      "imports": [
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00439d7b",
+      "size": 139,
+      "imports": [
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00439e0b",
+      "size": 175,
+      "imports": [
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00439ec6",
+      "size": 245,
+      "imports": [
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00439fc0",
+      "size": 235,
+      "imports": [
+        {
+          "iat_va": "0x0055e4e8",
+          "dll": "KERNEL32.dll",
+          "name": "GetPrivateProfileStringA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043a0ab",
+      "size": 162,
+      "imports": [
+        {
+          "iat_va": "0x0055e4e8",
+          "dll": "KERNEL32.dll",
+          "name": "GetPrivateProfileStringA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043a1ad",
+      "size": 75,
+      "imports": [
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043a1f8",
+      "size": 258,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        },
+        {
+          "iat_va": "0x0055e6a4",
+          "dll": "USER32.dll",
+          "name": "CreateWindowExA"
+        },
+        {
+          "iat_va": "0x0055e6b0",
+          "dll": "USER32.dll",
+          "name": "DestroyWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043a2fa",
+      "size": 46,
+      "imports": [
+        {
+          "iat_va": "0x0055e6b0",
+          "dll": "USER32.dll",
+          "name": "DestroyWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043a328",
+      "size": 195,
+      "imports": [
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043a3eb",
+      "size": 589,
+      "imports": [
+        {
+          "iat_va": "0x0055e68c",
+          "dll": "USER32.dll",
+          "name": "DestroyCursor"
+        },
+        {
+          "iat_va": "0x0055e6ec",
+          "dll": "USER32.dll",
+          "name": "LoadCursorA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0043b6cd",
+      "size": 83,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044b5a4",
+      "size": 181,
+      "imports": [
+        {
+          "iat_va": "0x0055e494",
+          "dll": "GDI32.dll",
+          "name": "AnimatePalette"
+        },
+        {
+          "iat_va": "0x0055e4b8",
+          "dll": "GDI32.dll",
+          "name": "SetPaletteEntries"
+        },
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044c055",
+      "size": 64,
+      "imports": [
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        },
+        {
+          "iat_va": "0x0055e688",
+          "dll": "USER32.dll",
+          "name": "SetCursorPos"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044c095",
+      "size": 102,
+      "imports": [
+        {
+          "iat_va": "0x0055e634",
+          "dll": "USER32.dll",
+          "name": "DispatchMessageA"
+        },
+        {
+          "iat_va": "0x0055e638",
+          "dll": "USER32.dll",
+          "name": "TranslateMessage"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        },
+        {
+          "iat_va": "0x0055e684",
+          "dll": "USER32.dll",
+          "name": "TranslateAcceleratorA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044c0fb",
+      "size": 102,
+      "imports": [
+        {
+          "iat_va": "0x0055e634",
+          "dll": "USER32.dll",
+          "name": "DispatchMessageA"
+        },
+        {
+          "iat_va": "0x0055e638",
+          "dll": "USER32.dll",
+          "name": "TranslateMessage"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        },
+        {
+          "iat_va": "0x0055e684",
+          "dll": "USER32.dll",
+          "name": "TranslateAcceleratorA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044c731",
+      "size": 121,
+      "imports": [
+        {
+          "iat_va": "0x0055e634",
+          "dll": "USER32.dll",
+          "name": "DispatchMessageA"
+        },
+        {
+          "iat_va": "0x0055e638",
+          "dll": "USER32.dll",
+          "name": "TranslateMessage"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        },
+        {
+          "iat_va": "0x0055e684",
+          "dll": "USER32.dll",
+          "name": "TranslateAcceleratorA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044e9dd",
+      "size": 27,
+      "imports": [
+        {
+          "iat_va": "0x0055e4dc",
+          "dll": "KERNEL32.dll",
+          "name": "Beep"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044e9f8",
+      "size": 24,
+      "imports": [
+        {
+          "iat_va": "0x0055e4dc",
+          "dll": "KERNEL32.dll",
+          "name": "Beep"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0044ea10",
+      "size": 24,
+      "imports": [
+        {
+          "iat_va": "0x0055e4dc",
+          "dll": "KERNEL32.dll",
+          "name": "Beep"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004521a0",
+      "size": 70,
+      "imports": [
+        {
+          "iat_va": "0x0055e680",
+          "dll": "USER32.dll",
+          "name": "WinHelpA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0045241f",
+      "size": 1357,
+      "imports": [
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0045313c",
+      "size": 416,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004532dc",
+      "size": 1221,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00453cc0",
+      "size": 1123,
+      "imports": [
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e734",
+          "dll": "smackw32.dll",
+          "ordinal": 14,
+          "resolved_name": "_SmackClose"
+        },
+        {
+          "iat_va": "0x0055e738",
+          "dll": "smackw32.dll",
+          "ordinal": 29,
+          "resolved_name": "_SmackToBufferRect"
+        },
+        {
+          "iat_va": "0x0055e73c",
+          "dll": "smackw32.dll",
+          "ordinal": 1,
+          "resolved_name": "_SmackBufferBlit"
+        },
+        {
+          "iat_va": "0x0055e740",
+          "dll": "smackw32.dll",
+          "ordinal": 32,
+          "resolved_name": "_SmackWait"
+        },
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        },
+        {
+          "iat_va": "0x0055e748",
+          "dll": "smackw32.dll",
+          "ordinal": 7,
+          "resolved_name": "_SmackBufferNewPalette"
+        },
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        },
+        {
+          "iat_va": "0x0055e754",
+          "dll": "smackw32.dll",
+          "ordinal": 28,
+          "resolved_name": "_SmackToBuffer"
+        },
+        {
+          "iat_va": "0x0055e758",
+          "dll": "smackw32.dll",
+          "ordinal": 8,
+          "resolved_name": "_SmackBufferOpen"
+        },
+        {
+          "iat_va": "0x0055e75c",
+          "dll": "smackw32.dll",
+          "ordinal": 22,
+          "resolved_name": "_SmackOpen"
+        },
+        {
+          "iat_va": "0x0055e764",
+          "dll": "smackw32.dll",
+          "ordinal": 3,
+          "resolved_name": "_SmackBufferClose"
+        },
+        {
+          "iat_va": "0x0055e768",
+          "dll": "smackw32.dll",
+          "ordinal": 26,
+          "resolved_name": "_SmackSoundOnOff"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00454128",
+      "size": 1492,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        },
+        {
+          "iat_va": "0x0055e734",
+          "dll": "smackw32.dll",
+          "ordinal": 14,
+          "resolved_name": "_SmackClose"
+        },
+        {
+          "iat_va": "0x0055e738",
+          "dll": "smackw32.dll",
+          "ordinal": 29,
+          "resolved_name": "_SmackToBufferRect"
+        },
+        {
+          "iat_va": "0x0055e73c",
+          "dll": "smackw32.dll",
+          "ordinal": 1,
+          "resolved_name": "_SmackBufferBlit"
+        },
+        {
+          "iat_va": "0x0055e740",
+          "dll": "smackw32.dll",
+          "ordinal": 32,
+          "resolved_name": "_SmackWait"
+        },
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        },
+        {
+          "iat_va": "0x0055e748",
+          "dll": "smackw32.dll",
+          "ordinal": 7,
+          "resolved_name": "_SmackBufferNewPalette"
+        },
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        },
+        {
+          "iat_va": "0x0055e754",
+          "dll": "smackw32.dll",
+          "ordinal": 28,
+          "resolved_name": "_SmackToBuffer"
+        },
+        {
+          "iat_va": "0x0055e758",
+          "dll": "smackw32.dll",
+          "ordinal": 8,
+          "resolved_name": "_SmackBufferOpen"
+        },
+        {
+          "iat_va": "0x0055e75c",
+          "dll": "smackw32.dll",
+          "ordinal": 22,
+          "resolved_name": "_SmackOpen"
+        },
+        {
+          "iat_va": "0x0055e760",
+          "dll": "smackw32.dll",
+          "ordinal": 31,
+          "resolved_name": "_SmackVolumePan"
+        },
+        {
+          "iat_va": "0x0055e764",
+          "dll": "smackw32.dll",
+          "ordinal": 3,
+          "resolved_name": "_SmackBufferClose"
+        },
+        {
+          "iat_va": "0x0055e768",
+          "dll": "smackw32.dll",
+          "ordinal": 26,
+          "resolved_name": "_SmackSoundOnOff"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00454701",
+      "size": 1435,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e63c",
+          "dll": "USER32.dll",
+          "name": "PeekMessageA"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e734",
+          "dll": "smackw32.dll",
+          "ordinal": 14,
+          "resolved_name": "_SmackClose"
+        },
+        {
+          "iat_va": "0x0055e738",
+          "dll": "smackw32.dll",
+          "ordinal": 29,
+          "resolved_name": "_SmackToBufferRect"
+        },
+        {
+          "iat_va": "0x0055e73c",
+          "dll": "smackw32.dll",
+          "ordinal": 1,
+          "resolved_name": "_SmackBufferBlit"
+        },
+        {
+          "iat_va": "0x0055e740",
+          "dll": "smackw32.dll",
+          "ordinal": 32,
+          "resolved_name": "_SmackWait"
+        },
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        },
+        {
+          "iat_va": "0x0055e748",
+          "dll": "smackw32.dll",
+          "ordinal": 7,
+          "resolved_name": "_SmackBufferNewPalette"
+        },
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        },
+        {
+          "iat_va": "0x0055e754",
+          "dll": "smackw32.dll",
+          "ordinal": 28,
+          "resolved_name": "_SmackToBuffer"
+        },
+        {
+          "iat_va": "0x0055e758",
+          "dll": "smackw32.dll",
+          "ordinal": 8,
+          "resolved_name": "_SmackBufferOpen"
+        },
+        {
+          "iat_va": "0x0055e75c",
+          "dll": "smackw32.dll",
+          "ordinal": 22,
+          "resolved_name": "_SmackOpen"
+        },
+        {
+          "iat_va": "0x0055e760",
+          "dll": "smackw32.dll",
+          "ordinal": 31,
+          "resolved_name": "_SmackVolumePan"
+        },
+        {
+          "iat_va": "0x0055e764",
+          "dll": "smackw32.dll",
+          "ordinal": 3,
+          "resolved_name": "_SmackBufferClose"
+        },
+        {
+          "iat_va": "0x0055e768",
+          "dll": "smackw32.dll",
+          "ordinal": 26,
+          "resolved_name": "_SmackSoundOnOff"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00459e8d",
+      "size": 2164,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004712b4",
+      "size": 1040,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e610",
+          "dll": "USER32.dll",
+          "name": "ScreenToClient"
+        },
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00472bc0",
+      "size": 972,
+      "imports": [
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048309c",
+      "size": 583,
+      "imports": [
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00485f8f",
+      "size": 801,
+      "imports": [
+        {
+          "iat_va": "0x0055e740",
+          "dll": "smackw32.dll",
+          "ordinal": 32,
+          "resolved_name": "_SmackWait"
+        },
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        },
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        },
+        {
+          "iat_va": "0x0055e754",
+          "dll": "smackw32.dll",
+          "ordinal": 28,
+          "resolved_name": "_SmackToBuffer"
+        },
+        {
+          "iat_va": "0x0055e75c",
+          "dll": "smackw32.dll",
+          "ordinal": 22,
+          "resolved_name": "_SmackOpen"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004862b0",
+      "size": 252,
+      "imports": [
+        {
+          "iat_va": "0x0055e734",
+          "dll": "smackw32.dll",
+          "ordinal": 14,
+          "resolved_name": "_SmackClose"
+        },
+        {
+          "iat_va": "0x0055e740",
+          "dll": "smackw32.dll",
+          "ordinal": 32,
+          "resolved_name": "_SmackWait"
+        },
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        },
+        {
+          "iat_va": "0x0055e748",
+          "dll": "smackw32.dll",
+          "ordinal": 7,
+          "resolved_name": "_SmackBufferNewPalette"
+        },
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004863ac",
+      "size": 58,
+      "imports": [
+        {
+          "iat_va": "0x0055e734",
+          "dll": "smackw32.dll",
+          "ordinal": 14,
+          "resolved_name": "_SmackClose"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048640f",
+      "size": 706,
+      "imports": [
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        },
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        },
+        {
+          "iat_va": "0x0055e754",
+          "dll": "smackw32.dll",
+          "ordinal": 28,
+          "resolved_name": "_SmackToBuffer"
+        },
+        {
+          "iat_va": "0x0055e75c",
+          "dll": "smackw32.dll",
+          "ordinal": 22,
+          "resolved_name": "_SmackOpen"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004866d1",
+      "size": 250,
+      "imports": [
+        {
+          "iat_va": "0x0055e734",
+          "dll": "smackw32.dll",
+          "ordinal": 14,
+          "resolved_name": "_SmackClose"
+        },
+        {
+          "iat_va": "0x0055e740",
+          "dll": "smackw32.dll",
+          "ordinal": 32,
+          "resolved_name": "_SmackWait"
+        },
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        },
+        {
+          "iat_va": "0x0055e748",
+          "dll": "smackw32.dll",
+          "ordinal": 7,
+          "resolved_name": "_SmackBufferNewPalette"
+        },
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004867e0",
+      "size": 998,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e67c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00486bcb",
+      "size": 165,
+      "imports": [
+        {
+          "iat_va": "0x0055e4e0",
+          "dll": "KERNEL32.dll",
+          "name": "WritePrivateProfileStringA"
+        },
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00486c70",
+      "size": 744,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e670",
+          "dll": "USER32.dll",
+          "name": "SetActiveWindow"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00486f5d",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00486fc2",
+      "size": 1583,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004875f6",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048765b",
+      "size": 791,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e67c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048797c",
+      "size": 145,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00487a0d",
+      "size": 586,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e67c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00487c5c",
+      "size": 145,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00487ced",
+      "size": 535,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00487f09",
+      "size": 90,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00487f63",
+      "size": 375,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004880df",
+      "size": 98,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488141",
+      "size": 688,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004883f6",
+      "size": 125,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488473",
+      "size": 677,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048871d",
+      "size": 87,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488774",
+      "size": 591,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004889c8",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488a2d",
+      "size": 624,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488ca2",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488cff",
+      "size": 624,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488f74",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00488fd1",
+      "size": 1110,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048942c",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00489489",
+      "size": 2216,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00489d36",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00489d93",
+      "size": 1085,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a1d5",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a232",
+      "size": 650,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a4c1",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a51e",
+      "size": 485,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a708",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a765",
+      "size": 485,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a94f",
+      "size": 93,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048a9ac",
+      "size": 451,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048ab74",
+      "size": 143,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048ac03",
+      "size": 1369,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048b161",
+      "size": 160,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048b2fa",
+      "size": 923,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048b69a",
+      "size": 67,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048b6dd",
+      "size": 1655,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048bd59",
+      "size": 67,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048d03a",
+      "size": 230,
+      "imports": [
+        {
+          "iat_va": "0x0055e614",
+          "dll": "USER32.dll",
+          "name": "SetRect"
+        },
+        {
+          "iat_va": "0x0055e6e8",
+          "dll": "USER32.dll",
+          "name": "DrawTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048d207",
+      "size": 329,
+      "imports": [
+        {
+          "iat_va": "0x0055e614",
+          "dll": "USER32.dll",
+          "name": "SetRect"
+        },
+        {
+          "iat_va": "0x0055e6e8",
+          "dll": "USER32.dll",
+          "name": "DrawTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048d350",
+      "size": 3861,
+      "imports": [
+        {
+          "iat_va": "0x0055e614",
+          "dll": "USER32.dll",
+          "name": "SetRect"
+        },
+        {
+          "iat_va": "0x0055e6e8",
+          "dll": "USER32.dll",
+          "name": "DrawTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048e83d",
+      "size": 1084,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048ed84",
+      "size": 696,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048f577",
+      "size": 460,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048f743",
+      "size": 820,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048fa77",
+      "size": 996,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048fe60",
+      "size": 86,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0048feb6",
+      "size": 988,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00490297",
+      "size": 81,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004902e8",
+      "size": 1134,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00490756",
+      "size": 361,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004908c4",
+      "size": 67,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00490907",
+      "size": 610,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00490b69",
+      "size": 869,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00490ece",
+      "size": 873,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00491237",
+      "size": 1997,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00491a09",
+      "size": 67,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00491a4c",
+      "size": 534,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00491c62",
+      "size": 535,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00491e79",
+      "size": 4836,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e630",
+          "dll": "USER32.dll",
+          "name": "PtInRect"
+        },
+        {
+          "iat_va": "0x0055e648",
+          "dll": "USER32.dll",
+          "name": "ClientToScreen"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00493268",
+      "size": 67,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004932ab",
+      "size": 1901,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00493a18",
+      "size": 3408,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00494768",
+      "size": 1723,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00494e23",
+      "size": 951,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004951df",
+      "size": 115,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00495252",
+      "size": 113,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004952c3",
+      "size": 113,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00495334",
+      "size": 682,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004955de",
+      "size": 1607,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00495c25",
+      "size": 752,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00495f15",
+      "size": 427,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004960c0",
+      "size": 981,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00496495",
+      "size": 264,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049659d",
+      "size": 1182,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        },
+        {
+          "iat_va": "0x0055e710",
+          "dll": "USER32.dll",
+          "name": "GetWindowRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00496a3b",
+      "size": 1113,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00496e94",
+      "size": 1877,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004975e9",
+      "size": 513,
+      "imports": [
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004977ea",
+      "size": 749,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00497ad7",
+      "size": 1759,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e674",
+          "dll": "USER32.dll",
+          "name": "SendDlgItemMessageA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        },
+        {
+          "iat_va": "0x0055e700",
+          "dll": "USER32.dll",
+          "name": "ShowWindow"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004981d3",
+      "size": 159,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00498272",
+      "size": 2727,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00498d23",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00498d88",
+      "size": 3204,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00499a16",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00499a7b",
+      "size": 887,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00499eff",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x00499f64",
+      "size": 2413,
+      "imports": [
+        {
+          "iat_va": "0x0055e498",
+          "dll": "GDI32.dll",
+          "name": "SetTextColor"
+        },
+        {
+          "iat_va": "0x0055e4a8",
+          "dll": "GDI32.dll",
+          "name": "SetBkMode"
+        },
+        {
+          "iat_va": "0x0055e4cc",
+          "dll": "GDI32.dll",
+          "name": "GetStockObject"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6cc",
+          "dll": "USER32.dll",
+          "name": "DefWindowProcA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049a9e7",
+      "size": 101,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049ae54",
+      "size": 531,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049b06c",
+      "size": 87,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049b4cd",
+      "size": 813,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049b804",
+      "size": 270,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049bc33",
+      "size": 542,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049be56",
+      "size": 192,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049bf16",
+      "size": 613,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049c180",
+      "size": 89,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049c1d9",
+      "size": 533,
+      "imports": [
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049c3ee",
+      "size": 2300,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e66c",
+          "dll": "USER32.dll",
+          "name": "GetDlgItem"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6c0",
+          "dll": "USER32.dll",
+          "name": "InvalidateRect"
+        },
+        {
+          "iat_va": "0x0055e6d4",
+          "dll": "USER32.dll",
+          "name": "BeginPaint"
+        },
+        {
+          "iat_va": "0x0055e6d8",
+          "dll": "USER32.dll",
+          "name": "EndPaint"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049cd62",
+      "size": 176,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049ce12",
+      "size": 1156,
+      "imports": [
+        {
+          "iat_va": "0x0055e620",
+          "dll": "USER32.dll",
+          "name": "SetWindowTextA"
+        },
+        {
+          "iat_va": "0x0055e678",
+          "dll": "USER32.dll",
+          "name": "SetDlgItemTextA"
+        },
+        {
+          "iat_va": "0x0055e6b8",
+          "dll": "USER32.dll",
+          "name": "SetTimer"
+        },
+        {
+          "iat_va": "0x0055e6bc",
+          "dll": "USER32.dll",
+          "name": "KillTimer"
+        },
+        {
+          "iat_va": "0x0055e6dc",
+          "dll": "USER32.dll",
+          "name": "EndDialog"
+        }
+      ]
+    },
+    {
+      "win_va": "0x0049d29b",
+      "size": 109,
+      "imports": [
+        {
+          "iat_va": "0x0055e6d0",
+          "dll": "USER32.dll",
+          "name": "DialogBoxParamA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004aebc5",
+      "size": 2373,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004af6fa",
+      "size": 2832,
+      "imports": [
+        {
+          "iat_va": "0x0055e660",
+          "dll": "USER32.dll",
+          "name": "GetSubMenu"
+        },
+        {
+          "iat_va": "0x0055e664",
+          "dll": "USER32.dll",
+          "name": "ModifyMenuA"
+        },
+        {
+          "iat_va": "0x0055e668",
+          "dll": "USER32.dll",
+          "name": "DrawMenuBar"
+        },
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b020a",
+      "size": 110,
+      "imports": [
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        },
+        {
+          "iat_va": "0x0055e6e4",
+          "dll": "USER32.dll",
+          "name": "CheckMenuItem"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b0278",
+      "size": 243,
+      "imports": [
+        {
+          "iat_va": "0x0055e65c",
+          "dll": "USER32.dll",
+          "name": "EnableMenuItem"
+        },
+        {
+          "iat_va": "0x0055e668",
+          "dll": "USER32.dll",
+          "name": "DrawMenuBar"
+        },
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b036b",
+      "size": 112,
+      "imports": [
+        {
+          "iat_va": "0x0055e65c",
+          "dll": "USER32.dll",
+          "name": "EnableMenuItem"
+        },
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b03db",
+      "size": 357,
+      "imports": [
+        {
+          "iat_va": "0x0055e664",
+          "dll": "USER32.dll",
+          "name": "ModifyMenuA"
+        },
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        },
+        {
+          "iat_va": "0x0055e6e4",
+          "dll": "USER32.dll",
+          "name": "CheckMenuItem"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b0540",
+      "size": 238,
+      "imports": [
+        {
+          "iat_va": "0x0055e664",
+          "dll": "USER32.dll",
+          "name": "ModifyMenuA"
+        },
+        {
+          "iat_va": "0x0055e6e0",
+          "dll": "USER32.dll",
+          "name": "GetMenu"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b0630",
+      "size": 4867,
+      "imports": [
+        {
+          "iat_va": "0x0055e4d8",
+          "dll": "KERNEL32.dll",
+          "name": "GetTickCount"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b75b9",
+      "size": 361,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b7722",
+      "size": 477,
+      "imports": [
+        {
+          "iat_va": "0x0055e618",
+          "dll": "USER32.dll",
+          "name": "BringWindowToTop"
+        },
+        {
+          "iat_va": "0x0055e658",
+          "dll": "USER32.dll",
+          "name": "SendMessageA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b9590",
+      "size": 183,
+      "imports": [
+        {
+          "iat_va": "0x0055e608",
+          "dll": "USER32.dll",
+          "name": "SetWindowPos"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b9f60",
+      "size": 143,
+      "imports": [
+        {
+          "iat_va": "0x0055e4c0",
+          "dll": "GDI32.dll",
+          "name": "CreateFontA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004b9fef",
+      "size": 86,
+      "imports": [
+        {
+          "iat_va": "0x0055e4bc",
+          "dll": "GDI32.dll",
+          "name": "DeleteObject"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba045",
+      "size": 78,
+      "imports": [
+        {
+          "iat_va": "0x0055e488",
+          "dll": "GDI32.dll",
+          "name": "SelectObject"
+        },
+        {
+          "iat_va": "0x0055e4a8",
+          "dll": "GDI32.dll",
+          "name": "SetBkMode"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba093",
+      "size": 72,
+      "imports": [
+        {
+          "iat_va": "0x0055e498",
+          "dll": "GDI32.dll",
+          "name": "SetTextColor"
+        },
+        {
+          "iat_va": "0x0055e4a0",
+          "dll": "GDI32.dll",
+          "name": "GetPaletteEntries"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba0db",
+      "size": 301,
+      "imports": [
+        {
+          "iat_va": "0x0055e484",
+          "dll": "GDI32.dll",
+          "name": "CreatePalette"
+        },
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e4bc",
+          "dll": "GDI32.dll",
+          "name": "DeleteObject"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba208",
+      "size": 623,
+      "imports": [
+        {
+          "iat_va": "0x0055e480",
+          "dll": "GDI32.dll",
+          "name": "DeleteDC"
+        },
+        {
+          "iat_va": "0x0055e488",
+          "dll": "GDI32.dll",
+          "name": "SelectObject"
+        },
+        {
+          "iat_va": "0x0055e7fc",
+          "dll": "WING32.dll",
+          "name": "WinGRecommendDIBFormat"
+        },
+        {
+          "iat_va": "0x0055e800",
+          "dll": "WING32.dll",
+          "name": "WinGCreateDC"
+        },
+        {
+          "iat_va": "0x0055e804",
+          "dll": "WING32.dll",
+          "name": "WinGCreateBitmap"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba477",
+      "size": 290,
+      "imports": [
+        {
+          "iat_va": "0x0055e480",
+          "dll": "GDI32.dll",
+          "name": "DeleteDC"
+        },
+        {
+          "iat_va": "0x0055e488",
+          "dll": "GDI32.dll",
+          "name": "SelectObject"
+        },
+        {
+          "iat_va": "0x0055e4bc",
+          "dll": "GDI32.dll",
+          "name": "DeleteObject"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba599",
+      "size": 618,
+      "imports": [
+        {
+          "iat_va": "0x0055e484",
+          "dll": "GDI32.dll",
+          "name": "CreatePalette"
+        },
+        {
+          "iat_va": "0x0055e4b4",
+          "dll": "GDI32.dll",
+          "name": "GetSystemPaletteEntries"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba803",
+      "size": 419,
+      "imports": [
+        {
+          "iat_va": "0x0055e494",
+          "dll": "GDI32.dll",
+          "name": "AnimatePalette"
+        },
+        {
+          "iat_va": "0x0055e4b8",
+          "dll": "GDI32.dll",
+          "name": "SetPaletteEntries"
+        },
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ba9fd",
+      "size": 457,
+      "imports": [
+        {
+          "iat_va": "0x0055e494",
+          "dll": "GDI32.dll",
+          "name": "AnimatePalette"
+        },
+        {
+          "iat_va": "0x0055e4b8",
+          "dll": "GDI32.dll",
+          "name": "SetPaletteEntries"
+        },
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bac30",
+      "size": 625,
+      "imports": [
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e7f8",
+          "dll": "WING32.dll",
+          "name": "WinGGetDIBPointer"
+        },
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004baea1",
+      "size": 51,
+      "imports": [
+        {
+          "iat_va": "0x0055e4bc",
+          "dll": "GDI32.dll",
+          "name": "DeleteObject"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bbc70",
+      "size": 170,
+      "imports": [
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e808",
+          "dll": "WING32.dll",
+          "name": "WinGBitBlt"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bbd1a",
+      "size": 178,
+      "imports": [
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e7f4",
+          "dll": "WING32.dll",
+          "name": "WinGStretchBlt"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bbdcc",
+      "size": 204,
+      "imports": [
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e7f4",
+          "dll": "WING32.dll",
+          "name": "WinGStretchBlt"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bbe98",
+      "size": 183,
+      "imports": [
+        {
+          "iat_va": "0x0055e48c",
+          "dll": "GDI32.dll",
+          "name": "RealizePalette"
+        },
+        {
+          "iat_va": "0x0055e490",
+          "dll": "GDI32.dll",
+          "name": "SelectPalette"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        },
+        {
+          "iat_va": "0x0055e808",
+          "dll": "WING32.dll",
+          "name": "WinGBitBlt"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bbf4f",
+      "size": 208,
+      "imports": [
+        {
+          "iat_va": "0x0055e4b0",
+          "dll": "GDI32.dll",
+          "name": "PatBlt"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bc01f",
+      "size": 134,
+      "imports": [
+        {
+          "iat_va": "0x0055e4b0",
+          "dll": "GDI32.dll",
+          "name": "PatBlt"
+        },
+        {
+          "iat_va": "0x0055e60c",
+          "dll": "USER32.dll",
+          "name": "GetClientRect"
+        },
+        {
+          "iat_va": "0x0055e6f8",
+          "dll": "USER32.dll",
+          "name": "GetDC"
+        },
+        {
+          "iat_va": "0x0055e6fc",
+          "dll": "USER32.dll",
+          "name": "ReleaseDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef74",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e728",
+          "dll": "comdlg32.dll",
+          "name": "GetSaveFileNameA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef7a",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e72c",
+          "dll": "comdlg32.dll",
+          "name": "GetOpenFileNameA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef80",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e750",
+          "dll": "smackw32.dll",
+          "ordinal": 49,
+          "resolved_name": "_SmackSoundUseMSS"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef86",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e734",
+          "dll": "smackw32.dll",
+          "ordinal": 14,
+          "resolved_name": "_SmackClose"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef8c",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e764",
+          "dll": "smackw32.dll",
+          "ordinal": 3,
+          "resolved_name": "_SmackBufferClose"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef92",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e744",
+          "dll": "smackw32.dll",
+          "ordinal": 21,
+          "resolved_name": "_SmackNextFrame"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef98",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e740",
+          "dll": "smackw32.dll",
+          "ordinal": 32,
+          "resolved_name": "_SmackWait"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004bef9e",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e73c",
+          "dll": "smackw32.dll",
+          "ordinal": 1,
+          "resolved_name": "_SmackBufferBlit"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befa4",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e738",
+          "dll": "smackw32.dll",
+          "ordinal": 29,
+          "resolved_name": "_SmackToBufferRect"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befaa",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e74c",
+          "dll": "smackw32.dll",
+          "ordinal": 17,
+          "resolved_name": "_SmackDoFrame"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befb0",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e748",
+          "dll": "smackw32.dll",
+          "ordinal": 7,
+          "resolved_name": "_SmackBufferNewPalette"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befb6",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e768",
+          "dll": "smackw32.dll",
+          "ordinal": 26,
+          "resolved_name": "_SmackSoundOnOff"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befbc",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e754",
+          "dll": "smackw32.dll",
+          "ordinal": 28,
+          "resolved_name": "_SmackToBuffer"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befc2",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e758",
+          "dll": "smackw32.dll",
+          "ordinal": 8,
+          "resolved_name": "_SmackBufferOpen"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befc8",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e75c",
+          "dll": "smackw32.dll",
+          "ordinal": 22,
+          "resolved_name": "_SmackOpen"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befce",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e760",
+          "dll": "smackw32.dll",
+          "ordinal": 31,
+          "resolved_name": "_SmackVolumePan"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befd4",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e80c",
+          "dll": "WING32.dll",
+          "name": "WinGSetDIBColorTable"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befda",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e808",
+          "dll": "WING32.dll",
+          "name": "WinGBitBlt"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befe0",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e804",
+          "dll": "WING32.dll",
+          "name": "WinGCreateBitmap"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befe6",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e800",
+          "dll": "WING32.dll",
+          "name": "WinGCreateDC"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004befec",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e7fc",
+          "dll": "WING32.dll",
+          "name": "WinGRecommendDIBFormat"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004beff2",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e7f8",
+          "dll": "WING32.dll",
+          "name": "WinGGetDIBPointer"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004beff8",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e7f4",
+          "dll": "WING32.dll",
+          "name": "WinGStretchBlt"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c0560",
+      "size": 92,
+      "imports": [
+        {
+          "iat_va": "0x0055e52c",
+          "dll": "KERNEL32.dll",
+          "name": "IsBadReadPtr"
+        },
+        {
+          "iat_va": "0x0055e530",
+          "dll": "KERNEL32.dll",
+          "name": "IsBadWritePtr"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c0f00",
+      "size": 210,
+      "imports": [
+        {
+          "iat_va": "0x0055e528",
+          "dll": "KERNEL32.dll",
+          "name": "ExitProcess"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c11c0",
+      "size": 1355,
+      "imports": [
+        {
+          "iat_va": "0x0055e518",
+          "dll": "KERNEL32.dll",
+          "name": "CreateFileA"
+        },
+        {
+          "iat_va": "0x0055e51c",
+          "dll": "KERNEL32.dll",
+          "name": "GetFileType"
+        },
+        {
+          "iat_va": "0x0055e520",
+          "dll": "KERNEL32.dll",
+          "name": "CloseHandle"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c1c80",
+      "size": 285,
+      "imports": [
+        {
+          "iat_va": "0x0055e514",
+          "dll": "KERNEL32.dll",
+          "name": "SetFilePointer"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c1ff0",
+      "size": 98,
+      "imports": [
+        {
+          "iat_va": "0x0055e510",
+          "dll": "KERNEL32.dll",
+          "name": "GetCurrentDirectoryA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c2060",
+      "size": 132,
+      "imports": [
+        {
+          "iat_va": "0x0055e50c",
+          "dll": "KERNEL32.dll",
+          "name": "SetCurrentDirectoryA"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c2180",
+      "size": 327,
+      "imports": [
+        {
+          "iat_va": "0x0055e508",
+          "dll": "KERNEL32.dll",
+          "name": "FindFirstFileA"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c22f0",
+      "size": 312,
+      "imports": [
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e548",
+          "dll": "KERNEL32.dll",
+          "name": "FindNextFileA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c2450",
+      "size": 164,
+      "imports": [
+        {
+          "iat_va": "0x0055e54c",
+          "dll": "KERNEL32.dll",
+          "name": "FileTimeToSystemTime"
+        },
+        {
+          "iat_va": "0x0055e550",
+          "dll": "KERNEL32.dll",
+          "name": "FileTimeToLocalFileTime"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c2500",
+      "size": 1136,
+      "imports": [
+        {
+          "iat_va": "0x0055e51c",
+          "dll": "KERNEL32.dll",
+          "name": "GetFileType"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e54c",
+          "dll": "KERNEL32.dll",
+          "name": "FileTimeToSystemTime"
+        },
+        {
+          "iat_va": "0x0055e550",
+          "dll": "KERNEL32.dll",
+          "name": "FileTimeToLocalFileTime"
+        },
+        {
+          "iat_va": "0x0055e554",
+          "dll": "KERNEL32.dll",
+          "name": "GetFileInformationByHandle"
+        },
+        {
+          "iat_va": "0x0055e558",
+          "dll": "KERNEL32.dll",
+          "name": "PeekNamedPipe"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c3980",
+      "size": 476,
+      "imports": [
+        {
+          "iat_va": "0x0055e55c",
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleHandleA"
+        },
+        {
+          "iat_va": "0x0055e560",
+          "dll": "KERNEL32.dll",
+          "name": "GetStartupInfoA"
+        },
+        {
+          "iat_va": "0x0055e564",
+          "dll": "KERNEL32.dll",
+          "name": "GetCommandLineA"
+        },
+        {
+          "iat_va": "0x0055e568",
+          "dll": "KERNEL32.dll",
+          "name": "GetVersion"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c4f50",
+      "size": 17,
+      "imports": [
+        {
+          "iat_va": "0x0055e56c",
+          "dll": "KERNEL32.dll",
+          "name": "DebugBreak"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c4f70",
+      "size": 945,
+      "imports": [
+        {
+          "iat_va": "0x0055e574",
+          "dll": "KERNEL32.dll",
+          "name": "InterlockedDecrement"
+        },
+        {
+          "iat_va": "0x0055e578",
+          "dll": "KERNEL32.dll",
+          "name": "OutputDebugStringA"
+        },
+        {
+          "iat_va": "0x0055e57c",
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile"
+        },
+        {
+          "iat_va": "0x0055e580",
+          "dll": "KERNEL32.dll",
+          "name": "GetProcAddress"
+        },
+        {
+          "iat_va": "0x0055e584",
+          "dll": "KERNEL32.dll",
+          "name": "LoadLibraryA"
+        },
+        {
+          "iat_va": "0x0055e588",
+          "dll": "KERNEL32.dll",
+          "name": "InterlockedIncrement"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c5330",
+      "size": 797,
+      "imports": [
+        {
+          "iat_va": "0x0055e58c",
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleFileNameA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c5740",
+      "size": 34,
+      "imports": [
+        {
+          "iat_va": "0x0055e590",
+          "dll": "KERNEL32.dll",
+          "name": "HeapAlloc"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c5790",
+      "size": 77,
+      "imports": [
+        {
+          "iat_va": "0x0055e594",
+          "dll": "KERNEL32.dll",
+          "name": "HeapReAlloc"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c57e0",
+      "size": 180,
+      "imports": [
+        {
+          "iat_va": "0x0055e594",
+          "dll": "KERNEL32.dll",
+          "name": "HeapReAlloc"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c58a0",
+      "size": 44,
+      "imports": [
+        {
+          "iat_va": "0x0055e598",
+          "dll": "KERNEL32.dll",
+          "name": "HeapFree"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c58d0",
+      "size": 95,
+      "imports": [
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e59c",
+          "dll": "KERNEL32.dll",
+          "name": "HeapValidate"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c5b10",
+      "size": 816,
+      "imports": [
+        {
+          "iat_va": "0x0055e5a4",
+          "dll": "KERNEL32.dll",
+          "name": "GetCPInfo"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c5e40",
+      "size": 121,
+      "imports": [
+        {
+          "iat_va": "0x0055e5a8",
+          "dll": "KERNEL32.dll",
+          "name": "GetACP"
+        },
+        {
+          "iat_va": "0x0055e5ac",
+          "dll": "KERNEL32.dll",
+          "name": "GetOEMCP"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c6010",
+      "size": 793,
+      "imports": [
+        {
+          "iat_va": "0x0055e51c",
+          "dll": "KERNEL32.dll",
+          "name": "GetFileType"
+        },
+        {
+          "iat_va": "0x0055e560",
+          "dll": "KERNEL32.dll",
+          "name": "GetStartupInfoA"
+        },
+        {
+          "iat_va": "0x0055e570",
+          "dll": "KERNEL32.dll",
+          "name": "GetStdHandle"
+        },
+        {
+          "iat_va": "0x0055e5b0",
+          "dll": "KERNEL32.dll",
+          "name": "SetHandleCount"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c6330",
+      "size": 268,
+      "imports": [
+        {
+          "iat_va": "0x0055e520",
+          "dll": "KERNEL32.dll",
+          "name": "CloseHandle"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c6440",
+      "size": 682,
+      "imports": [
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e5b4",
+          "dll": "KERNEL32.dll",
+          "name": "SetEndOfFile"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c66f0",
+      "size": 1156,
+      "imports": [
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e5b8",
+          "dll": "KERNEL32.dll",
+          "name": "ReadFile"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c6ce0",
+      "size": 233,
+      "imports": [
+        {
+          "iat_va": "0x0055e5bc",
+          "dll": "KERNEL32.dll",
+          "name": "SetStdHandle"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c6de0",
+      "size": 262,
+      "imports": [
+        {
+          "iat_va": "0x0055e5bc",
+          "dll": "KERNEL32.dll",
+          "name": "SetStdHandle"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c8030",
+      "size": 278,
+      "imports": [
+        {
+          "iat_va": "0x0055e580",
+          "dll": "KERNEL32.dll",
+          "name": "GetProcAddress"
+        },
+        {
+          "iat_va": "0x0055e584",
+          "dll": "KERNEL32.dll",
+          "name": "LoadLibraryA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c867c",
+      "size": 32,
+      "imports": [
+        {
+          "iat_va": "0x0055e5c0",
+          "dll": "KERNEL32.dll",
+          "name": "RtlUnwind"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c8770",
+      "size": 500,
+      "imports": [
+        {
+          "iat_va": "0x0055e5c8",
+          "dll": "KERNEL32.dll",
+          "name": "UnhandledExceptionFilter"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c8bb0",
+      "size": 204,
+      "imports": [
+        {
+          "iat_va": "0x0055e58c",
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleFileNameA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c9040",
+      "size": 588,
+      "imports": [
+        {
+          "iat_va": "0x0055e5cc",
+          "dll": "KERNEL32.dll",
+          "name": "FreeEnvironmentStringsA"
+        },
+        {
+          "iat_va": "0x0055e5d4",
+          "dll": "KERNEL32.dll",
+          "name": "GetEnvironmentStrings"
+        },
+        {
+          "iat_va": "0x0055e5dc",
+          "dll": "KERNEL32.dll",
+          "name": "FreeEnvironmentStringsW"
+        },
+        {
+          "iat_va": "0x0055e5e0",
+          "dll": "KERNEL32.dll",
+          "name": "GetEnvironmentStringsW"
+        },
+        {
+          "iat_va": "0x0055e5e4",
+          "dll": "KERNEL32.dll",
+          "name": "WideCharToMultiByte"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c9290",
+      "size": 36,
+      "imports": [
+        {
+          "iat_va": "0x0055e5e8",
+          "dll": "KERNEL32.dll",
+          "name": "HeapCreate"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c9400",
+      "size": 539,
+      "imports": [
+        {
+          "iat_va": "0x0055e570",
+          "dll": "KERNEL32.dll",
+          "name": "GetStdHandle"
+        },
+        {
+          "iat_va": "0x0055e57c",
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile"
+        },
+        {
+          "iat_va": "0x0055e58c",
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleFileNameA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c9620",
+      "size": 769,
+      "imports": [
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e57c",
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004c9a40",
+      "size": 198,
+      "imports": [
+        {
+          "iat_va": "0x0055e5e4",
+          "dll": "KERNEL32.dll",
+          "name": "WideCharToMultiByte"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ca190",
+      "size": 223,
+      "imports": [
+        {
+          "iat_va": "0x0055e580",
+          "dll": "KERNEL32.dll",
+          "name": "GetProcAddress"
+        },
+        {
+          "iat_va": "0x0055e584",
+          "dll": "KERNEL32.dll",
+          "name": "LoadLibraryA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ca2a0",
+      "size": 406,
+      "imports": [
+        {
+          "iat_va": "0x0055e5d0",
+          "dll": "KERNEL32.dll",
+          "name": "MultiByteToWideChar"
+        },
+        {
+          "iat_va": "0x0055e5fc",
+          "dll": "KERNEL32.dll",
+          "name": "GetStringTypeW"
+        },
+        {
+          "iat_va": "0x0055e600",
+          "dll": "KERNEL32.dll",
+          "name": "GetStringTypeA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ca5b0",
+      "size": 218,
+      "imports": [
+        {
+          "iat_va": "0x0055e504",
+          "dll": "KERNEL32.dll",
+          "name": "FlushFileBuffers"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ca690",
+      "size": 791,
+      "imports": [
+        {
+          "iat_va": "0x0055e500",
+          "dll": "KERNEL32.dll",
+          "name": "LCMapStringA"
+        },
+        {
+          "iat_va": "0x0055e5d0",
+          "dll": "KERNEL32.dll",
+          "name": "MultiByteToWideChar"
+        },
+        {
+          "iat_va": "0x0055e5e4",
+          "dll": "KERNEL32.dll",
+          "name": "WideCharToMultiByte"
+        },
+        {
+          "iat_va": "0x0055e5f8",
+          "dll": "KERNEL32.dll",
+          "name": "LCMapStringW"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cab10",
+      "size": 706,
+      "imports": [
+        {
+          "iat_va": "0x0055e5f4",
+          "dll": "KERNEL32.dll",
+          "name": "GetTimeZoneInformation"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cc820",
+      "size": 205,
+      "imports": [
+        {
+          "iat_va": "0x0055e5e4",
+          "dll": "KERNEL32.dll",
+          "name": "WideCharToMultiByte"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004ccc20",
+      "size": 1107,
+      "imports": [
+        {
+          "iat_va": "0x0055e5a4",
+          "dll": "KERNEL32.dll",
+          "name": "GetCPInfo"
+        },
+        {
+          "iat_va": "0x0055e5d0",
+          "dll": "KERNEL32.dll",
+          "name": "MultiByteToWideChar"
+        },
+        {
+          "iat_va": "0x0055e5ec",
+          "dll": "KERNEL32.dll",
+          "name": "CompareStringW"
+        },
+        {
+          "iat_va": "0x0055e5f0",
+          "dll": "KERNEL32.dll",
+          "name": "CompareStringA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cd0f0",
+      "size": 867,
+      "imports": [
+        {
+          "iat_va": "0x0055e5a0",
+          "dll": "KERNEL32.dll",
+          "name": "SetEnvironmentVariableA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cd708",
+      "size": 6,
+      "imports": [
+        {
+          "iat_va": "0x0055e5c0",
+          "dll": "KERNEL32.dll",
+          "name": "RtlUnwind"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cd710",
+      "size": 211,
+      "imports": [
+        {
+          "iat_va": "0x0055e50c",
+          "dll": "KERNEL32.dll",
+          "name": "SetCurrentDirectoryA"
+        },
+        {
+          "iat_va": "0x0055e510",
+          "dll": "KERNEL32.dll",
+          "name": "GetCurrentDirectoryA"
+        },
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e5a0",
+          "dll": "KERNEL32.dll",
+          "name": "SetEnvironmentVariableA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cd7f0",
+      "size": 94,
+      "imports": [
+        {
+          "iat_va": "0x0055e524",
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "iat_va": "0x0055e5d8",
+          "dll": "KERNEL32.dll",
+          "name": "CreateDirectoryA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cd880",
+      "size": 330,
+      "imports": [
+        {
+          "iat_va": "0x0055e4fc",
+          "dll": "KERNEL32.dll",
+          "name": "GetFullPathNameA"
+        },
+        {
+          "iat_va": "0x0055e510",
+          "dll": "KERNEL32.dll",
+          "name": "GetCurrentDirectoryA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cd9d0",
+      "size": 105,
+      "imports": [
+        {
+          "iat_va": "0x0055e534",
+          "dll": "KERNEL32.dll",
+          "name": "GetDriveTypeA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cda40",
+      "size": 300,
+      "imports": [
+        {
+          "iat_va": "0x0055e538",
+          "dll": "KERNEL32.dll",
+          "name": "SetConsoleMode"
+        },
+        {
+          "iat_va": "0x0055e53c",
+          "dll": "KERNEL32.dll",
+          "name": "ReadConsoleInputA"
+        },
+        {
+          "iat_va": "0x0055e540",
+          "dll": "KERNEL32.dll",
+          "name": "GetConsoleMode"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cdd20",
+      "size": 160,
+      "imports": [
+        {
+          "iat_va": "0x0055e544",
+          "dll": "KERNEL32.dll",
+          "name": "GetLocalTime"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cdf40",
+      "size": 73,
+      "imports": [
+        {
+          "iat_va": "0x0055e518",
+          "dll": "KERNEL32.dll",
+          "name": "CreateFileA"
+        }
+      ]
+    },
+    {
+      "win_va": "0x004cdf90",
+      "size": 61,
+      "imports": [
+        {
+          "iat_va": "0x0055e520",
+          "dll": "KERNEL32.dll",
+          "name": "CloseHandle"
+        }
+      ]
+    }
+  ]
+}

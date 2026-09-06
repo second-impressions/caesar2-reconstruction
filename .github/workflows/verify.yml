@@ -2,8 +2,9 @@ name: Verify
 
 # The reconstruction is byte-exact or it is nothing: every push to main and
 # every pull request rebuilds PS.EXE with the pinned Watcom toolchain and
-# compares it whole-file with the original, then validates the Windows
-# witness and the source annotations. The originals are copyrighted and
+# compares it whole-file with the original, compiles every translation unit
+# with MSVC 4.0 and compares each function with CAESAR2.EXE, and checks the
+# source annotations. The originals are copyrighted and
 # never committed; they are extracted from the archive.org CD image once
 # and kept in the (private, per-repository) Actions cache by their hashes.
 
@@ -74,6 +75,11 @@ jobs:
       - name: Rebuild PS.EXE and compare whole-file with the original
         working-directory: caesar2-reconstruction
         run: nix develop --command uv run c2 rebuild --require-exact
+      - name: Pull the MSVC 4.0 image
+        run: podman pull ghcr.io/second-impressions/msvc-4.00-wibo:latest
+      - name: Compile every TU with MSVC 4.0 and compare each function with CAESAR2.EXE
+        working-directory: caesar2-reconstruction
+        run: nix develop --command uv run c2 win-verify --files-only --require-exact
       - name: Function and data reports
         working-directory: caesar2-reconstruction
         run: |
