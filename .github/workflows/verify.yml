@@ -21,6 +21,13 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # The runner forces colour, and rich then styles "-" and "-reccmp" as two
+  # spans, so the CLI tests that grep --help output never see "--reccmp".
+  # typer's own switch renders help as plain text.
+  _TYPER_FORCE_DISABLE_TERMINAL: "1"
+  COLUMNS: "200"
+
 jobs:
   byte-exact:
     name: Byte-exact rebuild
